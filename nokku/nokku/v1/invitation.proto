@@ -1,0 +1,51 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service InvitationService {
+  rpc RefreshInviteToken(RefreshInviteTokenRequest) returns (RefreshInviteTokenResponse) {
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/invites:refresh"};
+  }
+  rpc RevokeInviteToken(RevokeInviteTokenRequest) returns (RevokeInviteTokenResponse) {
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/invites:revoke"};
+  }
+  rpc GetInvitation(GetInvitationRequest) returns (GetInvitationResponse) {
+    option (google.api.http) = {get: "/v1/invites/{token}"};
+  }
+  rpc AcceptInvitation(AcceptInvitationRequest) returns (AcceptInvitationResponse) {
+    option (google.api.http) = {post: "/v1/invites/{token}"};
+  }
+}
+
+message RefreshInviteTokenRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message RefreshInviteTokenResponse {
+  string link = 1;
+  google.protobuf.Timestamp expires_at = 2;
+}
+
+message RevokeInviteTokenRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message RevokeInviteTokenResponse {}
+
+message GetInvitationRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+}
+message GetInvitationResponse {
+  string workspace_name = 1;
+  string workspace_description = 2;
+  google.protobuf.Timestamp expires_at = 3;
+}
+
+message AcceptInvitationRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+}
+message AcceptInvitationResponse {
+  string workspace_id = 1;
+}

@@ -1,0 +1,141 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "nokku/v1/daemon.proto";
+import "nokku/v1/certificates.proto";
+import "nokku/v1/principal.proto";
+
+service TargetService {
+  rpc GetTarget(GetTargetRequest) returns (GetTargetResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/targets/{id}"};
+  }
+  rpc ListTargets(ListTargetsRequest) returns (ListTargetsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/targets"};
+  }
+  rpc CreateTarget(CreateTargetRequest) returns (CreateTargetResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/targets"
+      body: "*"
+    };
+  }
+  rpc UpdateTarget(UpdateTargetRequest) returns (UpdateTargetResponse) {
+    option (google.api.http) = {
+      patch: "/v1/targets/{id}"
+      body: "*"
+    };
+  }
+  rpc DeleteTarget(DeleteTargetRequest) returns (DeleteTargetResponse) {
+    option (google.api.http) = {delete: "/v1/targets/{id}"};
+  }
+  rpc GetSubjectAccess(GetSubjectAccessRequest) returns (GetSubjectAccessResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/targets/access"
+      body: "*"
+    };
+  }
+  rpc GetTargetFilters(GetTargetFiltersRequest) returns (GetTargetFiltersResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/targets/filters"};
+  }
+}
+
+message Target {
+  string id = 1;
+  string workspace_id = 2;
+  string ca_id = 3;
+  string daemon_id = 4;
+  string name = 5;
+  string description = 6;
+  repeated string tags = 7;
+  repeated string endpoints = 8;
+  repeated Principal principals = 9;
+  map<string, string> metadata = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+}
+
+message GetTargetRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+message GetTargetResponse {
+  Target target = 1;
+}
+
+message CreateTargetRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string ca_id = 2 [(buf.validate.field).string.uuid = true];
+  string name = 3 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 256
+    pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
+  }];
+  string description = 4 [(buf.validate.field).string.max_len = 1000];
+  repeated string endpoints = 5;
+  repeated string tags = 6;
+}
+message CreateTargetResponse {
+  Target target = 1;
+}
+
+message UpdateTargetRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string ca_id = 2 [(buf.validate.field).string.uuid = true];
+  string name = 3 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 256
+    pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
+  }];
+  string description = 4 [(buf.validate.field).string.max_len = 1000];
+  repeated string endpoints = 5;
+  repeated string tags = 6;
+}
+message UpdateTargetResponse {
+  Target target = 1;
+}
+
+message DeleteTargetRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+message DeleteTargetResponse {}
+
+message ListTargetsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  int32 limit = 2 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }];
+  int32 offset = 3;
+  string query = 4;
+  string daemon_id = 5;
+  string ca_id = 6;
+  repeated string principals = 7;
+  repeated string tags = 8;
+}
+message ListTargetsResponse {
+  repeated Target targets = 1;
+  int32 total = 2;
+}
+
+message GetSubjectAccessRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string subject_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message GetSubjectAccessResponse {
+  repeated Target targets = 1;
+  repeated Daemon daemons = 2;
+  repeated CertificateAuthority certificate_authorities = 3;
+}
+
+message GetTargetFiltersRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message GetTargetFiltersResponse {
+  repeated string tags = 1;
+  repeated string principals = 2;
+}

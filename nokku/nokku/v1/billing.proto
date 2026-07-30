@@ -1,0 +1,72 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service BillingService {
+  rpc GetBilling(GetBillingRequest) returns (GetBillingResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/billing/subscription"};
+  }
+  rpc CreateCustomerPortal(CreateCustomerPortalRequest) returns (CreateCustomerPortalResponse) {
+    option (google.api.http) = {post: "/v1/billing/portal"};
+  }
+  rpc CreateCheckout(CreateCheckoutRequest) returns (CreateCheckoutResponse) {
+    option (google.api.http) = {post: "/v1/billing/checkout"};
+  }
+  rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse) {
+    option (google.api.http) = {
+      post: "/v1/billing/subscription/cancel"
+      body: "*"
+    };
+  }
+}
+
+message WorkspaceCounts {
+  int64 members = 1;
+  int64 teams = 2;
+  int64 service_accounts = 3;
+  int64 daemons = 4;
+  int64 targets = 5;
+  int64 cas = 6;
+}
+
+message GetBillingRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message GetBillingResponse {
+  string customer_id = 1;
+  string product_id = 2;
+  string product_name = 3;
+  string status = 4;
+  bool cancel_at_period_end = 5;
+  map<string, string> metadata = 6;
+  WorkspaceCounts counts = 7;
+  google.protobuf.Timestamp current_period_end = 8;
+}
+
+message CreateCustomerPortalRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message CreateCustomerPortalResponse {
+  string url = 1;
+}
+
+message CreateCheckoutRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string product_id = 2;
+}
+message CreateCheckoutResponse {
+  string url = 1;
+}
+
+message CancelSubscriptionRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  bool immediate = 2;
+  bool cancel_at_period_end = 3;
+  string reason = 4 [(buf.validate.field).string.max_len = 1000];
+}
+message CancelSubscriptionResponse {}

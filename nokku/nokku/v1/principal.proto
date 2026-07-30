@@ -1,0 +1,129 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service PrincipalService {
+  rpc SetPrincipals(SetPrincipalsRequest) returns (SetPrincipalsResponse) {
+    option (google.api.http) = {
+      post: "/v1/principals"
+      body: "*"
+    };
+  }
+  rpc ListPrincipals(ListPrincipalsRequest) returns (ListPrincipalsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/principals"};
+  }
+  rpc AddSubjectsToPrincipal(AddSubjectsToPrincipalRequest) returns (AddSubjectsToPrincipalResponse) {
+    option (google.api.http) = {
+      post: "/v1/principals/add"
+      body: "*"
+    };
+  }
+  rpc RemoveSubjectsFromPrincipal(RemoveSubjectsFromPrincipalRequest) returns (RemoveSubjectsFromPrincipalResponse) {
+    option (google.api.http) = {
+      post: "/v1/principals/remove"
+      body: "*"
+    };
+  }
+  rpc RevokeAllAccess(RevokeAllAccessRequest) returns (RevokeAllAccessResponse) {
+    option (google.api.http) = {
+      post: "/v1/principals/revoke"
+      body: "*"
+    };
+  }
+}
+
+enum PrincipalType {
+  PRINCIPAL_TYPE_UNSPECIFIED = 0;
+  PRINCIPAL_TYPE_USER = 1;
+  PRINCIPAL_TYPE_TEAM = 2;
+  PRINCIPAL_TYPE_SERVICE_ACCOUNT = 3;
+}
+
+message Principal {
+  string id = 1;
+  string target_id = 2;
+  string username = 3;
+  repeated string user_ids = 4;
+  repeated string team_ids = 5;
+  repeated string service_account_ids = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message SetPrincipalsRequest {
+  string target_id = 1 [(buf.validate.field).string.uuid = true];
+  repeated string usernames = 2 [(buf.validate.field).repeated = {
+    items: {
+      string: {
+        min_len: 1
+        max_len: 32
+        pattern: "^[a-z_][a-z0-9-_]*\\$?$" // Valid Unix username
+      }
+    }
+  }];
+}
+message SetPrincipalsResponse {}
+
+message ListPrincipalsRequest {
+  string target_id = 1 [(buf.validate.field).string.uuid = true];
+  int32 limit = 2 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }];
+  int32 offset = 3;
+  string query = 4;
+  PrincipalType type = 5 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+}
+message ListPrincipalsResponse {
+  repeated Principal principals = 1;
+  int32 total = 2;
+}
+
+message AddSubjectsToPrincipalRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  repeated string subject_ids = 2 [(buf.validate.field).repeated = {
+    min_items: 1
+    max_items: 50
+    items: {
+      string: {uuid: true}
+    }
+  }];
+  PrincipalType type = 3 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+}
+message AddSubjectsToPrincipalResponse {}
+
+message RemoveSubjectsFromPrincipalRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  repeated string subject_ids = 2 [(buf.validate.field).repeated = {
+    min_items: 1
+    max_items: 50
+    items: {
+      string: {uuid: true}
+    }
+  }];
+  PrincipalType type = 3 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+}
+message RemoveSubjectsFromPrincipalResponse {}
+
+message RevokeAllAccessRequest {
+  string subject_id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  PrincipalType type = 3 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+}
+message RevokeAllAccessResponse {}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommits", ":disableDependencyDashboard"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "automerge": true,
+      "automergeType": "branch"
+    }
+  ],
+  "platformAutomerge": true,
+  "separateMinorPatch": true,
+  "vulnerabilityAlerts": { "enabled": true },
+  "osvVulnerabilityAlerts": true,
+  "labels": ["dependencies"]
+}

@@ -1,0 +1,148 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "nokku/v1/user.proto";
+
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/v1/login"
+      body: "*"
+    };
+  }
+  rpc LoginWithBackupCode(LoginWithBackupCodeRequest) returns (LoginWithBackupCodeResponse) {
+    option (google.api.http) = {
+      post: "/v1/login/backup-code"
+      body: "*"
+    };
+  }
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {
+    option (google.api.http) = {post: "/v1/logout"};
+  }
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/v1/register"
+      body: "*"
+    };
+  }
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {post: "/v1/refresh-token"};
+  }
+  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/forgot-password"
+      body: "*"
+    };
+  }
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/reset-password"
+      body: "*"
+    };
+  }
+  rpc ResendVerification(ResendVerificationRequest) returns (ResendVerificationResponse) {
+    option (google.api.http) = {post: "/v1/resend-verification"};
+  }
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
+    option (google.api.http) = {post: "/v1/verify-email"};
+  }
+  rpc StreamCLILogin(StreamCLILoginRequest) returns (stream StreamCLILoginResponse) {}
+  rpc VerifyCLILogin(VerifyCLILoginRequest) returns (VerifyCLILoginResponse) {}
+}
+
+// Authentication requests/responses
+message RegisterRequest {
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 256
+  }];
+  string email = 2 [(buf.validate.field).string = {
+    email: true
+    max_len: 256
+  }];
+  string username = 3 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 32
+    pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
+  }];
+  string password = 4 [(buf.validate.field).string = {
+    min_len: 8
+    max_len: 256
+  }];
+}
+message RegisterResponse {}
+
+message LoginRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+  string password = 2 [(buf.validate.field).string.min_len = 1];
+}
+message LoginResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message LoginWithBackupCodeRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+  string code = 2 [(buf.validate.field).string.min_len = 1];
+}
+message LoginWithBackupCodeResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+message RefreshTokenResponse {
+  string access_token = 1;
+}
+
+message LogoutRequest {}
+message LogoutResponse {}
+
+// Recovery/Verification flows ------------------------------------------------
+
+message ForgotPasswordRequest {
+  string email = 1 [(buf.validate.field).string = {
+    email: true
+    max_len: 256
+  }];
+}
+message ForgotPasswordResponse {}
+
+message ResetPasswordRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+  string new_password = 2 [(buf.validate.field).string.min_len = 8];
+}
+message ResetPasswordResponse {}
+
+message VerifyEmailRequest {
+  string token = 1;
+}
+message VerifyEmailResponse {}
+
+message ResendVerificationRequest {
+  string email = 1 [(buf.validate.field).string = {
+    email: true
+    max_len: 256
+  }];
+}
+message ResendVerificationResponse {}
+
+// CLI login flow -------------------------------------------------------------
+message StreamCLILoginRequest {
+  string login_code = 1;
+}
+message StreamCLILoginResponse {
+  User user = 1; // sent after success
+  string token = 2;
+  string verification_url = 3; // sent first
+}
+
+message VerifyCLILoginRequest {
+  string login_code = 1 [(buf.validate.field).string.min_len = 1];
+}
+message VerifyCLILoginResponse {}

@@ -1,0 +1,276 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service DaemonService {
+  rpc GetDaemon(GetDaemonRequest) returns (GetDaemonResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/daemons/{id}"};
+  }
+  rpc UpdateDaemon(UpdateDaemonRequest) returns (UpdateDaemonResponse) {
+    option (google.api.http) = {patch: "/v1/daemons/{id}"};
+  }
+  rpc DeleteDaemon(DeleteDaemonRequest) returns (DeleteDaemonResponse) {
+    option (google.api.http) = {delete: "/v1/daemons/{id}"};
+  }
+  rpc ListDaemons(ListDaemonsRequest) returns (ListDaemonsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/daemons"};
+  }
+  rpc RefreshEnrollToken(RefreshEnrollTokenRequest) returns (RefreshEnrollTokenResponse) {
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/enroll:refresh"};
+  }
+  rpc RevokeEnrollToken(RevokeEnrollTokenRequest) returns (RevokeEnrollTokenResponse) {
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/enroll:revoke"};
+  }
+  rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/daemons/{daemon_id}/sessions"};
+  }
+  rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse) {
+    option (google.api.http) = {post: "/v1/daemons/{daemon_id}/sessions"};
+  }
+  rpc CloseSession(CloseSessionRequest) returns (CloseSessionResponse) {
+    option (google.api.http) = {delete: "/v1/daemons/{daemon_id}/sessions/{session_id}"};
+  }
+  rpc EnrollDaemon(EnrollDaemonRequest) returns (EnrollDaemonResponse);
+  rpc SyncDaemon(SyncDaemonRequest) returns (SyncDaemonResponse);
+}
+
+service DaemonControlService {
+  rpc Connect(stream ConnectRequest) returns (stream ConnectResponse);
+}
+
+service DaemonSessionService {
+  rpc Session(stream SessionRequest) returns (stream SessionResponse);
+}
+
+enum DaemonStatus {
+  DAEMON_STATUS_UNSPECIFIED = 0;
+  DAEMON_STATUS_PENDING = 1;
+  DAEMON_STATUS_ACCEPTED = 2;
+  DAEMON_STATUS_REJECTED = 3;
+}
+
+message Daemon {
+  string id = 1;
+  string workspace_id = 2;
+  string name = 3;
+  bool online = 4;
+  DaemonStatus status = 5;
+  DaemonConfig config = 6;
+  map<string, string> metadata = 7;
+  google.protobuf.Timestamp updated_at = 8;
+  google.protobuf.Timestamp created_at = 9;
+}
+
+message DaemonConfig {
+  bool record_sessions = 1;
+}
+
+message GetDaemonRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+message GetDaemonResponse {
+  Daemon daemon = 1;
+}
+
+message UpdateDaemonRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  DaemonStatus status = 2 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0] /* Prevent UNSPECIFIED */
+  }];
+}
+message UpdateDaemonResponse {}
+
+message DeleteDaemonRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+message DeleteDaemonResponse {}
+
+message ListDaemonsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  int32 limit = 2 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }];
+  int32 offset = 3;
+  string query = 4;
+  bool online = 5;
+  DaemonStatus status = 6;
+}
+message ListDaemonsResponse {
+  repeated Daemon daemons = 1;
+  int32 total = 2;
+}
+
+message RefreshEnrollTokenRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message RefreshEnrollTokenResponse {
+  string token = 1;
+  google.protobuf.Timestamp expires_at = 2;
+}
+
+message RevokeEnrollTokenRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message RevokeEnrollTokenResponse {}
+
+message CreateSessionRequest {
+  string daemon_id = 1 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
+  string username = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 32
+    pattern: "^[a-z_][a-z0-9-_]*\\$?$"
+  }];
+}
+message CreateSessionResponse {
+  Session session = 1;
+  string daemon_name = 2;
+}
+
+message ListSessionsRequest {
+  string daemon_id = 1 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
+}
+message ListSessionsResponse {
+  repeated Session sessions = 1;
+  string daemon_name = 2;
+}
+
+message CloseSessionRequest {
+  string daemon_id = 1 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
+  string session_id = 2 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
+}
+message CloseSessionResponse {}
+
+message EnrollDaemonRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+  string ca_id = 2;
+}
+message EnrollDaemonResponse {
+  string id = 1;
+  string workspace_id = 2;
+  string target_id = 3;
+  string token = 4;
+  DaemonStatus status = 5;
+  DaemonConfig config = 6;
+}
+
+message PrincipalUsers {
+  string username = 1;
+  repeated string ids = 2;
+}
+
+message SyncDaemonRequest {
+  repeated string users = 1;
+  repeated string private_ips = 2;
+  map<string, string> metadata = 3;
+}
+message SyncDaemonResponse {
+  DaemonStatus status = 1;
+  DaemonConfig config = 2;
+  repeated PrincipalUsers principals = 3;
+}
+
+// Control Stream -------------------------------------------------------------
+
+message ConnectRequest {
+  oneof msg {
+    Heartbeat heartbeat = 1;
+    SyncReport sync = 2;
+  }
+}
+
+message ConnectResponse {
+  oneof msg {
+    HeartbeatAck heartbeat_ack = 1;
+    Notification notification = 2;
+    Session session = 3;
+  }
+}
+
+message Heartbeat {}
+
+message HeartbeatAck {}
+
+message SyncReport {
+  repeated string users = 1;
+  repeated string private_ips = 2;
+  map<string, string> metadata = 3;
+}
+
+message Notification {
+  enum EventType {
+    EVENT_TYPE_UNSPECIFIED = 0;
+    EVENT_TYPE_STATUS = 1;
+    EVENT_TYPE_PRINCIPALS = 2;
+    EVENT_TYPE_CERTIFICATES = 3;
+    EVENT_TYPE_SYNC_REQUEST = 4;
+  }
+  EventType event_type = 1;
+  string daemon_id = 2;
+  DaemonStatus status = 3;
+}
+
+message Session {
+  string session_id = 1;
+  string username = 2;
+  string user_id = 3;
+}
+
+// Session Stream -------------------------------------------------------------
+
+message SessionRequest {
+  oneof msg {
+    SessionReady ready = 1;
+    bytes stdout = 2;
+    SessionEnded exited = 3;
+  }
+}
+
+message SessionResponse {
+  oneof msg {
+    bytes stdin = 1;
+    ResizeRequest resize = 2;
+    CloseRequest close = 3;
+  }
+}
+
+message SessionReady {
+  string session_id = 1;
+  bytes replay_buffer = 2;
+  string username = 3;
+  string user_id = 4;
+}
+
+message ResizeRequest {
+  uint32 width = 1;
+  uint32 height = 2;
+}
+
+message SessionEnded {
+  int32 exit_code = 1;
+  string error_message = 2;
+}
+
+message CloseRequest {
+  string reason = 1;
+}

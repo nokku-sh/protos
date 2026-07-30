@@ -1,0 +1,79 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service UtilService {
+  rpc GetVersion(GetVersionRequest) returns (GetVersionResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/version"};
+  }
+  rpc ListAuditLogs(ListAuditLogsRequest) returns (ListAuditLogsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/audit"};
+  }
+  rpc ExportAuditLogs(ExportAuditLogsRequest) returns (ExportAuditLogsResponse) {
+    option (google.api.http) = {
+      post: "/v1/audit:export"
+      body: "*"
+    };
+  }
+}
+
+message GetVersionRequest {}
+message GetVersionResponse {
+  string version = 1;
+}
+
+message EventLog {
+  string id = 1;
+  string workspace_id = 2;
+  string actor_id = 3;
+  string actor_type = 4;
+  string action = 5;
+  string ip_address = 6;
+  string user_agent = 7;
+  string status_code = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+message ListAuditLogsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  int32 limit = 2 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }]; // Max 100
+  int32 offset = 3;
+
+  // Filters (optional)
+  string search = 4;
+  repeated string actor_ids = 5 [(buf.validate.field).repeated.items.string.uuid = true];
+  repeated string actor_types = 6;
+  repeated string actions = 7;
+  google.protobuf.Timestamp start_date = 8;
+  google.protobuf.Timestamp end_date = 9;
+}
+message ListAuditLogsResponse {
+  repeated EventLog logs = 1;
+  int32 total = 2;
+}
+
+message ExportAuditLogsRequest {
+  enum Format {
+    FORMAT_UNSPECIFIED = 0;
+    FORMAT_CSV = 1;
+    FORMAT_JSON = 2;
+  }
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  Format format = 2 [(buf.validate.field).enum = {defined_only: true}];
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+}
+message ExportAuditLogsResponse {
+  bytes data = 1;
+  string filename = 2;
+  string content_type = 3;
+}

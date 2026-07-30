@@ -1,0 +1,12 @@
+version: "3"
+
+tasks:
+  update:
+    desc: Update dependencies
+    cmds:
+      - cd nokku && buf dep update
+
+  lint:
+    desc: Lint
+    cmds:
+      - cd nokku && buf lint

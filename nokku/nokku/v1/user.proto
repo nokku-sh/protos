@@ -1,0 +1,124 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service UserService {
+  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
+    option (google.api.http) = {get: "/v1/whoami"};
+  }
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse) {
+    option (google.api.http) = {
+      patch: "/v1/profile"
+      body: "*"
+    };
+  }
+  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
+    option (google.api.http) = {delete: "/v1/account"};
+  }
+  rpc ListUserDevices(ListUserDevicesRequest) returns (ListUserDevicesResponse) {
+    option (google.api.http) = {get: "/v1/devices"};
+  }
+  rpc DeleteUserDevice(DeleteUserDeviceRequest) returns (DeleteUserDeviceResponse) {
+    option (google.api.http) = {delete: "/v1/devices/{id}"};
+  }
+  rpc ListLinkedAccounts(ListLinkedAccountsRequest) returns (ListLinkedAccountsResponse) {
+    option (google.api.http) = {get: "/v1/accounts/oauth"};
+  }
+  rpc UnlinkAccount(UnlinkAccountRequest) returns (UnlinkAccountResponse) {
+    option (google.api.http) = {delete: "/v1/accounts/oauth/{provider}"};
+  }
+  rpc SetEmailRecovery(SetEmailRecoveryRequest) returns (SetEmailRecoveryResponse) {
+    option (google.api.http) = {
+      patch: "/v1/account/email-recovery"
+      body: "*"
+    };
+  }
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string username = 3;
+  string email = 4;
+  bool email_verified = 5;
+  string picture = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+  bool enable_email_recovery = 9;
+}
+
+message OAuthIdentity {
+  string provider = 1;
+  string provider_email = 2;
+  string provider_username = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message UserDevice {
+  string id = 1;
+  string name = 2;
+  string kind = 3; // 'cli' | 'web'
+  google.protobuf.Timestamp expires_at = 4;
+  google.protobuf.Timestamp last_used_at = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message WhoamiRequest {}
+message WhoamiResponse {
+  User user = 1;
+}
+
+message UpdateProfileRequest {
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 256
+  }];
+  string email = 2 [(buf.validate.field).string = {
+    email: true
+    max_len: 256
+  }];
+  string username = 3 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 39 // GitHub's max
+    pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
+  }];
+  string picture = 4;
+}
+message UpdateProfileResponse {
+  User user = 1;
+  bool email_sent = 2;
+}
+
+message DeleteAccountRequest {}
+message DeleteAccountResponse {}
+
+// Device tokens --------------------------------------------------------------
+message ListUserDevicesRequest {}
+message ListUserDevicesResponse {
+  repeated UserDevice devices = 1;
+}
+
+message DeleteUserDeviceRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+message DeleteUserDeviceResponse {}
+
+// OAuth linked accounts -------------------------------------------------------
+message ListLinkedAccountsRequest {}
+message ListLinkedAccountsResponse {
+  repeated OAuthIdentity accounts = 1;
+}
+
+message UnlinkAccountRequest {
+  string provider = 1 [(buf.validate.field).string.min_len = 1];
+}
+message UnlinkAccountResponse {}
+
+message SetEmailRecoveryRequest {
+  bool enable = 1;
+}
+message SetEmailRecoveryResponse {}

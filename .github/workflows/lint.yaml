@@ -1,0 +1,25 @@
+name: Buf
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: [nokku]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: bufbuild/buf-action@v1
+        with:
+          setup_only: true
+
+      - working-directory: ${{ matrix.module }}
+        run: buf format
+
+      - working-directory: ${{ matrix.module }}
+        run: buf lint

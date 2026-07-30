@@ -1,0 +1,87 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service WorkspaceDomainService {
+  rpc GetWorkspaceDomain(GetWorkspaceDomainRequest) returns (GetWorkspaceDomainResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/domains/{domain}"};
+  }
+  rpc ListWorkspaceDomains(ListWorkspaceDomainsRequest) returns (ListWorkspaceDomainsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/domains"};
+  }
+  rpc CreateWorkspaceDomain(CreateWorkspaceDomainRequest) returns (CreateWorkspaceDomainResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/domains"
+      body: "*"
+    };
+  }
+  rpc DeleteWorkspaceDomain(DeleteWorkspaceDomainRequest) returns (DeleteWorkspaceDomainResponse) {
+    option (google.api.http) = {delete: "/v1/domains/{domain}"};
+  }
+  rpc VerifyWorkspaceDomain(VerifyWorkspaceDomainRequest) returns (VerifyWorkspaceDomainResponse) {
+    option (google.api.http) = {post: "/v1/domains/{domain}:verify"};
+  }
+  rpc RegenerateWorkspaceDomainToken(RegenerateWorkspaceDomainTokenRequest) returns (RegenerateWorkspaceDomainTokenResponse) {
+    option (google.api.http) = {post: "/v1/domains/{domain}:generate"};
+  }
+}
+
+message WorkspaceDomain {
+  string domain = 1;
+  string workspace_id = 2;
+  string verification_token = 3;
+  google.protobuf.Timestamp verified_at = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message GetWorkspaceDomainRequest {
+  string domain = 1 [(buf.validate.field).string.hostname = true];
+}
+message GetWorkspaceDomainResponse {
+  WorkspaceDomain domain = 1;
+}
+message CreateWorkspaceDomainRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 2 [(buf.validate.field).string = {
+    hostname: true
+    min_len: 4
+    max_len: 253
+    pattern: "^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z]{2,}$"
+  }];
+}
+message CreateWorkspaceDomainResponse {
+  WorkspaceDomain domain = 1;
+}
+
+message ListWorkspaceDomainsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ListWorkspaceDomainsResponse {
+  repeated WorkspaceDomain domains = 1;
+}
+
+message DeleteWorkspaceDomainRequest {
+  string domain = 1 [(buf.validate.field).string.hostname = true];
+}
+message DeleteWorkspaceDomainResponse {}
+
+message VerifyWorkspaceDomainRequest {
+  string domain = 1 [(buf.validate.field).string.hostname = true];
+}
+message VerifyWorkspaceDomainResponse {
+  WorkspaceDomain domain = 1;
+}
+
+message RegenerateWorkspaceDomainTokenRequest {
+  string domain = 1 [(buf.validate.field).string.hostname = true];
+}
+message RegenerateWorkspaceDomainTokenResponse {
+  WorkspaceDomain domain = 1;
+}

@@ -1,0 +1,202 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+service WorkspaceService {
+  rpc GetWorkspace(GetWorkspaceRequest) returns (GetWorkspaceResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}"};
+  }
+  rpc ListWorkspaces(ListWorkspacesRequest) returns (ListWorkspacesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces"};
+  }
+  rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces"
+      body: "*"
+    };
+  }
+  rpc UpdateWorkspace(UpdateWorkspaceRequest) returns (UpdateWorkspaceResponse) {
+    option (google.api.http) = {
+      patch: "/v1/workspaces/{workspace_id}"
+      body: "*"
+    };
+  }
+  rpc UpdateWorkspaceSettings(UpdateWorkspaceSettingsRequest) returns (UpdateWorkspaceSettingsResponse) {
+    option (google.api.http) = {
+      patch: "/v1/workspaces/{workspace_id}/settings"
+      body: "*"
+    };
+  }
+  rpc DeleteWorkspace(DeleteWorkspaceRequest) returns (DeleteWorkspaceResponse) {
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}"};
+  }
+  rpc GetWorkspaceMember(GetWorkspaceMemberRequest) returns (GetWorkspaceMemberResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/members/{user_id}"};
+  }
+  rpc ListWorkspaceMembers(ListWorkspaceMembersRequest) returns (ListWorkspaceMembersResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/members"};
+  }
+  rpc RemoveWorkspaceMember(RemoveWorkspaceMemberRequest) returns (RemoveWorkspaceMemberResponse) {
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/members/{user_id}"};
+  }
+  rpc UpdateWorkspaceMember(UpdateWorkspaceMemberRequest) returns (UpdateWorkspaceMemberResponse) {
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/members/{user_id}"};
+  }
+  rpc UpdateWorkspaceOwner(UpdateWorkspaceOwnerRequest) returns (UpdateWorkspaceOwnerResponse) {
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/owner/{new_owner}"};
+  }
+  rpc SubscribeWorkspaceEvents(SubscribeWorkspaceEventsRequest) returns (stream SubscribeWorkspaceEventsResponse) {
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/events:subscribe"};
+  }
+}
+
+message Workspace {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string created_by = 4;
+  WorkspaceSettings settings = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+message WorkspaceMember {
+  string id = 1; // User ID
+  string workspace_id = 2;
+  string name = 3;
+  string username = 4;
+  string email = 5;
+  bool email_verified = 6;
+  string picture = 7;
+  string role_name = 8;
+  string role_description = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+}
+message WorkspaceSettings {
+  bool enroll_auto_approve = 1;
+  google.protobuf.Timestamp enroll_expires_at = 2;
+  google.protobuf.Timestamp invite_expires_at = 3;
+}
+
+message GetWorkspaceRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message GetWorkspaceResponse {
+  Workspace workspace = 1;
+}
+
+message CreateWorkspaceRequest {
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 256
+  }];
+  string description = 2 [(buf.validate.field).string.max_len = 1000];
+}
+message CreateWorkspaceResponse {
+  Workspace workspace = 1;
+}
+
+message UpdateWorkspaceRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 256
+  }];
+  string description = 3 [(buf.validate.field).string.max_len = 1000];
+}
+message UpdateWorkspaceResponse {
+  Workspace workspace = 1;
+}
+
+message DeleteWorkspaceRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message DeleteWorkspaceResponse {}
+
+message ListWorkspacesRequest {}
+message ListWorkspacesResponse {
+  repeated Workspace workspaces = 1;
+}
+
+// Members --------------------------------------------------------------------
+message GetWorkspaceMemberRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message GetWorkspaceMemberResponse {
+  WorkspaceMember member = 1;
+}
+
+message ListWorkspaceMembersRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  int32 limit = 2 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }];
+  int32 offset = 3;
+  string query = 4;
+  string role_name = 5;
+  repeated string team_ids = 6 [(buf.validate.field).repeated.items.string.uuid = true];
+}
+message ListWorkspaceMembersResponse {
+  repeated WorkspaceMember members = 1;
+  int32 total = 2;
+}
+
+message RemoveWorkspaceMemberRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message RemoveWorkspaceMemberResponse {}
+
+message UpdateWorkspaceMemberRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  string role_name = 3;
+}
+message UpdateWorkspaceMemberResponse {}
+
+// Settings -------------------------------------------------------------------
+message UpdateWorkspaceSettingsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  bool enroll_auto_approve = 2;
+  google.protobuf.Duration enroll_expiry = 3 [(buf.validate.field).duration = {
+    gte: {seconds: 300} /* Min 5 minutes */
+    lte: {seconds: 2592000} /* Max 30 days */
+  }];
+  google.protobuf.Duration invite_expiry = 4 [(buf.validate.field).duration = {
+    gte: {seconds: 300} /* Min 5 minutes */
+    lte: {seconds: 2592000} /* Max 30 days */
+  }];
+}
+message UpdateWorkspaceSettingsResponse {
+  WorkspaceSettings settings = 1;
+}
+
+// Various --------------------------------------------------------------------
+message UpdateWorkspaceOwnerRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string new_owner = 2 [(buf.validate.field).string.uuid = true];
+}
+message UpdateWorkspaceOwnerResponse {}
+
+message SubscribeWorkspaceEventsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  repeated string event_types = 2;
+}
+message SubscribeWorkspaceEventsResponse {
+  string id = 1;
+  string type = 2;
+  string workspace_id = 3;
+  string payload_json = 4 [json_name = "payload"];
+  google.protobuf.Timestamp created_at = 5;
+}
