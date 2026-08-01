@@ -1,0 +1,21 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service LicenseService {
+  rpc GetLicense(GetLicenseRequest) returns (GetLicenseResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/license"};
+  }
+}
+
+message GetLicenseRequest {}
+message GetLicenseResponse {
+  string plan = 1;
+  string status = 2;
+  string key = 3;
+  google.protobuf.Timestamp expires_at = 4;
+}
