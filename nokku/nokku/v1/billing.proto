@@ -11,7 +11,7 @@ service BillingService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/billing/subscription"};
   }
-  rpc CreateCustomerPortal(CreateCustomerPortalRequest) returns (CreateCustomerPortalResponse) {
+  rpc CreatePortal(CreatePortalRequest) returns (CreatePortalResponse) {
     option (google.api.http) = {post: "/v1/billing/portal"};
   }
   rpc CreateCheckout(CreateCheckoutRequest) returns (CreateCheckoutResponse) {
@@ -42,22 +42,22 @@ message GetBillingResponse {
   string product_id = 2;
   string product_name = 3;
   string status = 4;
-  bool cancel_at_period_end = 5;
-  map<string, string> metadata = 6;
-  WorkspaceCounts counts = 7;
-  google.protobuf.Timestamp current_period_end = 8;
+  bool billing_enabled = 5;
+  bool cancel_at_period_end = 6;
+  map<string, string> metadata = 7;
+  WorkspaceCounts counts = 8;
+  google.protobuf.Timestamp current_period_end = 9;
 }
 
-message CreateCustomerPortalRequest {
+message CreatePortalRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
-message CreateCustomerPortalResponse {
+message CreatePortalResponse {
   string url = 1;
 }
 
 message CreateCheckoutRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string product_id = 2;
 }
 message CreateCheckoutResponse {
   string url = 1;
@@ -66,7 +66,6 @@ message CreateCheckoutResponse {
 message CancelSubscriptionRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   bool immediate = 2;
-  bool cancel_at_period_end = 3;
-  string reason = 4 [(buf.validate.field).string.max_len = 1000];
+  string reason = 3 [(buf.validate.field).string.max_len = 1000];
 }
 message CancelSubscriptionResponse {}
