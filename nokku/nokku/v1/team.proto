@@ -94,7 +94,7 @@ message ListTeamsRequest {
     gte: 1
     lte: 100
   }];
-  int32 offset = 3;
+  int32 offset = 3 [(buf.validate.field).int32.gte = 0];
   string query = 4;
   repeated string tags = 5;
 }

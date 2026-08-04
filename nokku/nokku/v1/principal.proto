@@ -74,7 +74,7 @@ message ListPrincipalsRequest {
     gte: 1
     lte: 100
   }];
-  int32 offset = 3;
+  int32 offset = 3 [(buf.validate.field).int32.gte = 0];
   string query = 4;
   PrincipalType type = 5 [(buf.validate.field).enum = {
     defined_only: true
