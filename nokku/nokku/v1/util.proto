@@ -11,6 +11,10 @@ service UtilService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/version"};
   }
+  rpc ListRoles(ListRolesRequest) returns (ListRolesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/roles"};
+  }
   rpc ListAuditLogs(ListAuditLogsRequest) returns (ListAuditLogsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/audit"};
@@ -26,6 +30,18 @@ service UtilService {
 message GetVersionRequest {}
 message GetVersionResponse {
   string version = 1;
+}
+
+message Role {
+  string name = 1;
+  string description = 2;
+  repeated string permissions = 3;
+  bool assignable_to_users = 4;
+  bool assignable_to_service_accounts = 5;
+}
+message ListRolesRequest {}
+message ListRolesResponse {
+  repeated Role roles = 1;
 }
 
 message EventLog {
