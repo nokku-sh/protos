@@ -164,14 +164,17 @@ message CloseSessionResponse {}
 message EnrollDaemonRequest {
   string token = 1 [(buf.validate.field).string.min_len = 1];
   string ca_id = 2;
+  // Signing method used by the daemon after enrollment: "tpm" or "soft".
+  string auth_method = 3;
+  // PEM-encoded PKIX public key the daemon uses to authenticate requests.
+  string auth_pubkey = 4;
 }
 message EnrollDaemonResponse {
   string id = 1;
   string workspace_id = 2;
   string target_id = 3;
-  string token = 4;
-  DaemonStatus status = 5;
-  DaemonConfig config = 6;
+  DaemonStatus status = 4;
+  DaemonConfig config = 5;
 }
 
 message PrincipalUsers {
