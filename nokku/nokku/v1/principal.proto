@@ -55,8 +55,9 @@ message Principal {
 }
 
 message SetPrincipalsRequest {
-  string target_id = 1 [(buf.validate.field).string.uuid = true];
-  repeated string usernames = 2 [(buf.validate.field).repeated = {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string target_id = 2 [(buf.validate.field).string.uuid = true];
+  repeated string usernames = 3 [(buf.validate.field).repeated = {
     items: {
       string: {
         min_len: 1
@@ -69,14 +70,15 @@ message SetPrincipalsRequest {
 message SetPrincipalsResponse {}
 
 message ListPrincipalsRequest {
-  string target_id = 1 [(buf.validate.field).string.uuid = true];
-  int32 limit = 2 [(buf.validate.field).int32 = {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string target_id = 2 [(buf.validate.field).string.uuid = true];
+  int32 limit = 3 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }];
-  int32 offset = 3 [(buf.validate.field).int32.gte = 0];
-  string query = 4;
-  PrincipalType type = 5 [(buf.validate.field).enum = {
+  int32 offset = 4 [(buf.validate.field).int32.gte = 0];
+  string query = 5;
+  PrincipalType type = 6 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -87,15 +89,16 @@ message ListPrincipalsResponse {
 }
 
 message AddSubjectsToPrincipalRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  repeated string subject_ids = 2 [(buf.validate.field).repeated = {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+  repeated string subject_ids = 3 [(buf.validate.field).repeated = {
     min_items: 1
     max_items: 50
     items: {
       string: {uuid: true}
     }
   }];
-  PrincipalType type = 3 [(buf.validate.field).enum = {
+  PrincipalType type = 4 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -103,15 +106,16 @@ message AddSubjectsToPrincipalRequest {
 message AddSubjectsToPrincipalResponse {}
 
 message RemoveSubjectsFromPrincipalRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  repeated string subject_ids = 2 [(buf.validate.field).repeated = {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+  repeated string subject_ids = 3 [(buf.validate.field).repeated = {
     min_items: 1
     max_items: 50
     items: {
       string: {uuid: true}
     }
   }];
-  PrincipalType type = 3 [(buf.validate.field).enum = {
+  PrincipalType type = 4 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];

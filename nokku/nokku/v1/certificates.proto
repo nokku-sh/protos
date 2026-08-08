@@ -128,16 +128,15 @@ message CreateCertificateAuthorityRequest {
   }];
   map<string, string> user_extensions = 13;
   map<string, string> user_critical_options = 14;
-  AuthorityType authority_type = 15 [(buf.validate.field).enum = {
-    defined_only: true
-  }];
+  AuthorityType authority_type = 15 [(buf.validate.field).enum = {defined_only: true}];
 }
 message CreateCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
 }
 
 message GetCertificateAuthorityRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
@@ -151,51 +150,54 @@ message ListCertificateAuthoritiesResponse {
 }
 
 message UpdateCertificateAuthorityRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string = {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+  string name = 3 [(buf.validate.field).string = {
     min_len: 1
     max_len: 256
   }];
-  string description = 3 [(buf.validate.field).string.max_len = 1000];
-  bool is_active = 4;
-  bool is_default = 5;
-  repeated CertificateKeyType allowed_key_types = 6;
-  google.protobuf.Duration lifetime = 7 [(buf.validate.field).duration = {
+  string description = 4 [(buf.validate.field).string.max_len = 1000];
+  bool is_active = 5;
+  bool is_default = 6;
+  repeated CertificateKeyType allowed_key_types = 7;
+  google.protobuf.Duration lifetime = 8 [(buf.validate.field).duration = {
     gte: {seconds: 2628000} /* Min 1 month */
     lte: {seconds: 315360000} /* Max 10 years */
   }];
-  google.protobuf.Duration user_default_ttl = 8 [(buf.validate.field).duration = {
+  google.protobuf.Duration user_default_ttl = 9 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration user_max_ttl = 9 [(buf.validate.field).duration = {
+  google.protobuf.Duration user_max_ttl = 10 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration host_default_ttl = 10 [(buf.validate.field).duration = {
+  google.protobuf.Duration host_default_ttl = 11 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration host_max_ttl = 11 [(buf.validate.field).duration = {
+  google.protobuf.Duration host_max_ttl = 12 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  map<string, string> user_extensions = 12;
-  map<string, string> user_critical_options = 13;
+  map<string, string> user_extensions = 13;
+  map<string, string> user_critical_options = 14;
 }
 message UpdateCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
 }
 
 message DeleteCertificateAuthorityRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message DeleteCertificateAuthorityResponse {}
 
 message RolloverCertificateAuthorityRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  int32 key_bits = 2;
-  CertificateKeyType key_type = 3;
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+  int32 key_bits = 3;
+  CertificateKeyType key_type = 4;
 }
 message RolloverCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
@@ -243,9 +245,7 @@ message SignX509CertificateRequest {
     min_len: 1
     max_len: 10000
   }];
-  X509Usage usage = 4 [(buf.validate.field).enum = {
-    defined_only: true
-  }];
+  X509Usage usage = 4 [(buf.validate.field).enum = {defined_only: true}];
   google.protobuf.Duration ttl = 5 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}

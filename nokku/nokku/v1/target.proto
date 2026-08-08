@@ -5,8 +5,8 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "nokku/v1/daemon.proto";
 import "nokku/v1/certificates.proto";
+import "nokku/v1/daemon.proto";
 import "nokku/v1/principal.proto";
 
 service TargetService {
@@ -61,7 +61,8 @@ message Target {
 }
 
 message GetTargetRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetTargetResponse {
   Target target = 1;
@@ -84,23 +85,25 @@ message CreateTargetResponse {
 }
 
 message UpdateTargetRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  string ca_id = 2 [(buf.validate.field).string.uuid = true];
-  string name = 3 [(buf.validate.field).string = {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+  string ca_id = 3 [(buf.validate.field).string.uuid = true];
+  string name = 4 [(buf.validate.field).string = {
     min_len: 1
     max_len: 256
     pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
   }];
-  string description = 4 [(buf.validate.field).string.max_len = 1000];
-  repeated string endpoints = 5;
-  repeated string tags = 6;
+  string description = 5 [(buf.validate.field).string.max_len = 1000];
+  repeated string endpoints = 6;
+  repeated string tags = 7;
 }
 message UpdateTargetResponse {
   Target target = 1;
 }
 
 message DeleteTargetRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message DeleteTargetResponse {}
 

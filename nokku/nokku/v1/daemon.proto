@@ -73,15 +73,17 @@ message DaemonConfig {
 }
 
 message GetDaemonRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetDaemonResponse {
   Daemon daemon = 1;
 }
 
 message UpdateDaemonRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  DaemonStatus status = 2 [(buf.validate.field).enum = {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+  DaemonStatus status = 3 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0] /* Prevent UNSPECIFIED */
   }];
@@ -89,7 +91,8 @@ message UpdateDaemonRequest {
 message UpdateDaemonResponse {}
 
 message DeleteDaemonRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message DeleteDaemonResponse {}
 
@@ -123,11 +126,12 @@ message RevokeEnrollTokenRequest {
 message RevokeEnrollTokenResponse {}
 
 message CreateSessionRequest {
-  string daemon_id = 1 [
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string daemon_id = 2 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
-  string username = 2 [(buf.validate.field).string = {
+  string username = 3 [(buf.validate.field).string = {
     min_len: 1
     max_len: 32
     pattern: "^[a-z_][a-z0-9-_]*\\$?$"
@@ -139,7 +143,8 @@ message CreateSessionResponse {
 }
 
 message ListSessionsRequest {
-  string daemon_id = 1 [
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string daemon_id = 2 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
@@ -150,11 +155,12 @@ message ListSessionsResponse {
 }
 
 message CloseSessionRequest {
-  string daemon_id = 1 [
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string daemon_id = 2 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
-  string session_id = 2 [
+  string session_id = 3 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
@@ -164,9 +170,7 @@ message CloseSessionResponse {}
 message EnrollDaemonRequest {
   string token = 1 [(buf.validate.field).string.min_len = 1];
   string ca_id = 2;
-  // Signing method used by the daemon after enrollment: "tpm" or "soft".
   string auth_method = 3;
-  // PEM-encoded PKIX public key the daemon uses to authenticate requests.
   string auth_pubkey = 4;
 }
 message EnrollDaemonResponse {

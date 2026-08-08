@@ -42,7 +42,8 @@ message WorkspaceDomain {
 }
 
 message GetWorkspaceDomainRequest {
-  string domain = 1 [(buf.validate.field).string.hostname = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 2 [(buf.validate.field).string.hostname = true];
 }
 message GetWorkspaceDomainResponse {
   WorkspaceDomain domain = 1;
@@ -68,19 +69,22 @@ message ListWorkspaceDomainsResponse {
 }
 
 message DeleteWorkspaceDomainRequest {
-  string domain = 1 [(buf.validate.field).string.hostname = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 2 [(buf.validate.field).string.hostname = true];
 }
 message DeleteWorkspaceDomainResponse {}
 
 message VerifyWorkspaceDomainRequest {
-  string domain = 1 [(buf.validate.field).string.hostname = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 2 [(buf.validate.field).string.hostname = true];
 }
 message VerifyWorkspaceDomainResponse {
   WorkspaceDomain domain = 1;
 }
 
 message RegenerateWorkspaceDomainTokenRequest {
-  string domain = 1 [(buf.validate.field).string.hostname = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 2 [(buf.validate.field).string.hostname = true];
 }
 message RegenerateWorkspaceDomainTokenResponse {
   WorkspaceDomain domain = 1;

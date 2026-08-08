@@ -51,7 +51,8 @@ message Team {
 }
 
 message GetTeamRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetTeamResponse {
   Team team = 1;
@@ -71,20 +72,22 @@ message CreateTeamResponse {
 }
 
 message UpdateTeamRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string = {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+  string name = 3 [(buf.validate.field).string = {
     min_len: 1
     max_len: 256
   }];
-  string description = 3 [(buf.validate.field).string.max_len = 1000];
-  repeated string tags = 4;
+  string description = 4 [(buf.validate.field).string.max_len = 1000];
+  repeated string tags = 5;
 }
 message UpdateTeamResponse {
   Team team = 1;
 }
 
 message DeleteTeamRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message DeleteTeamResponse {}
 
@@ -104,13 +107,15 @@ message ListTeamsResponse {
 }
 
 message AddTeamMemberRequest {
-  string team_id = 1 [(buf.validate.field).string.uuid = true];
-  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string team_id = 2 [(buf.validate.field).string.uuid = true];
+  string user_id = 3 [(buf.validate.field).string.uuid = true];
 }
 message AddTeamMemberResponse {}
 
 message RemoveTeamMemberRequest {
-  string team_id = 1 [(buf.validate.field).string.uuid = true];
-  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string team_id = 2 [(buf.validate.field).string.uuid = true];
+  string user_id = 3 [(buf.validate.field).string.uuid = true];
 }
 message RemoveTeamMemberResponse {}
