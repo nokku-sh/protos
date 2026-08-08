@@ -29,9 +29,8 @@ message WorkspaceCounts {
   int64 members = 1;
   int64 teams = 2;
   int64 service_accounts = 3;
-  int64 daemons = 4;
-  int64 targets = 5;
-  int64 cas = 6;
+  int64 targets = 4;
+  int64 cas = 5;
 }
 
 message GetBillingRequest {
