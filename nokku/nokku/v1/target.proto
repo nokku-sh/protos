@@ -12,7 +12,7 @@ import "nokku/v1/principal.proto";
 service TargetService {
   rpc GetTarget(GetTargetRequest) returns (GetTargetResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/targets/{id}"};
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/targets/{id}"};
   }
   rpc ListTargets(ListTargetsRequest) returns (ListTargetsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -26,12 +26,12 @@ service TargetService {
   }
   rpc UpdateTarget(UpdateTargetRequest) returns (UpdateTargetResponse) {
     option (google.api.http) = {
-      patch: "/v1/targets/{id}"
+      patch: "/v1/workspaces/{workspace_id}/targets/{id}"
       body: "*"
     };
   }
   rpc DeleteTarget(DeleteTargetRequest) returns (DeleteTargetResponse) {
-    option (google.api.http) = {delete: "/v1/targets/{id}"};
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/targets/{id}"};
   }
   rpc GetSubjectAccess(GetSubjectAccessRequest) returns (GetSubjectAccessResponse) {
     option (google.api.http) = {

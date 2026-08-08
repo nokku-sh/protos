@@ -9,7 +9,7 @@ import "google/protobuf/timestamp.proto";
 service WorkspaceDomainService {
   rpc GetWorkspaceDomain(GetWorkspaceDomainRequest) returns (GetWorkspaceDomainResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/domains/{domain}"};
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/domains/{domain}"};
   }
   rpc ListWorkspaceDomains(ListWorkspaceDomainsRequest) returns (ListWorkspaceDomainsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -22,13 +22,13 @@ service WorkspaceDomainService {
     };
   }
   rpc DeleteWorkspaceDomain(DeleteWorkspaceDomainRequest) returns (DeleteWorkspaceDomainResponse) {
-    option (google.api.http) = {delete: "/v1/domains/{domain}"};
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/domains/{domain}"};
   }
   rpc VerifyWorkspaceDomain(VerifyWorkspaceDomainRequest) returns (VerifyWorkspaceDomainResponse) {
-    option (google.api.http) = {post: "/v1/domains/{domain}:verify"};
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/domains/{domain}:verify"};
   }
   rpc RegenerateWorkspaceDomainToken(RegenerateWorkspaceDomainTokenRequest) returns (RegenerateWorkspaceDomainTokenResponse) {
-    option (google.api.http) = {post: "/v1/domains/{domain}:generate"};
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/domains/{domain}:generate"};
   }
 }
 

@@ -9,29 +9,29 @@ import "google/protobuf/timestamp.proto";
 service PrincipalService {
   rpc SetPrincipals(SetPrincipalsRequest) returns (SetPrincipalsResponse) {
     option (google.api.http) = {
-      post: "/v1/principals"
+      post: "/v1/workspaces/{workspace_id}/principals"
       body: "*"
     };
   }
   rpc ListPrincipals(ListPrincipalsRequest) returns (ListPrincipalsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/principals"};
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/principals"};
   }
   rpc AddSubjectsToPrincipal(AddSubjectsToPrincipalRequest) returns (AddSubjectsToPrincipalResponse) {
     option (google.api.http) = {
-      post: "/v1/principals/add"
+      post: "/v1/workspaces/{workspace_id}/principals:add"
       body: "*"
     };
   }
   rpc RemoveSubjectsFromPrincipal(RemoveSubjectsFromPrincipalRequest) returns (RemoveSubjectsFromPrincipalResponse) {
     option (google.api.http) = {
-      post: "/v1/principals/remove"
+      post: "/v1/workspaces/{workspace_id}/principals:remove"
       body: "*"
     };
   }
   rpc RevokeAllAccess(RevokeAllAccessRequest) returns (RevokeAllAccessResponse) {
     option (google.api.http) = {
-      post: "/v1/principals/revoke"
+      post: "/v1/workspaces/{workspace_id}/principals:revoke"
       body: "*"
     };
   }
