@@ -15,7 +15,6 @@ service LicenseService {
 message GetLicenseRequest {}
 message GetLicenseResponse {
   string plan = 1;
-  string key = 2;
-  bool active = 3;
-  google.protobuf.Timestamp expires_at = 4;
+  bool active = 2;
+  google.protobuf.Timestamp expires_at = 3;
 }
