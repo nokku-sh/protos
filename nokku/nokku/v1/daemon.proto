@@ -93,6 +93,7 @@ message UpdateDaemonRequest {
     defined_only: true
     not_in: [0] /* Prevent UNSPECIFIED */
   }];
+  DaemonConfig config = 4;
 }
 message UpdateDaemonResponse {}
 
