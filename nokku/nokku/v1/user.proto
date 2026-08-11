@@ -52,10 +52,12 @@ message User {
 }
 
 message OAuthIdentity {
-  string provider = 1;
-  string provider_email = 2;
-  string provider_username = 3;
-  google.protobuf.Timestamp created_at = 4;
+  string provider_id = 1;
+  string provider = 2;
+  string provider_email = 3;
+  string provider_username = 4;
+  string protocol = 5; // 'oauth' | 'oidc' | 'saml'
+  google.protobuf.Timestamp created_at = 6;
 }
 
 message UserDevice {
