@@ -202,6 +202,7 @@ message SyncDaemonResponse {
   DaemonStatus status = 1;
   DaemonConfig config = 2;
   repeated PrincipalUsers principals = 3;
+  int64 state_version = 4;
 }
 
 // Control Stream -------------------------------------------------------------
@@ -209,39 +210,27 @@ message SyncDaemonResponse {
 message ConnectRequest {
   oneof msg {
     Heartbeat heartbeat = 1;
-    SyncReport sync = 2;
   }
 }
 
 message ConnectResponse {
   oneof msg {
     HeartbeatAck heartbeat_ack = 1;
-    Notification notification = 2;
+    StateUpdate state_update = 2;
     Session session = 3;
   }
 }
 
-message Heartbeat {}
-
-message HeartbeatAck {}
-
-message SyncReport {
-  repeated string users = 1;
-  repeated string private_ips = 2;
-  map<string, string> metadata = 3;
+message Heartbeat {
+  int64 state_version = 1;
 }
 
-message Notification {
-  enum EventType {
-    EVENT_TYPE_UNSPECIFIED = 0;
-    EVENT_TYPE_STATUS = 1;
-    EVENT_TYPE_PRINCIPALS = 2;
-    EVENT_TYPE_CERTIFICATES = 3;
-    EVENT_TYPE_SYNC_REQUEST = 4;
-  }
-  EventType event_type = 1;
-  string daemon_id = 2;
-  DaemonStatus status = 3;
+message HeartbeatAck {
+  int64 state_version = 1;
+}
+
+message StateUpdate {
+  int64 state_version = 1;
 }
 
 message Session {
