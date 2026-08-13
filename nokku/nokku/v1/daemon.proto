@@ -203,6 +203,7 @@ message SyncDaemonResponse {
   DaemonConfig config = 2;
   repeated PrincipalUsers principals = 3;
   int64 state_version = 4;
+  string ca_public_key = 5;
 }
 
 // Control Stream -------------------------------------------------------------
