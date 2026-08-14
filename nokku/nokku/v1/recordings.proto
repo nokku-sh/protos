@@ -1,0 +1,89 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service RecordingService {
+  rpc UploadRecording(stream UploadRecordingRequest) returns (UploadRecordingResponse);
+  rpc ListRecordings(ListRecordingsRequest) returns (ListRecordingsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/recordings"};
+  }
+  rpc GetRecording(GetRecordingRequest) returns (stream GetRecordingResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/recordings/{recording_id}"};
+  }
+  rpc DeleteRecording(DeleteRecordingRequest) returns (DeleteRecordingResponse) {
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/recordings/{recording_id}"};
+  }
+}
+
+message Recording {
+  string id = 1;
+  string workspace_id = 2;
+  string daemon_id = 3;
+  string username = 4;
+  int64 size_bytes = 5;
+  string key_fingerprint = 6;
+  bool complete = 7;
+  google.protobuf.Timestamp started_at = 8;
+  google.protobuf.Timestamp ended_at = 9;
+}
+
+message UploadRecordingRequest {
+  oneof msg {
+    RecordingMeta meta = 1;
+    bytes chunk = 2;
+    RecordingFinal final = 3;
+  }
+}
+
+message RecordingMeta {
+  string recording_id = 1 [(buf.validate.field).string.uuid = true];
+  string username = 2 [(buf.validate.field).string.max_len = 32];
+  // Fingerprint of the workspace recording key the chunks were sealed with.
+  string key_fingerprint = 3;
+}
+
+message RecordingFinal {}
+
+message UploadRecordingResponse {
+  string recording_id = 1;
+  int64 size_bytes = 2;
+}
+
+message ListRecordingsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string daemon_id = 2 [(buf.validate.field).string.uuid = true];
+  int32 limit = 3 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }];
+  int32 offset = 4 [(buf.validate.field).int32.gte = 0];
+  string username = 5;
+}
+message ListRecordingsResponse {
+  repeated Recording recordings = 1;
+  int32 total = 2;
+  int64 total_bytes = 3;
+}
+
+message GetRecordingRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string recording_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message GetRecordingResponse {
+  oneof msg {
+    RecordingMeta meta = 1;
+    bytes chunk = 2;
+  }
+}
+
+message DeleteRecordingRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string recording_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message DeleteRecordingResponse {}
