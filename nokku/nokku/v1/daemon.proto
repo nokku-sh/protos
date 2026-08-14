@@ -76,6 +76,7 @@ message Daemon {
 
 message DaemonConfig {
   bool record_sessions = 1;
+  string recording_public_key = 2;
 }
 
 message GetDaemonRequest {

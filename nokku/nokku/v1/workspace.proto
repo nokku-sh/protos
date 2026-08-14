@@ -57,6 +57,18 @@ service WorkspaceService {
   rpc SubscribeWorkspaceEvents(SubscribeWorkspaceEventsRequest) returns (stream SubscribeWorkspaceEventsResponse) {
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/events:subscribe"};
   }
+  rpc SetRecordingKey(SetRecordingKeyRequest) returns (SetRecordingKeyResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/settings:set-recording-key"
+      body: "*"
+    };
+  }
+  rpc ClearRecordingKey(ClearRecordingKeyRequest) returns (ClearRecordingKeyResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/settings:clear-recording-key"
+      body: "*"
+    };
+  }
 }
 
 message Workspace {
@@ -85,6 +97,9 @@ message WorkspaceSettings {
   bool enroll_auto_approve = 1;
   google.protobuf.Timestamp enroll_expires_at = 2;
   google.protobuf.Timestamp invite_expires_at = 3;
+  string recording_public_key = 4;
+  string recording_key_fingerprint = 5;
+  google.protobuf.Timestamp recording_key_created_at = 6;
 }
 
 message GetWorkspaceRequest {
@@ -199,4 +214,23 @@ message SubscribeWorkspaceEventsResponse {
   string workspace_id = 3;
   string payload_json = 4 [json_name = "payload"];
   google.protobuf.Timestamp created_at = 5;
+}
+
+// Recording key --------------------------------------------------------------
+message SetRecordingKeyRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string public_key = 2 [(buf.validate.field).string = {
+    min_len: 32
+    max_len: 128
+  }];
+}
+message SetRecordingKeyResponse {
+  WorkspaceSettings settings = 1;
+}
+
+message ClearRecordingKeyRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ClearRecordingKeyResponse {
+  WorkspaceSettings settings = 1;
 }
