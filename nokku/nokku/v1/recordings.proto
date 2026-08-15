@@ -19,6 +19,18 @@ service RecordingService {
   rpc DeleteRecording(DeleteRecordingRequest) returns (DeleteRecordingResponse) {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/recordings/{recording_id}"};
   }
+  rpc SetRecordingKey(SetRecordingKeyRequest) returns (SetRecordingKeyResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/settings:set-recording-key"
+      body: "*"
+    };
+  }
+  rpc ClearRecordingKey(ClearRecordingKeyRequest) returns (ClearRecordingKeyResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/settings:clear-recording-key"
+      body: "*"
+    };
+  }
 }
 
 message Recording {
@@ -44,7 +56,6 @@ message UploadRecordingRequest {
 message RecordingMeta {
   string recording_id = 1 [(buf.validate.field).string.uuid = true];
   string username = 2 [(buf.validate.field).string.max_len = 32];
-  // Fingerprint of the workspace recording key the chunks were sealed with.
   string key_fingerprint = 3;
 }
 
@@ -87,3 +98,17 @@ message DeleteRecordingRequest {
   string recording_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message DeleteRecordingResponse {}
+
+message SetRecordingKeyRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string public_key = 2 [(buf.validate.field).string = {
+    min_len: 32
+    max_len: 128
+  }];
+}
+message SetRecordingKeyResponse {}
+
+message ClearRecordingKeyRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ClearRecordingKeyResponse {}

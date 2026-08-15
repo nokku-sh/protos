@@ -4,8 +4,8 @@ package nokku.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
+import "nokku/v1/daemon.proto";
 
 service WorkspaceService {
   rpc GetWorkspace(GetWorkspaceRequest) returns (GetWorkspaceResponse) {
@@ -25,12 +25,6 @@ service WorkspaceService {
   rpc UpdateWorkspace(UpdateWorkspaceRequest) returns (UpdateWorkspaceResponse) {
     option (google.api.http) = {
       patch: "/v1/workspaces/{workspace_id}"
-      body: "*"
-    };
-  }
-  rpc UpdateWorkspaceSettings(UpdateWorkspaceSettingsRequest) returns (UpdateWorkspaceSettingsResponse) {
-    option (google.api.http) = {
-      patch: "/v1/workspaces/{workspace_id}/settings"
       body: "*"
     };
   }
@@ -57,18 +51,6 @@ service WorkspaceService {
   rpc SubscribeWorkspaceEvents(SubscribeWorkspaceEventsRequest) returns (stream SubscribeWorkspaceEventsResponse) {
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/events:subscribe"};
   }
-  rpc SetRecordingKey(SetRecordingKeyRequest) returns (SetRecordingKeyResponse) {
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/settings:set-recording-key"
-      body: "*"
-    };
-  }
-  rpc ClearRecordingKey(ClearRecordingKeyRequest) returns (ClearRecordingKeyResponse) {
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/settings:clear-recording-key"
-      body: "*"
-    };
-  }
 }
 
 message Workspace {
@@ -76,9 +58,13 @@ message Workspace {
   string name = 2;
   string description = 3;
   string created_by = 4;
-  WorkspaceSettings settings = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
+  string enroll_token_hash = 5;
+  google.protobuf.Timestamp enroll_expires_at = 6;
+  string invite_token_hash = 7;
+  google.protobuf.Timestamp invite_expires_at = 8;
+  WorkspaceSettings settings = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 message WorkspaceMember {
   string id = 1; // User ID
@@ -95,11 +81,10 @@ message WorkspaceMember {
 }
 message WorkspaceSettings {
   bool enroll_auto_approve = 1;
-  google.protobuf.Timestamp enroll_expires_at = 2;
-  google.protobuf.Timestamp invite_expires_at = 3;
-  string recording_public_key = 4;
-  string recording_key_fingerprint = 5;
-  google.protobuf.Timestamp recording_key_created_at = 6;
+  string recording_public_key = 2;
+  string recording_key_fingerprint = 3;
+  google.protobuf.Timestamp recording_key_created_at = 4;
+  nokku.v1.DaemonConfig default_daemon_config = 5;
 }
 
 message GetWorkspaceRequest {
@@ -127,6 +112,7 @@ message UpdateWorkspaceRequest {
     max_len: 256
   }];
   string description = 3 [(buf.validate.field).string.max_len = 1000];
+  WorkspaceSettings settings = 4;
 }
 message UpdateWorkspaceResponse {
   Workspace workspace = 1;
@@ -180,23 +166,6 @@ message UpdateWorkspaceMemberRequest {
 }
 message UpdateWorkspaceMemberResponse {}
 
-// Settings -------------------------------------------------------------------
-message UpdateWorkspaceSettingsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  bool enroll_auto_approve = 2;
-  google.protobuf.Duration enroll_expiry = 3 [(buf.validate.field).duration = {
-    gte: {seconds: 300} /* Min 5 minutes */
-    lte: {seconds: 2592000} /* Max 30 days */
-  }];
-  google.protobuf.Duration invite_expiry = 4 [(buf.validate.field).duration = {
-    gte: {seconds: 300} /* Min 5 minutes */
-    lte: {seconds: 2592000} /* Max 30 days */
-  }];
-}
-message UpdateWorkspaceSettingsResponse {
-  WorkspaceSettings settings = 1;
-}
-
 // Various --------------------------------------------------------------------
 message UpdateWorkspaceOwnerRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
@@ -214,23 +183,4 @@ message SubscribeWorkspaceEventsResponse {
   string workspace_id = 3;
   string payload_json = 4 [json_name = "payload"];
   google.protobuf.Timestamp created_at = 5;
-}
-
-// Recording key --------------------------------------------------------------
-message SetRecordingKeyRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string public_key = 2 [(buf.validate.field).string = {
-    min_len: 32
-    max_len: 128
-  }];
-}
-message SetRecordingKeyResponse {
-  WorkspaceSettings settings = 1;
-}
-
-message ClearRecordingKeyRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
-message ClearRecordingKeyResponse {
-  WorkspaceSettings settings = 1;
 }
