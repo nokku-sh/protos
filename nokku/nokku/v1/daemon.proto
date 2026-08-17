@@ -185,8 +185,6 @@ message CloseSessionResponse {}
 message EnrollDaemonRequest {
   string token = 1 [(buf.validate.field).string.min_len = 1];
   string ca_id = 2;
-  string auth_method = 3;
-  string auth_pubkey = 4;
 }
 message EnrollDaemonResponse {
   string id = 1;
@@ -194,6 +192,7 @@ message EnrollDaemonResponse {
   string target_id = 3;
   DaemonStatus status = 4;
   DaemonConfig config = 5;
+  string access_token = 6;
 }
 
 message PrincipalUsers {
