@@ -32,6 +32,27 @@ service UserService {
       body: "*"
     };
   }
+  rpc ListUserSessions(ListUserSessionsRequest) returns (ListUserSessionsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/account/sessions"};
+  }
+  rpc RevokeUserSession(RevokeUserSessionRequest) returns (RevokeUserSessionResponse) {
+    option (google.api.http) = {delete: "/v1/account/sessions/{session_id}"};
+  }
+}
+
+// Session is a login session the user can see and revoke. It never carries
+// the raw token; only the hash-derived id and metadata.
+message UserSession {
+  string id = 1;
+  string kind = 2; // 'user' | 'daemon'
+  string method = 3; // 'password' | 'passkey' | 'device' | 'oidc' | ...
+  string identity_id = 4; // CLI device id, when the session is device-bound
+  string binding = 5; // DPoP key thumbprint (jkt), when key-bound
+  google.protobuf.Timestamp expires_at = 6; // absent = never expires
+  google.protobuf.Timestamp last_seen = 7;
+  google.protobuf.Timestamp created_at = 8;
+  bool is_current = 9; // true for the session presenting this request
 }
 
 message User {
@@ -98,3 +119,14 @@ message SetEmailRecoveryRequest {
   bool enable = 1;
 }
 message SetEmailRecoveryResponse {}
+
+// Sessions ----------------------------------------------------------------------
+message ListUserSessionsRequest {}
+message ListUserSessionsResponse {
+  repeated UserSession sessions = 1;
+}
+
+message RevokeUserSessionRequest {
+  string session_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message RevokeUserSessionResponse {}
