@@ -53,7 +53,7 @@ service DaemonControlService {
 }
 
 service DaemonSessionService {
-  rpc Session(stream SessionRequest) returns (stream SessionResponse);
+  rpc DaemonSession(stream DaemonSessionRequest) returns (stream DaemonSessionResponse);
 }
 
 enum DaemonStatus {
@@ -154,7 +154,7 @@ message CreateSessionRequest {
   }];
 }
 message CreateSessionResponse {
-  Session session = 1;
+  DaemonSession session = 1;
   string daemon_name = 2;
 }
 
@@ -166,7 +166,7 @@ message ListSessionsRequest {
   ];
 }
 message ListSessionsResponse {
-  repeated Session sessions = 1;
+  repeated DaemonSession sessions = 1;
   string daemon_name = 2;
 }
 
@@ -226,7 +226,7 @@ message ConnectResponse {
   oneof msg {
     HeartbeatAck heartbeat_ack = 1;
     StateUpdate state_update = 2;
-    Session session = 3;
+    DaemonSession session = 3;
   }
 }
 
@@ -242,7 +242,7 @@ message StateUpdate {
   int64 state_version = 1;
 }
 
-message Session {
+message DaemonSession {
   string session_id = 1;
   string username = 2;
   string user_id = 3;
@@ -250,39 +250,39 @@ message Session {
 
 // Session Stream -------------------------------------------------------------
 
-message SessionRequest {
+message DaemonSessionRequest {
   oneof msg {
-    SessionReady ready = 1;
+    DaemonSessionReady ready = 1;
     bytes stdout = 2;
-    SessionEnded exited = 3;
+    DaemonSessionEnded exited = 3;
   }
 }
 
-message SessionResponse {
+message DaemonSessionResponse {
   oneof msg {
     bytes stdin = 1;
-    ResizeRequest resize = 2;
-    CloseRequest close = 3;
+    DaemonResizeRequest resize = 2;
+    DaemonCloseRequest close = 3;
   }
 }
 
-message SessionReady {
+message DaemonSessionReady {
   string session_id = 1;
   bytes replay_buffer = 2;
   string username = 3;
   string user_id = 4;
 }
 
-message ResizeRequest {
+message DaemonResizeRequest {
   uint32 width = 1;
   uint32 height = 2;
 }
 
-message SessionEnded {
+message DaemonSessionEnded {
   int32 exit_code = 1;
   string error_message = 2;
 }
 
-message CloseRequest {
+message DaemonCloseRequest {
   string reason = 1;
 }
