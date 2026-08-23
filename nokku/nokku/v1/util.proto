@@ -57,7 +57,7 @@ message EventLog {
 }
 
 message ListAuditLogsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1;
   int32 limit = 2 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
@@ -83,7 +83,7 @@ message ExportAuditLogsRequest {
     FORMAT_CSV = 1;
     FORMAT_JSON = 2;
   }
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1;
   Format format = 2 [(buf.validate.field).enum = {defined_only: true}];
   google.protobuf.Timestamp start_date = 3;
   google.protobuf.Timestamp end_date = 4;
