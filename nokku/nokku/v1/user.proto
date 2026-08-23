@@ -127,6 +127,9 @@ message ListUserSessionsResponse {
 }
 
 message RevokeUserSessionRequest {
-  string session_id = 1 [(buf.validate.field).string.uuid = true];
+  string session_id = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 64
+  ];
 }
 message RevokeUserSessionResponse {}
