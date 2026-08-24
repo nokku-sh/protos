@@ -77,14 +77,13 @@ message Daemon {
 
 message DaemonConfig {
   bool record_sessions = 1;
-  string recording_public_key = 2;
-  bool allow_forwarding = 3;
-  bool allow_agent_forwarding = 4;
-  bool gateway_ports = 5;
-  int32 max_sessions = 6 [(buf.validate.field).int32.gte = 0];
-  int32 max_sessions_per_user = 7 [(buf.validate.field).int32.gte = 0];
-  int32 max_connections = 8 [(buf.validate.field).int32.gte = 0];
-  google.protobuf.Duration client_alive_interval = 9;
+  bool allow_forwarding = 2;
+  bool allow_agent_forwarding = 3;
+  bool gateway_ports = 4;
+  int32 max_sessions = 5 [(buf.validate.field).int32.gte = 0];
+  int32 max_sessions_per_user = 6 [(buf.validate.field).int32.gte = 0];
+  int32 max_connections = 7 [(buf.validate.field).int32.gte = 0];
+  google.protobuf.Duration client_alive_interval = 8;
 }
 
 message GetDaemonRequest {

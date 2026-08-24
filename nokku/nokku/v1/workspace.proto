@@ -81,10 +81,7 @@ message WorkspaceMember {
 }
 message WorkspaceSettings {
   bool enroll_auto_approve = 1;
-  string recording_public_key = 2;
-  string recording_key_fingerprint = 3;
-  google.protobuf.Timestamp recording_key_created_at = 4;
-  nokku.v1.DaemonConfig default_daemon_config = 5;
+  nokku.v1.DaemonConfig default_daemon_config = 2;
 }
 
 message GetWorkspaceRequest {
