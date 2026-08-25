@@ -4,6 +4,7 @@ package nokku.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
 service UtilService {
@@ -54,7 +55,7 @@ message EventLog {
   string ip_address = 7;
   string user_agent = 8;
   string status_code = 9;
-  map<string, string> details = 10;
+  google.protobuf.Struct details = 10;
   google.protobuf.Timestamp timestamp = 11;
 }
 
