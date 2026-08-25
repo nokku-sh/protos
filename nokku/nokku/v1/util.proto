@@ -49,11 +49,13 @@ message EventLog {
   string workspace_id = 2;
   string actor_id = 3;
   string actor_type = 4;
-  string action = 5;
-  string ip_address = 6;
-  string user_agent = 7;
-  string status_code = 8;
-  google.protobuf.Timestamp timestamp = 9;
+  string actor_email = 5;
+  string action = 6;
+  string ip_address = 7;
+  string user_agent = 8;
+  string status_code = 9;
+  map<string, string> details = 10;
+  google.protobuf.Timestamp timestamp = 11;
 }
 
 message ListAuditLogsRequest {
