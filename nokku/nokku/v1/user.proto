@@ -43,18 +43,15 @@ service UserService {
   }
 }
 
-// Session is a login session the user can see and revoke. It never carries
-// the raw token; only the hash-derived id and metadata.
 message UserSession {
   string id = 1;
-  string kind = 2; // 'user' | 'daemon'
-  string method = 3; // 'password' | 'passkey' | 'device' | 'oidc' | ...
-  string identity_id = 4; // CLI device id, when the session is device-bound
-  string binding = 5; // DPoP key thumbprint (jkt), when key-bound
-  google.protobuf.Timestamp expires_at = 6; // absent = never expires
+  string kind = 2;
+  string method = 3;
+  string identity_id = 4;
+  string binding = 5;
+  google.protobuf.Timestamp expires_at = 6;
   google.protobuf.Timestamp last_seen = 7;
   google.protobuf.Timestamp created_at = 8;
-  bool is_current = 9; // true for the session presenting this request
 }
 
 message User {
@@ -72,7 +69,7 @@ message User {
 message OAuthIdentity {
   string provider_id = 1;
   string provider = 2;
-  string protocol = 3; // 'oauth' | 'oidc' | 'saml'
+  string protocol = 3;
   google.protobuf.Timestamp created_at = 4;
 }
 
@@ -106,7 +103,7 @@ message UpdateProfileResponse {
 message DeleteAccountRequest {}
 message DeleteAccountResponse {}
 
-// OAuth linked accounts -------------------------------------------------------
+// OAuth linked accounts ------------------------------------------------------
 message ListLinkedAccountsRequest {}
 message ListLinkedAccountsResponse {
   repeated OAuthIdentity accounts = 1;
@@ -122,7 +119,7 @@ message SetEmailRecoveryRequest {
 }
 message SetEmailRecoveryResponse {}
 
-// Sessions ----------------------------------------------------------------------
+// Sessions -------------------------------------------------------------------
 message ListUserSessionsRequest {}
 message ListUserSessionsResponse {
   repeated UserSession sessions = 1;
