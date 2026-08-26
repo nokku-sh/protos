@@ -34,8 +34,9 @@ service TargetService {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/targets/{id}"};
   }
   rpc GetSubjectAccess(GetSubjectAccessRequest) returns (GetSubjectAccessResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/targets/access"
+      get: "/v1/workspaces/{workspace_id}/targets/access"
       body: "*"
     };
   }
