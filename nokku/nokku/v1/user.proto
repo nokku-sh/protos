@@ -9,6 +9,7 @@ import "nokku/v1/service_account.proto";
 
 service UserService {
   rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/whoami"};
   }
   rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse) {
@@ -21,6 +22,7 @@ service UserService {
     option (google.api.http) = {delete: "/v1/account"};
   }
   rpc ListLinkedAccounts(ListLinkedAccountsRequest) returns (ListLinkedAccountsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/accounts/oauth"};
   }
   rpc UnlinkAccount(UnlinkAccountRequest) returns (UnlinkAccountResponse) {

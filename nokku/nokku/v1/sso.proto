@@ -29,6 +29,7 @@ service SSOService {
   }
   // Public endpoint
   rpc CheckSSO(CheckSSORequest) returns (CheckSSOResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/sso/{email}"};
   }
 }
