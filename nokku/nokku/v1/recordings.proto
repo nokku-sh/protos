@@ -16,7 +16,7 @@ service RecordingService {
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/recordings"};
   }
   rpc UploadRecording(stream UploadRecordingRequest) returns (UploadRecordingResponse) {
-    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/recordings"};
+    option (google.api.http) = {post: "/v1/recordings:upload"};
   }
   rpc DeleteRecording(DeleteRecordingRequest) returns (DeleteRecordingResponse) {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/recordings/{recording_id}"};
