@@ -37,14 +37,12 @@ service CertificateService {
       body: "*"
     };
   }
-
   rpc SignSSHCertificate(SignSSHCertificateRequest) returns (SignSSHCertificateResponse) {
     option (google.api.http) = {
       post: "/v1/workspaces/{workspace_id}/sign-ssh"
       body: "*"
     };
   }
-
   rpc SignX509Certificate(SignX509CertificateRequest) returns (SignX509CertificateResponse) {
     option (google.api.http) = {
       post: "/v1/workspaces/{workspace_id}/sign-x509"
