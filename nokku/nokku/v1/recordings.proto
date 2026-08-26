@@ -7,14 +7,16 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 service RecordingService {
-  rpc UploadRecording(stream UploadRecordingRequest) returns (UploadRecordingResponse);
+  rpc GetRecording(GetRecordingRequest) returns (stream GetRecordingResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/recordings/{recording_id}"};
+  }
   rpc ListRecordings(ListRecordingsRequest) returns (ListRecordingsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/recordings"};
   }
-  rpc GetRecording(GetRecordingRequest) returns (stream GetRecordingResponse) {
-    option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/recordings/{recording_id}"};
+  rpc UploadRecording(stream UploadRecordingRequest) returns (UploadRecordingResponse) {
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/recordings"};
   }
   rpc DeleteRecording(DeleteRecordingRequest) returns (DeleteRecordingResponse) {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/recordings/{recording_id}"};
