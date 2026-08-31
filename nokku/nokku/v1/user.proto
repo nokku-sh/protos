@@ -2,133 +2,15 @@ edition = "2023";
 
 package nokku.v1;
 
-import "buf/validate/validate.proto";
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "nokku/v1/service_account.proto";
-
-service UserService {
-  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
-    option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/whoami"};
-  }
-  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse) {
-    option (google.api.http) = {
-      patch: "/v1/profile"
-      body: "*"
-    };
-  }
-  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
-    option (google.api.http) = {delete: "/v1/account"};
-  }
-  rpc ListLinkedAccounts(ListLinkedAccountsRequest) returns (ListLinkedAccountsResponse) {
-    option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/accounts/oauth"};
-  }
-  rpc UnlinkAccount(UnlinkAccountRequest) returns (UnlinkAccountResponse) {
-    option (google.api.http) = {delete: "/v1/accounts/oauth/{provider}"};
-  }
-  rpc SetEmailRecovery(SetEmailRecoveryRequest) returns (SetEmailRecoveryResponse) {
-    option (google.api.http) = {
-      patch: "/v1/account/email-recovery"
-      body: "*"
-    };
-  }
-  rpc ListUserSessions(ListUserSessionsRequest) returns (ListUserSessionsResponse) {
-    option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/account/sessions"};
-  }
-  rpc RevokeUserSession(RevokeUserSessionRequest) returns (RevokeUserSessionResponse) {
-    option (google.api.http) = {delete: "/v1/account/sessions/{session_id}"};
-  }
-}
-
-message UserSession {
-  string id = 1;
-  string kind = 2;
-  string method = 3;
-  string identity_id = 4;
-  string binding = 5;
-  google.protobuf.Timestamp expires_at = 6;
-  google.protobuf.Timestamp last_seen = 7;
-  google.protobuf.Timestamp created_at = 8;
-}
 
 message User {
   string id = 1;
   string name = 2;
-  string username = 3;
-  string email = 4;
-  bool email_verified = 5;
-  string picture = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
-  bool enable_email_recovery = 9;
+  string email = 3;
+  bool email_verified = 4;
+  string picture = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+  bool enable_email_recovery = 8;
 }
-
-message OAuthIdentity {
-  string provider_id = 1;
-  string provider = 2;
-  string protocol = 3;
-  google.protobuf.Timestamp created_at = 4;
-}
-
-message WhoamiRequest {}
-message WhoamiResponse {
-  User user = 1;
-  ServiceAccount service_account = 2;
-}
-
-message UpdateProfileRequest {
-  string name = 1 [(buf.validate.field).string = {
-    min_len: 3
-    max_len: 256
-  }];
-  string email = 2 [(buf.validate.field).string = {
-    email: true
-    max_len: 256
-  }];
-  string username = 3 [(buf.validate.field).string = {
-    min_len: 3
-    max_len: 39 // GitHub's max
-    pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
-  }];
-  string picture = 4;
-}
-message UpdateProfileResponse {
-  User user = 1;
-  bool email_sent = 2;
-}
-
-message DeleteAccountRequest {}
-message DeleteAccountResponse {}
-
-// OAuth linked accounts ------------------------------------------------------
-message ListLinkedAccountsRequest {}
-message ListLinkedAccountsResponse {
-  repeated OAuthIdentity accounts = 1;
-}
-
-message UnlinkAccountRequest {
-  string provider = 1 [(buf.validate.field).string.min_len = 1];
-}
-message UnlinkAccountResponse {}
-
-message SetEmailRecoveryRequest {
-  bool enable = 1;
-}
-message SetEmailRecoveryResponse {}
-
-// Sessions -------------------------------------------------------------------
-message ListUserSessionsRequest {}
-message ListUserSessionsResponse {
-  repeated UserSession sessions = 1;
-}
-
-message RevokeUserSessionRequest {
-  string session_id = 1 [
-    (buf.validate.field).string.min_len = 1,
-    (buf.validate.field).string.max_len = 64
-  ];
-}
-message RevokeUserSessionResponse {}

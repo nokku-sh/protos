@@ -6,11 +6,18 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "nokku/v1/daemon.proto";
+import "nokku/v1/service_account.proto";
+import "nokku/v1/user.proto";
 
 service UtilService {
   rpc GetVersion(GetVersionRequest) returns (GetVersionResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/version"};
+  }
+  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/whoami"};
   }
   rpc ListRoles(ListRolesRequest) returns (ListRolesResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -31,6 +38,17 @@ service UtilService {
 message GetVersionRequest {}
 message GetVersionResponse {
   string version = 1;
+}
+
+message WhoamiRequest {}
+message WhoamiResponse {
+  string kind = 1;
+  string subject_id = 2;
+  string user_id = 3;
+  string workspace_id = 4;
+  User user = 5;
+  ServiceAccount service_account = 6;
+  Daemon daemon = 7;
 }
 
 message Role {
