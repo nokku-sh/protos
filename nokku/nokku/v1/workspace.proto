@@ -68,17 +68,16 @@ message Workspace {
   google.protobuf.Timestamp updated_at = 11;
 }
 message WorkspaceMember {
-  string id = 1; // User ID
+  string id = 1;
   string workspace_id = 2;
   string name = 3;
-  string username = 4;
-  string email = 5;
-  bool email_verified = 6;
-  string picture = 7;
-  string role_name = 8;
-  string role_description = 9;
-  google.protobuf.Timestamp created_at = 10;
-  google.protobuf.Timestamp updated_at = 11;
+  string email = 4;
+  bool email_verified = 5;
+  string picture = 6;
+  string role_name = 7;
+  string role_description = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
 }
 message WorkspaceSettings {
   bool enroll_auto_approve = 1;
