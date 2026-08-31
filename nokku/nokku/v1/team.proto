@@ -37,6 +37,14 @@ service TeamService {
   rpc RemoveTeamMember(RemoveTeamMemberRequest) returns (RemoveTeamMemberResponse) {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/teams/{team_id}/members/{user_id}"};
   }
+  rpc ListTeamMembers(ListTeamMembersRequest) returns (ListTeamMembersResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/teams/{team_id}/members"};
+  }
+  rpc ListTeamsForUser(ListTeamsForUserRequest) returns (ListTeamsForUserResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/users/{user_id}/teams"};
+  }
 }
 
 message Team {
@@ -45,9 +53,9 @@ message Team {
   string name = 3;
   string description = 4;
   repeated string tags = 5;
-  repeated WorkspaceMember members = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+  int32 member_count = 8;
 }
 
 message GetTeamRequest {
@@ -119,3 +127,19 @@ message RemoveTeamMemberRequest {
   string user_id = 3 [(buf.validate.field).string.uuid = true];
 }
 message RemoveTeamMemberResponse {}
+
+message ListTeamMembersRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string team_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message ListTeamMembersResponse {
+  repeated WorkspaceMember members = 1;
+}
+
+message ListTeamsForUserRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message ListTeamsForUserResponse {
+  repeated Team teams = 1;
+}
