@@ -5,9 +5,11 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "nokku/v1/account.proto";
 import "nokku/v1/certificates.proto";
 import "nokku/v1/daemon.proto";
 import "nokku/v1/principal.proto";
+import "nokku/v1/service_account.proto";
 
 service TargetService {
   rpc GetTarget(GetTargetRequest) returns (GetTargetResponse) {
@@ -39,6 +41,10 @@ service TargetService {
       get: "/v1/workspaces/{workspace_id}/targets/access"
       body: "*"
     };
+  }
+  rpc GetMyAccess(GetMyAccessRequest) returns (GetMyAccessResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/targets/access"};
   }
   rpc GetTargetFilters(GetTargetFiltersRequest) returns (GetTargetFiltersResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -134,6 +140,23 @@ message GetSubjectAccessResponse {
   repeated Target targets = 1;
   repeated Daemon daemons = 2;
   repeated CertificateAuthority certificate_authorities = 3;
+}
+
+message GetMyAccessRequest {}
+
+message GetMyAccessResponse {
+  oneof subject {
+    User user = 1;
+    ServiceAccount service_account = 2;
+  }
+  repeated WorkspaceAccess workspaces = 3;
+}
+
+message WorkspaceAccess {
+  string workspace_id = 1;
+  string workspace_name = 2;
+  repeated Target targets = 3;
+  repeated CertificateAuthority certificate_authorities = 4;
 }
 
 message GetTargetFiltersRequest {
