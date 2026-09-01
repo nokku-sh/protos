@@ -1,0 +1,192 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service AccountService {
+  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/account"};
+  }
+  rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {
+    option (google.api.http) = {
+      patch: "/v1/account"
+      body: "*"
+    };
+  }
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/account/password"
+      body: "*"
+    };
+  }
+  rpc RemovePassword(RemovePasswordRequest) returns (RemovePasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/account/password:remove"
+      body: "*"
+    };
+  }
+  rpc ListCredentials(ListCredentialsRequest) returns (ListCredentialsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/account/credentials"};
+  }
+  rpc RenameCredential(RenameCredentialRequest) returns (RenameCredentialResponse) {
+    option (google.api.http) = {
+      post: "/v1/account/credentials/{id}:rename"
+      body: "*"
+    };
+  }
+  rpc RemoveCredential(RemoveCredentialRequest) returns (RemoveCredentialResponse) {
+    option (google.api.http) = {delete: "/v1/account/credentials/{id}"};
+  }
+  rpc RemoveIdentity(RemoveIdentityRequest) returns (RemoveIdentityResponse) {
+    option (google.api.http) = {
+      post: "/v1/account/identities:remove"
+      body: "*"
+    };
+  }
+  rpc ListBackupCodes(ListBackupCodesRequest) returns (ListBackupCodesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/account/backup-codes"};
+  }
+  rpc RotateBackupCodes(RotateBackupCodesRequest) returns (RotateBackupCodesResponse) {
+    option (google.api.http) = {
+      post: "/v1/account/backup-codes:rotate"
+      body: "*"
+    };
+  }
+  rpc RemoveBackupCodes(RemoveBackupCodesRequest) returns (RemoveBackupCodesResponse) {
+    option (google.api.http) = {delete: "/v1/account/backup-codes"};
+  }
+  rpc ListAccountSessions(ListAccountSessionsRequest) returns (ListAccountSessionsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/account/sessions"};
+  }
+  rpc RemoveSession(RemoveSessionRequest) returns (RemoveSessionResponse) {
+    option (google.api.http) = {delete: "/v1/account/sessions/{id}"};
+  }
+  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
+    option (google.api.http) = {
+      post: "/v1/account:delete"
+      body: "*"
+    };
+  }
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  bool email_verified = 4;
+  string picture = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+  bool disable_password_reset = 8;
+}
+
+message AccountCredential {
+  string id = 1;
+  string type = 2;
+  string provider = 3;
+  string subject = 4;
+  string label = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message AccountSession {
+  string id = 1;
+  string kind = 2;
+  string method = 3;
+  string binding = 4;
+  bool current = 5;
+  google.protobuf.Timestamp expires_at = 6;
+  google.protobuf.Timestamp last_seen_at = 7;
+}
+
+message GetAccountRequest {}
+message GetAccountResponse {
+  User user = 1;
+}
+
+message UpdateAccountRequest {
+  string name = 1 [(buf.validate.field).string.max_len = 256];
+  string picture = 2;
+  bool disable_password_reset = 3;
+}
+message UpdateAccountResponse {
+  User user = 1;
+}
+
+message ChangePasswordRequest {
+  string current_password = 1 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 128
+  }];
+  string new_password = 2 [(buf.validate.field).string = {
+    min_len: 8
+    max_len: 128
+  }];
+}
+message ChangePasswordResponse {}
+
+message RemovePasswordRequest {
+  string current_password = 1 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 128
+  }];
+}
+message RemovePasswordResponse {}
+
+message ListCredentialsRequest {}
+message ListCredentialsResponse {
+  repeated AccountCredential credentials = 1;
+}
+
+message RenameCredentialRequest {
+  string id = 1 [(buf.validate.field).string.min_len = 1];
+  string label = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 256
+  }];
+}
+message RenameCredentialResponse {}
+
+message RemoveCredentialRequest {
+  string id = 1 [(buf.validate.field).string.min_len = 1];
+}
+message RemoveCredentialResponse {}
+
+message RemoveIdentityRequest {
+  string provider = 1 [(buf.validate.field).string.min_len = 1];
+}
+message RemoveIdentityResponse {}
+
+message ListBackupCodesRequest {}
+message ListBackupCodesResponse {
+  repeated AccountCredential codes = 1;
+}
+
+message RotateBackupCodesRequest {}
+message RotateBackupCodesResponse {
+  repeated string codes = 1;
+}
+
+message RemoveBackupCodesRequest {}
+message RemoveBackupCodesResponse {}
+
+message ListAccountSessionsRequest {}
+message ListAccountSessionsResponse {
+  repeated AccountSession sessions = 1;
+}
+
+message RemoveSessionRequest {
+  // The hex token hash of the session, as returned by ListSessions.
+  string id = 1 [(buf.validate.field).string.min_len = 1];
+}
+message RemoveSessionResponse {}
+
+message DeleteAccountRequest {}
+message DeleteAccountResponse {}

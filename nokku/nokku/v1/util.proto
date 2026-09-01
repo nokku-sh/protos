@@ -6,9 +6,9 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "nokku/v1/account.proto";
 import "nokku/v1/daemon.proto";
 import "nokku/v1/service_account.proto";
-import "nokku/v1/user.proto";
 
 service UtilService {
   rpc GetVersion(GetVersionRequest) returns (GetVersionResponse) {
