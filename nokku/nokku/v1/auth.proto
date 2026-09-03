@@ -1,0 +1,91 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "nokku/v1/account.proto";
+
+service AuthService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc LoginWithBackupCode(LoginWithBackupCodeRequest) returns (LoginWithBackupCodeResponse);
+  rpc Logout(LogoutRequest) returns (LogoutResponse);
+  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse);
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse);
+  rpc ResendVerification(ResendVerificationRequest) returns (ResendVerificationResponse);
+  rpc DiscoverSSO(DiscoverSSORequest) returns (DiscoverSSOResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+message RegisterRequest {
+  string name = 1 [(buf.validate.field).string.max_len = 256];
+  string email = 2 [(buf.validate.field).string.email = true];
+  string password = 3 [(buf.validate.field).string = {
+    min_len: 8
+    max_len: 128
+  }];
+}
+message RegisterResponse {}
+
+message LoginRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+  string password = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 128
+  }];
+}
+message LoginResponse {
+  User user = 1;
+}
+
+message LoginWithBackupCodeRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+  string code = 2 [(buf.validate.field).string.min_len = 1];
+}
+message LoginWithBackupCodeResponse {
+  User user = 1;
+}
+
+message LogoutRequest {}
+message LogoutResponse {}
+
+message ForgotPasswordRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+}
+message ForgotPasswordResponse {}
+
+message ResetPasswordRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+  string new_password = 2 [(buf.validate.field).string = {
+    min_len: 8
+    max_len: 128
+  }];
+}
+message ResetPasswordResponse {}
+
+message VerifyEmailRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+}
+message VerifyEmailResponse {}
+
+message ResendVerificationRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+}
+message ResendVerificationResponse {}
+
+message DiscoverSSORequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+}
+message DiscoverSSOResponse {
+  bool has_sso = 1;
+  bool enforce = 2;
+  repeated SSOProviderInfo providers = 3;
+}
+
+message SSOProviderInfo {
+  string method = 1;
+  string provider = 2;
+  string name = 3;
+}
