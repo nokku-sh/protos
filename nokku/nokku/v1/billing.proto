@@ -23,29 +23,36 @@ service BillingService {
       body: "*"
     };
   }
-}
-
-message WorkspaceCounts {
-  int64 members = 1;
-  int64 teams = 2;
-  int64 service_accounts = 3;
-  int64 targets = 4;
-  int64 cas = 5;
+  rpc GetLicense(GetLicenseRequest) returns (GetLicenseResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/license"};
+  }
 }
 
 message GetBillingRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message GetBillingResponse {
-  string customer_id = 1;
-  string product_id = 2;
-  string product_name = 3;
-  string status = 4;
-  bool billing_enabled = 5;
-  bool cancel_at_period_end = 6;
-  map<string, string> metadata = 7;
-  WorkspaceCounts counts = 8;
-  google.protobuf.Timestamp current_period_end = 9;
+  string plan = 1;
+  string mode = 2;
+  map<string, bool> features = 3;
+  Quotas quotas = 4;
+  int64 member_count = 5;
+  int64 resource_count = 6;
+  Subscription subscription = 7;
+}
+
+message Quotas {
+  int64 seats = 1;
+  int64 retention_days = 2;
+  int64 recording_storage_bytes = 3;
+  int64 resource_cap = 4;
+}
+
+message Subscription {
+  string status = 1;
+  bool cancel_at_period_end = 2;
+  google.protobuf.Timestamp current_period_end = 3;
 }
 
 message CreatePortalRequest {
@@ -68,3 +75,10 @@ message CancelSubscriptionRequest {
   string reason = 3 [(buf.validate.field).string.max_len = 1000];
 }
 message CancelSubscriptionResponse {}
+
+message GetLicenseRequest {}
+message GetLicenseResponse {
+  string plan = 1;
+  bool active = 2;
+  google.protobuf.Timestamp expires_at = 3;
+}
