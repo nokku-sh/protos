@@ -80,10 +80,13 @@ message DaemonConfig {
   bool allow_forwarding = 2;
   bool allow_agent_forwarding = 3;
   bool gateway_ports = 4;
-  int32 max_sessions = 5 [(buf.validate.field).int32.gte = 0];
-  int32 max_sessions_per_user = 6 [(buf.validate.field).int32.gte = 0];
-  int32 max_connections = 7 [(buf.validate.field).int32.gte = 0];
-  google.protobuf.Duration client_alive_interval = 8;
+  bool banner = 5; // pre-auth banner display toggle
+  int32 max_sessions = 6 [(buf.validate.field).int32.gte = 0];
+  int32 max_sessions_per_user = 7 [(buf.validate.field).int32.gte = 0];
+  int32 max_connections = 8 [(buf.validate.field).int32.gte = 0];
+  int32 conn_rate = 9 [(buf.validate.field).int32.gte = 0];
+  int32 conn_rate_burst = 10 [(buf.validate.field).int32.gte = 0];
+  google.protobuf.Duration client_alive_interval = 11;
 }
 
 message GetDaemonRequest {
