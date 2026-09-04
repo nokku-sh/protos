@@ -1,0 +1,56 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service SCIMService {
+  rpc CreateSCIMToken(CreateSCIMTokenRequest) returns (CreateSCIMTokenResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/scim/tokens"
+      body: "*"
+    };
+  }
+  rpc ListSCIMTokens(ListSCIMTokensRequest) returns (ListSCIMTokensResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/scim/tokens"};
+  }
+  rpc DeleteSCIMToken(DeleteSCIMTokenRequest) returns (DeleteSCIMTokenResponse) {
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/scim/tokens/{token_id}"};
+  }
+}
+
+message SCIMToken {
+  string id = 1;
+  string label = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp last_used_at = 4;
+}
+
+message CreateSCIMTokenRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string label = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 256
+  }];
+}
+message CreateSCIMTokenResponse {
+  string token = 1; // token is the bearer secret, shown once at creation.
+  SCIMToken entry = 2;
+  string base_url = 3;
+}
+
+message ListSCIMTokensRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ListSCIMTokensResponse {
+  repeated SCIMToken tokens = 1;
+}
+
+message DeleteSCIMTokenRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string token_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message DeleteSCIMTokenResponse {}
