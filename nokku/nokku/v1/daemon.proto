@@ -46,6 +46,7 @@ service DaemonService {
   }
   rpc EnrollDaemon(EnrollDaemonRequest) returns (EnrollDaemonResponse);
   rpc SyncDaemon(SyncDaemonRequest) returns (SyncDaemonResponse);
+  rpc Relay(stream RelayRequest) returns (stream RelayResponse);
 }
 
 service DaemonControlService {
@@ -53,7 +54,7 @@ service DaemonControlService {
 }
 
 service DaemonSessionService {
-  rpc DaemonSession(stream DaemonSessionRequest) returns (stream DaemonSessionResponse);
+  rpc DaemonRelay(stream DaemonRelayRequest) returns (stream DaemonRelayResponse);
 }
 
 enum DaemonStatus {
@@ -84,9 +85,10 @@ message DaemonConfig {
   int32 max_sessions = 6 [(buf.validate.field).int32.gte = 0];
   int32 max_sessions_per_user = 7 [(buf.validate.field).int32.gte = 0];
   int32 max_connections = 8 [(buf.validate.field).int32.gte = 0];
-  int32 conn_rate = 9 [(buf.validate.field).int32.gte = 0];
-  int32 conn_rate_burst = 10 [(buf.validate.field).int32.gte = 0];
-  google.protobuf.Duration client_alive_interval = 11;
+  int32 max_startups = 9 [(buf.validate.field).int32.gte = 0];
+  int32 conn_rate = 10 [(buf.validate.field).int32.gte = 0];
+  int32 conn_rate_burst = 11 [(buf.validate.field).int32.gte = 0];
+  google.protobuf.Duration client_alive_interval = 12;
 }
 
 message GetDaemonRequest {
@@ -106,6 +108,7 @@ message UpdateDaemonRequest {
   }];
   DaemonConfig config = 4;
 }
+
 message UpdateDaemonResponse {}
 
 message DeleteDaemonRequest {
@@ -208,12 +211,19 @@ message SyncDaemonRequest {
   repeated string private_ips = 2;
   map<string, string> metadata = 3;
 }
+
+message RevokedPrincipal {
+  string principal = 1;
+  int64 revoked_before = 2;
+}
+
 message SyncDaemonResponse {
   DaemonStatus status = 1;
   DaemonConfig config = 2;
   repeated PrincipalUsers principals = 3;
   int64 state_version = 4;
   string ca_public_key = 5;
+  repeated RevokedPrincipal revoked_principals = 6;
 }
 
 // Control Stream -------------------------------------------------------------
@@ -228,7 +238,7 @@ message ConnectResponse {
   oneof msg {
     HeartbeatAck heartbeat_ack = 1;
     StateUpdate state_update = 2;
-    DaemonSession session = 3;
+    RelayOpen relay_open = 4;
   }
 }
 
@@ -250,41 +260,62 @@ message DaemonSession {
   string user_id = 3;
 }
 
-// Session Stream -------------------------------------------------------------
+// Relay Stream --------------------------------------------------------------
 
-message DaemonSessionRequest {
+message RelayOpen {
+  string relay_id = 1;
+}
+
+message RelayStart {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string daemon_id = 2 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
+}
+
+message RelayRequest {
   oneof msg {
-    DaemonSessionReady ready = 1;
-    bytes stdout = 2;
-    DaemonSessionEnded exited = 3;
+    RelayStart start = 1;
+    bytes data = 2;
   }
 }
 
-message DaemonSessionResponse {
+message RelayReady {
+  string relay_id = 1;
+}
+
+message RelayResponse {
   oneof msg {
-    bytes stdin = 1;
-    DaemonResizeRequest resize = 2;
-    DaemonCloseRequest close = 3;
+    RelayReady ready = 1;
+    bytes data = 2;
+    RelayClosed closed = 3;
   }
 }
 
-message DaemonSessionReady {
-  string session_id = 1;
-  bytes replay_buffer = 2;
-  string username = 3;
-  string user_id = 4;
+message RelayClosed {
+  string reason = 1;
 }
 
-message DaemonResizeRequest {
-  uint32 width = 1;
-  uint32 height = 2;
+message DaemonRelayRequest {
+  oneof msg {
+    DaemonRelayReady ready = 1;
+    bytes data = 2;
+    DaemonRelayClosed closed = 3;
+  }
 }
 
-message DaemonSessionEnded {
-  int32 exit_code = 1;
-  string error_message = 2;
+message DaemonRelayResponse {
+  oneof msg {
+    bytes data = 1;
+    DaemonRelayClosed closed = 2;
+  }
 }
 
-message DaemonCloseRequest {
+message DaemonRelayReady {
+  string relay_id = 1;
+}
+
+message DaemonRelayClosed {
   string reason = 1;
 }
