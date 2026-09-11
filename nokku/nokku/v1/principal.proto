@@ -17,6 +17,18 @@ service PrincipalService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/principals"};
   }
+  rpc AddPrincipal(AddPrincipalRequest) returns (AddPrincipalResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/principals/accounts"
+      body: "*"
+    };
+  }
+  rpc RemovePrincipal(RemovePrincipalRequest) returns (RemovePrincipalResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/principals/accounts:remove"
+      body: "*"
+    };
+  }
   rpc AddSubjectsToPrincipal(AddSubjectsToPrincipalRequest) returns (AddSubjectsToPrincipalResponse) {
     option (google.api.http) = {
       post: "/v1/workspaces/{workspace_id}/principals:add"
@@ -131,3 +143,21 @@ message RevokeAllAccessRequest {
   }];
 }
 message RevokeAllAccessResponse {}
+
+message AddPrincipalRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string target_id = 2 [(buf.validate.field).string.uuid = true];
+  string username = 3 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 64
+  }];
+}
+message AddPrincipalResponse {
+  Principal principal = 1;
+}
+
+message RemovePrincipalRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+}
+message RemovePrincipalResponse {}
