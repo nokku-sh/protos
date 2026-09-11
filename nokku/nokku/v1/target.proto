@@ -50,7 +50,36 @@ service TargetService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/targets/filters"};
   }
+  rpc GetTargetPrincipals(GetTargetPrincipalsRequest) returns (GetTargetPrincipalsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/targets/{target_id}/principals"};
+  }
+  rpc SyncTargetUsers(SyncTargetUsersRequest) returns (SyncTargetUsersResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/targets/{target_id}/users"
+      body: "*"
+    };
+  }
 }
+
+message GetTargetPrincipalsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string target_id = 2 [(buf.validate.field).string.uuid = true];
+}
+
+message GetTargetPrincipalsResponse {
+  repeated PrincipalUsers principals = 1;
+}
+
+message SyncTargetUsersRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string target_id = 2 [(buf.validate.field).string.uuid = true];
+  string host_public_key = 3;
+  repeated string usernames = 4;
+  repeated string endpoints = 5;
+}
+
+message SyncTargetUsersResponse {}
 
 message Target {
   string id = 1;
@@ -66,6 +95,9 @@ message Target {
   map<string, string> metadata = 11;
   google.protobuf.Timestamp created_at = 12;
   google.protobuf.Timestamp updated_at = 13;
+  repeated string usernames = 14;
+  repeated string reported_users = 15;
+  google.protobuf.Timestamp reported_at = 16;
 }
 
 message GetTargetRequest {
@@ -80,10 +112,9 @@ message CreateTargetRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string ca_id = 2 [(buf.validate.field).string.uuid = true];
   string name = 3 [(buf.validate.field).string = {
-    min_len: 1
     max_len: 256
-    pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
-  }];
+    pattern: "^$|^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
+  }]; // can be empty
   string description = 4 [(buf.validate.field).string.max_len = 1000];
   string host_public_key = 5;
   repeated string endpoints = 6;
