@@ -214,18 +214,12 @@ message SyncDaemonRequest {
   map<string, string> metadata = 3;
 }
 
-message RevokedPrincipal {
-  string principal = 1;
-  int64 revoked_before = 2;
-}
-
 message SyncDaemonResponse {
   DaemonStatus status = 1;
   DaemonConfig config = 2;
   repeated PrincipalUsers principals = 3;
   int64 state_version = 4;
   string ca_public_key = 5;
-  repeated RevokedPrincipal revoked_principals = 6;
 }
 
 // Control Stream -------------------------------------------------------------

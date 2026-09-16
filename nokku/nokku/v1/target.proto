@@ -91,13 +91,11 @@ message Target {
   string host_public_key = 7; // pinned SSH host public key (manual mode)
   repeated string tags = 8;
   repeated string endpoints = 9;
-  repeated Principal principals = 10;
-  map<string, string> metadata = 11;
-  google.protobuf.Timestamp created_at = 12;
-  google.protobuf.Timestamp updated_at = 13;
-  repeated string usernames = 14;
-  repeated string reported_users = 15;
-  google.protobuf.Timestamp reported_at = 16;
+  repeated string usernames = 10;
+  repeated Principal principals = 11;
+  map<string, string> metadata = 12;
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
 }
 
 message GetTargetRequest {
