@@ -4,7 +4,6 @@ package nokku.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 
 service DaemonService {
@@ -24,12 +23,6 @@ service DaemonService {
   rpc ListDaemons(ListDaemonsRequest) returns (ListDaemonsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/daemons"};
-  }
-  rpc RefreshEnrollToken(RefreshEnrollTokenRequest) returns (RefreshEnrollTokenResponse) {
-    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/enroll:refresh"};
-  }
-  rpc RevokeEnrollToken(RevokeEnrollTokenRequest) returns (RevokeEnrollTokenResponse) {
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/enroll:revoke"};
   }
   rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -81,16 +74,7 @@ message DaemonConfig {
   bool allow_forwarding = 2;
   bool allow_agent_forwarding = 3;
   bool gateway_ports = 4;
-  bool banner = 5; // pre-auth banner display toggle
-  int32 max_sessions = 6 [(buf.validate.field).int32.gte = 0];
-  int32 max_sessions_per_user = 7 [(buf.validate.field).int32.gte = 0];
-  int32 max_connections = 8 [(buf.validate.field).int32.gte = 0];
-  int32 max_startups = 9 [(buf.validate.field).int32.gte = 0];
-  int32 max_channels = 10 [(buf.validate.field).int32.gte = 0];
-  int32 conn_rate = 11 [(buf.validate.field).int32.gte = 0];
-  int32 conn_rate_burst = 12 [(buf.validate.field).int32.gte = 0];
-  bool drop_retired_ca = 13;
-  google.protobuf.Duration client_alive_interval = 14;
+  bool drop_retired_ca = 5;
 }
 
 message GetDaemonRequest {
@@ -135,19 +119,6 @@ message ListDaemonsResponse {
   int32 total = 2;
 }
 
-message RefreshEnrollTokenRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
-message RefreshEnrollTokenResponse {
-  string token = 1;
-  google.protobuf.Timestamp expires_at = 2;
-}
-
-message RevokeEnrollTokenRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
-message RevokeEnrollTokenResponse {}
-
 message CreateSessionRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string daemon_id = 2 [
@@ -157,7 +128,7 @@ message CreateSessionRequest {
   string username = 3 [(buf.validate.field).string = {
     min_len: 1
     max_len: 32
-    pattern: "^[a-z_][a-z0-9-_]*\\$?$"
+    pattern: "^[A-Za-z_][A-Za-z0-9._-]*\\$?$"
   }];
 }
 message CreateSessionResponse {
@@ -192,7 +163,6 @@ message CloseSessionResponse {}
 
 message EnrollDaemonRequest {
   string token = 1 [(buf.validate.field).string.min_len = 1];
-  string ca_id = 2;
 }
 message EnrollDaemonResponse {
   string id = 1;
@@ -232,9 +202,8 @@ message ConnectRequest {
 
 message ConnectResponse {
   oneof msg {
-    HeartbeatAck heartbeat_ack = 1;
-    StateUpdate state_update = 2;
-    RelayOpen relay_open = 4;
+    StateUpdate state_update = 1;
+    RelayOpen relay_open = 2;
   }
 }
 
@@ -242,13 +211,8 @@ message Heartbeat {
   int64 state_version = 1;
 }
 
-message HeartbeatAck {
-  int64 state_version = 1;
-}
-
-message StateUpdate {
-  int64 state_version = 1;
-}
+// StateUpdate tells the daemon to re-sync now.
+message StateUpdate {}
 
 message DaemonSession {
   string session_id = 1;

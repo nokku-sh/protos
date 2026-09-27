@@ -7,12 +7,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 service PrincipalService {
-  rpc SetPrincipals(SetPrincipalsRequest) returns (SetPrincipalsResponse) {
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/principals"
-      body: "*"
-    };
-  }
   rpc ListPrincipals(ListPrincipalsRequest) returns (ListPrincipalsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/principals"};
@@ -49,11 +43,12 @@ service PrincipalService {
   }
 }
 
-enum PrincipalType {
-  PRINCIPAL_TYPE_UNSPECIFIED = 0;
-  PRINCIPAL_TYPE_USER = 1;
-  PRINCIPAL_TYPE_TEAM = 2;
-  PRINCIPAL_TYPE_SERVICE_ACCOUNT = 3;
+// SubjectKind is who a grant is for. A Principal is the local account.
+enum SubjectKind {
+  SUBJECT_KIND_UNSPECIFIED = 0;
+  SUBJECT_KIND_USER = 1;
+  SUBJECT_KIND_TEAM = 2;
+  SUBJECT_KIND_SERVICE_ACCOUNT = 3;
 }
 
 message Principal {
@@ -66,21 +61,6 @@ message Principal {
   google.protobuf.Timestamp created_at = 7;
 }
 
-message SetPrincipalsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string target_id = 2 [(buf.validate.field).string.uuid = true];
-  repeated string usernames = 3 [(buf.validate.field).repeated = {
-    items: {
-      string: {
-        min_len: 1
-        max_len: 32
-        pattern: "^[a-z_][a-z0-9-_]*\\$?$" // Valid Unix username
-      }
-    }
-  }];
-}
-message SetPrincipalsResponse {}
-
 message ListPrincipalsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string target_id = 2 [(buf.validate.field).string.uuid = true];
@@ -90,10 +70,6 @@ message ListPrincipalsRequest {
   }];
   int32 offset = 4 [(buf.validate.field).int32.gte = 0];
   string query = 5;
-  PrincipalType type = 6 [(buf.validate.field).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
 }
 message ListPrincipalsResponse {
   repeated Principal principals = 1;
@@ -110,7 +86,7 @@ message AddSubjectsToPrincipalRequest {
       string: {uuid: true}
     }
   }];
-  PrincipalType type = 4 [(buf.validate.field).enum = {
+  SubjectKind kind = 4 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -127,7 +103,7 @@ message RemoveSubjectsFromPrincipalRequest {
       string: {uuid: true}
     }
   }];
-  PrincipalType type = 4 [(buf.validate.field).enum = {
+  SubjectKind kind = 4 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -137,7 +113,7 @@ message RemoveSubjectsFromPrincipalResponse {}
 message RevokeAllAccessRequest {
   string subject_id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  PrincipalType type = 3 [(buf.validate.field).enum = {
+  SubjectKind kind = 3 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -149,7 +125,8 @@ message AddPrincipalRequest {
   string target_id = 2 [(buf.validate.field).string.uuid = true];
   string username = 3 [(buf.validate.field).string = {
     min_len: 1
-    max_len: 64
+    max_len: 32
+    pattern: "^[A-Za-z_][A-Za-z0-9._-]*\\$?$"
   }];
 }
 message AddPrincipalResponse {

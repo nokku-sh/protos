@@ -59,13 +59,9 @@ message Workspace {
   string name = 2;
   string description = 3;
   string created_by = 4;
-  string enroll_token_hash = 5;
-  google.protobuf.Timestamp enroll_expires_at = 6;
-  string invite_token_hash = 7;
-  google.protobuf.Timestamp invite_expires_at = 8;
-  WorkspaceSettings settings = 9;
-  google.protobuf.Timestamp created_at = 10;
-  google.protobuf.Timestamp updated_at = 11;
+  WorkspaceSettings settings = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
 message WorkspaceMember {
   string id = 1;
@@ -80,10 +76,9 @@ message WorkspaceMember {
   google.protobuf.Timestamp updated_at = 10;
 }
 message WorkspaceSettings {
-  bool enroll_auto_approve = 1;
-  nokku.v1.DaemonConfig default_daemon_config = 2;
-  string audit_webhook_url = 3;
-  string audit_webhook_secret = 4;
+  nokku.v1.DaemonConfig default_daemon_config = 1;
+  string audit_webhook_url = 2;
+  string audit_webhook_secret = 3;
 }
 
 message GetWorkspaceRequest {

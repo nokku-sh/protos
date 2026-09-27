@@ -1,0 +1,76 @@
+edition = "2023";
+
+package nokku.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+service TokenService {
+  rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspaces/{workspace_id}/tokens"
+      body: "*"
+    };
+  }
+  rpc ListTokens(ListTokensRequest) returns (ListTokensResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/tokens"};
+  }
+  rpc DeleteToken(DeleteTokenRequest) returns (DeleteTokenResponse) {
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/tokens/{id}"};
+  }
+}
+
+enum TokenKind {
+  TOKEN_KIND_UNSPECIFIED = 0;
+  TOKEN_KIND_ENROLL = 1;
+  TOKEN_KIND_INVITE = 2;
+}
+
+message Token {
+  string id = 1;
+  TokenKind kind = 2;
+  string label = 3;
+  google.protobuf.Timestamp expires_at = 4;
+  int32 max_uses = 5;
+  int32 uses = 6;
+  bool auto_approve = 7;
+  string ca_id = 8;
+  string role_name = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp last_used_at = 11;
+}
+
+message CreateTokenRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  TokenKind kind = 2 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+  string label = 3 [(buf.validate.field).string.max_len = 100];
+  google.protobuf.Duration ttl = 4 [(buf.validate.field).duration.gt = {seconds: 0}];
+  int32 max_uses = 5 [(buf.validate.field).int32.gt = 0];
+  bool auto_approve = 6;
+  string ca_id = 7 [(buf.validate.field).string.uuid = true];
+  string role_name = 8;
+}
+message CreateTokenResponse {
+  Token token = 1;
+  string secret = 2;
+}
+
+message ListTokensRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  TokenKind kind = 2 [(buf.validate.field).enum.defined_only = true];
+}
+message ListTokensResponse {
+  repeated Token tokens = 1;
+}
+
+message DeleteTokenRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+}
+message DeleteTokenResponse {}
