@@ -61,12 +61,13 @@ message Daemon {
   string id = 1;
   string workspace_id = 2;
   string name = 3;
-  bool online = 4;
+  bool online = 4; // Derived from last_seen_at: seen by a core instance in the last 30 seconds.
   DaemonStatus status = 5;
   DaemonConfig config = 6;
   map<string, string> metadata = 7;
   google.protobuf.Timestamp updated_at = 8;
   google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp last_seen_at = 10;
 }
 
 message DaemonConfig {

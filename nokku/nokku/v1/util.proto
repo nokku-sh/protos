@@ -54,9 +54,6 @@ message WhoamiResponse {
 message Role {
   string name = 1;
   string description = 2;
-  repeated string permissions = 3;
-  bool assignable_to_users = 4;
-  bool assignable_to_service_accounts = 5;
 }
 message ListRolesRequest {}
 message ListRolesResponse {
@@ -67,16 +64,18 @@ message EventLog {
   string id = 1;
   string workspace_id = 2;
   string actor_id = 3;
-  string actor_type = 4;
-  string actor_email = 5;
+  string actor_kind = 4;
+  string actor_name = 5;
   string action = 6;
-  string ip_address = 7;
-  string user_agent = 8;
-  string status_code = 9;
-  google.protobuf.Struct details = 10;
-  google.protobuf.Timestamp timestamp = 11;
+  string target = 7;
+  bool ok = 8;
+  string ip = 9;
+  string user_agent = 10;
+  google.protobuf.Struct details = 11;
+  google.protobuf.Timestamp timestamp = 12;
 }
 
+// An empty workspace_id lists the caller's own activity across workspaces.
 message ListAuditLogsRequest {
   string workspace_id = 1;
   int32 limit = 2 [(buf.validate.field).int32 = {
@@ -88,10 +87,11 @@ message ListAuditLogsRequest {
   // Filters (optional)
   string search = 4;
   repeated string actor_ids = 5 [(buf.validate.field).repeated.items.string.uuid = true];
-  repeated string actor_types = 6;
+  repeated string actor_kinds = 6;
   repeated string actions = 7;
   google.protobuf.Timestamp start_date = 8;
   google.protobuf.Timestamp end_date = 9;
+  string target = 10;
 }
 message ListAuditLogsResponse {
   repeated EventLog logs = 1;

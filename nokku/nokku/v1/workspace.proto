@@ -48,10 +48,6 @@ service WorkspaceService {
   rpc UpdateWorkspaceOwner(UpdateWorkspaceOwnerRequest) returns (UpdateWorkspaceOwnerResponse) {
     option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/owner/{new_owner}"};
   }
-  rpc SubscribeWorkspaceEvents(SubscribeWorkspaceEventsRequest) returns (stream SubscribeWorkspaceEventsResponse) {
-    option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/events:subscribe"};
-  }
 }
 
 message Workspace {
@@ -59,9 +55,10 @@ message Workspace {
   string name = 2;
   string description = 3;
   string created_by = 4;
-  WorkspaceSettings settings = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
+  string role = 5; // The caller's role in this workspace.
+  WorkspaceSettings settings = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
 }
 message WorkspaceMember {
   string id = 1;
@@ -166,15 +163,3 @@ message UpdateWorkspaceOwnerRequest {
   string new_owner = 2 [(buf.validate.field).string.uuid = true];
 }
 message UpdateWorkspaceOwnerResponse {}
-
-message SubscribeWorkspaceEventsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  repeated string event_types = 2;
-}
-message SubscribeWorkspaceEventsResponse {
-  string id = 1;
-  string type = 2;
-  string workspace_id = 3;
-  string payload_json = 4 [json_name = "payload"];
-  google.protobuf.Timestamp created_at = 5;
-}
