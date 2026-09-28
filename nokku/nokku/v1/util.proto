@@ -75,6 +75,29 @@ message EventLog {
   google.protobuf.Timestamp timestamp = 12;
 }
 
+// AuditOutcome FAILED matches every failed call, DENIED only the ones an auth
+// or permission check stopped.
+enum AuditOutcome {
+  AUDIT_OUTCOME_UNSPECIFIED = 0;
+  AUDIT_OUTCOME_SUCCEEDED = 1;
+  AUDIT_OUTCOME_FAILED = 2;
+  AUDIT_OUTCOME_DENIED = 3;
+}
+
+// AuditLogFilter is shared by listing and export, so an export always matches
+// what the list shows.
+message AuditLogFilter {
+  string search = 1;
+  repeated string actor_ids = 2 [(buf.validate.field).repeated.items.string.uuid = true];
+  repeated string actor_kinds = 3;
+  // Exact action names, a trailing * matches by prefix, e.g. "Delete*".
+  repeated string actions = 4;
+  string target = 5;
+  AuditOutcome outcome = 6 [(buf.validate.field).enum = {defined_only: true}];
+  google.protobuf.Timestamp start_date = 7;
+  google.protobuf.Timestamp end_date = 8;
+}
+
 // An empty workspace_id lists the caller's own activity across workspaces.
 message ListAuditLogsRequest {
   string workspace_id = 1;
@@ -83,19 +106,13 @@ message ListAuditLogsRequest {
     lte: 100
   }];
   int32 offset = 3 [(buf.validate.field).int32.gte = 0];
-
-  // Filters (optional)
-  string search = 4;
-  repeated string actor_ids = 5 [(buf.validate.field).repeated.items.string.uuid = true];
-  repeated string actor_kinds = 6;
-  repeated string actions = 7;
-  google.protobuf.Timestamp start_date = 8;
-  google.protobuf.Timestamp end_date = 9;
-  string target = 10;
+  AuditLogFilter filter = 4;
 }
 message ListAuditLogsResponse {
   repeated EventLog logs = 1;
   int32 total = 2;
+  // How long the workspace's plan keeps events, 0 for the personal log.
+  int32 retention_days = 3;
 }
 
 message ExportAuditLogsRequest {
@@ -106,8 +123,7 @@ message ExportAuditLogsRequest {
   }
   string workspace_id = 1;
   Format format = 2 [(buf.validate.field).enum = {defined_only: true}];
-  google.protobuf.Timestamp start_date = 3;
-  google.protobuf.Timestamp end_date = 4;
+  AuditLogFilter filter = 3;
 }
 message ExportAuditLogsResponse {
   bytes data = 1;

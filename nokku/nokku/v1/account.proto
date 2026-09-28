@@ -94,6 +94,7 @@ message AccountCredential {
   string subject = 4;
   string label = 5;
   google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp last_used_at = 7;
 }
 
 message AccountSession {
@@ -101,9 +102,11 @@ message AccountSession {
   string kind = 2;
   string method = 3;
   string binding = 4;
-  bool current = 5;
-  google.protobuf.Timestamp expires_at = 6;
-  google.protobuf.Timestamp last_seen_at = 7;
+  string user_agent = 5;
+  string ip = 6;
+  bool current = 7;
+  google.protobuf.Timestamp expires_at = 8;
+  google.protobuf.Timestamp last_seen_at = 9;
 }
 
 message GetAccountRequest {}
