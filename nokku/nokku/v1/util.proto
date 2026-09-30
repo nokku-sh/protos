@@ -15,6 +15,12 @@ service UtilService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/version"};
   }
+  // Who runs this server, for legal links and support contacts. Public, the
+  // login pages need it too.
+  rpc GetInstanceInfo(GetInstanceInfoRequest) returns (GetInstanceInfoResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/instance"};
+  }
   rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/whoami"};
@@ -38,6 +44,17 @@ service UtilService {
 message GetVersionRequest {}
 message GetVersionResponse {
   string version = 1;
+}
+
+message GetInstanceInfoRequest {}
+// Empty fields are not configured. Self-hosted servers usually leave them all empty.
+message GetInstanceInfoResponse {
+  string operator_name = 1;
+  string support_email = 2;
+  string website_url = 3;
+  string terms_url = 4;
+  string privacy_url = 5;
+  string imprint_url = 6;
 }
 
 message WhoamiRequest {}
