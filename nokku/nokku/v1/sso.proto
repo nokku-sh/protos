@@ -5,13 +5,16 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "nokku/v1/access.proto";
 
 service SSOService {
   rpc GetSSOProvider(GetSSOProviderRequest) returns (GetSSOProviderResponse) {
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/sso"};
   }
   rpc UpdateSSOProvider(UpdateSSOProviderRequest) returns (UpdateSSOProviderResponse) {
+    option (access) = {role: WORKSPACE_ROLE_ADMIN};
     option (google.api.http) = {
       patch: "/v1/workspaces/{workspace_id}/sso"
       body: "*"

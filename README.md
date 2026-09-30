@@ -1,89 +1,39 @@
-# Protobuf Schemas
+# protos
 
-This repository contains Protocol Buffer schema definitions for Nokku APIs. These schemas are used to generate client libraries and server stubs across multiple programming languages.
+The Nokku API schema and the Go code generated from it. Everything that
+talks to the Nokku API (`nokku`, `nokkud`, `nk`) imports this module, so all
+of them compile against the same schema at the version their `go.mod` pins.
 
-## Overview
+- `nokku/` is the buf module. Proto package `nokku.v1`.
+- `gen/` is the generated Go and connect code. Never edit it by hand.
 
-- **Organization**: `nokku-sh`
-- **Structure**: Each project has its own directory with versioned schemas
-- **Tooling**: Managed with [Buf](https://buf.build/) for schema validation and code generation
+The web UI in `nokku` generates its TypeScript client from the `.proto`
+files of the exact version its `go.mod` pins, so Go and TS never drift.
 
-## Usage with Buf
+## Access rules
 
-This repository uses [Buf](https://buf.build/) for schema management and validation. To consume these APIs in your project:
+Every RPC declares who may call it with `option (access)`, see
+`nokku/nokku/v1/access.proto`. An RPC without it is denied by the server.
 
-### As a Buf Dependency
-
-Add to your `buf.yaml`:
-
-```yaml
-deps:
-  - buf.build/nokku-sh/protos
-```
-
-Or use the BSR (Buf Schema Registry):
+## Changing the schema
 
 ```bash
-buf mod update
+task lint   # buf format and lint
+task gen    # regenerate gen/, must be committed
 ```
 
-### Generate Code
-
-Generate code for your preferred language:
+Then tag a release and bump it in the consumers:
 
 ```bash
-# Generate for Go
-buf generate --template buf.gen.yaml
-
-# Generate for TypeScript
-buf generate --template buf.gen.ts.yaml
-
-# Generate for Python
-buf generate --template buf.gen.py.yaml
+git tag v0.x.y && git push --tags
+go get github.com/nokku-sh/protos@v0.x.y   # in nokku, nokkud, nk
 ```
 
-### Local Development
-
-To work with these schemas locally:
+For local work across repos, point the consumers at this checkout with a
+`go.work` in the parent directory (not committed):
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd protos
-
-# Install Buf (if not already installed)
-# https://docs.buf.build/installation
-
-# Lint the schemas
-buf lint
-
-# Check for breaking changes
-buf breaking --against '.git#branch=main'
-
-# Generate code
-buf generate
+go work init ./nokku ./nokkud ./nk ./protos ./mon
 ```
 
-## Schema Validation
-
-All schemas are validated using:
-
-- **Standard linting rules** via `STANDARD` configuration
-- **Breaking change detection** via `FILE` configuration
-- **ProtoValidate** for runtime validation
-
-## Dependencies
-
-This repository depends on:
-
-- `googleapis/googleapis` - Google API common types
-- `bufbuild/protovalidate` - ProtoValidate extensions
-
-## Contributing
-
-When making changes to protobuf schemas:
-
-1. Always run `buf lint` to ensure schema quality
-2. Use `buf breaking` to check for breaking changes
-3. Update documentation for any API changes
-4. Consider backward compatibility for all modifications
+CI fails when `gen/` is stale.

@@ -7,19 +7,28 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-test:
+  lint-and-gen:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        module: [nokku]
     steps:
       - uses: actions/checkout@v7
       - uses: bufbuild/buf-action@v1
         with:
           setup_only: true
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: "go.mod"
 
-      - working-directory: ${{ matrix.module }}
-        run: buf format
+      - working-directory: nokku
+        run: buf format -d --exit-code
 
-      - working-directory: ${{ matrix.module }}
+      - working-directory: nokku
         run: buf lint
+
+      - name: Generated code is up to date
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install connectrpc.com/connect/cmd/protoc-gen-connect-go@latest
+          buf generate
+          go mod tidy
+          go build ./...
+          git diff --exit-code

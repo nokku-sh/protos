@@ -5,20 +5,25 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "nokku/v1/access.proto";
 
 service RecordingService {
   rpc GetRecording(GetRecordingRequest) returns (stream GetRecordingResponse) {
+    option (access) = {self: true};
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/recordings/{recording_id}"};
   }
   rpc ListRecordings(ListRecordingsRequest) returns (ListRecordingsResponse) {
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/recordings"};
   }
   rpc UploadRecording(stream UploadRecordingRequest) returns (UploadRecordingResponse) {
+    option (access) = {daemon: true};
     option (google.api.http) = {post: "/v1/recordings:upload"};
   }
   rpc DeleteRecording(DeleteRecordingRequest) returns (DeleteRecordingResponse) {
+    option (access) = {role: WORKSPACE_ROLE_EDITOR};
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/recordings/{recording_id}"};
   }
 }

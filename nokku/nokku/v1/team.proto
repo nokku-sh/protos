@@ -5,43 +5,53 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "nokku/v1/access.proto";
 import "nokku/v1/workspace.proto";
 
 service TeamService {
   rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/teams/{id}"};
   }
   rpc ListTeams(ListTeamsRequest) returns (ListTeamsResponse) {
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/teams"};
   }
   rpc CreateTeam(CreateTeamRequest) returns (CreateTeamResponse) {
+    option (access) = {role: WORKSPACE_ROLE_EDITOR};
     option (google.api.http) = {
       post: "/v1/workspaces/{workspace_id}/teams"
       body: "*"
     };
   }
   rpc UpdateTeam(UpdateTeamRequest) returns (UpdateTeamResponse) {
+    option (access) = {role: WORKSPACE_ROLE_EDITOR};
     option (google.api.http) = {
       patch: "/v1/workspaces/{workspace_id}/teams/{id}"
       body: "*"
     };
   }
   rpc DeleteTeam(DeleteTeamRequest) returns (DeleteTeamResponse) {
+    option (access) = {role: WORKSPACE_ROLE_EDITOR};
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/teams/{id}"};
   }
   rpc AddTeamMember(AddTeamMemberRequest) returns (AddTeamMemberResponse) {
+    option (access) = {role: WORKSPACE_ROLE_EDITOR};
     option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/teams/{team_id}/members/{user_id}"};
   }
   rpc RemoveTeamMember(RemoveTeamMemberRequest) returns (RemoveTeamMemberResponse) {
+    option (access) = {role: WORKSPACE_ROLE_EDITOR};
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/teams/{team_id}/members/{user_id}"};
   }
   rpc ListTeamMembers(ListTeamMembersRequest) returns (ListTeamMembersResponse) {
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/teams/{team_id}/members"};
   }
   rpc ListTeamsForUser(ListTeamsForUserRequest) returns (ListTeamsForUserResponse) {
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/users/{user_id}/teams"};
   }

@@ -5,6 +5,7 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "nokku/v1/access.proto";
 import "nokku/v1/certificates.proto";
 import "nokku/v1/daemon.proto";
 import "nokku/v1/util.proto";
@@ -12,6 +13,7 @@ import "nokku/v1/util.proto";
 service DashboardService {
   // One call for the whole overview, so the status line never mixes stale counts.
   rpc GetDashboard(GetDashboardRequest) returns (GetDashboardResponse) {
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/dashboard"};
   }

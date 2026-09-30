@@ -3,18 +3,37 @@ edition = "2023";
 package nokku.v1;
 
 import "buf/validate/validate.proto";
+import "nokku/v1/access.proto";
 import "nokku/v1/account.proto";
 
 service AuthService {
-  rpc Register(RegisterRequest) returns (RegisterResponse);
-  rpc Login(LoginRequest) returns (LoginResponse);
-  rpc LoginWithBackupCode(LoginWithBackupCodeRequest) returns (LoginWithBackupCodeResponse);
-  rpc Logout(LogoutRequest) returns (LogoutResponse);
-  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse);
-  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
-  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse);
-  rpc ResendVerification(ResendVerificationRequest) returns (ResendVerificationResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (access) = {public: true};
+  }
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (access) = {public: true};
+  }
+  rpc LoginWithBackupCode(LoginWithBackupCodeRequest) returns (LoginWithBackupCodeResponse) {
+    option (access) = {public: true};
+  }
+  // Public so a stale session can still clear its cookie.
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {
+    option (access) = {public: true};
+  }
+  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {
+    option (access) = {public: true};
+  }
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (access) = {public: true};
+  }
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
+    option (access) = {public: true};
+  }
+  rpc ResendVerification(ResendVerificationRequest) returns (ResendVerificationResponse) {
+    option (access) = {public: true};
+  }
   rpc DiscoverSSO(DiscoverSSORequest) returns (DiscoverSSOResponse) {
+    option (access) = {public: true};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
 }
