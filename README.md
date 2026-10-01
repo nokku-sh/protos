@@ -60,3 +60,7 @@ within about 30 minutes. To go around it:
 ```bash
 GOPROXY=direct GONOSUMDB=github.com/nokku-sh/protos go get github.com/nokku-sh/protos@v0.x.y
 ```
+
+## License
+
+Apache License 2.0
