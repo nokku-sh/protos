@@ -32,6 +32,15 @@ service AuthService {
   rpc ResendVerification(ResendVerificationRequest) returns (ResendVerificationResponse) {
     option (access) = {public: true};
   }
+  // Takes the token mailed to the new address and switches the account to it.
+  rpc ConfirmEmailChange(ConfirmEmailChangeRequest) returns (ConfirmEmailChangeResponse) {
+    option (access) = {public: true};
+  }
+  // Takes the token mailed to the old address. Drops a pending change, or
+  // puts the old address back when the change already happened.
+  rpc CancelEmailChange(CancelEmailChangeRequest) returns (CancelEmailChangeResponse) {
+    option (access) = {public: true};
+  }
   rpc DiscoverSSO(DiscoverSSORequest) returns (DiscoverSSOResponse) {
     option (access) = {public: true};
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -88,6 +97,16 @@ message VerifyEmailRequest {
   string token = 1 [(buf.validate.field).string.min_len = 1];
 }
 message VerifyEmailResponse {}
+
+message ConfirmEmailChangeRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+}
+message ConfirmEmailChangeResponse {}
+
+message CancelEmailChangeRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+}
+message CancelEmailChangeResponse {}
 
 message ResendVerificationRequest {
   string email = 1 [(buf.validate.field).string.email = true];

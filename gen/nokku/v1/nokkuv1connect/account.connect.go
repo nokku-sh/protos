@@ -42,6 +42,9 @@ const (
 	// AccountServiceChangePasswordProcedure is the fully-qualified name of the AccountService's
 	// ChangePassword RPC.
 	AccountServiceChangePasswordProcedure = "/nokku.v1.AccountService/ChangePassword"
+	// AccountServiceRequestEmailChangeProcedure is the fully-qualified name of the AccountService's
+	// RequestEmailChange RPC.
+	AccountServiceRequestEmailChangeProcedure = "/nokku.v1.AccountService/RequestEmailChange"
 	// AccountServiceRemovePasswordProcedure is the fully-qualified name of the AccountService's
 	// RemovePassword RPC.
 	AccountServiceRemovePasswordProcedure = "/nokku.v1.AccountService/RemovePassword"
@@ -82,6 +85,9 @@ type AccountServiceClient interface {
 	GetAccount(context.Context, *v1.GetAccountRequest) (*v1.GetAccountResponse, error)
 	UpdateAccount(context.Context, *v1.UpdateAccountRequest) (*v1.UpdateAccountResponse, error)
 	ChangePassword(context.Context, *v1.ChangePasswordRequest) (*v1.ChangePasswordResponse, error)
+	// Starts an email change. The address stays the old one until the link
+	// sent to the new address is used with AuthService.ConfirmEmailChange.
+	RequestEmailChange(context.Context, *v1.RequestEmailChangeRequest) (*v1.RequestEmailChangeResponse, error)
 	RemovePassword(context.Context, *v1.RemovePasswordRequest) (*v1.RemovePasswordResponse, error)
 	ListCredentials(context.Context, *v1.ListCredentialsRequest) (*v1.ListCredentialsResponse, error)
 	RenameCredential(context.Context, *v1.RenameCredentialRequest) (*v1.RenameCredentialResponse, error)
@@ -123,6 +129,12 @@ func NewAccountServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 			httpClient,
 			baseURL+AccountServiceChangePasswordProcedure,
 			connect.WithSchema(accountServiceMethods.ByName("ChangePassword")),
+			connect.WithClientOptions(opts...),
+		),
+		requestEmailChange: connect.NewClient[v1.RequestEmailChangeRequest, v1.RequestEmailChangeResponse](
+			httpClient,
+			baseURL+AccountServiceRequestEmailChangeProcedure,
+			connect.WithSchema(accountServiceMethods.ByName("RequestEmailChange")),
 			connect.WithClientOptions(opts...),
 		),
 		removePassword: connect.NewClient[v1.RemovePasswordRequest, v1.RemovePasswordResponse](
@@ -202,6 +214,7 @@ type accountServiceClient struct {
 	getAccount          *connect.Client[v1.GetAccountRequest, v1.GetAccountResponse]
 	updateAccount       *connect.Client[v1.UpdateAccountRequest, v1.UpdateAccountResponse]
 	changePassword      *connect.Client[v1.ChangePasswordRequest, v1.ChangePasswordResponse]
+	requestEmailChange  *connect.Client[v1.RequestEmailChangeRequest, v1.RequestEmailChangeResponse]
 	removePassword      *connect.Client[v1.RemovePasswordRequest, v1.RemovePasswordResponse]
 	listCredentials     *connect.Client[v1.ListCredentialsRequest, v1.ListCredentialsResponse]
 	renameCredential    *connect.Client[v1.RenameCredentialRequest, v1.RenameCredentialResponse]
@@ -236,6 +249,15 @@ func (c *accountServiceClient) UpdateAccount(ctx context.Context, req *v1.Update
 // ChangePassword calls nokku.v1.AccountService.ChangePassword.
 func (c *accountServiceClient) ChangePassword(ctx context.Context, req *v1.ChangePasswordRequest) (*v1.ChangePasswordResponse, error) {
 	response, err := c.changePassword.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// RequestEmailChange calls nokku.v1.AccountService.RequestEmailChange.
+func (c *accountServiceClient) RequestEmailChange(ctx context.Context, req *v1.RequestEmailChangeRequest) (*v1.RequestEmailChangeResponse, error) {
+	response, err := c.requestEmailChange.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
@@ -346,6 +368,9 @@ type AccountServiceHandler interface {
 	GetAccount(context.Context, *v1.GetAccountRequest) (*v1.GetAccountResponse, error)
 	UpdateAccount(context.Context, *v1.UpdateAccountRequest) (*v1.UpdateAccountResponse, error)
 	ChangePassword(context.Context, *v1.ChangePasswordRequest) (*v1.ChangePasswordResponse, error)
+	// Starts an email change. The address stays the old one until the link
+	// sent to the new address is used with AuthService.ConfirmEmailChange.
+	RequestEmailChange(context.Context, *v1.RequestEmailChangeRequest) (*v1.RequestEmailChangeResponse, error)
 	RemovePassword(context.Context, *v1.RemovePasswordRequest) (*v1.RemovePasswordResponse, error)
 	ListCredentials(context.Context, *v1.ListCredentialsRequest) (*v1.ListCredentialsResponse, error)
 	RenameCredential(context.Context, *v1.RenameCredentialRequest) (*v1.RenameCredentialResponse, error)
@@ -383,6 +408,12 @@ func NewAccountServiceHandler(svc AccountServiceHandler, opts ...connect.Handler
 		AccountServiceChangePasswordProcedure,
 		svc.ChangePassword,
 		connect.WithSchema(accountServiceMethods.ByName("ChangePassword")),
+		connect.WithHandlerOptions(opts...),
+	)
+	accountServiceRequestEmailChangeHandler := connect.NewUnaryHandlerSimple(
+		AccountServiceRequestEmailChangeProcedure,
+		svc.RequestEmailChange,
+		connect.WithSchema(accountServiceMethods.ByName("RequestEmailChange")),
 		connect.WithHandlerOptions(opts...),
 	)
 	accountServiceRemovePasswordHandler := connect.NewUnaryHandlerSimple(
@@ -462,6 +493,8 @@ func NewAccountServiceHandler(svc AccountServiceHandler, opts ...connect.Handler
 			accountServiceUpdateAccountHandler.ServeHTTP(w, r)
 		case AccountServiceChangePasswordProcedure:
 			accountServiceChangePasswordHandler.ServeHTTP(w, r)
+		case AccountServiceRequestEmailChangeProcedure:
+			accountServiceRequestEmailChangeHandler.ServeHTTP(w, r)
 		case AccountServiceRemovePasswordProcedure:
 			accountServiceRemovePasswordHandler.ServeHTTP(w, r)
 		case AccountServiceListCredentialsProcedure:
@@ -503,6 +536,10 @@ func (UnimplementedAccountServiceHandler) UpdateAccount(context.Context, *v1.Upd
 
 func (UnimplementedAccountServiceHandler) ChangePassword(context.Context, *v1.ChangePasswordRequest) (*v1.ChangePasswordResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.ChangePassword is not implemented"))
+}
+
+func (UnimplementedAccountServiceHandler) RequestEmailChange(context.Context, *v1.RequestEmailChangeRequest) (*v1.RequestEmailChangeResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.RequestEmailChange is not implemented"))
 }
 
 func (UnimplementedAccountServiceHandler) RemovePassword(context.Context, *v1.RemovePasswordRequest) (*v1.RemovePasswordResponse, error) {

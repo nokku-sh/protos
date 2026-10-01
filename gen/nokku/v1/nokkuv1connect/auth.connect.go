@@ -53,6 +53,12 @@ const (
 	// AuthServiceResendVerificationProcedure is the fully-qualified name of the AuthService's
 	// ResendVerification RPC.
 	AuthServiceResendVerificationProcedure = "/nokku.v1.AuthService/ResendVerification"
+	// AuthServiceConfirmEmailChangeProcedure is the fully-qualified name of the AuthService's
+	// ConfirmEmailChange RPC.
+	AuthServiceConfirmEmailChangeProcedure = "/nokku.v1.AuthService/ConfirmEmailChange"
+	// AuthServiceCancelEmailChangeProcedure is the fully-qualified name of the AuthService's
+	// CancelEmailChange RPC.
+	AuthServiceCancelEmailChangeProcedure = "/nokku.v1.AuthService/CancelEmailChange"
 	// AuthServiceDiscoverSSOProcedure is the fully-qualified name of the AuthService's DiscoverSSO RPC.
 	AuthServiceDiscoverSSOProcedure = "/nokku.v1.AuthService/DiscoverSSO"
 )
@@ -68,6 +74,11 @@ type AuthServiceClient interface {
 	ResetPassword(context.Context, *v1.ResetPasswordRequest) (*v1.ResetPasswordResponse, error)
 	VerifyEmail(context.Context, *v1.VerifyEmailRequest) (*v1.VerifyEmailResponse, error)
 	ResendVerification(context.Context, *v1.ResendVerificationRequest) (*v1.ResendVerificationResponse, error)
+	// Takes the token mailed to the new address and switches the account to it.
+	ConfirmEmailChange(context.Context, *v1.ConfirmEmailChangeRequest) (*v1.ConfirmEmailChangeResponse, error)
+	// Takes the token mailed to the old address. Drops a pending change, or
+	// puts the old address back when the change already happened.
+	CancelEmailChange(context.Context, *v1.CancelEmailChangeRequest) (*v1.CancelEmailChangeResponse, error)
 	DiscoverSSO(context.Context, *v1.DiscoverSSORequest) (*v1.DiscoverSSOResponse, error)
 }
 
@@ -130,6 +141,18 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(authServiceMethods.ByName("ResendVerification")),
 			connect.WithClientOptions(opts...),
 		),
+		confirmEmailChange: connect.NewClient[v1.ConfirmEmailChangeRequest, v1.ConfirmEmailChangeResponse](
+			httpClient,
+			baseURL+AuthServiceConfirmEmailChangeProcedure,
+			connect.WithSchema(authServiceMethods.ByName("ConfirmEmailChange")),
+			connect.WithClientOptions(opts...),
+		),
+		cancelEmailChange: connect.NewClient[v1.CancelEmailChangeRequest, v1.CancelEmailChangeResponse](
+			httpClient,
+			baseURL+AuthServiceCancelEmailChangeProcedure,
+			connect.WithSchema(authServiceMethods.ByName("CancelEmailChange")),
+			connect.WithClientOptions(opts...),
+		),
 		discoverSSO: connect.NewClient[v1.DiscoverSSORequest, v1.DiscoverSSOResponse](
 			httpClient,
 			baseURL+AuthServiceDiscoverSSOProcedure,
@@ -150,6 +173,8 @@ type authServiceClient struct {
 	resetPassword       *connect.Client[v1.ResetPasswordRequest, v1.ResetPasswordResponse]
 	verifyEmail         *connect.Client[v1.VerifyEmailRequest, v1.VerifyEmailResponse]
 	resendVerification  *connect.Client[v1.ResendVerificationRequest, v1.ResendVerificationResponse]
+	confirmEmailChange  *connect.Client[v1.ConfirmEmailChangeRequest, v1.ConfirmEmailChangeResponse]
+	cancelEmailChange   *connect.Client[v1.CancelEmailChangeRequest, v1.CancelEmailChangeResponse]
 	discoverSSO         *connect.Client[v1.DiscoverSSORequest, v1.DiscoverSSOResponse]
 }
 
@@ -225,6 +250,24 @@ func (c *authServiceClient) ResendVerification(ctx context.Context, req *v1.Rese
 	return nil, err
 }
 
+// ConfirmEmailChange calls nokku.v1.AuthService.ConfirmEmailChange.
+func (c *authServiceClient) ConfirmEmailChange(ctx context.Context, req *v1.ConfirmEmailChangeRequest) (*v1.ConfirmEmailChangeResponse, error) {
+	response, err := c.confirmEmailChange.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// CancelEmailChange calls nokku.v1.AuthService.CancelEmailChange.
+func (c *authServiceClient) CancelEmailChange(ctx context.Context, req *v1.CancelEmailChangeRequest) (*v1.CancelEmailChangeResponse, error) {
+	response, err := c.cancelEmailChange.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
 // DiscoverSSO calls nokku.v1.AuthService.DiscoverSSO.
 func (c *authServiceClient) DiscoverSSO(ctx context.Context, req *v1.DiscoverSSORequest) (*v1.DiscoverSSOResponse, error) {
 	response, err := c.discoverSSO.CallUnary(ctx, connect.NewRequest(req))
@@ -245,6 +288,11 @@ type AuthServiceHandler interface {
 	ResetPassword(context.Context, *v1.ResetPasswordRequest) (*v1.ResetPasswordResponse, error)
 	VerifyEmail(context.Context, *v1.VerifyEmailRequest) (*v1.VerifyEmailResponse, error)
 	ResendVerification(context.Context, *v1.ResendVerificationRequest) (*v1.ResendVerificationResponse, error)
+	// Takes the token mailed to the new address and switches the account to it.
+	ConfirmEmailChange(context.Context, *v1.ConfirmEmailChangeRequest) (*v1.ConfirmEmailChangeResponse, error)
+	// Takes the token mailed to the old address. Drops a pending change, or
+	// puts the old address back when the change already happened.
+	CancelEmailChange(context.Context, *v1.CancelEmailChangeRequest) (*v1.CancelEmailChangeResponse, error)
 	DiscoverSSO(context.Context, *v1.DiscoverSSORequest) (*v1.DiscoverSSOResponse, error)
 }
 
@@ -303,6 +351,18 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(authServiceMethods.ByName("ResendVerification")),
 		connect.WithHandlerOptions(opts...),
 	)
+	authServiceConfirmEmailChangeHandler := connect.NewUnaryHandlerSimple(
+		AuthServiceConfirmEmailChangeProcedure,
+		svc.ConfirmEmailChange,
+		connect.WithSchema(authServiceMethods.ByName("ConfirmEmailChange")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authServiceCancelEmailChangeHandler := connect.NewUnaryHandlerSimple(
+		AuthServiceCancelEmailChangeProcedure,
+		svc.CancelEmailChange,
+		connect.WithSchema(authServiceMethods.ByName("CancelEmailChange")),
+		connect.WithHandlerOptions(opts...),
+	)
 	authServiceDiscoverSSOHandler := connect.NewUnaryHandlerSimple(
 		AuthServiceDiscoverSSOProcedure,
 		svc.DiscoverSSO,
@@ -328,6 +388,10 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 			authServiceVerifyEmailHandler.ServeHTTP(w, r)
 		case AuthServiceResendVerificationProcedure:
 			authServiceResendVerificationHandler.ServeHTTP(w, r)
+		case AuthServiceConfirmEmailChangeProcedure:
+			authServiceConfirmEmailChangeHandler.ServeHTTP(w, r)
+		case AuthServiceCancelEmailChangeProcedure:
+			authServiceCancelEmailChangeHandler.ServeHTTP(w, r)
 		case AuthServiceDiscoverSSOProcedure:
 			authServiceDiscoverSSOHandler.ServeHTTP(w, r)
 		default:
@@ -369,6 +433,14 @@ func (UnimplementedAuthServiceHandler) VerifyEmail(context.Context, *v1.VerifyEm
 
 func (UnimplementedAuthServiceHandler) ResendVerification(context.Context, *v1.ResendVerificationRequest) (*v1.ResendVerificationResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.ResendVerification is not implemented"))
+}
+
+func (UnimplementedAuthServiceHandler) ConfirmEmailChange(context.Context, *v1.ConfirmEmailChangeRequest) (*v1.ConfirmEmailChangeResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.ConfirmEmailChange is not implemented"))
+}
+
+func (UnimplementedAuthServiceHandler) CancelEmailChange(context.Context, *v1.CancelEmailChangeRequest) (*v1.CancelEmailChangeResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.CancelEmailChange is not implemented"))
 }
 
 func (UnimplementedAuthServiceHandler) DiscoverSSO(context.Context, *v1.DiscoverSSORequest) (*v1.DiscoverSSOResponse, error) {

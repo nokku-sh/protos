@@ -27,6 +27,15 @@ service AccountService {
       body: "*"
     };
   }
+  // Starts an email change. The address stays the old one until the link
+  // sent to the new address is used with AuthService.ConfirmEmailChange.
+  rpc RequestEmailChange(RequestEmailChangeRequest) returns (RequestEmailChangeResponse) {
+    option (access) = {self: true};
+    option (google.api.http) = {
+      post: "/v1/account/email"
+      body: "*"
+    };
+  }
   rpc RemovePassword(RemovePasswordRequest) returns (RemovePasswordResponse) {
     option (access) = {self: true};
     option (google.api.http) = {
@@ -100,6 +109,8 @@ message User {
   google.protobuf.Timestamp created_at = 6;
   google.protobuf.Timestamp updated_at = 7;
   bool disable_password_reset = 8;
+  // The address an email change is waiting on, empty when none is pending.
+  string pending_email = 9;
 }
 
 message AccountCredential {
@@ -149,6 +160,15 @@ message ChangePasswordRequest {
   }];
 }
 message ChangePasswordResponse {}
+
+message RequestEmailChangeRequest {
+  string new_email = 1 [(buf.validate.field).string.email = true];
+  string current_password = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 128
+  }];
+}
+message RequestEmailChangeResponse {}
 
 message RemovePasswordRequest {
   string current_password = 1 [(buf.validate.field).string = {
