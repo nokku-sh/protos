@@ -48,6 +48,9 @@ const (
 	// BillingServiceGetLicenseProcedure is the fully-qualified name of the BillingService's GetLicense
 	// RPC.
 	BillingServiceGetLicenseProcedure = "/nokku.v1.BillingService/GetLicense"
+	// BillingServiceActivateLicenseProcedure is the fully-qualified name of the BillingService's
+	// ActivateLicense RPC.
+	BillingServiceActivateLicenseProcedure = "/nokku.v1.BillingService/ActivateLicense"
 )
 
 // BillingServiceClient is a client for the nokku.v1.BillingService service.
@@ -57,6 +60,8 @@ type BillingServiceClient interface {
 	CreateCheckout(context.Context, *v1.CreateCheckoutRequest) (*v1.CreateCheckoutResponse, error)
 	CancelSubscription(context.Context, *v1.CancelSubscriptionRequest) (*v1.CancelSubscriptionResponse, error)
 	GetLicense(context.Context, *v1.GetLicenseRequest) (*v1.GetLicenseResponse, error)
+	// Self-hosted only. Takes effect at once, no restart.
+	ActivateLicense(context.Context, *v1.ActivateLicenseRequest) (*v1.ActivateLicenseResponse, error)
 }
 
 // NewBillingServiceClient constructs a client for the nokku.v1.BillingService service. By default,
@@ -102,6 +107,12 @@ func NewBillingServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
+		activateLicense: connect.NewClient[v1.ActivateLicenseRequest, v1.ActivateLicenseResponse](
+			httpClient,
+			baseURL+BillingServiceActivateLicenseProcedure,
+			connect.WithSchema(billingServiceMethods.ByName("ActivateLicense")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -112,6 +123,7 @@ type billingServiceClient struct {
 	createCheckout     *connect.Client[v1.CreateCheckoutRequest, v1.CreateCheckoutResponse]
 	cancelSubscription *connect.Client[v1.CancelSubscriptionRequest, v1.CancelSubscriptionResponse]
 	getLicense         *connect.Client[v1.GetLicenseRequest, v1.GetLicenseResponse]
+	activateLicense    *connect.Client[v1.ActivateLicenseRequest, v1.ActivateLicenseResponse]
 }
 
 // GetBilling calls nokku.v1.BillingService.GetBilling.
@@ -159,6 +171,15 @@ func (c *billingServiceClient) GetLicense(ctx context.Context, req *v1.GetLicens
 	return nil, err
 }
 
+// ActivateLicense calls nokku.v1.BillingService.ActivateLicense.
+func (c *billingServiceClient) ActivateLicense(ctx context.Context, req *v1.ActivateLicenseRequest) (*v1.ActivateLicenseResponse, error) {
+	response, err := c.activateLicense.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
 // BillingServiceHandler is an implementation of the nokku.v1.BillingService service.
 type BillingServiceHandler interface {
 	GetBilling(context.Context, *v1.GetBillingRequest) (*v1.GetBillingResponse, error)
@@ -166,6 +187,8 @@ type BillingServiceHandler interface {
 	CreateCheckout(context.Context, *v1.CreateCheckoutRequest) (*v1.CreateCheckoutResponse, error)
 	CancelSubscription(context.Context, *v1.CancelSubscriptionRequest) (*v1.CancelSubscriptionResponse, error)
 	GetLicense(context.Context, *v1.GetLicenseRequest) (*v1.GetLicenseResponse, error)
+	// Self-hosted only. Takes effect at once, no restart.
+	ActivateLicense(context.Context, *v1.ActivateLicenseRequest) (*v1.ActivateLicenseResponse, error)
 }
 
 // NewBillingServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -207,6 +230,12 @@ func NewBillingServiceHandler(svc BillingServiceHandler, opts ...connect.Handler
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
+	billingServiceActivateLicenseHandler := connect.NewUnaryHandlerSimple(
+		BillingServiceActivateLicenseProcedure,
+		svc.ActivateLicense,
+		connect.WithSchema(billingServiceMethods.ByName("ActivateLicense")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/nokku.v1.BillingService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case BillingServiceGetBillingProcedure:
@@ -219,6 +248,8 @@ func NewBillingServiceHandler(svc BillingServiceHandler, opts ...connect.Handler
 			billingServiceCancelSubscriptionHandler.ServeHTTP(w, r)
 		case BillingServiceGetLicenseProcedure:
 			billingServiceGetLicenseHandler.ServeHTTP(w, r)
+		case BillingServiceActivateLicenseProcedure:
+			billingServiceActivateLicenseHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -246,4 +277,8 @@ func (UnimplementedBillingServiceHandler) CancelSubscription(context.Context, *v
 
 func (UnimplementedBillingServiceHandler) GetLicense(context.Context, *v1.GetLicenseRequest) (*v1.GetLicenseResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.BillingService.GetLicense is not implemented"))
+}
+
+func (UnimplementedBillingServiceHandler) ActivateLicense(context.Context, *v1.ActivateLicenseRequest) (*v1.ActivateLicenseResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.BillingService.ActivateLicense is not implemented"))
 }

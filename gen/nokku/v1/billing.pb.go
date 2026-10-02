@@ -656,6 +656,96 @@ func (x *GetLicenseResponse) GetExpiresAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// The license covers the whole instance. The workspace only says where the
+// caller is an owner.
+type ActivateLicenseRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
+	Key           *string                `protobuf:"bytes,2,opt,name=key" json:"key,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ActivateLicenseRequest) Reset() {
+	*x = ActivateLicenseRequest{}
+	mi := &file_nokku_v1_billing_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ActivateLicenseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActivateLicenseRequest) ProtoMessage() {}
+
+func (x *ActivateLicenseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_billing_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActivateLicenseRequest.ProtoReflect.Descriptor instead.
+func (*ActivateLicenseRequest) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_billing_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ActivateLicenseRequest) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *ActivateLicenseRequest) GetKey() string {
+	if x != nil && x.Key != nil {
+		return *x.Key
+	}
+	return ""
+}
+
+type ActivateLicenseResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ActivateLicenseResponse) Reset() {
+	*x = ActivateLicenseResponse{}
+	mi := &file_nokku_v1_billing_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ActivateLicenseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActivateLicenseResponse) ProtoMessage() {}
+
+func (x *ActivateLicenseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_billing_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActivateLicenseResponse.ProtoReflect.Descriptor instead.
+func (*ActivateLicenseResponse) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_billing_proto_rawDescGZIP(), []int{13}
+}
+
 var File_nokku_v1_billing_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_billing_proto_rawDesc = "" +
@@ -701,7 +791,12 @@ const file_nokku_v1_billing_proto_rawDesc = "" +
 	"\x04plan\x18\x01 \x01(\tR\x04plan\x12\x16\n" +
 	"\x06active\x18\x02 \x01(\bR\x06active\x129\n" +
 	"\n" +
-	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt2\xe9\x04\n" +
+	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"c\n" +
+	"\x16ActivateLicenseRequest\x12+\n" +
+	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1c\n" +
+	"\x03key\x18\x02 \x01(\tB\n" +
+	"\xbaH\ar\x05\x10\x01\x18\x80 R\x03key\"\x19\n" +
+	"\x17ActivateLicenseResponse2\xdf\x05\n" +
 	"\x0eBillingService\x12r\n" +
 	"\n" +
 	"GetBilling\x12\x1b.nokku.v1.GetBillingRequest\x1a\x1c.nokku.v1.GetBillingResponse\")\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x02\x1a\x12\x18/v1/billing/subscription\x90\x02\x01\x12o\n" +
@@ -709,7 +804,8 @@ const file_nokku_v1_billing_proto_rawDesc = "" +
 	"\x0eCreateCheckout\x12\x1f.nokku.v1.CreateCheckoutRequest\x1a .nokku.v1.CreateCheckoutResponse\"\"\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x16\"\x14/v1/billing/checkout\x12\x91\x01\n" +
 	"\x12CancelSubscription\x12#.nokku.v1.CancelSubscriptionRequest\x1a$.nokku.v1.CancelSubscriptionResponse\"0\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/billing/subscription/cancel\x12e\n" +
 	"\n" +
-	"GetLicense\x12\x1b.nokku.v1.GetLicenseRequest\x1a\x1c.nokku.v1.GetLicenseResponse\"\x1c\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\r\x12\v/v1/license\x90\x02\x01B\x8e\x01\n" +
+	"GetLicense\x12\x1b.nokku.v1.GetLicenseRequest\x1a\x1c.nokku.v1.GetLicenseResponse\"\x1c\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\r\x12\v/v1/license\x90\x02\x01\x12t\n" +
+	"\x0fActivateLicense\x12 .nokku.v1.ActivateLicenseRequest\x1a!.nokku.v1.ActivateLicenseResponse\"\x1c\xc2\xf3\x18\x02\x18\x05\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/licenseB\x8e\x01\n" +
 	"\fcom.nokku.v1B\fBillingProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (
@@ -724,7 +820,7 @@ func file_nokku_v1_billing_proto_rawDescGZIP() []byte {
 	return file_nokku_v1_billing_proto_rawDescData
 }
 
-var file_nokku_v1_billing_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_nokku_v1_billing_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_nokku_v1_billing_proto_goTypes = []any{
 	(*GetBillingRequest)(nil),          // 0: nokku.v1.GetBillingRequest
 	(*GetBillingResponse)(nil),         // 1: nokku.v1.GetBillingResponse
@@ -738,27 +834,31 @@ var file_nokku_v1_billing_proto_goTypes = []any{
 	(*CancelSubscriptionResponse)(nil), // 9: nokku.v1.CancelSubscriptionResponse
 	(*GetLicenseRequest)(nil),          // 10: nokku.v1.GetLicenseRequest
 	(*GetLicenseResponse)(nil),         // 11: nokku.v1.GetLicenseResponse
-	nil,                                // 12: nokku.v1.GetBillingResponse.FeaturesEntry
-	(*timestamppb.Timestamp)(nil),      // 13: google.protobuf.Timestamp
+	(*ActivateLicenseRequest)(nil),     // 12: nokku.v1.ActivateLicenseRequest
+	(*ActivateLicenseResponse)(nil),    // 13: nokku.v1.ActivateLicenseResponse
+	nil,                                // 14: nokku.v1.GetBillingResponse.FeaturesEntry
+	(*timestamppb.Timestamp)(nil),      // 15: google.protobuf.Timestamp
 }
 var file_nokku_v1_billing_proto_depIdxs = []int32{
-	12, // 0: nokku.v1.GetBillingResponse.features:type_name -> nokku.v1.GetBillingResponse.FeaturesEntry
+	14, // 0: nokku.v1.GetBillingResponse.features:type_name -> nokku.v1.GetBillingResponse.FeaturesEntry
 	2,  // 1: nokku.v1.GetBillingResponse.quotas:type_name -> nokku.v1.Quotas
 	3,  // 2: nokku.v1.GetBillingResponse.subscription:type_name -> nokku.v1.Subscription
-	13, // 3: nokku.v1.Subscription.current_period_end:type_name -> google.protobuf.Timestamp
-	13, // 4: nokku.v1.GetLicenseResponse.expires_at:type_name -> google.protobuf.Timestamp
+	15, // 3: nokku.v1.Subscription.current_period_end:type_name -> google.protobuf.Timestamp
+	15, // 4: nokku.v1.GetLicenseResponse.expires_at:type_name -> google.protobuf.Timestamp
 	0,  // 5: nokku.v1.BillingService.GetBilling:input_type -> nokku.v1.GetBillingRequest
 	4,  // 6: nokku.v1.BillingService.CreatePortal:input_type -> nokku.v1.CreatePortalRequest
 	6,  // 7: nokku.v1.BillingService.CreateCheckout:input_type -> nokku.v1.CreateCheckoutRequest
 	8,  // 8: nokku.v1.BillingService.CancelSubscription:input_type -> nokku.v1.CancelSubscriptionRequest
 	10, // 9: nokku.v1.BillingService.GetLicense:input_type -> nokku.v1.GetLicenseRequest
-	1,  // 10: nokku.v1.BillingService.GetBilling:output_type -> nokku.v1.GetBillingResponse
-	5,  // 11: nokku.v1.BillingService.CreatePortal:output_type -> nokku.v1.CreatePortalResponse
-	7,  // 12: nokku.v1.BillingService.CreateCheckout:output_type -> nokku.v1.CreateCheckoutResponse
-	9,  // 13: nokku.v1.BillingService.CancelSubscription:output_type -> nokku.v1.CancelSubscriptionResponse
-	11, // 14: nokku.v1.BillingService.GetLicense:output_type -> nokku.v1.GetLicenseResponse
-	10, // [10:15] is the sub-list for method output_type
-	5,  // [5:10] is the sub-list for method input_type
+	12, // 10: nokku.v1.BillingService.ActivateLicense:input_type -> nokku.v1.ActivateLicenseRequest
+	1,  // 11: nokku.v1.BillingService.GetBilling:output_type -> nokku.v1.GetBillingResponse
+	5,  // 12: nokku.v1.BillingService.CreatePortal:output_type -> nokku.v1.CreatePortalResponse
+	7,  // 13: nokku.v1.BillingService.CreateCheckout:output_type -> nokku.v1.CreateCheckoutResponse
+	9,  // 14: nokku.v1.BillingService.CancelSubscription:output_type -> nokku.v1.CancelSubscriptionResponse
+	11, // 15: nokku.v1.BillingService.GetLicense:output_type -> nokku.v1.GetLicenseResponse
+	13, // 16: nokku.v1.BillingService.ActivateLicense:output_type -> nokku.v1.ActivateLicenseResponse
+	11, // [11:17] is the sub-list for method output_type
+	5,  // [5:11] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
 	5,  // [5:5] is the sub-list for extension extendee
 	0,  // [0:5] is the sub-list for field type_name
@@ -776,7 +876,7 @@ func file_nokku_v1_billing_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_nokku_v1_billing_proto_rawDesc), len(file_nokku_v1_billing_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
