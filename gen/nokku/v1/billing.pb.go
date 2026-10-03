@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -750,7 +749,7 @@ var File_nokku_v1_billing_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_billing_proto_rawDesc = "" +
 	"\n" +
-	"\x16nokku/v1/billing.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"@\n" +
+	"\x16nokku/v1/billing.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"@\n" +
 	"\x11GetBillingRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\"\xf1\x02\n" +
 	"\x12GetBillingResponse\x12\x12\n" +
@@ -796,16 +795,16 @@ const file_nokku_v1_billing_proto_rawDesc = "" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1c\n" +
 	"\x03key\x18\x02 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x80 R\x03key\"\x19\n" +
-	"\x17ActivateLicenseResponse2\xdf\x05\n" +
-	"\x0eBillingService\x12r\n" +
+	"\x17ActivateLicenseResponse2\xb5\x04\n" +
+	"\x0eBillingService\x12R\n" +
 	"\n" +
-	"GetBilling\x12\x1b.nokku.v1.GetBillingRequest\x1a\x1c.nokku.v1.GetBillingResponse\")\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x02\x1a\x12\x18/v1/billing/subscription\x90\x02\x01\x12o\n" +
-	"\fCreatePortal\x12\x1d.nokku.v1.CreatePortalRequest\x1a\x1e.nokku.v1.CreatePortalResponse\" \xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x14\"\x12/v1/billing/portal\x12w\n" +
-	"\x0eCreateCheckout\x12\x1f.nokku.v1.CreateCheckoutRequest\x1a .nokku.v1.CreateCheckoutResponse\"\"\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x16\"\x14/v1/billing/checkout\x12\x91\x01\n" +
-	"\x12CancelSubscription\x12#.nokku.v1.CancelSubscriptionRequest\x1a$.nokku.v1.CancelSubscriptionResponse\"0\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/billing/subscription/cancel\x12e\n" +
+	"GetBilling\x12\x1b.nokku.v1.GetBillingRequest\x1a\x1c.nokku.v1.GetBillingResponse\"\t\xc2\xf3\x18\x02\x18\x04\x90\x02\x01\x12U\n" +
+	"\fCreatePortal\x12\x1d.nokku.v1.CreatePortalRequest\x1a\x1e.nokku.v1.CreatePortalResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12[\n" +
+	"\x0eCreateCheckout\x12\x1f.nokku.v1.CreateCheckoutRequest\x1a .nokku.v1.CreateCheckoutResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12g\n" +
+	"\x12CancelSubscription\x12#.nokku.v1.CancelSubscriptionRequest\x1a$.nokku.v1.CancelSubscriptionResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12R\n" +
 	"\n" +
-	"GetLicense\x12\x1b.nokku.v1.GetLicenseRequest\x1a\x1c.nokku.v1.GetLicenseResponse\"\x1c\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\r\x12\v/v1/license\x90\x02\x01\x12t\n" +
-	"\x0fActivateLicense\x12 .nokku.v1.ActivateLicenseRequest\x1a!.nokku.v1.ActivateLicenseResponse\"\x1c\xc2\xf3\x18\x02\x18\x05\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/licenseB\x8e\x01\n" +
+	"GetLicense\x12\x1b.nokku.v1.GetLicenseRequest\x1a\x1c.nokku.v1.GetLicenseResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12^\n" +
+	"\x0fActivateLicense\x12 .nokku.v1.ActivateLicenseRequest\x1a!.nokku.v1.ActivateLicenseResponse\"\x06\xc2\xf3\x18\x02\x18\x05B\x8e\x01\n" +
 	"\fcom.nokku.v1B\fBillingProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

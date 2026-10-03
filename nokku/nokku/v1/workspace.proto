@@ -3,7 +3,6 @@ edition = "2023";
 package nokku.v1;
 
 import "buf/validate/validate.proto";
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 import "nokku/v1/daemon.proto";
@@ -12,52 +11,36 @@ service WorkspaceService {
   rpc GetWorkspace(GetWorkspaceRequest) returns (GetWorkspaceResponse) {
     option (access) = {self: true};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}"};
   }
   rpc ListWorkspaces(ListWorkspacesRequest) returns (ListWorkspacesResponse) {
     option (access) = {self: true};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces"};
   }
   rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse) {
     option (access) = {self: true};
-    option (google.api.http) = {
-      post: "/v1/workspaces"
-      body: "*"
-    };
   }
   rpc UpdateWorkspace(UpdateWorkspaceRequest) returns (UpdateWorkspaceResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
-    option (google.api.http) = {
-      patch: "/v1/workspaces/{workspace_id}"
-      body: "*"
-    };
   }
   rpc DeleteWorkspace(DeleteWorkspaceRequest) returns (DeleteWorkspaceResponse) {
     option (access) = {role: WORKSPACE_ROLE_OWNER};
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}"};
   }
   rpc GetWorkspaceMember(GetWorkspaceMemberRequest) returns (GetWorkspaceMemberResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/members/{user_id}"};
   }
   rpc ListWorkspaceMembers(ListWorkspaceMembersRequest) returns (ListWorkspaceMembersResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/members"};
   }
   rpc RemoveWorkspaceMember(RemoveWorkspaceMemberRequest) returns (RemoveWorkspaceMemberResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/members/{user_id}"};
   }
   rpc UpdateWorkspaceMember(UpdateWorkspaceMemberRequest) returns (UpdateWorkspaceMemberResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
-    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/members/{user_id}"};
   }
   rpc UpdateWorkspaceOwner(UpdateWorkspaceOwnerRequest) returns (UpdateWorkspaceOwnerResponse) {
     option (access) = {self: true};
-    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/owner/{new_owner}"};
   }
 }
 

@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -1570,7 +1569,7 @@ var File_nokku_v1_account_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_account_proto_rawDesc = "" +
 	"\n" +
-	"\x16nokku/v1/account.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xd2\x02\n" +
+	"\x16nokku/v1/account.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xd2\x02\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
@@ -1659,24 +1658,24 @@ const file_nokku_v1_account_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x02id\"\x17\n" +
 	"\x15RemoveSessionResponse\"\x16\n" +
 	"\x14DeleteAccountRequest\"\x17\n" +
-	"\x15DeleteAccountResponse2\xaa\x0f\n" +
-	"\x0eAccountService\x12e\n" +
+	"\x15DeleteAccountResponse2\xb9\v\n" +
+	"\x0eAccountService\x12R\n" +
 	"\n" +
-	"GetAccount\x12\x1b.nokku.v1.GetAccountRequest\x1a\x1c.nokku.v1.GetAccountResponse\"\x1c\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\r\x12\v/v1/account\x90\x02\x01\x12n\n" +
-	"\rUpdateAccount\x12\x1e.nokku.v1.UpdateAccountRequest\x1a\x1f.nokku.v1.UpdateAccountResponse\"\x1c\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x10:\x01*2\v/v1/account\x12z\n" +
-	"\x0eChangePassword\x12\x1f.nokku.v1.ChangePasswordRequest\x1a .nokku.v1.ChangePasswordResponse\"%\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1/account/password\x12\x83\x01\n" +
-	"\x12RequestEmailChange\x12#.nokku.v1.RequestEmailChangeRequest\x1a$.nokku.v1.RequestEmailChangeResponse\"\"\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/account/email\x12\x81\x01\n" +
-	"\x0eRemovePassword\x12\x1f.nokku.v1.RemovePasswordRequest\x1a .nokku.v1.RemovePasswordResponse\",\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/account/password:remove\x12\x80\x01\n" +
-	"\x0fListCredentials\x12 .nokku.v1.ListCredentialsRequest\x1a!.nokku.v1.ListCredentialsResponse\"(\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x19\x12\x17/v1/account/credentials\x90\x02\x01\x12\x8f\x01\n" +
-	"\x10RenameCredential\x12!.nokku.v1.RenameCredentialRequest\x1a\".nokku.v1.RenameCredentialResponse\"4\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02(:\x01*\"#/v1/account/credentials/{id}:rename\x12\x85\x01\n" +
-	"\x10RemoveCredential\x12!.nokku.v1.RemoveCredentialRequest\x1a\".nokku.v1.RemoveCredentialResponse\"*\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x1e*\x1c/v1/account/credentials/{id}\x12\x83\x01\n" +
-	"\x0eRemoveIdentity\x12\x1f.nokku.v1.RemoveIdentityRequest\x1a .nokku.v1.RemoveIdentityResponse\".\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/v1/account/identities:remove\x12\x81\x01\n" +
-	"\x0fListBackupCodes\x12 .nokku.v1.ListBackupCodesRequest\x1a!.nokku.v1.ListBackupCodesResponse\")\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x1a\x12\x18/v1/account/backup-codes\x90\x02\x01\x12\x8e\x01\n" +
-	"\x11RotateBackupCodes\x12\".nokku.v1.RotateBackupCodesRequest\x1a#.nokku.v1.RotateBackupCodesResponse\"0\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/account/backup-codes:rotate\x12\x84\x01\n" +
-	"\x11RemoveBackupCodes\x12\".nokku.v1.RemoveBackupCodesRequest\x1a#.nokku.v1.RemoveBackupCodesResponse\"&\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x1a*\x18/v1/account/backup-codes\x12\x89\x01\n" +
-	"\x13ListAccountSessions\x12$.nokku.v1.ListAccountSessionsRequest\x1a%.nokku.v1.ListAccountSessionsResponse\"%\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/account/sessions\x90\x02\x01\x12y\n" +
-	"\rRemoveSession\x12\x1e.nokku.v1.RemoveSessionRequest\x1a\x1f.nokku.v1.RemoveSessionResponse\"'\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x1b*\x19/v1/account/sessions/{id}\x12u\n" +
-	"\rDeleteAccount\x12\x1e.nokku.v1.DeleteAccountRequest\x1a\x1f.nokku.v1.DeleteAccountResponse\"#\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/account:deleteB\x8e\x01\n" +
+	"GetAccount\x12\x1b.nokku.v1.GetAccountRequest\x1a\x1c.nokku.v1.GetAccountResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12X\n" +
+	"\rUpdateAccount\x12\x1e.nokku.v1.UpdateAccountRequest\x1a\x1f.nokku.v1.UpdateAccountResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12[\n" +
+	"\x0eChangePassword\x12\x1f.nokku.v1.ChangePasswordRequest\x1a .nokku.v1.ChangePasswordResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12g\n" +
+	"\x12RequestEmailChange\x12#.nokku.v1.RequestEmailChangeRequest\x1a$.nokku.v1.RequestEmailChangeResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12[\n" +
+	"\x0eRemovePassword\x12\x1f.nokku.v1.RemovePasswordRequest\x1a .nokku.v1.RemovePasswordResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12a\n" +
+	"\x0fListCredentials\x12 .nokku.v1.ListCredentialsRequest\x1a!.nokku.v1.ListCredentialsResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12a\n" +
+	"\x10RenameCredential\x12!.nokku.v1.RenameCredentialRequest\x1a\".nokku.v1.RenameCredentialResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12a\n" +
+	"\x10RemoveCredential\x12!.nokku.v1.RemoveCredentialRequest\x1a\".nokku.v1.RemoveCredentialResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12[\n" +
+	"\x0eRemoveIdentity\x12\x1f.nokku.v1.RemoveIdentityRequest\x1a .nokku.v1.RemoveIdentityResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12a\n" +
+	"\x0fListBackupCodes\x12 .nokku.v1.ListBackupCodesRequest\x1a!.nokku.v1.ListBackupCodesResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12d\n" +
+	"\x11RotateBackupCodes\x12\".nokku.v1.RotateBackupCodesRequest\x1a#.nokku.v1.RotateBackupCodesResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12d\n" +
+	"\x11RemoveBackupCodes\x12\".nokku.v1.RemoveBackupCodesRequest\x1a#.nokku.v1.RemoveBackupCodesResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12m\n" +
+	"\x13ListAccountSessions\x12$.nokku.v1.ListAccountSessionsRequest\x1a%.nokku.v1.ListAccountSessionsResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12X\n" +
+	"\rRemoveSession\x12\x1e.nokku.v1.RemoveSessionRequest\x1a\x1f.nokku.v1.RemoveSessionResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12X\n" +
+	"\rDeleteAccount\x12\x1e.nokku.v1.DeleteAccountRequest\x1a\x1f.nokku.v1.DeleteAccountResponse\"\x06\xc2\xf3\x18\x02\x10\x01B\x8e\x01\n" +
 	"\fcom.nokku.v1B\fAccountProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

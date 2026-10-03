@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -384,7 +383,7 @@ var File_nokku_v1_scim_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_scim_proto_rawDesc = "" +
 	"\n" +
-	"\x13nokku/v1/scim.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xaa\x01\n" +
+	"\x13nokku/v1/scim.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xaa\x01\n" +
 	"\tSCIMToken\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x129\n" +
@@ -407,11 +406,11 @@ const file_nokku_v1_scim_proto_rawDesc = "" +
 	"\x16DeleteSCIMTokenRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12#\n" +
 	"\btoken_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\atokenId\"\x19\n" +
-	"\x17DeleteSCIMTokenResponse2\xd1\x03\n" +
-	"\vSCIMService\x12\x92\x01\n" +
-	"\x0fCreateSCIMToken\x12 .nokku.v1.CreateSCIMTokenRequest\x1a!.nokku.v1.CreateSCIMTokenResponse\":\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x02.:\x01*\")/v1/workspaces/{workspace_id}/scim/tokens\x12\x8f\x01\n" +
-	"\x0eListSCIMTokens\x12\x1f.nokku.v1.ListSCIMTokensRequest\x1a .nokku.v1.ListSCIMTokensResponse\":\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02+\x12)/v1/workspaces/{workspace_id}/scim/tokens\x90\x02\x01\x12\x9a\x01\n" +
-	"\x0fDeleteSCIMToken\x12 .nokku.v1.DeleteSCIMTokenRequest\x1a!.nokku.v1.DeleteSCIMTokenResponse\"B\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x026*4/v1/workspaces/{workspace_id}/scim/tokens/{token_id}B\x8b\x01\n" +
+	"\x17DeleteSCIMTokenResponse2\xad\x02\n" +
+	"\vSCIMService\x12^\n" +
+	"\x0fCreateSCIMToken\x12 .nokku.v1.CreateSCIMTokenRequest\x1a!.nokku.v1.CreateSCIMTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12^\n" +
+	"\x0eListSCIMTokens\x12\x1f.nokku.v1.ListSCIMTokensRequest\x1a .nokku.v1.ListSCIMTokensResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12^\n" +
+	"\x0fDeleteSCIMToken\x12 .nokku.v1.DeleteSCIMTokenRequest\x1a!.nokku.v1.DeleteSCIMTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x04B\x8b\x01\n" +
 	"\fcom.nokku.v1B\tScimProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

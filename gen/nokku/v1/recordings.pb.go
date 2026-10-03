@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -724,7 +723,7 @@ var File_nokku_v1_recordings_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"\n" +
-	"\x19nokku/v1/recordings.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xa4\x02\n" +
+	"\x19nokku/v1/recordings.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xa4\x02\n" +
 	"\tRecording\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x1b\n" +
@@ -772,12 +771,12 @@ const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"\x16DeleteRecordingRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12+\n" +
 	"\frecording_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vrecordingId\"\x19\n" +
-	"\x17DeleteRecordingResponse2\xde\x04\n" +
-	"\x10RecordingService\x12\x99\x01\n" +
-	"\fGetRecording\x12\x1d.nokku.v1.GetRecordingRequest\x1a\x1e.nokku.v1.GetRecordingResponse\"H\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x029\x127/v1/workspaces/{workspace_id}/recordings/{recording_id}\x90\x02\x010\x01\x12\x8e\x01\n" +
-	"\x0eListRecordings\x12\x1f.nokku.v1.ListRecordingsRequest\x1a .nokku.v1.ListRecordingsResponse\"9\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02*\x12(/v1/workspaces/{workspace_id}/recordings\x90\x02\x01\x12}\n" +
-	"\x0fUploadRecording\x12 .nokku.v1.UploadRecordingRequest\x1a!.nokku.v1.UploadRecordingResponse\"#\xc2\xf3\x18\x02(\x01\x82\xd3\xe4\x93\x02\x17\"\x15/v1/recordings:upload(\x01\x12\x9d\x01\n" +
-	"\x0fDeleteRecording\x12 .nokku.v1.DeleteRecordingRequest\x1a!.nokku.v1.DeleteRecordingResponse\"E\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x029*7/v1/workspaces/{workspace_id}/recordings/{recording_id}B\x91\x01\n" +
+	"\x17DeleteRecordingResponse2\x90\x03\n" +
+	"\x10RecordingService\x12Z\n" +
+	"\fGetRecording\x12\x1d.nokku.v1.GetRecordingRequest\x1a\x1e.nokku.v1.GetRecordingResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x010\x01\x12^\n" +
+	"\x0eListRecordings\x12\x1f.nokku.v1.ListRecordingsRequest\x1a .nokku.v1.ListRecordingsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12`\n" +
+	"\x0fUploadRecording\x12 .nokku.v1.UploadRecordingRequest\x1a!.nokku.v1.UploadRecordingResponse\"\x06\xc2\xf3\x18\x02(\x01(\x01\x12^\n" +
+	"\x0fDeleteRecording\x12 .nokku.v1.DeleteRecordingRequest\x1a!.nokku.v1.DeleteRecordingResponse\"\x06\xc2\xf3\x18\x02\x18\x03B\x91\x01\n" +
 	"\fcom.nokku.v1B\x0fRecordingsProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -672,7 +671,7 @@ var File_nokku_v1_workspace_domain_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_workspace_domain_proto_rawDesc = "" +
 	"\n" +
-	"\x1fnokku/v1/workspace_domain.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xae\x02\n" +
+	"\x1fnokku/v1/workspace_domain.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xae\x02\n" +
 	"\x0fWorkspaceDomain\x12\x16\n" +
 	"\x06domain\x18\x01 \x01(\tR\x06domain\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12-\n" +
@@ -710,14 +709,14 @@ const file_nokku_v1_workspace_domain_proto_rawDesc = "" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1f\n" +
 	"\x06domain\x18\x02 \x01(\tB\a\xbaH\x04r\x02h\x01R\x06domain\"[\n" +
 	"&RegenerateWorkspaceDomainTokenResponse\x121\n" +
-	"\x06domain\x18\x01 \x01(\v2\x19.nokku.v1.WorkspaceDomainR\x06domain2\xa4\b\n" +
-	"\x16WorkspaceDomainService\x12\xa0\x01\n" +
-	"\x12GetWorkspaceDomain\x12#.nokku.v1.GetWorkspaceDomainRequest\x1a$.nokku.v1.GetWorkspaceDomainResponse\"?\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x020\x12./v1/workspaces/{workspace_id}/domains/{domain}\x90\x02\x01\x12\x9d\x01\n" +
-	"\x14ListWorkspaceDomains\x12%.nokku.v1.ListWorkspaceDomainsRequest\x1a&.nokku.v1.ListWorkspaceDomainsResponse\"6\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02'\x12%/v1/workspaces/{workspace_id}/domains\x90\x02\x01\x12\xa0\x01\n" +
-	"\x15CreateWorkspaceDomain\x12&.nokku.v1.CreateWorkspaceDomainRequest\x1a'.nokku.v1.CreateWorkspaceDomainResponse\"6\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x02*:\x01*\"%/v1/workspaces/{workspace_id}/domains\x12\xa6\x01\n" +
-	"\x15DeleteWorkspaceDomain\x12&.nokku.v1.DeleteWorkspaceDomainRequest\x1a'.nokku.v1.DeleteWorkspaceDomainResponse\"<\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x020*./v1/workspaces/{workspace_id}/domains/{domain}\x12\xad\x01\n" +
-	"\x15VerifyWorkspaceDomain\x12&.nokku.v1.VerifyWorkspaceDomainRequest\x1a'.nokku.v1.VerifyWorkspaceDomainResponse\"C\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x027\"5/v1/workspaces/{workspace_id}/domains/{domain}:verify\x12\xca\x01\n" +
-	"\x1eRegenerateWorkspaceDomainToken\x12/.nokku.v1.RegenerateWorkspaceDomainTokenRequest\x1a0.nokku.v1.RegenerateWorkspaceDomainTokenResponse\"E\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x029\"7/v1/workspaces/{workspace_id}/domains/{domain}:generateB\x96\x01\n" +
+	"\x06domain\x18\x01 \x01(\v2\x19.nokku.v1.WorkspaceDomainR\x06domain2\xda\x05\n" +
+	"\x16WorkspaceDomainService\x12j\n" +
+	"\x12GetWorkspaceDomain\x12#.nokku.v1.GetWorkspaceDomainRequest\x1a$.nokku.v1.GetWorkspaceDomainResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12p\n" +
+	"\x14ListWorkspaceDomains\x12%.nokku.v1.ListWorkspaceDomainsRequest\x1a&.nokku.v1.ListWorkspaceDomainsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12p\n" +
+	"\x15CreateWorkspaceDomain\x12&.nokku.v1.CreateWorkspaceDomainRequest\x1a'.nokku.v1.CreateWorkspaceDomainResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12p\n" +
+	"\x15DeleteWorkspaceDomain\x12&.nokku.v1.DeleteWorkspaceDomainRequest\x1a'.nokku.v1.DeleteWorkspaceDomainResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12p\n" +
+	"\x15VerifyWorkspaceDomain\x12&.nokku.v1.VerifyWorkspaceDomainRequest\x1a'.nokku.v1.VerifyWorkspaceDomainResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12\x8b\x01\n" +
+	"\x1eRegenerateWorkspaceDomainToken\x12/.nokku.v1.RegenerateWorkspaceDomainTokenRequest\x1a0.nokku.v1.RegenerateWorkspaceDomainTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x04B\x96\x01\n" +
 	"\fcom.nokku.v1B\x14WorkspaceDomainProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -228,7 +227,7 @@ var File_nokku_v1_invitation_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_invitation_proto_rawDesc = "" +
 	"\n" +
-	"\x19nokku/v1/invitation.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"5\n" +
+	"\x19nokku/v1/invitation.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"5\n" +
 	"\x14GetInvitationRequest\x12\x1d\n" +
 	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"\xcb\x01\n" +
 	"\x15GetInvitationResponse\x12%\n" +
@@ -240,10 +239,10 @@ const file_nokku_v1_invitation_proto_rawDesc = "" +
 	"\x17AcceptInvitationRequest\x12\x1d\n" +
 	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"=\n" +
 	"\x18AcceptInvitationResponse\x12!\n" +
-	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId2\x89\x02\n" +
-	"\x11InvitationService\x12v\n" +
-	"\rGetInvitation\x12\x1e.nokku.v1.GetInvitationRequest\x1a\x1f.nokku.v1.GetInvitationResponse\"$\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/invites/{token}\x90\x02\x01\x12|\n" +
-	"\x10AcceptInvitation\x12!.nokku.v1.AcceptInvitationRequest\x1a\".nokku.v1.AcceptInvitationResponse\"!\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x15\"\x13/v1/invites/{token}B\x91\x01\n" +
+	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId2\xd3\x01\n" +
+	"\x11InvitationService\x12[\n" +
+	"\rGetInvitation\x12\x1e.nokku.v1.GetInvitationRequest\x1a\x1f.nokku.v1.GetInvitationResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12a\n" +
+	"\x10AcceptInvitation\x12!.nokku.v1.AcceptInvitationRequest\x1a\".nokku.v1.AcceptInvitationResponse\"\x06\xc2\xf3\x18\x02\x10\x01B\x91\x01\n" +
 	"\fcom.nokku.v1B\x0fInvitationProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

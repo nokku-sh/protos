@@ -3,7 +3,6 @@ edition = "2023";
 package nokku.v1;
 
 import "buf/validate/validate.proto";
-import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
@@ -13,38 +12,23 @@ service CertificateService {
   rpc GetCertificateAuthority(GetCertificateAuthorityRequest) returns (GetCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_MEMBER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/certificate_authorities/{id}"};
   }
   rpc CreateCertificateAuthority(CreateCertificateAuthorityRequest) returns (CreateCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/certificate_authorities"
-      body: "*"
-    };
   }
   rpc UpdateCertificateAuthority(UpdateCertificateAuthorityRequest) returns (UpdateCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
-    option (google.api.http) = {
-      patch: "/v1/workspaces/{workspace_id}/certificate_authorities/{id}"
-      body: "*"
-    };
   }
   // Members read CAs because nk trusts the X.509 CAs of every workspace it belongs to.
   rpc ListCertificateAuthorities(ListCertificateAuthoritiesRequest) returns (ListCertificateAuthoritiesResponse) {
     option (access) = {role: WORKSPACE_ROLE_MEMBER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/certificate_authorities"};
   }
   rpc DeleteCertificateAuthority(DeleteCertificateAuthorityRequest) returns (DeleteCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/certificate_authorities/{id}"};
   }
   rpc RolloverCertificateAuthority(RolloverCertificateAuthorityRequest) returns (RolloverCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/certificate_authorities/{id}:rollover"
-      body: "*"
-    };
   }
   // A daemon may only sign its own host cert, the handler narrows it.
   rpc SignSSHCertificate(SignSSHCertificateRequest) returns (SignSSHCertificateResponse) {
@@ -52,17 +36,9 @@ service CertificateService {
       self: true
       daemon: true
     };
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/sign-ssh"
-      body: "*"
-    };
   }
   rpc SignX509Certificate(SignX509CertificateRequest) returns (SignX509CertificateResponse) {
     option (access) = {self: true};
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/sign-x509"
-      body: "*"
-    };
   }
 }
 

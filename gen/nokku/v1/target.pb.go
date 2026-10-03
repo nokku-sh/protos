@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -1402,7 +1401,7 @@ var File_nokku_v1_target_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_target_proto_rawDesc = "" +
 	"\n" +
-	"\x15nokku/v1/target.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x18nokku/v1/principal.proto\x1a\x1enokku/v1/service_account.proto\"p\n" +
+	"\x15nokku/v1/target.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x18nokku/v1/principal.proto\x1a\x1enokku/v1/service_account.proto\"p\n" +
 	"\x1aGetTargetPrincipalsRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12%\n" +
 	"\ttarget_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\"W\n" +
@@ -1511,18 +1510,18 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"\x04tags\x18\x01 \x03(\tR\x04tags\x12\x1e\n" +
 	"\n" +
 	"principals\x18\x02 \x03(\tR\n" +
-	"principals2\xb9\v\n" +
-	"\rTargetService\x12\x81\x01\n" +
-	"\tGetTarget\x12\x1a.nokku.v1.GetTargetRequest\x1a\x1b.nokku.v1.GetTargetResponse\";\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02,\x12*/v1/workspaces/{workspace_id}/targets/{id}\x90\x02\x01\x12\x82\x01\n" +
-	"\vListTargets\x12\x1c.nokku.v1.ListTargetsRequest\x1a\x1d.nokku.v1.ListTargetsResponse\"6\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02'\x12%/v1/workspaces/{workspace_id}/targets\x90\x02\x01\x12\x85\x01\n" +
-	"\fCreateTarget\x12\x1d.nokku.v1.CreateTargetRequest\x1a\x1e.nokku.v1.CreateTargetResponse\"6\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02*:\x01*\"%/v1/workspaces/{workspace_id}/targets\x12\x8a\x01\n" +
-	"\fUpdateTarget\x12\x1d.nokku.v1.UpdateTargetRequest\x1a\x1e.nokku.v1.UpdateTargetResponse\";\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02/:\x01*2*/v1/workspaces/{workspace_id}/targets/{id}\x12\x87\x01\n" +
-	"\fDeleteTarget\x12\x1d.nokku.v1.DeleteTargetRequest\x1a\x1e.nokku.v1.DeleteTargetResponse\"8\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02,**/v1/workspaces/{workspace_id}/targets/{id}\x12\x9b\x01\n" +
-	"\x10GetSubjectAccess\x12!.nokku.v1.GetSubjectAccessRequest\x1a\".nokku.v1.GetSubjectAccessResponse\"@\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x021:\x01*\x12,/v1/workspaces/{workspace_id}/targets/access\x90\x02\x01\x12o\n" +
-	"\vGetMyAccess\x12\x1c.nokku.v1.GetMyAccessRequest\x1a\x1d.nokku.v1.GetMyAccessResponse\"#\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x14\x12\x12/v1/targets/access\x90\x02\x01\x12\x99\x01\n" +
-	"\x10GetTargetFilters\x12!.nokku.v1.GetTargetFiltersRequest\x1a\".nokku.v1.GetTargetFiltersResponse\">\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02/\x12-/v1/workspaces/{workspace_id}/targets/filters\x90\x02\x01\x12\xb1\x01\n" +
-	"\x13GetTargetPrincipals\x12$.nokku.v1.GetTargetPrincipalsRequest\x1a%.nokku.v1.GetTargetPrincipalsResponse\"M\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02>\x12</v1/workspaces/{workspace_id}/targets/{target_id}/principals\x90\x02\x01\x12\xa0\x01\n" +
-	"\x0fSyncTargetUsers\x12 .nokku.v1.SyncTargetUsersRequest\x1a!.nokku.v1.SyncTargetUsersResponse\"H\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02<:\x01*\"7/v1/workspaces/{workspace_id}/targets/{target_id}/usersB\x8d\x01\n" +
+	"principals2\xae\a\n" +
+	"\rTargetService\x12O\n" +
+	"\tGetTarget\x12\x1a.nokku.v1.GetTargetRequest\x1a\x1b.nokku.v1.GetTargetResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12U\n" +
+	"\vListTargets\x12\x1c.nokku.v1.ListTargetsRequest\x1a\x1d.nokku.v1.ListTargetsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12U\n" +
+	"\fCreateTarget\x12\x1d.nokku.v1.CreateTargetRequest\x1a\x1e.nokku.v1.CreateTargetResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12U\n" +
+	"\fUpdateTarget\x12\x1d.nokku.v1.UpdateTargetRequest\x1a\x1e.nokku.v1.UpdateTargetResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12U\n" +
+	"\fDeleteTarget\x12\x1d.nokku.v1.DeleteTargetRequest\x1a\x1e.nokku.v1.DeleteTargetResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12d\n" +
+	"\x10GetSubjectAccess\x12!.nokku.v1.GetSubjectAccessRequest\x1a\".nokku.v1.GetSubjectAccessResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12U\n" +
+	"\vGetMyAccess\x12\x1c.nokku.v1.GetMyAccessRequest\x1a\x1d.nokku.v1.GetMyAccessResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12d\n" +
+	"\x10GetTargetFilters\x12!.nokku.v1.GetTargetFiltersRequest\x1a\".nokku.v1.GetTargetFiltersResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12m\n" +
+	"\x13GetTargetPrincipals\x12$.nokku.v1.GetTargetPrincipalsRequest\x1a%.nokku.v1.GetTargetPrincipalsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12^\n" +
+	"\x0fSyncTargetUsers\x12 .nokku.v1.SyncTargetUsersRequest\x1a!.nokku.v1.SyncTargetUsersResponse\"\x06\xc2\xf3\x18\x02\x18\x03B\x8d\x01\n" +
 	"\fcom.nokku.v1B\vTargetProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

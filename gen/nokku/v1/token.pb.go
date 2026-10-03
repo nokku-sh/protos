@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
@@ -538,7 +537,7 @@ var File_nokku_v1_token_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_token_proto_rawDesc = "" +
 	"\n" +
-	"\x14nokku/v1/token.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x8e\x03\n" +
+	"\x14nokku/v1/token.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x8e\x03\n" +
 	"\x05Token\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
 	"\x04kind\x18\x02 \x01(\x0e2\x13.nokku.v1.TokenKindR\x04kind\x12\x14\n" +
@@ -580,12 +579,12 @@ const file_nokku_v1_token_proto_rawDesc = "" +
 	"\tTokenKind\x12\x1a\n" +
 	"\x16TOKEN_KIND_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11TOKEN_KIND_ENROLL\x10\x01\x12\x15\n" +
-	"\x11TOKEN_KIND_INVITE\x10\x022\x98\x03\n" +
-	"\fTokenService\x12\x81\x01\n" +
-	"\vCreateToken\x12\x1c.nokku.v1.CreateTokenRequest\x1a\x1d.nokku.v1.CreateTokenResponse\"5\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x02):\x01*\"$/v1/workspaces/{workspace_id}/tokens\x12~\n" +
+	"\x11TOKEN_KIND_INVITE\x10\x022\x8a\x02\n" +
+	"\fTokenService\x12R\n" +
+	"\vCreateToken\x12\x1c.nokku.v1.CreateTokenRequest\x1a\x1d.nokku.v1.CreateTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12R\n" +
 	"\n" +
-	"ListTokens\x12\x1b.nokku.v1.ListTokensRequest\x1a\x1c.nokku.v1.ListTokensResponse\"5\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02&\x12$/v1/workspaces/{workspace_id}/tokens\x90\x02\x01\x12\x83\x01\n" +
-	"\vDeleteToken\x12\x1c.nokku.v1.DeleteTokenRequest\x1a\x1d.nokku.v1.DeleteTokenResponse\"7\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x02+*)/v1/workspaces/{workspace_id}/tokens/{id}B\x8c\x01\n" +
+	"ListTokens\x12\x1b.nokku.v1.ListTokensRequest\x1a\x1c.nokku.v1.ListTokensResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12R\n" +
+	"\vDeleteToken\x12\x1c.nokku.v1.DeleteTokenRequest\x1a\x1d.nokku.v1.DeleteTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x04B\x8c\x01\n" +
 	"\fcom.nokku.v1B\n" +
 	"TokenProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 

@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
@@ -1556,7 +1555,7 @@ var File_nokku_v1_certificates_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\n" +
-	"\x1bnokku/v1/certificates.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x93\v\n" +
+	"\x1bnokku/v1/certificates.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x93\v\n" +
 	"\x14CertificateAuthority\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x12\n" +
@@ -1722,16 +1721,16 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\rAuthorityType\x12\x1e\n" +
 	"\x1aAUTHORITY_TYPE_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12AUTHORITY_TYPE_SSH\x10\x01\x12\x17\n" +
-	"\x13AUTHORITY_TYPE_X509\x10\x022\xf3\v\n" +
-	"\x12CertificateService\x12\xbb\x01\n" +
-	"\x17GetCertificateAuthority\x12(.nokku.v1.GetCertificateAuthorityRequest\x1a).nokku.v1.GetCertificateAuthorityResponse\"K\xc2\xf3\x18\x02\x18\x01\x82\xd3\xe4\x93\x02<\x12:/v1/workspaces/{workspace_id}/certificate_authorities/{id}\x90\x02\x01\x12\xbf\x01\n" +
-	"\x1aCreateCertificateAuthority\x12+.nokku.v1.CreateCertificateAuthorityRequest\x1a,.nokku.v1.CreateCertificateAuthorityResponse\"F\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02::\x01*\"5/v1/workspaces/{workspace_id}/certificate_authorities\x12\xc4\x01\n" +
-	"\x1aUpdateCertificateAuthority\x12+.nokku.v1.UpdateCertificateAuthorityRequest\x1a,.nokku.v1.UpdateCertificateAuthorityResponse\"K\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02?:\x01*2:/v1/workspaces/{workspace_id}/certificate_authorities/{id}\x12\xbf\x01\n" +
-	"\x1aListCertificateAuthorities\x12+.nokku.v1.ListCertificateAuthoritiesRequest\x1a,.nokku.v1.ListCertificateAuthoritiesResponse\"F\xc2\xf3\x18\x02\x18\x01\x82\xd3\xe4\x93\x027\x125/v1/workspaces/{workspace_id}/certificate_authorities\x90\x02\x01\x12\xc1\x01\n" +
-	"\x1aDeleteCertificateAuthority\x12+.nokku.v1.DeleteCertificateAuthorityRequest\x1a,.nokku.v1.DeleteCertificateAuthorityResponse\"H\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02<*:/v1/workspaces/{workspace_id}/certificate_authorities/{id}\x12\xd3\x01\n" +
-	"\x1cRolloverCertificateAuthority\x12-.nokku.v1.RolloverCertificateAuthorityRequest\x1a..nokku.v1.RolloverCertificateAuthorityResponse\"T\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02H:\x01*\"C/v1/workspaces/{workspace_id}/certificate_authorities/{id}:rollover\x12\x9a\x01\n" +
-	"\x12SignSSHCertificate\x12#.nokku.v1.SignSSHCertificateRequest\x1a$.nokku.v1.SignSSHCertificateResponse\"9\xc2\xf3\x18\x04\x10\x01(\x01\x82\xd3\xe4\x93\x02+:\x01*\"&/v1/workspaces/{workspace_id}/sign-ssh\x12\x9c\x01\n" +
-	"\x13SignX509Certificate\x12$.nokku.v1.SignX509CertificateRequest\x1a%.nokku.v1.SignX509CertificateResponse\"8\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02,:\x01*\"'/v1/workspaces/{workspace_id}/sign-x509B\x93\x01\n" +
+	"\x13AUTHORITY_TYPE_X509\x10\x022\xf6\a\n" +
+	"\x12CertificateService\x12y\n" +
+	"\x17GetCertificateAuthority\x12(.nokku.v1.GetCertificateAuthorityRequest\x1a).nokku.v1.GetCertificateAuthorityResponse\"\t\xc2\xf3\x18\x02\x18\x01\x90\x02\x01\x12\x7f\n" +
+	"\x1aCreateCertificateAuthority\x12+.nokku.v1.CreateCertificateAuthorityRequest\x1a,.nokku.v1.CreateCertificateAuthorityResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12\x7f\n" +
+	"\x1aUpdateCertificateAuthority\x12+.nokku.v1.UpdateCertificateAuthorityRequest\x1a,.nokku.v1.UpdateCertificateAuthorityResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12\x82\x01\n" +
+	"\x1aListCertificateAuthorities\x12+.nokku.v1.ListCertificateAuthoritiesRequest\x1a,.nokku.v1.ListCertificateAuthoritiesResponse\"\t\xc2\xf3\x18\x02\x18\x01\x90\x02\x01\x12\x7f\n" +
+	"\x1aDeleteCertificateAuthority\x12+.nokku.v1.DeleteCertificateAuthorityRequest\x1a,.nokku.v1.DeleteCertificateAuthorityResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12\x85\x01\n" +
+	"\x1cRolloverCertificateAuthority\x12-.nokku.v1.RolloverCertificateAuthorityRequest\x1a..nokku.v1.RolloverCertificateAuthorityResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12i\n" +
+	"\x12SignSSHCertificate\x12#.nokku.v1.SignSSHCertificateRequest\x1a$.nokku.v1.SignSSHCertificateResponse\"\b\xc2\xf3\x18\x04\x10\x01(\x01\x12j\n" +
+	"\x13SignX509Certificate\x12$.nokku.v1.SignX509CertificateRequest\x1a%.nokku.v1.SignX509CertificateResponse\"\x06\xc2\xf3\x18\x02\x10\x01B\x93\x01\n" +
 	"\fcom.nokku.v1B\x11CertificatesProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

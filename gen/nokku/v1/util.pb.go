@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -1078,7 +1077,7 @@ var File_nokku_v1_util_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_util_proto_rawDesc = "" +
 	"\n" +
-	"\x13nokku/v1/util.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x15nokku/v1/daemon.proto\x1a\x1enokku/v1/service_account.proto\"\x13\n" +
+	"\x13nokku/v1/util.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x15nokku/v1/daemon.proto\x1a\x1enokku/v1/service_account.proto\"\x13\n" +
 	"\x11GetVersionRequest\".\n" +
 	"\x12GetVersionResponse\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\"\x18\n" +
@@ -1164,16 +1163,15 @@ const file_nokku_v1_util_proto_rawDesc = "" +
 	"\x19AUDIT_OUTCOME_UNSPECIFIED\x10\x00\x12\x1b\n" +
 	"\x17AUDIT_OUTCOME_SUCCEEDED\x10\x01\x12\x18\n" +
 	"\x14AUDIT_OUTCOME_FAILED\x10\x02\x12\x18\n" +
-	"\x14AUDIT_OUTCOME_DENIED\x10\x032\x94\x05\n" +
-	"\vUtilService\x12e\n" +
+	"\x14AUDIT_OUTCOME_DENIED\x10\x032\x9e\x04\n" +
+	"\vUtilService\x12R\n" +
 	"\n" +
-	"GetVersion\x12\x1b.nokku.v1.GetVersionRequest\x1a\x1c.nokku.v1.GetVersionResponse\"\x1c\xc2\xf3\x18\x02\b\x01\x82\xd3\xe4\x93\x02\r\x12\v/v1/version\x90\x02\x01\x12u\n" +
-	"\x0fGetInstanceInfo\x12 .nokku.v1.GetInstanceInfoRequest\x1a!.nokku.v1.GetInstanceInfoResponse\"\x1d\xc2\xf3\x18\x02\b\x01\x82\xd3\xe4\x93\x02\x0e\x12\f/v1/instance\x90\x02\x01\x12X\n" +
-	"\x06Whoami\x12\x17.nokku.v1.WhoamiRequest\x1a\x18.nokku.v1.WhoamiResponse\"\x1b\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\f\x12\n" +
-	"/v1/whoami\x90\x02\x01\x12`\n" +
-	"\tListRoles\x12\x1a.nokku.v1.ListRolesRequest\x1a\x1b.nokku.v1.ListRolesResponse\"\x1a\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\v\x12\t/v1/roles\x90\x02\x01\x12n\n" +
-	"\rListAuditLogs\x12\x1e.nokku.v1.ListAuditLogsRequest\x1a\x1f.nokku.v1.ListAuditLogsResponse\"\x1c\xc2\xf3\x18\x04\x18\x02 \x01\x82\xd3\xe4\x93\x02\v\x12\t/v1/audit\x90\x02\x01\x12{\n" +
-	"\x0fExportAuditLogs\x12 .nokku.v1.ExportAuditLogsRequest\x1a!.nokku.v1.ExportAuditLogsResponse\"#\xc2\xf3\x18\x04\x18\x02 \x01\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/audit:exportB\x8b\x01\n" +
+	"GetVersion\x12\x1b.nokku.v1.GetVersionRequest\x1a\x1c.nokku.v1.GetVersionResponse\"\t\xc2\xf3\x18\x02\b\x01\x90\x02\x01\x12a\n" +
+	"\x0fGetInstanceInfo\x12 .nokku.v1.GetInstanceInfoRequest\x1a!.nokku.v1.GetInstanceInfoResponse\"\t\xc2\xf3\x18\x02\b\x01\x90\x02\x01\x12F\n" +
+	"\x06Whoami\x12\x17.nokku.v1.WhoamiRequest\x1a\x18.nokku.v1.WhoamiResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12O\n" +
+	"\tListRoles\x12\x1a.nokku.v1.ListRolesRequest\x1a\x1b.nokku.v1.ListRolesResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12]\n" +
+	"\rListAuditLogs\x12\x1e.nokku.v1.ListAuditLogsRequest\x1a\x1f.nokku.v1.ListAuditLogsResponse\"\v\xc2\xf3\x18\x04\x18\x02 \x01\x90\x02\x01\x12`\n" +
+	"\x0fExportAuditLogs\x12 .nokku.v1.ExportAuditLogsRequest\x1a!.nokku.v1.ExportAuditLogsResponse\"\b\xc2\xf3\x18\x04\x18\x02 \x01B\x8b\x01\n" +
 	"\fcom.nokku.v1B\tUtilProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -1266,7 +1265,7 @@ var File_nokku_v1_workspace_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_workspace_proto_rawDesc = "" +
 	"\n" +
-	"\x18nokku/v1/workspace.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x15nokku/v1/daemon.proto\"\xb3\x02\n" +
+	"\x18nokku/v1/workspace.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x15nokku/v1/daemon.proto\"\xb3\x02\n" +
 	"\tWorkspace\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -1351,18 +1350,18 @@ const file_nokku_v1_workspace_proto_rawDesc = "" +
 	"\x1bUpdateWorkspaceOwnerRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12%\n" +
 	"\tnew_owner\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\bnewOwner\"\x1e\n" +
-	"\x1cUpdateWorkspaceOwnerResponse2\xce\v\n" +
-	"\x10WorkspaceService\x12}\n" +
-	"\fGetWorkspace\x12\x1d.nokku.v1.GetWorkspaceRequest\x1a\x1e.nokku.v1.GetWorkspaceResponse\".\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x1f\x12\x1d/v1/workspaces/{workspace_id}\x90\x02\x01\x12t\n" +
-	"\x0eListWorkspaces\x12\x1f.nokku.v1.ListWorkspacesRequest\x1a .nokku.v1.ListWorkspacesResponse\"\x1f\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/workspaces\x90\x02\x01\x12w\n" +
-	"\x0fCreateWorkspace\x12 .nokku.v1.CreateWorkspaceRequest\x1a!.nokku.v1.CreateWorkspaceResponse\"\x1f\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/workspaces\x12\x86\x01\n" +
-	"\x0fUpdateWorkspace\x12 .nokku.v1.UpdateWorkspaceRequest\x1a!.nokku.v1.UpdateWorkspaceResponse\".\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x02\":\x01*2\x1d/v1/workspaces/{workspace_id}\x12\x83\x01\n" +
-	"\x0fDeleteWorkspace\x12 .nokku.v1.DeleteWorkspaceRequest\x1a!.nokku.v1.DeleteWorkspaceResponse\"+\xc2\xf3\x18\x02\x18\x05\x82\xd3\xe4\x93\x02\x1f*\x1d/v1/workspaces/{workspace_id}\x12\xa1\x01\n" +
-	"\x12GetWorkspaceMember\x12#.nokku.v1.GetWorkspaceMemberRequest\x1a$.nokku.v1.GetWorkspaceMemberResponse\"@\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x021\x12//v1/workspaces/{workspace_id}/members/{user_id}\x90\x02\x01\x12\x9d\x01\n" +
-	"\x14ListWorkspaceMembers\x12%.nokku.v1.ListWorkspaceMembersRequest\x1a&.nokku.v1.ListWorkspaceMembersResponse\"6\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02'\x12%/v1/workspaces/{workspace_id}/members\x90\x02\x01\x12\xa7\x01\n" +
-	"\x15RemoveWorkspaceMember\x12&.nokku.v1.RemoveWorkspaceMemberRequest\x1a'.nokku.v1.RemoveWorkspaceMemberResponse\"=\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x021*//v1/workspaces/{workspace_id}/members/{user_id}\x12\xa7\x01\n" +
-	"\x15UpdateWorkspaceMember\x12&.nokku.v1.UpdateWorkspaceMemberRequest\x1a'.nokku.v1.UpdateWorkspaceMemberResponse\"=\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x021\"//v1/workspaces/{workspace_id}/members/{user_id}\x12\xa4\x01\n" +
-	"\x14UpdateWorkspaceOwner\x12%.nokku.v1.UpdateWorkspaceOwnerRequest\x1a&.nokku.v1.UpdateWorkspaceOwnerResponse\"=\xc2\xf3\x18\x02\x10\x01\x82\xd3\xe4\x93\x021\"//v1/workspaces/{workspace_id}/owner/{new_owner}B\x90\x01\n" +
+	"\x1cUpdateWorkspaceOwnerResponse2\x9d\b\n" +
+	"\x10WorkspaceService\x12X\n" +
+	"\fGetWorkspace\x12\x1d.nokku.v1.GetWorkspaceRequest\x1a\x1e.nokku.v1.GetWorkspaceResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12^\n" +
+	"\x0eListWorkspaces\x12\x1f.nokku.v1.ListWorkspacesRequest\x1a .nokku.v1.ListWorkspacesResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12^\n" +
+	"\x0fCreateWorkspace\x12 .nokku.v1.CreateWorkspaceRequest\x1a!.nokku.v1.CreateWorkspaceResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12^\n" +
+	"\x0fUpdateWorkspace\x12 .nokku.v1.UpdateWorkspaceRequest\x1a!.nokku.v1.UpdateWorkspaceResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12^\n" +
+	"\x0fDeleteWorkspace\x12 .nokku.v1.DeleteWorkspaceRequest\x1a!.nokku.v1.DeleteWorkspaceResponse\"\x06\xc2\xf3\x18\x02\x18\x05\x12j\n" +
+	"\x12GetWorkspaceMember\x12#.nokku.v1.GetWorkspaceMemberRequest\x1a$.nokku.v1.GetWorkspaceMemberResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12p\n" +
+	"\x14ListWorkspaceMembers\x12%.nokku.v1.ListWorkspaceMembersRequest\x1a&.nokku.v1.ListWorkspaceMembersResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12p\n" +
+	"\x15RemoveWorkspaceMember\x12&.nokku.v1.RemoveWorkspaceMemberRequest\x1a'.nokku.v1.RemoveWorkspaceMemberResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12p\n" +
+	"\x15UpdateWorkspaceMember\x12&.nokku.v1.UpdateWorkspaceMemberRequest\x1a'.nokku.v1.UpdateWorkspaceMemberResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12m\n" +
+	"\x14UpdateWorkspaceOwner\x12%.nokku.v1.UpdateWorkspaceOwnerRequest\x1a&.nokku.v1.UpdateWorkspaceOwnerResponse\"\x06\xc2\xf3\x18\x02\x10\x01B\x90\x01\n" +
 	"\fcom.nokku.v1B\x0eWorkspaceProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

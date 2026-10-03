@@ -3,7 +3,6 @@ edition = "2023";
 package nokku.v1;
 
 import "buf/validate/validate.proto";
-import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
@@ -11,19 +10,13 @@ import "nokku/v1/access.proto";
 service TokenService {
   rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/tokens"
-      body: "*"
-    };
   }
   rpc ListTokens(ListTokensRequest) returns (ListTokensResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/tokens"};
   }
   rpc DeleteToken(DeleteTokenRequest) returns (DeleteTokenResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/tokens/{id}"};
   }
 }
 

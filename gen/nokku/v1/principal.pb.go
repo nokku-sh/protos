@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -797,7 +796,7 @@ var File_nokku_v1_principal_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_principal_proto_rawDesc = "" +
 	"\n" +
-	"\x18nokku/v1/principal.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xf5\x01\n" +
+	"\x18nokku/v1/principal.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xf5\x01\n" +
 	"\tPrincipal\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
 	"\ttarget_id\x18\x02 \x01(\tR\btargetId\x12\x1a\n" +
@@ -855,14 +854,14 @@ const file_nokku_v1_principal_proto_rawDesc = "" +
 	"\x18SUBJECT_KIND_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11SUBJECT_KIND_USER\x10\x01\x12\x15\n" +
 	"\x11SUBJECT_KIND_TEAM\x10\x02\x12 \n" +
-	"\x1cSUBJECT_KIND_SERVICE_ACCOUNT\x10\x032\xe2\a\n" +
-	"\x10PrincipalService\x12\x8e\x01\n" +
-	"\x0eListPrincipals\x12\x1f.nokku.v1.ListPrincipalsRequest\x1a .nokku.v1.ListPrincipalsResponse\"9\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02*\x12(/v1/workspaces/{workspace_id}/principals\x90\x02\x01\x12\x91\x01\n" +
-	"\fAddPrincipal\x12\x1d.nokku.v1.AddPrincipalRequest\x1a\x1e.nokku.v1.AddPrincipalResponse\"B\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x026:\x01*\"1/v1/workspaces/{workspace_id}/principals/accounts\x12\xa1\x01\n" +
-	"\x0fRemovePrincipal\x12 .nokku.v1.RemovePrincipalRequest\x1a!.nokku.v1.RemovePrincipalResponse\"I\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02=:\x01*\"8/v1/workspaces/{workspace_id}/principals/accounts:remove\x12\xaa\x01\n" +
-	"\x16AddSubjectsToPrincipal\x12'.nokku.v1.AddSubjectsToPrincipalRequest\x1a(.nokku.v1.AddSubjectsToPrincipalResponse\"=\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x021:\x01*\",/v1/workspaces/{workspace_id}/principals:add\x12\xbc\x01\n" +
-	"\x1bRemoveSubjectsFromPrincipal\x12,.nokku.v1.RemoveSubjectsFromPrincipalRequest\x1a-.nokku.v1.RemoveSubjectsFromPrincipalResponse\"@\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x024:\x01*\"//v1/workspaces/{workspace_id}/principals:remove\x12\x98\x01\n" +
-	"\x0fRevokeAllAccess\x12 .nokku.v1.RevokeAllAccessRequest\x1a!.nokku.v1.RevokeAllAccessResponse\"@\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x024:\x01*\"//v1/workspaces/{workspace_id}/principals:revokeB\x90\x01\n" +
+	"\x1cSUBJECT_KIND_SERVICE_ACCOUNT\x10\x032\x83\x05\n" +
+	"\x10PrincipalService\x12^\n" +
+	"\x0eListPrincipals\x12\x1f.nokku.v1.ListPrincipalsRequest\x1a .nokku.v1.ListPrincipalsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12U\n" +
+	"\fAddPrincipal\x12\x1d.nokku.v1.AddPrincipalRequest\x1a\x1e.nokku.v1.AddPrincipalResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12^\n" +
+	"\x0fRemovePrincipal\x12 .nokku.v1.RemovePrincipalRequest\x1a!.nokku.v1.RemovePrincipalResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12s\n" +
+	"\x16AddSubjectsToPrincipal\x12'.nokku.v1.AddSubjectsToPrincipalRequest\x1a(.nokku.v1.AddSubjectsToPrincipalResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12\x82\x01\n" +
+	"\x1bRemoveSubjectsFromPrincipal\x12,.nokku.v1.RemoveSubjectsFromPrincipalRequest\x1a-.nokku.v1.RemoveSubjectsFromPrincipalResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12^\n" +
+	"\x0fRevokeAllAccess\x12 .nokku.v1.RevokeAllAccessRequest\x1a!.nokku.v1.RevokeAllAccessResponse\"\x06\xc2\xf3\x18\x02\x18\x03B\x90\x01\n" +
 	"\fcom.nokku.v1B\x0ePrincipalProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -436,7 +435,7 @@ var File_nokku_v1_sso_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_sso_proto_rawDesc = "" +
 	"\n" +
-	"\x12nokku/v1/sso.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xf3\x02\n" +
+	"\x12nokku/v1/sso.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xf3\x02\n" +
 	"\vSSOProvider\x12!\n" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12\x16\n" +
 	"\x06method\x18\x02 \x01(\tR\x06method\x12\x12\n" +
@@ -472,11 +471,11 @@ const file_nokku_v1_sso_proto_rawDesc = "" +
 	"\rclient_secret\x18\a \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\fclientSecret\x12+\n" +
 	"\x06config\x18\b \x01(\v2\x13.nokku.v1.SSOConfigR\x06config\"N\n" +
 	"\x19UpdateSSOProviderResponse\x121\n" +
-	"\bprovider\x18\x01 \x01(\v2\x15.nokku.v1.SSOProviderR\bprovider2\xa9\x02\n" +
+	"\bprovider\x18\x01 \x01(\v2\x15.nokku.v1.SSOProviderR\bprovider2\xd2\x01\n" +
 	"\n" +
-	"SSOService\x12\x87\x01\n" +
-	"\x0eGetSSOProvider\x12\x1f.nokku.v1.GetSSOProviderRequest\x1a .nokku.v1.GetSSOProviderResponse\"2\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02#\x12!/v1/workspaces/{workspace_id}/sso\x90\x02\x01\x12\x90\x01\n" +
-	"\x11UpdateSSOProvider\x12\".nokku.v1.UpdateSSOProviderRequest\x1a#.nokku.v1.UpdateSSOProviderResponse\"2\xc2\xf3\x18\x02\x18\x04\x82\xd3\xe4\x93\x02&:\x01*2!/v1/workspaces/{workspace_id}/ssoB\x8a\x01\n" +
+	"SSOService\x12^\n" +
+	"\x0eGetSSOProvider\x12\x1f.nokku.v1.GetSSOProviderRequest\x1a .nokku.v1.GetSSOProviderResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12d\n" +
+	"\x11UpdateSSOProvider\x12\".nokku.v1.UpdateSSOProviderRequest\x1a#.nokku.v1.UpdateSSOProviderResponse\"\x06\xc2\xf3\x18\x02\x18\x04B\x8a\x01\n" +
 	"\fcom.nokku.v1B\bSsoProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

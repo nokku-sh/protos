@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -728,7 +727,7 @@ var File_nokku_v1_service_account_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_service_account_proto_rawDesc = "" +
 	"\n" +
-	"\x1enokku/v1/service_account.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x99\x03\n" +
+	"\x1enokku/v1/service_account.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x99\x03\n" +
 	"\x0eServiceAccount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x12\n" +
@@ -783,13 +782,13 @@ const file_nokku_v1_service_account_proto_rawDesc = "" +
 	"\x04tags\x18\x06 \x03(\tR\x04tags\"x\n" +
 	"\x1bListServiceAccountsResponse\x12C\n" +
 	"\x10service_accounts\x18\x01 \x03(\v2\x18.nokku.v1.ServiceAccountR\x0fserviceAccounts\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total2\xe4\x06\n" +
-	"\x15ServiceAccountService\x12\xa2\x01\n" +
-	"\x11GetServiceAccount\x12\".nokku.v1.GetServiceAccountRequest\x1a#.nokku.v1.GetServiceAccountResponse\"D\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x025\x123/v1/workspaces/{workspace_id}/service_accounts/{id}\x90\x02\x01\x12\xa3\x01\n" +
-	"\x13ListServiceAccounts\x12$.nokku.v1.ListServiceAccountsRequest\x1a%.nokku.v1.ListServiceAccountsResponse\"?\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x020\x12./v1/workspaces/{workspace_id}/service_accounts\x90\x02\x01\x12\xa6\x01\n" +
-	"\x14CreateServiceAccount\x12%.nokku.v1.CreateServiceAccountRequest\x1a&.nokku.v1.CreateServiceAccountResponse\"?\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x023:\x01*\"./v1/workspaces/{workspace_id}/service_accounts\x12\xab\x01\n" +
-	"\x14UpdateServiceAccount\x12%.nokku.v1.UpdateServiceAccountRequest\x1a&.nokku.v1.UpdateServiceAccountResponse\"D\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x028:\x01*23/v1/workspaces/{workspace_id}/service_accounts/{id}\x12\xa8\x01\n" +
-	"\x14DeleteServiceAccount\x12%.nokku.v1.DeleteServiceAccountRequest\x1a&.nokku.v1.DeleteServiceAccountResponse\"A\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x025*3/v1/workspaces/{workspace_id}/service_accounts/{id}B\x95\x01\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total2\xbc\x04\n" +
+	"\x15ServiceAccountService\x12g\n" +
+	"\x11GetServiceAccount\x12\".nokku.v1.GetServiceAccountRequest\x1a#.nokku.v1.GetServiceAccountResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12m\n" +
+	"\x13ListServiceAccounts\x12$.nokku.v1.ListServiceAccountsRequest\x1a%.nokku.v1.ListServiceAccountsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12m\n" +
+	"\x14CreateServiceAccount\x12%.nokku.v1.CreateServiceAccountRequest\x1a&.nokku.v1.CreateServiceAccountResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12m\n" +
+	"\x14UpdateServiceAccount\x12%.nokku.v1.UpdateServiceAccountRequest\x1a&.nokku.v1.UpdateServiceAccountResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12m\n" +
+	"\x14DeleteServiceAccount\x12%.nokku.v1.DeleteServiceAccountRequest\x1a&.nokku.v1.DeleteServiceAccountResponse\"\x06\xc2\xf3\x18\x02\x18\x03B\x95\x01\n" +
 	"\fcom.nokku.v1B\x13ServiceAccountProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

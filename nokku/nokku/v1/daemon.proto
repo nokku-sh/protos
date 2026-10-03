@@ -3,7 +3,6 @@ edition = "2023";
 package nokku.v1;
 
 import "buf/validate/validate.proto";
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
@@ -11,14 +10,9 @@ service DaemonService {
   rpc GetDaemon(GetDaemonRequest) returns (GetDaemonResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/daemons/{id}"};
   }
   rpc UpdateDaemon(UpdateDaemonRequest) returns (UpdateDaemonResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
-    option (google.api.http) = {
-      patch: "/v1/workspaces/{workspace_id}/daemons/{id}"
-      body: "*"
-    };
   }
   // A daemon may only delete its own record, the handler narrows it.
   rpc DeleteDaemon(DeleteDaemonRequest) returns (DeleteDaemonResponse) {
@@ -26,29 +20,21 @@ service DaemonService {
       role: WORKSPACE_ROLE_EDITOR
       daemon: true
     };
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/daemons/{id}"};
   }
   rpc ListDaemons(ListDaemonsRequest) returns (ListDaemonsResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/daemons"};
   }
   rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/daemons/{daemon_id}/sessions"};
   }
   // A web session only opens the transport, sshd still checks the cert against synced grants.
   rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse) {
     option (access) = {role: WORKSPACE_ROLE_MEMBER};
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/daemons/{daemon_id}/sessions"
-      body: "*"
-    };
   }
   rpc CloseSession(CloseSessionRequest) returns (CloseSessionResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/daemons/{daemon_id}/sessions/{session_id}"};
   }
   rpc EnrollDaemon(EnrollDaemonRequest) returns (EnrollDaemonResponse) {
     option (access) = {public: true};

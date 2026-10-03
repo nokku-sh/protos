@@ -3,7 +3,6 @@ edition = "2023";
 package nokku.v1;
 
 import "buf/validate/validate.proto";
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
@@ -11,11 +10,9 @@ service InvitationService {
   rpc GetInvitation(GetInvitationRequest) returns (GetInvitationResponse) {
     option (access) = {self: true};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/invites/{token}"};
   }
   rpc AcceptInvitation(AcceptInvitationRequest) returns (AcceptInvitationResponse) {
     option (access) = {self: true};
-    option (google.api.http) = {post: "/v1/invites/{token}"};
   }
 }
 

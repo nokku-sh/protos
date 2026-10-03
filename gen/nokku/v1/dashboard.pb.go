@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -341,7 +340,7 @@ var File_nokku_v1_dashboard_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_dashboard_proto_rawDesc = "" +
 	"\n" +
-	"\x18nokku/v1/dashboard.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x13nokku/v1/util.proto\"B\n" +
+	"\x18nokku/v1/dashboard.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x13nokku/v1/util.proto\"B\n" +
 	"\x13GetDashboardRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\"\x9c\x05\n" +
 	"\x14GetDashboardResponse\x12\x18\n" +
@@ -372,9 +371,9 @@ const file_nokku_v1_dashboard_proto_rawDesc = "" +
 	"\n" +
 	"started_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x12\x1c\n" +
 	"\trecording\x18\a \x01(\bR\trecording\x12\x10\n" +
-	"\x03web\x18\b \x01(\bR\x03web2\x9c\x01\n" +
-	"\x10DashboardService\x12\x87\x01\n" +
-	"\fGetDashboard\x12\x1d.nokku.v1.GetDashboardRequest\x1a\x1e.nokku.v1.GetDashboardResponse\"8\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02)\x12'/v1/workspaces/{workspace_id}/dashboard\x90\x02\x01B\x90\x01\n" +
+	"\x03web\x18\b \x01(\bR\x03web2l\n" +
+	"\x10DashboardService\x12X\n" +
+	"\fGetDashboard\x12\x1d.nokku.v1.GetDashboardRequest\x1a\x1e.nokku.v1.GetDashboardResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01B\x90\x01\n" +
 	"\fcom.nokku.v1B\x0eDashboardProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

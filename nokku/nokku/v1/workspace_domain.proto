@@ -3,7 +3,6 @@ edition = "2023";
 package nokku.v1;
 
 import "buf/validate/validate.proto";
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
@@ -11,31 +10,22 @@ service WorkspaceDomainService {
   rpc GetWorkspaceDomain(GetWorkspaceDomainRequest) returns (GetWorkspaceDomainResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/domains/{domain}"};
   }
   rpc ListWorkspaceDomains(ListWorkspaceDomainsRequest) returns (ListWorkspaceDomainsResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/domains"};
   }
   rpc CreateWorkspaceDomain(CreateWorkspaceDomainRequest) returns (CreateWorkspaceDomainResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
-    option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/domains"
-      body: "*"
-    };
   }
   rpc DeleteWorkspaceDomain(DeleteWorkspaceDomainRequest) returns (DeleteWorkspaceDomainResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/domains/{domain}"};
   }
   rpc VerifyWorkspaceDomain(VerifyWorkspaceDomainRequest) returns (VerifyWorkspaceDomainResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
-    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/domains/{domain}:verify"};
   }
   rpc RegenerateWorkspaceDomainToken(RegenerateWorkspaceDomainTokenRequest) returns (RegenerateWorkspaceDomainTokenResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
-    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/domains/{domain}:generate"};
   }
 }
 

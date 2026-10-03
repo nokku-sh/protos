@@ -3,7 +3,6 @@ edition = "2023";
 package nokku.v1;
 
 import "buf/validate/validate.proto";
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
@@ -11,35 +10,23 @@ service BillingService {
   rpc GetBilling(GetBillingRequest) returns (GetBillingResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/billing/subscription"};
   }
   rpc CreatePortal(CreatePortalRequest) returns (CreatePortalResponse) {
     option (access) = {self: true};
-    option (google.api.http) = {post: "/v1/billing/portal"};
   }
   rpc CreateCheckout(CreateCheckoutRequest) returns (CreateCheckoutResponse) {
     option (access) = {self: true};
-    option (google.api.http) = {post: "/v1/billing/checkout"};
   }
   rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse) {
     option (access) = {self: true};
-    option (google.api.http) = {
-      post: "/v1/billing/subscription/cancel"
-      body: "*"
-    };
   }
   rpc GetLicense(GetLicenseRequest) returns (GetLicenseResponse) {
     option (access) = {self: true};
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/license"};
   }
   // Self-hosted only. Takes effect at once, no restart.
   rpc ActivateLicense(ActivateLicenseRequest) returns (ActivateLicenseResponse) {
     option (access) = {role: WORKSPACE_ROLE_OWNER};
-    option (google.api.http) = {
-      post: "/v1/license"
-      body: "*"
-    };
   }
 }
 

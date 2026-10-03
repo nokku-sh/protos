@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -1056,7 +1055,7 @@ var File_nokku_v1_team_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_team_proto_rawDesc = "" +
 	"\n" +
-	"\x13nokku/v1/team.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x18nokku/v1/workspace.proto\"\x9c\x02\n" +
+	"\x13nokku/v1/team.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x18nokku/v1/workspace.proto\"\x9c\x02\n" +
 	"\x04Team\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x12\n" +
@@ -1122,21 +1121,20 @@ const file_nokku_v1_team_proto_rawDesc = "" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12!\n" +
 	"\auser_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\"@\n" +
 	"\x18ListTeamsForUserResponse\x12$\n" +
-	"\x05teams\x18\x01 \x03(\v2\x0e.nokku.v1.TeamR\x05teams2\x99\n" +
+	"\x05teams\x18\x01 \x03(\v2\x0e.nokku.v1.TeamR\x05teams2\xa2\x06\n" +
+	"\vTeamService\x12I\n" +
+	"\aGetTeam\x12\x18.nokku.v1.GetTeamRequest\x1a\x19.nokku.v1.GetTeamResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12O\n" +
+	"\tListTeams\x12\x1a.nokku.v1.ListTeamsRequest\x1a\x1b.nokku.v1.ListTeamsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12O\n" +
 	"\n" +
-	"\vTeamService\x12y\n" +
-	"\aGetTeam\x12\x18.nokku.v1.GetTeamRequest\x1a\x19.nokku.v1.GetTeamResponse\"9\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02*\x12(/v1/workspaces/{workspace_id}/teams/{id}\x90\x02\x01\x12z\n" +
-	"\tListTeams\x12\x1a.nokku.v1.ListTeamsRequest\x1a\x1b.nokku.v1.ListTeamsResponse\"4\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02%\x12#/v1/workspaces/{workspace_id}/teams\x90\x02\x01\x12}\n" +
+	"CreateTeam\x12\x1b.nokku.v1.CreateTeamRequest\x1a\x1c.nokku.v1.CreateTeamResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12O\n" +
 	"\n" +
-	"CreateTeam\x12\x1b.nokku.v1.CreateTeamRequest\x1a\x1c.nokku.v1.CreateTeamResponse\"4\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02(:\x01*\"#/v1/workspaces/{workspace_id}/teams\x12\x82\x01\n" +
+	"UpdateTeam\x12\x1b.nokku.v1.UpdateTeamRequest\x1a\x1c.nokku.v1.UpdateTeamResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12O\n" +
 	"\n" +
-	"UpdateTeam\x12\x1b.nokku.v1.UpdateTeamRequest\x1a\x1c.nokku.v1.UpdateTeamResponse\"9\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02-:\x01*2(/v1/workspaces/{workspace_id}/teams/{id}\x12\x7f\n" +
-	"\n" +
-	"DeleteTeam\x12\x1b.nokku.v1.DeleteTeamRequest\x1a\x1c.nokku.v1.DeleteTeamResponse\"6\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02**(/v1/workspaces/{workspace_id}/teams/{id}\x12\x9f\x01\n" +
-	"\rAddTeamMember\x12\x1e.nokku.v1.AddTeamMemberRequest\x1a\x1f.nokku.v1.AddTeamMemberResponse\"M\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02A\"?/v1/workspaces/{workspace_id}/teams/{team_id}/members/{user_id}\x12\xa8\x01\n" +
-	"\x10RemoveTeamMember\x12!.nokku.v1.RemoveTeamMemberRequest\x1a\".nokku.v1.RemoveTeamMemberResponse\"M\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02A*?/v1/workspaces/{workspace_id}/teams/{team_id}/members/{user_id}\x12\x9e\x01\n" +
-	"\x0fListTeamMembers\x12 .nokku.v1.ListTeamMembersRequest\x1a!.nokku.v1.ListTeamMembersResponse\"F\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x027\x125/v1/workspaces/{workspace_id}/teams/{team_id}/members\x90\x02\x01\x12\x9f\x01\n" +
-	"\x10ListTeamsForUser\x12!.nokku.v1.ListTeamsForUserRequest\x1a\".nokku.v1.ListTeamsForUserResponse\"D\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x025\x123/v1/workspaces/{workspace_id}/users/{user_id}/teams\x90\x02\x01B\x8b\x01\n" +
+	"DeleteTeam\x12\x1b.nokku.v1.DeleteTeamRequest\x1a\x1c.nokku.v1.DeleteTeamResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12X\n" +
+	"\rAddTeamMember\x12\x1e.nokku.v1.AddTeamMemberRequest\x1a\x1f.nokku.v1.AddTeamMemberResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12a\n" +
+	"\x10RemoveTeamMember\x12!.nokku.v1.RemoveTeamMemberRequest\x1a\".nokku.v1.RemoveTeamMemberResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12a\n" +
+	"\x0fListTeamMembers\x12 .nokku.v1.ListTeamMembersRequest\x1a!.nokku.v1.ListTeamMembersResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12d\n" +
+	"\x10ListTeamsForUser\x12!.nokku.v1.ListTeamsForUserRequest\x1a\".nokku.v1.ListTeamsForUserResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01B\x8b\x01\n" +
 	"\fcom.nokku.v1B\tTeamProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

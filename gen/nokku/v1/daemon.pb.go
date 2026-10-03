@@ -8,7 +8,6 @@ package nokkuv1
 
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -2245,7 +2244,7 @@ var File_nokku_v1_daemon_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"\n" +
-	"\x15nokku/v1/daemon.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xf4\x03\n" +
+	"\x15nokku/v1/daemon.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xf4\x03\n" +
 	"\x06Daemon\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x12\n" +
@@ -2398,16 +2397,15 @@ const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"\x19DAEMON_STATUS_UNSPECIFIED\x10\x00\x12\x19\n" +
 	"\x15DAEMON_STATUS_PENDING\x10\x01\x12\x1a\n" +
 	"\x16DAEMON_STATUS_ACCEPTED\x10\x02\x12\x1a\n" +
-	"\x16DAEMON_STATUS_REJECTED\x10\x032\x83\n" +
-	"\n" +
-	"\rDaemonService\x12\x81\x01\n" +
-	"\tGetDaemon\x12\x1a.nokku.v1.GetDaemonRequest\x1a\x1b.nokku.v1.GetDaemonResponse\";\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02,\x12*/v1/workspaces/{workspace_id}/daemons/{id}\x90\x02\x01\x12\x8a\x01\n" +
-	"\fUpdateDaemon\x12\x1d.nokku.v1.UpdateDaemonRequest\x1a\x1e.nokku.v1.UpdateDaemonResponse\";\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02/:\x01*2*/v1/workspaces/{workspace_id}/daemons/{id}\x12\x89\x01\n" +
-	"\fDeleteDaemon\x12\x1d.nokku.v1.DeleteDaemonRequest\x1a\x1e.nokku.v1.DeleteDaemonResponse\":\xc2\xf3\x18\x04\x18\x03(\x01\x82\xd3\xe4\x93\x02,**/v1/workspaces/{workspace_id}/daemons/{id}\x12\x82\x01\n" +
-	"\vListDaemons\x12\x1c.nokku.v1.ListDaemonsRequest\x1a\x1d.nokku.v1.ListDaemonsResponse\"6\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02'\x12%/v1/workspaces/{workspace_id}/daemons\x90\x02\x01\x12\x9a\x01\n" +
-	"\fListSessions\x12\x1d.nokku.v1.ListSessionsRequest\x1a\x1e.nokku.v1.ListSessionsResponse\"K\xc2\xf3\x18\x02\x18\x02\x82\xd3\xe4\x93\x02<\x12:/v1/workspaces/{workspace_id}/daemons/{daemon_id}/sessions\x90\x02\x01\x12\x9d\x01\n" +
-	"\rCreateSession\x12\x1e.nokku.v1.CreateSessionRequest\x1a\x1f.nokku.v1.CreateSessionResponse\"K\xc2\xf3\x18\x02\x18\x01\x82\xd3\xe4\x93\x02?:\x01*\":/v1/workspaces/{workspace_id}/daemons/{daemon_id}/sessions\x12\xa4\x01\n" +
-	"\fCloseSession\x12\x1d.nokku.v1.CloseSessionRequest\x1a\x1e.nokku.v1.CloseSessionResponse\"U\xc2\xf3\x18\x02\x18\x03\x82\xd3\xe4\x93\x02I*G/v1/workspaces/{workspace_id}/daemons/{daemon_id}/sessions/{session_id}\x12U\n" +
+	"\x16DAEMON_STATUS_REJECTED\x10\x032\xe0\x06\n" +
+	"\rDaemonService\x12O\n" +
+	"\tGetDaemon\x12\x1a.nokku.v1.GetDaemonRequest\x1a\x1b.nokku.v1.GetDaemonResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12U\n" +
+	"\fUpdateDaemon\x12\x1d.nokku.v1.UpdateDaemonRequest\x1a\x1e.nokku.v1.UpdateDaemonResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12W\n" +
+	"\fDeleteDaemon\x12\x1d.nokku.v1.DeleteDaemonRequest\x1a\x1e.nokku.v1.DeleteDaemonResponse\"\b\xc2\xf3\x18\x04\x18\x03(\x01\x12U\n" +
+	"\vListDaemons\x12\x1c.nokku.v1.ListDaemonsRequest\x1a\x1d.nokku.v1.ListDaemonsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12X\n" +
+	"\fListSessions\x12\x1d.nokku.v1.ListSessionsRequest\x1a\x1e.nokku.v1.ListSessionsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12X\n" +
+	"\rCreateSession\x12\x1e.nokku.v1.CreateSessionRequest\x1a\x1f.nokku.v1.CreateSessionResponse\"\x06\xc2\xf3\x18\x02\x18\x01\x12U\n" +
+	"\fCloseSession\x12\x1d.nokku.v1.CloseSessionRequest\x1a\x1e.nokku.v1.CloseSessionResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12U\n" +
 	"\fEnrollDaemon\x12\x1d.nokku.v1.EnrollDaemonRequest\x1a\x1e.nokku.v1.EnrollDaemonResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12O\n" +
 	"\n" +
 	"SyncDaemon\x12\x1b.nokku.v1.SyncDaemonRequest\x1a\x1c.nokku.v1.SyncDaemonResponse\"\x06\xc2\xf3\x18\x02(\x01\x12D\n" +
