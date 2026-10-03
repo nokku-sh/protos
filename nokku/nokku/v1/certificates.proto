@@ -205,7 +205,6 @@ message SignSSHCertificateRequest {
   }
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string ca_id = 2 [(buf.validate.field).string.uuid = true];
-  string target_id = 3 [(buf.validate.field).string.uuid = true];
   CertificateType type = 4;
   string public_key = 5 [(buf.validate.field).string = {
     min_len: 1

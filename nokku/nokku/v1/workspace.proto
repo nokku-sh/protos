@@ -62,7 +62,6 @@ message WorkspaceMember {
   bool email_verified = 5;
   string picture = 6;
   string role_name = 7;
-  string role_description = 8;
   google.protobuf.Timestamp created_at = 9;
   google.protobuf.Timestamp updated_at = 10;
 }
@@ -131,7 +130,6 @@ message ListWorkspaceMembersRequest {
   int32 offset = 3 [(buf.validate.field).int32.gte = 0];
   string query = 4;
   string role_name = 5;
-  repeated string team_ids = 6 [(buf.validate.field).repeated.items.string.uuid = true];
 }
 message ListWorkspaceMembersResponse {
   repeated WorkspaceMember members = 1;

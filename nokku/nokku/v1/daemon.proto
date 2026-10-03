@@ -264,9 +264,7 @@ message RelayResponse {
   }
 }
 
-message RelayClosed {
-  string reason = 1;
-}
+message RelayClosed {}
 
 message DaemonRelayRequest {
   oneof msg {
@@ -287,6 +285,4 @@ message DaemonRelayReady {
   string relay_id = 1;
 }
 
-message DaemonRelayClosed {
-  string reason = 1;
-}
+message DaemonRelayClosed {}

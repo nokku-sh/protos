@@ -1243,7 +1243,6 @@ type SignSSHCertificateRequest struct {
 	state         protoimpl.MessageState                     `protogen:"open.v1"`
 	WorkspaceId   *string                                    `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
 	CaId          *string                                    `protobuf:"bytes,2,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	TargetId      *string                                    `protobuf:"bytes,3,opt,name=target_id,json=targetId" json:"target_id,omitempty"`
 	Type          *SignSSHCertificateRequest_CertificateType `protobuf:"varint,4,opt,name=type,enum=nokku.v1.SignSSHCertificateRequest_CertificateType" json:"type,omitempty"`
 	PublicKey     *string                                    `protobuf:"bytes,5,opt,name=public_key,json=publicKey" json:"public_key,omitempty"`
 	Ttl           *durationpb.Duration                       `protobuf:"bytes,6,opt,name=ttl" json:"ttl,omitempty"`
@@ -1291,13 +1290,6 @@ func (x *SignSSHCertificateRequest) GetWorkspaceId() string {
 func (x *SignSSHCertificateRequest) GetCaId() string {
 	if x != nil && x.CaId != nil {
 		return *x.CaId
-	}
-	return ""
-}
-
-func (x *SignSSHCertificateRequest) GetTargetId() string {
-	if x != nil && x.TargetId != nil {
-		return *x.TargetId
 	}
 	return ""
 }
@@ -1673,11 +1665,10 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\bkey_bits\x18\x03 \x01(\x05R\akeyBits\x127\n" +
 	"\bkey_type\x18\x04 \x01(\x0e2\x1c.nokku.v1.CertificateKeyTypeR\akeyType\"{\n" +
 	"$RolloverCertificateAuthorityResponse\x12S\n" +
-	"\x15certificate_authority\x18\x01 \x01(\v2\x1e.nokku.v1.CertificateAuthorityR\x14certificateAuthority\"\xad\x03\n" +
+	"\x15certificate_authority\x18\x01 \x01(\v2\x1e.nokku.v1.CertificateAuthorityR\x14certificateAuthority\"\x86\x03\n" +
 	"\x19SignSSHCertificateRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1d\n" +
-	"\x05ca_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12%\n" +
-	"\ttarget_id\x18\x03 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\x12G\n" +
+	"\x05ca_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12G\n" +
 	"\x04type\x18\x04 \x01(\x0e23.nokku.v1.SignSSHCertificateRequest.CertificateTypeR\x04type\x12)\n" +
 	"\n" +
 	"public_key\x18\x05 \x01(\tB\n" +

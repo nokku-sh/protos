@@ -1930,7 +1930,6 @@ func (*RelayResponse_Closed) isRelayResponse_Msg() {}
 
 type RelayClosed struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Reason        *string                `protobuf:"bytes,1,opt,name=reason" json:"reason,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1963,13 +1962,6 @@ func (x *RelayClosed) ProtoReflect() protoreflect.Message {
 // Deprecated: Use RelayClosed.ProtoReflect.Descriptor instead.
 func (*RelayClosed) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{31}
-}
-
-func (x *RelayClosed) GetReason() string {
-	if x != nil && x.Reason != nil {
-		return *x.Reason
-	}
-	return ""
 }
 
 type DaemonRelayRequest struct {
@@ -2198,7 +2190,6 @@ func (x *DaemonRelayReady) GetRelayId() string {
 
 type DaemonRelayClosed struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Reason        *string                `protobuf:"bytes,1,opt,name=reason" json:"reason,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2231,13 +2222,6 @@ func (x *DaemonRelayClosed) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DaemonRelayClosed.ProtoReflect.Descriptor instead.
 func (*DaemonRelayClosed) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{35}
-}
-
-func (x *DaemonRelayClosed) GetReason() string {
-	if x != nil && x.Reason != nil {
-		return *x.Reason
-	}
-	return ""
 }
 
 var File_nokku_v1_daemon_proto protoreflect.FileDescriptor
@@ -2377,9 +2361,8 @@ const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"\x05ready\x18\x01 \x01(\v2\x14.nokku.v1.RelayReadyH\x00R\x05ready\x12\x14\n" +
 	"\x04data\x18\x02 \x01(\fH\x00R\x04data\x12/\n" +
 	"\x06closed\x18\x03 \x01(\v2\x15.nokku.v1.RelayClosedH\x00R\x06closedB\x05\n" +
-	"\x03msg\"%\n" +
-	"\vRelayClosed\x12\x16\n" +
-	"\x06reason\x18\x01 \x01(\tR\x06reason\"\x9c\x01\n" +
+	"\x03msg\"\r\n" +
+	"\vRelayClosed\"\x9c\x01\n" +
 	"\x12DaemonRelayRequest\x122\n" +
 	"\x05ready\x18\x01 \x01(\v2\x1a.nokku.v1.DaemonRelayReadyH\x00R\x05ready\x12\x14\n" +
 	"\x04data\x18\x02 \x01(\fH\x00R\x04data\x125\n" +
@@ -2390,9 +2373,8 @@ const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"\x06closed\x18\x02 \x01(\v2\x1b.nokku.v1.DaemonRelayClosedH\x00R\x06closedB\x05\n" +
 	"\x03msg\"-\n" +
 	"\x10DaemonRelayReady\x12\x19\n" +
-	"\brelay_id\x18\x01 \x01(\tR\arelayId\"+\n" +
-	"\x11DaemonRelayClosed\x12\x16\n" +
-	"\x06reason\x18\x01 \x01(\tR\x06reason*\x80\x01\n" +
+	"\brelay_id\x18\x01 \x01(\tR\arelayId\"\x13\n" +
+	"\x11DaemonRelayClosed*\x80\x01\n" +
 	"\fDaemonStatus\x12\x1d\n" +
 	"\x19DAEMON_STATUS_UNSPECIFIED\x10\x00\x12\x19\n" +
 	"\x15DAEMON_STATUS_PENDING\x10\x01\x12\x1a\n" +

@@ -124,19 +124,18 @@ func (x *Workspace) GetUpdatedAt() *timestamppb.Timestamp {
 }
 
 type WorkspaceMember struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	Id              *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	WorkspaceId     *string                `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Name            *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
-	Email           *string                `protobuf:"bytes,4,opt,name=email" json:"email,omitempty"`
-	EmailVerified   *bool                  `protobuf:"varint,5,opt,name=email_verified,json=emailVerified" json:"email_verified,omitempty"`
-	Picture         *string                `protobuf:"bytes,6,opt,name=picture" json:"picture,omitempty"`
-	RoleName        *string                `protobuf:"bytes,7,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
-	RoleDescription *string                `protobuf:"bytes,8,opt,name=role_description,json=roleDescription" json:"role_description,omitempty"`
-	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
-	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	WorkspaceId   *string                `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
+	Name          *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
+	Email         *string                `protobuf:"bytes,4,opt,name=email" json:"email,omitempty"`
+	EmailVerified *bool                  `protobuf:"varint,5,opt,name=email_verified,json=emailVerified" json:"email_verified,omitempty"`
+	Picture       *string                `protobuf:"bytes,6,opt,name=picture" json:"picture,omitempty"`
+	RoleName      *string                `protobuf:"bytes,7,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WorkspaceMember) Reset() {
@@ -214,13 +213,6 @@ func (x *WorkspaceMember) GetPicture() string {
 func (x *WorkspaceMember) GetRoleName() string {
 	if x != nil && x.RoleName != nil {
 		return *x.RoleName
-	}
-	return ""
-}
-
-func (x *WorkspaceMember) GetRoleDescription() string {
-	if x != nil && x.RoleDescription != nil {
-		return *x.RoleDescription
 	}
 	return ""
 }
@@ -859,7 +851,6 @@ type ListWorkspaceMembersRequest struct {
 	Offset        *int32                 `protobuf:"varint,3,opt,name=offset" json:"offset,omitempty"`
 	Query         *string                `protobuf:"bytes,4,opt,name=query" json:"query,omitempty"`
 	RoleName      *string                `protobuf:"bytes,5,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
-	TeamIds       []string               `protobuf:"bytes,6,rep,name=team_ids,json=teamIds" json:"team_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -927,13 +918,6 @@ func (x *ListWorkspaceMembersRequest) GetRoleName() string {
 		return *x.RoleName
 	}
 	return ""
-}
-
-func (x *ListWorkspaceMembersRequest) GetTeamIds() []string {
-	if x != nil {
-		return x.TeamIds
-	}
-	return nil
 }
 
 type ListWorkspaceMembersResponse struct {
@@ -1277,7 +1261,7 @@ const file_nokku_v1_workspace_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xed\x02\n" +
+	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xc2\x02\n" +
 	"\x0fWorkspaceMember\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x12\n" +
@@ -1285,8 +1269,7 @@ const file_nokku_v1_workspace_proto_rawDesc = "" +
 	"\x05email\x18\x04 \x01(\tR\x05email\x12%\n" +
 	"\x0eemail_verified\x18\x05 \x01(\bR\remailVerified\x12\x18\n" +
 	"\apicture\x18\x06 \x01(\tR\apicture\x12\x1b\n" +
-	"\trole_name\x18\a \x01(\tR\broleName\x12)\n" +
-	"\x10role_description\x18\b \x01(\tR\x0froleDescription\x129\n" +
+	"\trole_name\x18\a \x01(\tR\broleName\x129\n" +
 	"\n" +
 	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
@@ -1326,15 +1309,13 @@ const file_nokku_v1_workspace_proto_rawDesc = "" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12!\n" +
 	"\auser_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\"O\n" +
 	"\x1aGetWorkspaceMemberResponse\x121\n" +
-	"\x06member\x18\x01 \x01(\v2\x19.nokku.v1.WorkspaceMemberR\x06member\"\xe9\x01\n" +
+	"\x06member\x18\x01 \x01(\v2\x19.nokku.v1.WorkspaceMemberR\x06member\"\xbf\x01\n" +
 	"\x1bListWorkspaceMembersRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1f\n" +
 	"\x05limit\x18\x02 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
 	"\x06offset\x18\x03 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x14\n" +
 	"\x05query\x18\x04 \x01(\tR\x05query\x12\x1b\n" +
-	"\trole_name\x18\x05 \x01(\tR\broleName\x12(\n" +
-	"\bteam_ids\x18\x06 \x03(\tB\r\xbaH\n" +
-	"\x92\x01\a\"\x05r\x03\xb0\x01\x01R\ateamIds\"i\n" +
+	"\trole_name\x18\x05 \x01(\tR\broleName\"i\n" +
 	"\x1cListWorkspaceMembersResponse\x123\n" +
 	"\amembers\x18\x01 \x03(\v2\x19.nokku.v1.WorkspaceMemberR\amembers\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\"n\n" +
