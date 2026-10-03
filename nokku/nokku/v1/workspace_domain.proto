@@ -7,10 +7,6 @@ import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
 service WorkspaceDomainService {
-  rpc GetWorkspaceDomain(GetWorkspaceDomainRequest) returns (GetWorkspaceDomainResponse) {
-    option (access) = {role: WORKSPACE_ROLE_VIEWER};
-    option idempotency_level = NO_SIDE_EFFECTS;
-  }
   rpc ListWorkspaceDomains(ListWorkspaceDomainsRequest) returns (ListWorkspaceDomainsResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -38,13 +34,6 @@ message WorkspaceDomain {
   google.protobuf.Timestamp updated_at = 6;
 }
 
-message GetWorkspaceDomainRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string domain = 2 [(buf.validate.field).string.hostname = true];
-}
-message GetWorkspaceDomainResponse {
-  WorkspaceDomain domain = 1;
-}
 message CreateWorkspaceDomainRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string domain = 2 [(buf.validate.field).string = {

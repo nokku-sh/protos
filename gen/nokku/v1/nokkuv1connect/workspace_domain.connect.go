@@ -33,9 +33,6 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// WorkspaceDomainServiceGetWorkspaceDomainProcedure is the fully-qualified name of the
-	// WorkspaceDomainService's GetWorkspaceDomain RPC.
-	WorkspaceDomainServiceGetWorkspaceDomainProcedure = "/nokku.v1.WorkspaceDomainService/GetWorkspaceDomain"
 	// WorkspaceDomainServiceListWorkspaceDomainsProcedure is the fully-qualified name of the
 	// WorkspaceDomainService's ListWorkspaceDomains RPC.
 	WorkspaceDomainServiceListWorkspaceDomainsProcedure = "/nokku.v1.WorkspaceDomainService/ListWorkspaceDomains"
@@ -55,7 +52,6 @@ const (
 
 // WorkspaceDomainServiceClient is a client for the nokku.v1.WorkspaceDomainService service.
 type WorkspaceDomainServiceClient interface {
-	GetWorkspaceDomain(context.Context, *v1.GetWorkspaceDomainRequest) (*v1.GetWorkspaceDomainResponse, error)
 	ListWorkspaceDomains(context.Context, *v1.ListWorkspaceDomainsRequest) (*v1.ListWorkspaceDomainsResponse, error)
 	CreateWorkspaceDomain(context.Context, *v1.CreateWorkspaceDomainRequest) (*v1.CreateWorkspaceDomainResponse, error)
 	DeleteWorkspaceDomain(context.Context, *v1.DeleteWorkspaceDomainRequest) (*v1.DeleteWorkspaceDomainResponse, error)
@@ -74,13 +70,6 @@ func NewWorkspaceDomainServiceClient(httpClient connect.HTTPClient, baseURL stri
 	baseURL = strings.TrimRight(baseURL, "/")
 	workspaceDomainServiceMethods := v1.File_nokku_v1_workspace_domain_proto.Services().ByName("WorkspaceDomainService").Methods()
 	return &workspaceDomainServiceClient{
-		getWorkspaceDomain: connect.NewClient[v1.GetWorkspaceDomainRequest, v1.GetWorkspaceDomainResponse](
-			httpClient,
-			baseURL+WorkspaceDomainServiceGetWorkspaceDomainProcedure,
-			connect.WithSchema(workspaceDomainServiceMethods.ByName("GetWorkspaceDomain")),
-			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-			connect.WithClientOptions(opts...),
-		),
 		listWorkspaceDomains: connect.NewClient[v1.ListWorkspaceDomainsRequest, v1.ListWorkspaceDomainsResponse](
 			httpClient,
 			baseURL+WorkspaceDomainServiceListWorkspaceDomainsProcedure,
@@ -117,21 +106,11 @@ func NewWorkspaceDomainServiceClient(httpClient connect.HTTPClient, baseURL stri
 
 // workspaceDomainServiceClient implements WorkspaceDomainServiceClient.
 type workspaceDomainServiceClient struct {
-	getWorkspaceDomain             *connect.Client[v1.GetWorkspaceDomainRequest, v1.GetWorkspaceDomainResponse]
 	listWorkspaceDomains           *connect.Client[v1.ListWorkspaceDomainsRequest, v1.ListWorkspaceDomainsResponse]
 	createWorkspaceDomain          *connect.Client[v1.CreateWorkspaceDomainRequest, v1.CreateWorkspaceDomainResponse]
 	deleteWorkspaceDomain          *connect.Client[v1.DeleteWorkspaceDomainRequest, v1.DeleteWorkspaceDomainResponse]
 	verifyWorkspaceDomain          *connect.Client[v1.VerifyWorkspaceDomainRequest, v1.VerifyWorkspaceDomainResponse]
 	regenerateWorkspaceDomainToken *connect.Client[v1.RegenerateWorkspaceDomainTokenRequest, v1.RegenerateWorkspaceDomainTokenResponse]
-}
-
-// GetWorkspaceDomain calls nokku.v1.WorkspaceDomainService.GetWorkspaceDomain.
-func (c *workspaceDomainServiceClient) GetWorkspaceDomain(ctx context.Context, req *v1.GetWorkspaceDomainRequest) (*v1.GetWorkspaceDomainResponse, error) {
-	response, err := c.getWorkspaceDomain.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
 }
 
 // ListWorkspaceDomains calls nokku.v1.WorkspaceDomainService.ListWorkspaceDomains.
@@ -183,7 +162,6 @@ func (c *workspaceDomainServiceClient) RegenerateWorkspaceDomainToken(ctx contex
 // WorkspaceDomainServiceHandler is an implementation of the nokku.v1.WorkspaceDomainService
 // service.
 type WorkspaceDomainServiceHandler interface {
-	GetWorkspaceDomain(context.Context, *v1.GetWorkspaceDomainRequest) (*v1.GetWorkspaceDomainResponse, error)
 	ListWorkspaceDomains(context.Context, *v1.ListWorkspaceDomainsRequest) (*v1.ListWorkspaceDomainsResponse, error)
 	CreateWorkspaceDomain(context.Context, *v1.CreateWorkspaceDomainRequest) (*v1.CreateWorkspaceDomainResponse, error)
 	DeleteWorkspaceDomain(context.Context, *v1.DeleteWorkspaceDomainRequest) (*v1.DeleteWorkspaceDomainResponse, error)
@@ -198,13 +176,6 @@ type WorkspaceDomainServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewWorkspaceDomainServiceHandler(svc WorkspaceDomainServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	workspaceDomainServiceMethods := v1.File_nokku_v1_workspace_domain_proto.Services().ByName("WorkspaceDomainService").Methods()
-	workspaceDomainServiceGetWorkspaceDomainHandler := connect.NewUnaryHandlerSimple(
-		WorkspaceDomainServiceGetWorkspaceDomainProcedure,
-		svc.GetWorkspaceDomain,
-		connect.WithSchema(workspaceDomainServiceMethods.ByName("GetWorkspaceDomain")),
-		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-		connect.WithHandlerOptions(opts...),
-	)
 	workspaceDomainServiceListWorkspaceDomainsHandler := connect.NewUnaryHandlerSimple(
 		WorkspaceDomainServiceListWorkspaceDomainsProcedure,
 		svc.ListWorkspaceDomains,
@@ -238,8 +209,6 @@ func NewWorkspaceDomainServiceHandler(svc WorkspaceDomainServiceHandler, opts ..
 	)
 	return "/nokku.v1.WorkspaceDomainService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case WorkspaceDomainServiceGetWorkspaceDomainProcedure:
-			workspaceDomainServiceGetWorkspaceDomainHandler.ServeHTTP(w, r)
 		case WorkspaceDomainServiceListWorkspaceDomainsProcedure:
 			workspaceDomainServiceListWorkspaceDomainsHandler.ServeHTTP(w, r)
 		case WorkspaceDomainServiceCreateWorkspaceDomainProcedure:
@@ -258,10 +227,6 @@ func NewWorkspaceDomainServiceHandler(svc WorkspaceDomainServiceHandler, opts ..
 
 // UnimplementedWorkspaceDomainServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedWorkspaceDomainServiceHandler struct{}
-
-func (UnimplementedWorkspaceDomainServiceHandler) GetWorkspaceDomain(context.Context, *v1.GetWorkspaceDomainRequest) (*v1.GetWorkspaceDomainResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceDomainService.GetWorkspaceDomain is not implemented"))
-}
 
 func (UnimplementedWorkspaceDomainServiceHandler) ListWorkspaceDomains(context.Context, *v1.ListWorkspaceDomainsRequest) (*v1.ListWorkspaceDomainsResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceDomainService.ListWorkspaceDomains is not implemented"))
