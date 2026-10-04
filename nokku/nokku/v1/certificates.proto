@@ -30,12 +30,10 @@ service CertificateService {
   rpc RolloverCertificateAuthority(RolloverCertificateAuthorityRequest) returns (RolloverCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  // A daemon may only sign its own host cert, the handler narrows it.
+  // Signs a user certificate for the caller. Daemons get host certificates
+  // from DaemonControlService.
   rpc SignSSHCertificate(SignSSHCertificateRequest) returns (SignSSHCertificateResponse) {
-    option (access) = {
-      self: true
-      daemon: true
-    };
+    option (access) = {self: true};
   }
   rpc SignX509Certificate(SignX509CertificateRequest) returns (SignX509CertificateResponse) {
     option (access) = {self: true};
@@ -205,14 +203,8 @@ message RolloverCertificateAuthorityResponse {
 // Certificate messages -------------------------------------------------------
 
 message SignSSHCertificateRequest {
-  enum CertificateType {
-    CERTIFICATE_TYPE_UNSPECIFIED = 0;
-    CERTIFICATE_TYPE_USER = 1;
-    CERTIFICATE_TYPE_HOST = 2;
-  }
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string ca_id = 2 [(buf.validate.field).string.uuid = true];
-  CertificateType type = 4;
   string public_key = 5 [(buf.validate.field).string = {
     min_len: 1
     max_len: 10000

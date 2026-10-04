@@ -771,11 +771,10 @@ const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"\x16DeleteRecordingRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12+\n" +
 	"\frecording_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vrecordingId\"\x19\n" +
-	"\x17DeleteRecordingResponse2\x90\x03\n" +
+	"\x17DeleteRecordingResponse2\xae\x02\n" +
 	"\x10RecordingService\x12Z\n" +
 	"\fGetRecording\x12\x1d.nokku.v1.GetRecordingRequest\x1a\x1e.nokku.v1.GetRecordingResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x010\x01\x12^\n" +
-	"\x0eListRecordings\x12\x1f.nokku.v1.ListRecordingsRequest\x1a .nokku.v1.ListRecordingsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12`\n" +
-	"\x0fUploadRecording\x12 .nokku.v1.UploadRecordingRequest\x1a!.nokku.v1.UploadRecordingResponse\"\x06\xc2\xf3\x18\x02(\x01(\x01\x12^\n" +
+	"\x0eListRecordings\x12\x1f.nokku.v1.ListRecordingsRequest\x1a .nokku.v1.ListRecordingsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12^\n" +
 	"\x0fDeleteRecording\x12 .nokku.v1.DeleteRecordingRequest\x1a!.nokku.v1.DeleteRecordingResponse\"\x06\xc2\xf3\x18\x02\x18\x03B\x91\x01\n" +
 	"\fcom.nokku.v1B\x0fRecordingsProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
@@ -815,14 +814,12 @@ var file_nokku_v1_recordings_proto_depIdxs = []int32{
 	2,  // 5: nokku.v1.GetRecordingResponse.meta:type_name -> nokku.v1.RecordingMeta
 	7,  // 6: nokku.v1.RecordingService.GetRecording:input_type -> nokku.v1.GetRecordingRequest
 	5,  // 7: nokku.v1.RecordingService.ListRecordings:input_type -> nokku.v1.ListRecordingsRequest
-	1,  // 8: nokku.v1.RecordingService.UploadRecording:input_type -> nokku.v1.UploadRecordingRequest
-	9,  // 9: nokku.v1.RecordingService.DeleteRecording:input_type -> nokku.v1.DeleteRecordingRequest
-	8,  // 10: nokku.v1.RecordingService.GetRecording:output_type -> nokku.v1.GetRecordingResponse
-	6,  // 11: nokku.v1.RecordingService.ListRecordings:output_type -> nokku.v1.ListRecordingsResponse
-	4,  // 12: nokku.v1.RecordingService.UploadRecording:output_type -> nokku.v1.UploadRecordingResponse
-	10, // 13: nokku.v1.RecordingService.DeleteRecording:output_type -> nokku.v1.DeleteRecordingResponse
-	10, // [10:14] is the sub-list for method output_type
-	6,  // [6:10] is the sub-list for method input_type
+	9,  // 8: nokku.v1.RecordingService.DeleteRecording:input_type -> nokku.v1.DeleteRecordingRequest
+	8,  // 9: nokku.v1.RecordingService.GetRecording:output_type -> nokku.v1.GetRecordingResponse
+	6,  // 10: nokku.v1.RecordingService.ListRecordings:output_type -> nokku.v1.ListRecordingsResponse
+	10, // 11: nokku.v1.RecordingService.DeleteRecording:output_type -> nokku.v1.DeleteRecordingResponse
+	9,  // [9:12] is the sub-list for method output_type
+	6,  // [6:9] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name
 	6,  // [6:6] is the sub-list for extension extendee
 	0,  // [0:6] is the sub-list for field type_name

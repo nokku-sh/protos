@@ -39,9 +39,6 @@ const (
 	// RecordingServiceListRecordingsProcedure is the fully-qualified name of the RecordingService's
 	// ListRecordings RPC.
 	RecordingServiceListRecordingsProcedure = "/nokku.v1.RecordingService/ListRecordings"
-	// RecordingServiceUploadRecordingProcedure is the fully-qualified name of the RecordingService's
-	// UploadRecording RPC.
-	RecordingServiceUploadRecordingProcedure = "/nokku.v1.RecordingService/UploadRecording"
 	// RecordingServiceDeleteRecordingProcedure is the fully-qualified name of the RecordingService's
 	// DeleteRecording RPC.
 	RecordingServiceDeleteRecordingProcedure = "/nokku.v1.RecordingService/DeleteRecording"
@@ -51,7 +48,6 @@ const (
 type RecordingServiceClient interface {
 	GetRecording(context.Context, *v1.GetRecordingRequest) (*connect.ServerStreamForClient[v1.GetRecordingResponse], error)
 	ListRecordings(context.Context, *v1.ListRecordingsRequest) (*v1.ListRecordingsResponse, error)
-	UploadRecording(context.Context) (*connect.ClientStreamForClientSimple[v1.UploadRecordingRequest, v1.UploadRecordingResponse], error)
 	DeleteRecording(context.Context, *v1.DeleteRecordingRequest) (*v1.DeleteRecordingResponse, error)
 }
 
@@ -80,12 +76,6 @@ func NewRecordingServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
-		uploadRecording: connect.NewClient[v1.UploadRecordingRequest, v1.UploadRecordingResponse](
-			httpClient,
-			baseURL+RecordingServiceUploadRecordingProcedure,
-			connect.WithSchema(recordingServiceMethods.ByName("UploadRecording")),
-			connect.WithClientOptions(opts...),
-		),
 		deleteRecording: connect.NewClient[v1.DeleteRecordingRequest, v1.DeleteRecordingResponse](
 			httpClient,
 			baseURL+RecordingServiceDeleteRecordingProcedure,
@@ -99,7 +89,6 @@ func NewRecordingServiceClient(httpClient connect.HTTPClient, baseURL string, op
 type recordingServiceClient struct {
 	getRecording    *connect.Client[v1.GetRecordingRequest, v1.GetRecordingResponse]
 	listRecordings  *connect.Client[v1.ListRecordingsRequest, v1.ListRecordingsResponse]
-	uploadRecording *connect.Client[v1.UploadRecordingRequest, v1.UploadRecordingResponse]
 	deleteRecording *connect.Client[v1.DeleteRecordingRequest, v1.DeleteRecordingResponse]
 }
 
@@ -117,11 +106,6 @@ func (c *recordingServiceClient) ListRecordings(ctx context.Context, req *v1.Lis
 	return nil, err
 }
 
-// UploadRecording calls nokku.v1.RecordingService.UploadRecording.
-func (c *recordingServiceClient) UploadRecording(ctx context.Context) (*connect.ClientStreamForClientSimple[v1.UploadRecordingRequest, v1.UploadRecordingResponse], error) {
-	return c.uploadRecording.CallClientStreamSimple(ctx)
-}
-
 // DeleteRecording calls nokku.v1.RecordingService.DeleteRecording.
 func (c *recordingServiceClient) DeleteRecording(ctx context.Context, req *v1.DeleteRecordingRequest) (*v1.DeleteRecordingResponse, error) {
 	response, err := c.deleteRecording.CallUnary(ctx, connect.NewRequest(req))
@@ -135,7 +119,6 @@ func (c *recordingServiceClient) DeleteRecording(ctx context.Context, req *v1.De
 type RecordingServiceHandler interface {
 	GetRecording(context.Context, *v1.GetRecordingRequest, *connect.ServerStream[v1.GetRecordingResponse]) error
 	ListRecordings(context.Context, *v1.ListRecordingsRequest) (*v1.ListRecordingsResponse, error)
-	UploadRecording(context.Context, *connect.ClientStream[v1.UploadRecordingRequest]) (*v1.UploadRecordingResponse, error)
 	DeleteRecording(context.Context, *v1.DeleteRecordingRequest) (*v1.DeleteRecordingResponse, error)
 }
 
@@ -160,12 +143,6 @@ func NewRecordingServiceHandler(svc RecordingServiceHandler, opts ...connect.Han
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
-	recordingServiceUploadRecordingHandler := connect.NewClientStreamHandlerSimple(
-		RecordingServiceUploadRecordingProcedure,
-		svc.UploadRecording,
-		connect.WithSchema(recordingServiceMethods.ByName("UploadRecording")),
-		connect.WithHandlerOptions(opts...),
-	)
 	recordingServiceDeleteRecordingHandler := connect.NewUnaryHandlerSimple(
 		RecordingServiceDeleteRecordingProcedure,
 		svc.DeleteRecording,
@@ -178,8 +155,6 @@ func NewRecordingServiceHandler(svc RecordingServiceHandler, opts ...connect.Han
 			recordingServiceGetRecordingHandler.ServeHTTP(w, r)
 		case RecordingServiceListRecordingsProcedure:
 			recordingServiceListRecordingsHandler.ServeHTTP(w, r)
-		case RecordingServiceUploadRecordingProcedure:
-			recordingServiceUploadRecordingHandler.ServeHTTP(w, r)
 		case RecordingServiceDeleteRecordingProcedure:
 			recordingServiceDeleteRecordingHandler.ServeHTTP(w, r)
 		default:
@@ -197,10 +172,6 @@ func (UnimplementedRecordingServiceHandler) GetRecording(context.Context, *v1.Ge
 
 func (UnimplementedRecordingServiceHandler) ListRecordings(context.Context, *v1.ListRecordingsRequest) (*v1.ListRecordingsResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.RecordingService.ListRecordings is not implemented"))
-}
-
-func (UnimplementedRecordingServiceHandler) UploadRecording(context.Context, *connect.ClientStream[v1.UploadRecordingRequest]) (*v1.UploadRecordingResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.RecordingService.UploadRecording is not implemented"))
 }
 
 func (UnimplementedRecordingServiceHandler) DeleteRecording(context.Context, *v1.DeleteRecordingRequest) (*v1.DeleteRecordingResponse, error) {

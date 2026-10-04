@@ -25,8 +25,6 @@ const (
 	DaemonServiceName = "nokku.v1.DaemonService"
 	// DaemonControlServiceName is the fully-qualified name of the DaemonControlService service.
 	DaemonControlServiceName = "nokku.v1.DaemonControlService"
-	// DaemonSessionServiceName is the fully-qualified name of the DaemonSessionService service.
-	DaemonSessionServiceName = "nokku.v1.DaemonSessionService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -57,35 +55,41 @@ const (
 	// DaemonServiceCloseSessionProcedure is the fully-qualified name of the DaemonService's
 	// CloseSession RPC.
 	DaemonServiceCloseSessionProcedure = "/nokku.v1.DaemonService/CloseSession"
-	// DaemonServiceEnrollDaemonProcedure is the fully-qualified name of the DaemonService's
-	// EnrollDaemon RPC.
-	DaemonServiceEnrollDaemonProcedure = "/nokku.v1.DaemonService/EnrollDaemon"
-	// DaemonServiceSyncDaemonProcedure is the fully-qualified name of the DaemonService's SyncDaemon
-	// RPC.
-	DaemonServiceSyncDaemonProcedure = "/nokku.v1.DaemonService/SyncDaemon"
 	// DaemonServiceRelayProcedure is the fully-qualified name of the DaemonService's Relay RPC.
 	DaemonServiceRelayProcedure = "/nokku.v1.DaemonService/Relay"
+	// DaemonControlServiceEnrollDaemonProcedure is the fully-qualified name of the
+	// DaemonControlService's EnrollDaemon RPC.
+	DaemonControlServiceEnrollDaemonProcedure = "/nokku.v1.DaemonControlService/EnrollDaemon"
+	// DaemonControlServiceSyncDaemonProcedure is the fully-qualified name of the DaemonControlService's
+	// SyncDaemon RPC.
+	DaemonControlServiceSyncDaemonProcedure = "/nokku.v1.DaemonControlService/SyncDaemon"
 	// DaemonControlServiceConnectProcedure is the fully-qualified name of the DaemonControlService's
 	// Connect RPC.
 	DaemonControlServiceConnectProcedure = "/nokku.v1.DaemonControlService/Connect"
-	// DaemonSessionServiceDaemonRelayProcedure is the fully-qualified name of the
-	// DaemonSessionService's DaemonRelay RPC.
-	DaemonSessionServiceDaemonRelayProcedure = "/nokku.v1.DaemonSessionService/DaemonRelay"
+	// DaemonControlServiceDaemonRelayProcedure is the fully-qualified name of the
+	// DaemonControlService's DaemonRelay RPC.
+	DaemonControlServiceDaemonRelayProcedure = "/nokku.v1.DaemonControlService/DaemonRelay"
+	// DaemonControlServiceSignHostCertificateProcedure is the fully-qualified name of the
+	// DaemonControlService's SignHostCertificate RPC.
+	DaemonControlServiceSignHostCertificateProcedure = "/nokku.v1.DaemonControlService/SignHostCertificate"
+	// DaemonControlServiceUploadRecordingProcedure is the fully-qualified name of the
+	// DaemonControlService's UploadRecording RPC.
+	DaemonControlServiceUploadRecordingProcedure = "/nokku.v1.DaemonControlService/UploadRecording"
+	// DaemonControlServiceUnenrollDaemonProcedure is the fully-qualified name of the
+	// DaemonControlService's UnenrollDaemon RPC.
+	DaemonControlServiceUnenrollDaemonProcedure = "/nokku.v1.DaemonControlService/UnenrollDaemon"
 )
 
 // DaemonServiceClient is a client for the nokku.v1.DaemonService service.
 type DaemonServiceClient interface {
 	GetDaemon(context.Context, *v1.GetDaemonRequest) (*v1.GetDaemonResponse, error)
 	UpdateDaemon(context.Context, *v1.UpdateDaemonRequest) (*v1.UpdateDaemonResponse, error)
-	// A daemon may only delete its own record, the handler narrows it.
 	DeleteDaemon(context.Context, *v1.DeleteDaemonRequest) (*v1.DeleteDaemonResponse, error)
 	ListDaemons(context.Context, *v1.ListDaemonsRequest) (*v1.ListDaemonsResponse, error)
 	ListSessions(context.Context, *v1.ListSessionsRequest) (*v1.ListSessionsResponse, error)
 	// A web session only opens the transport, sshd still checks the cert against synced grants.
 	CreateSession(context.Context, *v1.CreateSessionRequest) (*v1.CreateSessionResponse, error)
 	CloseSession(context.Context, *v1.CloseSessionRequest) (*v1.CloseSessionResponse, error)
-	EnrollDaemon(context.Context, *v1.EnrollDaemonRequest) (*v1.EnrollDaemonResponse, error)
-	SyncDaemon(context.Context, *v1.SyncDaemonRequest) (*v1.SyncDaemonResponse, error)
 	// Streams are self-scoped since their workspace only arrives with the first message.
 	Relay(context.Context) (*connect.BidiStreamForClientSimple[v1.RelayRequest, v1.RelayResponse], error)
 }
@@ -146,18 +150,6 @@ func NewDaemonServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			connect.WithSchema(daemonServiceMethods.ByName("CloseSession")),
 			connect.WithClientOptions(opts...),
 		),
-		enrollDaemon: connect.NewClient[v1.EnrollDaemonRequest, v1.EnrollDaemonResponse](
-			httpClient,
-			baseURL+DaemonServiceEnrollDaemonProcedure,
-			connect.WithSchema(daemonServiceMethods.ByName("EnrollDaemon")),
-			connect.WithClientOptions(opts...),
-		),
-		syncDaemon: connect.NewClient[v1.SyncDaemonRequest, v1.SyncDaemonResponse](
-			httpClient,
-			baseURL+DaemonServiceSyncDaemonProcedure,
-			connect.WithSchema(daemonServiceMethods.ByName("SyncDaemon")),
-			connect.WithClientOptions(opts...),
-		),
 		relay: connect.NewClient[v1.RelayRequest, v1.RelayResponse](
 			httpClient,
 			baseURL+DaemonServiceRelayProcedure,
@@ -176,8 +168,6 @@ type daemonServiceClient struct {
 	listSessions  *connect.Client[v1.ListSessionsRequest, v1.ListSessionsResponse]
 	createSession *connect.Client[v1.CreateSessionRequest, v1.CreateSessionResponse]
 	closeSession  *connect.Client[v1.CloseSessionRequest, v1.CloseSessionResponse]
-	enrollDaemon  *connect.Client[v1.EnrollDaemonRequest, v1.EnrollDaemonResponse]
-	syncDaemon    *connect.Client[v1.SyncDaemonRequest, v1.SyncDaemonResponse]
 	relay         *connect.Client[v1.RelayRequest, v1.RelayResponse]
 }
 
@@ -244,24 +234,6 @@ func (c *daemonServiceClient) CloseSession(ctx context.Context, req *v1.CloseSes
 	return nil, err
 }
 
-// EnrollDaemon calls nokku.v1.DaemonService.EnrollDaemon.
-func (c *daemonServiceClient) EnrollDaemon(ctx context.Context, req *v1.EnrollDaemonRequest) (*v1.EnrollDaemonResponse, error) {
-	response, err := c.enrollDaemon.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// SyncDaemon calls nokku.v1.DaemonService.SyncDaemon.
-func (c *daemonServiceClient) SyncDaemon(ctx context.Context, req *v1.SyncDaemonRequest) (*v1.SyncDaemonResponse, error) {
-	response, err := c.syncDaemon.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
 // Relay calls nokku.v1.DaemonService.Relay.
 func (c *daemonServiceClient) Relay(ctx context.Context) (*connect.BidiStreamForClientSimple[v1.RelayRequest, v1.RelayResponse], error) {
 	return c.relay.CallBidiStreamSimple(ctx)
@@ -271,15 +243,12 @@ func (c *daemonServiceClient) Relay(ctx context.Context) (*connect.BidiStreamFor
 type DaemonServiceHandler interface {
 	GetDaemon(context.Context, *v1.GetDaemonRequest) (*v1.GetDaemonResponse, error)
 	UpdateDaemon(context.Context, *v1.UpdateDaemonRequest) (*v1.UpdateDaemonResponse, error)
-	// A daemon may only delete its own record, the handler narrows it.
 	DeleteDaemon(context.Context, *v1.DeleteDaemonRequest) (*v1.DeleteDaemonResponse, error)
 	ListDaemons(context.Context, *v1.ListDaemonsRequest) (*v1.ListDaemonsResponse, error)
 	ListSessions(context.Context, *v1.ListSessionsRequest) (*v1.ListSessionsResponse, error)
 	// A web session only opens the transport, sshd still checks the cert against synced grants.
 	CreateSession(context.Context, *v1.CreateSessionRequest) (*v1.CreateSessionResponse, error)
 	CloseSession(context.Context, *v1.CloseSessionRequest) (*v1.CloseSessionResponse, error)
-	EnrollDaemon(context.Context, *v1.EnrollDaemonRequest) (*v1.EnrollDaemonResponse, error)
-	SyncDaemon(context.Context, *v1.SyncDaemonRequest) (*v1.SyncDaemonResponse, error)
 	// Streams are self-scoped since their workspace only arrives with the first message.
 	Relay(context.Context, *connect.BidiStream[v1.RelayRequest, v1.RelayResponse]) error
 }
@@ -336,18 +305,6 @@ func NewDaemonServiceHandler(svc DaemonServiceHandler, opts ...connect.HandlerOp
 		connect.WithSchema(daemonServiceMethods.ByName("CloseSession")),
 		connect.WithHandlerOptions(opts...),
 	)
-	daemonServiceEnrollDaemonHandler := connect.NewUnaryHandlerSimple(
-		DaemonServiceEnrollDaemonProcedure,
-		svc.EnrollDaemon,
-		connect.WithSchema(daemonServiceMethods.ByName("EnrollDaemon")),
-		connect.WithHandlerOptions(opts...),
-	)
-	daemonServiceSyncDaemonHandler := connect.NewUnaryHandlerSimple(
-		DaemonServiceSyncDaemonProcedure,
-		svc.SyncDaemon,
-		connect.WithSchema(daemonServiceMethods.ByName("SyncDaemon")),
-		connect.WithHandlerOptions(opts...),
-	)
 	daemonServiceRelayHandler := connect.NewBidiStreamHandler(
 		DaemonServiceRelayProcedure,
 		svc.Relay,
@@ -370,10 +327,6 @@ func NewDaemonServiceHandler(svc DaemonServiceHandler, opts ...connect.HandlerOp
 			daemonServiceCreateSessionHandler.ServeHTTP(w, r)
 		case DaemonServiceCloseSessionProcedure:
 			daemonServiceCloseSessionHandler.ServeHTTP(w, r)
-		case DaemonServiceEnrollDaemonProcedure:
-			daemonServiceEnrollDaemonHandler.ServeHTTP(w, r)
-		case DaemonServiceSyncDaemonProcedure:
-			daemonServiceSyncDaemonHandler.ServeHTTP(w, r)
 		case DaemonServiceRelayProcedure:
 			daemonServiceRelayHandler.ServeHTTP(w, r)
 		default:
@@ -413,21 +366,22 @@ func (UnimplementedDaemonServiceHandler) CloseSession(context.Context, *v1.Close
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonService.CloseSession is not implemented"))
 }
 
-func (UnimplementedDaemonServiceHandler) EnrollDaemon(context.Context, *v1.EnrollDaemonRequest) (*v1.EnrollDaemonResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonService.EnrollDaemon is not implemented"))
-}
-
-func (UnimplementedDaemonServiceHandler) SyncDaemon(context.Context, *v1.SyncDaemonRequest) (*v1.SyncDaemonResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonService.SyncDaemon is not implemented"))
-}
-
 func (UnimplementedDaemonServiceHandler) Relay(context.Context, *connect.BidiStream[v1.RelayRequest, v1.RelayResponse]) error {
 	return connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonService.Relay is not implemented"))
 }
 
 // DaemonControlServiceClient is a client for the nokku.v1.DaemonControlService service.
 type DaemonControlServiceClient interface {
+	// Public, the enroll token and the DPoP proof are the gate.
+	EnrollDaemon(context.Context, *v1.EnrollDaemonRequest) (*v1.EnrollDaemonResponse, error)
+	SyncDaemon(context.Context, *v1.SyncDaemonRequest) (*v1.SyncDaemonResponse, error)
 	Connect(context.Context) (*connect.BidiStreamForClientSimple[v1.ConnectRequest, v1.ConnectResponse], error)
+	DaemonRelay(context.Context) (*connect.BidiStreamForClientSimple[v1.DaemonRelayRequest, v1.DaemonRelayResponse], error)
+	// Signs the daemon's host key for its own target.
+	SignHostCertificate(context.Context, *v1.SignHostCertificateRequest) (*v1.SignHostCertificateResponse, error)
+	UploadRecording(context.Context) (*connect.ClientStreamForClientSimple[v1.UploadRecordingRequest, v1.UploadRecordingResponse], error)
+	// Removes the calling daemon.
+	UnenrollDaemon(context.Context, *v1.UnenrollDaemonRequest) (*v1.UnenrollDaemonResponse, error)
 }
 
 // NewDaemonControlServiceClient constructs a client for the nokku.v1.DaemonControlService service.
@@ -441,10 +395,46 @@ func NewDaemonControlServiceClient(httpClient connect.HTTPClient, baseURL string
 	baseURL = strings.TrimRight(baseURL, "/")
 	daemonControlServiceMethods := v1.File_nokku_v1_daemon_proto.Services().ByName("DaemonControlService").Methods()
 	return &daemonControlServiceClient{
+		enrollDaemon: connect.NewClient[v1.EnrollDaemonRequest, v1.EnrollDaemonResponse](
+			httpClient,
+			baseURL+DaemonControlServiceEnrollDaemonProcedure,
+			connect.WithSchema(daemonControlServiceMethods.ByName("EnrollDaemon")),
+			connect.WithClientOptions(opts...),
+		),
+		syncDaemon: connect.NewClient[v1.SyncDaemonRequest, v1.SyncDaemonResponse](
+			httpClient,
+			baseURL+DaemonControlServiceSyncDaemonProcedure,
+			connect.WithSchema(daemonControlServiceMethods.ByName("SyncDaemon")),
+			connect.WithClientOptions(opts...),
+		),
 		connect: connect.NewClient[v1.ConnectRequest, v1.ConnectResponse](
 			httpClient,
 			baseURL+DaemonControlServiceConnectProcedure,
 			connect.WithSchema(daemonControlServiceMethods.ByName("Connect")),
+			connect.WithClientOptions(opts...),
+		),
+		daemonRelay: connect.NewClient[v1.DaemonRelayRequest, v1.DaemonRelayResponse](
+			httpClient,
+			baseURL+DaemonControlServiceDaemonRelayProcedure,
+			connect.WithSchema(daemonControlServiceMethods.ByName("DaemonRelay")),
+			connect.WithClientOptions(opts...),
+		),
+		signHostCertificate: connect.NewClient[v1.SignHostCertificateRequest, v1.SignHostCertificateResponse](
+			httpClient,
+			baseURL+DaemonControlServiceSignHostCertificateProcedure,
+			connect.WithSchema(daemonControlServiceMethods.ByName("SignHostCertificate")),
+			connect.WithClientOptions(opts...),
+		),
+		uploadRecording: connect.NewClient[v1.UploadRecordingRequest, v1.UploadRecordingResponse](
+			httpClient,
+			baseURL+DaemonControlServiceUploadRecordingProcedure,
+			connect.WithSchema(daemonControlServiceMethods.ByName("UploadRecording")),
+			connect.WithClientOptions(opts...),
+		),
+		unenrollDaemon: connect.NewClient[v1.UnenrollDaemonRequest, v1.UnenrollDaemonResponse](
+			httpClient,
+			baseURL+DaemonControlServiceUnenrollDaemonProcedure,
+			connect.WithSchema(daemonControlServiceMethods.ByName("UnenrollDaemon")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -452,7 +442,31 @@ func NewDaemonControlServiceClient(httpClient connect.HTTPClient, baseURL string
 
 // daemonControlServiceClient implements DaemonControlServiceClient.
 type daemonControlServiceClient struct {
-	connect *connect.Client[v1.ConnectRequest, v1.ConnectResponse]
+	enrollDaemon        *connect.Client[v1.EnrollDaemonRequest, v1.EnrollDaemonResponse]
+	syncDaemon          *connect.Client[v1.SyncDaemonRequest, v1.SyncDaemonResponse]
+	connect             *connect.Client[v1.ConnectRequest, v1.ConnectResponse]
+	daemonRelay         *connect.Client[v1.DaemonRelayRequest, v1.DaemonRelayResponse]
+	signHostCertificate *connect.Client[v1.SignHostCertificateRequest, v1.SignHostCertificateResponse]
+	uploadRecording     *connect.Client[v1.UploadRecordingRequest, v1.UploadRecordingResponse]
+	unenrollDaemon      *connect.Client[v1.UnenrollDaemonRequest, v1.UnenrollDaemonResponse]
+}
+
+// EnrollDaemon calls nokku.v1.DaemonControlService.EnrollDaemon.
+func (c *daemonControlServiceClient) EnrollDaemon(ctx context.Context, req *v1.EnrollDaemonRequest) (*v1.EnrollDaemonResponse, error) {
+	response, err := c.enrollDaemon.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// SyncDaemon calls nokku.v1.DaemonControlService.SyncDaemon.
+func (c *daemonControlServiceClient) SyncDaemon(ctx context.Context, req *v1.SyncDaemonRequest) (*v1.SyncDaemonResponse, error) {
+	response, err := c.syncDaemon.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
 }
 
 // Connect calls nokku.v1.DaemonControlService.Connect.
@@ -460,9 +474,46 @@ func (c *daemonControlServiceClient) Connect(ctx context.Context) (*connect.Bidi
 	return c.connect.CallBidiStreamSimple(ctx)
 }
 
+// DaemonRelay calls nokku.v1.DaemonControlService.DaemonRelay.
+func (c *daemonControlServiceClient) DaemonRelay(ctx context.Context) (*connect.BidiStreamForClientSimple[v1.DaemonRelayRequest, v1.DaemonRelayResponse], error) {
+	return c.daemonRelay.CallBidiStreamSimple(ctx)
+}
+
+// SignHostCertificate calls nokku.v1.DaemonControlService.SignHostCertificate.
+func (c *daemonControlServiceClient) SignHostCertificate(ctx context.Context, req *v1.SignHostCertificateRequest) (*v1.SignHostCertificateResponse, error) {
+	response, err := c.signHostCertificate.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// UploadRecording calls nokku.v1.DaemonControlService.UploadRecording.
+func (c *daemonControlServiceClient) UploadRecording(ctx context.Context) (*connect.ClientStreamForClientSimple[v1.UploadRecordingRequest, v1.UploadRecordingResponse], error) {
+	return c.uploadRecording.CallClientStreamSimple(ctx)
+}
+
+// UnenrollDaemon calls nokku.v1.DaemonControlService.UnenrollDaemon.
+func (c *daemonControlServiceClient) UnenrollDaemon(ctx context.Context, req *v1.UnenrollDaemonRequest) (*v1.UnenrollDaemonResponse, error) {
+	response, err := c.unenrollDaemon.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
 // DaemonControlServiceHandler is an implementation of the nokku.v1.DaemonControlService service.
 type DaemonControlServiceHandler interface {
+	// Public, the enroll token and the DPoP proof are the gate.
+	EnrollDaemon(context.Context, *v1.EnrollDaemonRequest) (*v1.EnrollDaemonResponse, error)
+	SyncDaemon(context.Context, *v1.SyncDaemonRequest) (*v1.SyncDaemonResponse, error)
 	Connect(context.Context, *connect.BidiStream[v1.ConnectRequest, v1.ConnectResponse]) error
+	DaemonRelay(context.Context, *connect.BidiStream[v1.DaemonRelayRequest, v1.DaemonRelayResponse]) error
+	// Signs the daemon's host key for its own target.
+	SignHostCertificate(context.Context, *v1.SignHostCertificateRequest) (*v1.SignHostCertificateResponse, error)
+	UploadRecording(context.Context, *connect.ClientStream[v1.UploadRecordingRequest]) (*v1.UploadRecordingResponse, error)
+	// Removes the calling daemon.
+	UnenrollDaemon(context.Context, *v1.UnenrollDaemonRequest) (*v1.UnenrollDaemonResponse, error)
 }
 
 // NewDaemonControlServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -472,16 +523,64 @@ type DaemonControlServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewDaemonControlServiceHandler(svc DaemonControlServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	daemonControlServiceMethods := v1.File_nokku_v1_daemon_proto.Services().ByName("DaemonControlService").Methods()
+	daemonControlServiceEnrollDaemonHandler := connect.NewUnaryHandlerSimple(
+		DaemonControlServiceEnrollDaemonProcedure,
+		svc.EnrollDaemon,
+		connect.WithSchema(daemonControlServiceMethods.ByName("EnrollDaemon")),
+		connect.WithHandlerOptions(opts...),
+	)
+	daemonControlServiceSyncDaemonHandler := connect.NewUnaryHandlerSimple(
+		DaemonControlServiceSyncDaemonProcedure,
+		svc.SyncDaemon,
+		connect.WithSchema(daemonControlServiceMethods.ByName("SyncDaemon")),
+		connect.WithHandlerOptions(opts...),
+	)
 	daemonControlServiceConnectHandler := connect.NewBidiStreamHandler(
 		DaemonControlServiceConnectProcedure,
 		svc.Connect,
 		connect.WithSchema(daemonControlServiceMethods.ByName("Connect")),
 		connect.WithHandlerOptions(opts...),
 	)
+	daemonControlServiceDaemonRelayHandler := connect.NewBidiStreamHandler(
+		DaemonControlServiceDaemonRelayProcedure,
+		svc.DaemonRelay,
+		connect.WithSchema(daemonControlServiceMethods.ByName("DaemonRelay")),
+		connect.WithHandlerOptions(opts...),
+	)
+	daemonControlServiceSignHostCertificateHandler := connect.NewUnaryHandlerSimple(
+		DaemonControlServiceSignHostCertificateProcedure,
+		svc.SignHostCertificate,
+		connect.WithSchema(daemonControlServiceMethods.ByName("SignHostCertificate")),
+		connect.WithHandlerOptions(opts...),
+	)
+	daemonControlServiceUploadRecordingHandler := connect.NewClientStreamHandlerSimple(
+		DaemonControlServiceUploadRecordingProcedure,
+		svc.UploadRecording,
+		connect.WithSchema(daemonControlServiceMethods.ByName("UploadRecording")),
+		connect.WithHandlerOptions(opts...),
+	)
+	daemonControlServiceUnenrollDaemonHandler := connect.NewUnaryHandlerSimple(
+		DaemonControlServiceUnenrollDaemonProcedure,
+		svc.UnenrollDaemon,
+		connect.WithSchema(daemonControlServiceMethods.ByName("UnenrollDaemon")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/nokku.v1.DaemonControlService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
+		case DaemonControlServiceEnrollDaemonProcedure:
+			daemonControlServiceEnrollDaemonHandler.ServeHTTP(w, r)
+		case DaemonControlServiceSyncDaemonProcedure:
+			daemonControlServiceSyncDaemonHandler.ServeHTTP(w, r)
 		case DaemonControlServiceConnectProcedure:
 			daemonControlServiceConnectHandler.ServeHTTP(w, r)
+		case DaemonControlServiceDaemonRelayProcedure:
+			daemonControlServiceDaemonRelayHandler.ServeHTTP(w, r)
+		case DaemonControlServiceSignHostCertificateProcedure:
+			daemonControlServiceSignHostCertificateHandler.ServeHTTP(w, r)
+		case DaemonControlServiceUploadRecordingProcedure:
+			daemonControlServiceUploadRecordingHandler.ServeHTTP(w, r)
+		case DaemonControlServiceUnenrollDaemonProcedure:
+			daemonControlServiceUnenrollDaemonHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -491,76 +590,30 @@ func NewDaemonControlServiceHandler(svc DaemonControlServiceHandler, opts ...con
 // UnimplementedDaemonControlServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedDaemonControlServiceHandler struct{}
 
+func (UnimplementedDaemonControlServiceHandler) EnrollDaemon(context.Context, *v1.EnrollDaemonRequest) (*v1.EnrollDaemonResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonControlService.EnrollDaemon is not implemented"))
+}
+
+func (UnimplementedDaemonControlServiceHandler) SyncDaemon(context.Context, *v1.SyncDaemonRequest) (*v1.SyncDaemonResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonControlService.SyncDaemon is not implemented"))
+}
+
 func (UnimplementedDaemonControlServiceHandler) Connect(context.Context, *connect.BidiStream[v1.ConnectRequest, v1.ConnectResponse]) error {
 	return connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonControlService.Connect is not implemented"))
 }
 
-// DaemonSessionServiceClient is a client for the nokku.v1.DaemonSessionService service.
-type DaemonSessionServiceClient interface {
-	DaemonRelay(context.Context) (*connect.BidiStreamForClientSimple[v1.DaemonRelayRequest, v1.DaemonRelayResponse], error)
+func (UnimplementedDaemonControlServiceHandler) DaemonRelay(context.Context, *connect.BidiStream[v1.DaemonRelayRequest, v1.DaemonRelayResponse]) error {
+	return connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonControlService.DaemonRelay is not implemented"))
 }
 
-// NewDaemonSessionServiceClient constructs a client for the nokku.v1.DaemonSessionService service.
-// By default, it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped
-// responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the
-// connect.WithGRPC() or connect.WithGRPCWeb() options.
-//
-// The URL supplied here should be the base URL for the Connect or gRPC server (for example,
-// http://api.acme.com or https://acme.com/grpc).
-func NewDaemonSessionServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) DaemonSessionServiceClient {
-	baseURL = strings.TrimRight(baseURL, "/")
-	daemonSessionServiceMethods := v1.File_nokku_v1_daemon_proto.Services().ByName("DaemonSessionService").Methods()
-	return &daemonSessionServiceClient{
-		daemonRelay: connect.NewClient[v1.DaemonRelayRequest, v1.DaemonRelayResponse](
-			httpClient,
-			baseURL+DaemonSessionServiceDaemonRelayProcedure,
-			connect.WithSchema(daemonSessionServiceMethods.ByName("DaemonRelay")),
-			connect.WithClientOptions(opts...),
-		),
-	}
+func (UnimplementedDaemonControlServiceHandler) SignHostCertificate(context.Context, *v1.SignHostCertificateRequest) (*v1.SignHostCertificateResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonControlService.SignHostCertificate is not implemented"))
 }
 
-// daemonSessionServiceClient implements DaemonSessionServiceClient.
-type daemonSessionServiceClient struct {
-	daemonRelay *connect.Client[v1.DaemonRelayRequest, v1.DaemonRelayResponse]
+func (UnimplementedDaemonControlServiceHandler) UploadRecording(context.Context, *connect.ClientStream[v1.UploadRecordingRequest]) (*v1.UploadRecordingResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonControlService.UploadRecording is not implemented"))
 }
 
-// DaemonRelay calls nokku.v1.DaemonSessionService.DaemonRelay.
-func (c *daemonSessionServiceClient) DaemonRelay(ctx context.Context) (*connect.BidiStreamForClientSimple[v1.DaemonRelayRequest, v1.DaemonRelayResponse], error) {
-	return c.daemonRelay.CallBidiStreamSimple(ctx)
-}
-
-// DaemonSessionServiceHandler is an implementation of the nokku.v1.DaemonSessionService service.
-type DaemonSessionServiceHandler interface {
-	DaemonRelay(context.Context, *connect.BidiStream[v1.DaemonRelayRequest, v1.DaemonRelayResponse]) error
-}
-
-// NewDaemonSessionServiceHandler builds an HTTP handler from the service implementation. It returns
-// the path on which to mount the handler and the handler itself.
-//
-// By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
-// and JSON codecs. They also support gzip compression.
-func NewDaemonSessionServiceHandler(svc DaemonSessionServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	daemonSessionServiceMethods := v1.File_nokku_v1_daemon_proto.Services().ByName("DaemonSessionService").Methods()
-	daemonSessionServiceDaemonRelayHandler := connect.NewBidiStreamHandler(
-		DaemonSessionServiceDaemonRelayProcedure,
-		svc.DaemonRelay,
-		connect.WithSchema(daemonSessionServiceMethods.ByName("DaemonRelay")),
-		connect.WithHandlerOptions(opts...),
-	)
-	return "/nokku.v1.DaemonSessionService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		switch r.URL.Path {
-		case DaemonSessionServiceDaemonRelayProcedure:
-			daemonSessionServiceDaemonRelayHandler.ServeHTTP(w, r)
-		default:
-			http.NotFound(w, r)
-		}
-	})
-}
-
-// UnimplementedDaemonSessionServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedDaemonSessionServiceHandler struct{}
-
-func (UnimplementedDaemonSessionServiceHandler) DaemonRelay(context.Context, *connect.BidiStream[v1.DaemonRelayRequest, v1.DaemonRelayResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonSessionService.DaemonRelay is not implemented"))
+func (UnimplementedDaemonControlServiceHandler) UnenrollDaemon(context.Context, *v1.UnenrollDaemonRequest) (*v1.UnenrollDaemonResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.DaemonControlService.UnenrollDaemon is not implemented"))
 }

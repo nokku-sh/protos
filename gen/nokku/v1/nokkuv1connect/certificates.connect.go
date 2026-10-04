@@ -69,7 +69,8 @@ type CertificateServiceClient interface {
 	ListCertificateAuthorities(context.Context, *v1.ListCertificateAuthoritiesRequest) (*v1.ListCertificateAuthoritiesResponse, error)
 	DeleteCertificateAuthority(context.Context, *v1.DeleteCertificateAuthorityRequest) (*v1.DeleteCertificateAuthorityResponse, error)
 	RolloverCertificateAuthority(context.Context, *v1.RolloverCertificateAuthorityRequest) (*v1.RolloverCertificateAuthorityResponse, error)
-	// A daemon may only sign its own host cert, the handler narrows it.
+	// Signs a user certificate for the caller. Daemons get host certificates
+	// from DaemonControlService.
 	SignSSHCertificate(context.Context, *v1.SignSSHCertificateRequest) (*v1.SignSSHCertificateResponse, error)
 	SignX509Certificate(context.Context, *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error)
 }
@@ -232,7 +233,8 @@ type CertificateServiceHandler interface {
 	ListCertificateAuthorities(context.Context, *v1.ListCertificateAuthoritiesRequest) (*v1.ListCertificateAuthoritiesResponse, error)
 	DeleteCertificateAuthority(context.Context, *v1.DeleteCertificateAuthorityRequest) (*v1.DeleteCertificateAuthorityResponse, error)
 	RolloverCertificateAuthority(context.Context, *v1.RolloverCertificateAuthorityRequest) (*v1.RolloverCertificateAuthorityResponse, error)
-	// A daemon may only sign its own host cert, the handler narrows it.
+	// Signs a user certificate for the caller. Daemons get host certificates
+	// from DaemonControlService.
 	SignSSHCertificate(context.Context, *v1.SignSSHCertificateRequest) (*v1.SignSSHCertificateResponse, error)
 	SignX509Certificate(context.Context, *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error)
 }

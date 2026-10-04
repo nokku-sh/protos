@@ -5,6 +5,7 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
+import "nokku/v1/recordings.proto";
 
 service DaemonService {
   rpc GetDaemon(GetDaemonRequest) returns (GetDaemonResponse) {
@@ -14,12 +15,8 @@ service DaemonService {
   rpc UpdateDaemon(UpdateDaemonRequest) returns (UpdateDaemonResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  // A daemon may only delete its own record, the handler narrows it.
   rpc DeleteDaemon(DeleteDaemonRequest) returns (DeleteDaemonResponse) {
-    option (access) = {
-      role: WORKSPACE_ROLE_EDITOR
-      daemon: true
-    };
+    option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
   rpc ListDaemons(ListDaemonsRequest) returns (ListDaemonsResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
@@ -36,26 +33,37 @@ service DaemonService {
   rpc CloseSession(CloseSessionRequest) returns (CloseSessionResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  rpc EnrollDaemon(EnrollDaemonRequest) returns (EnrollDaemonResponse) {
-    option (access) = {public: true};
-  }
-  rpc SyncDaemon(SyncDaemonRequest) returns (SyncDaemonResponse) {
-    option (access) = {daemon: true};
-  }
   // Streams are self-scoped since their workspace only arrives with the first message.
   rpc Relay(stream RelayRequest) returns (stream RelayResponse) {
     option (access) = {self: true};
   }
 }
 
+// DaemonControlService is everything a daemon calls. Nobody else may call it
+// and a daemon may call nothing else.
 service DaemonControlService {
+  // Public, the enroll token and the DPoP proof are the gate.
+  rpc EnrollDaemon(EnrollDaemonRequest) returns (EnrollDaemonResponse) {
+    option (access) = {public: true};
+  }
+  rpc SyncDaemon(SyncDaemonRequest) returns (SyncDaemonResponse) {
+    option (access) = {daemon: true};
+  }
   rpc Connect(stream ConnectRequest) returns (stream ConnectResponse) {
     option (access) = {daemon: true};
   }
-}
-
-service DaemonSessionService {
   rpc DaemonRelay(stream DaemonRelayRequest) returns (stream DaemonRelayResponse) {
+    option (access) = {daemon: true};
+  }
+  // Signs the daemon's host key for its own target.
+  rpc SignHostCertificate(SignHostCertificateRequest) returns (SignHostCertificateResponse) {
+    option (access) = {daemon: true};
+  }
+  rpc UploadRecording(stream UploadRecordingRequest) returns (UploadRecordingResponse) {
+    option (access) = {daemon: true};
+  }
+  // Removes the calling daemon.
+  rpc UnenrollDaemon(UnenrollDaemonRequest) returns (UnenrollDaemonResponse) {
     option (access) = {daemon: true};
   }
 }
@@ -188,10 +196,31 @@ message PrincipalUsers {
   repeated string ids = 2;
 }
 
+// The sizes are bounded here. The backend drops entries that are not valid
+// instead of failing the sync, a host with one odd account must still sync.
 message SyncDaemonRequest {
-  repeated string users = 1;
-  repeated string private_ips = 2;
-  map<string, string> metadata = 3;
+  repeated string users = 1 [(buf.validate.field).repeated = {
+    max_items: 200
+    items: {
+      string: {max_len: 256}
+    }
+  }];
+  // Where the daemon's sshd listens, as ip:port.
+  repeated string private_ips = 2 [(buf.validate.field).repeated = {
+    max_items: 8
+    items: {
+      string: {max_len: 64}
+    }
+  }];
+  map<string, string> metadata = 3 [(buf.validate.field).map = {
+    max_pairs: 16
+    keys: {
+      string: {max_len: 64}
+    }
+    values: {
+      string: {max_len: 256}
+    }
+  }];
 }
 
 message SyncDaemonResponse {
@@ -208,6 +237,19 @@ message RetiredCAKey {
   string public_key = 1;
   google.protobuf.Timestamp trusted_until = 2;
 }
+
+message SignHostCertificateRequest {
+  string public_key = 1 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 10000
+  }];
+}
+message SignHostCertificateResponse {
+  string signed_certificate = 1;
+}
+
+message UnenrollDaemonRequest {}
+message UnenrollDaemonResponse {}
 
 // Control Stream -------------------------------------------------------------
 
@@ -241,6 +283,9 @@ message DaemonSession {
 
 message RelayOpen {
   string relay_id = 1;
+  // The user's address as the backend saw it. The daemon's sshd reports it as
+  // the remote address of the relayed connection.
+  string client_addr = 2;
 }
 
 message RelayStart {

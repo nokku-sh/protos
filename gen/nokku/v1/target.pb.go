@@ -2131,13 +2131,14 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"\x1bGetTargetPrincipalsResponse\x128\n" +
 	"\n" +
 	"principals\x18\x01 \x03(\v2\x18.nokku.v1.PrincipalUsersR\n" +
-	"principals\"\xd0\x01\n" +
+	"principals\"\xf3\x01\n" +
 	"\x16SyncTargetUsersRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12%\n" +
 	"\ttarget_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\x12&\n" +
-	"\x0fhost_public_key\x18\x03 \x01(\tR\rhostPublicKey\x12\x1c\n" +
-	"\tusernames\x18\x04 \x03(\tR\tusernames\x12\x1c\n" +
-	"\tendpoints\x18\x05 \x03(\tR\tendpoints\"\x19\n" +
+	"\x0fhost_public_key\x18\x03 \x01(\tR\rhostPublicKey\x12.\n" +
+	"\tusernames\x18\x04 \x03(\tB\x10\xbaH\r\x92\x01\n" +
+	"\x10\xc8\x01\"\x05r\x03\x18\x80\x02R\tusernames\x12-\n" +
+	"\tendpoints\x18\x05 \x03(\tB\x0f\xbaH\f\x92\x01\t\x10\x10\"\x05r\x03\x18\xff\x01R\tendpoints\"\x19\n" +
 	"\x17SyncTargetUsersResponse\"\xbf\x04\n" +
 	"\x06Target\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +

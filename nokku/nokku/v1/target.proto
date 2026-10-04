@@ -75,8 +75,18 @@ message SyncTargetUsersRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string target_id = 2 [(buf.validate.field).string.uuid = true];
   string host_public_key = 3;
-  repeated string usernames = 4;
-  repeated string endpoints = 5;
+  repeated string usernames = 4 [(buf.validate.field).repeated = {
+    max_items: 200
+    items: {
+      string: {max_len: 256}
+    }
+  }];
+  repeated string endpoints = 5 [(buf.validate.field).repeated = {
+    max_items: 16
+    items: {
+      string: {max_len: 255}
+    }
+  }];
 }
 
 message SyncTargetUsersResponse {}

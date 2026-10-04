@@ -15,9 +15,6 @@ service RecordingService {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
-  rpc UploadRecording(stream UploadRecordingRequest) returns (UploadRecordingResponse) {
-    option (access) = {daemon: true};
-  }
   rpc DeleteRecording(DeleteRecordingRequest) returns (DeleteRecordingResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
