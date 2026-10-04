@@ -62,6 +62,12 @@ const (
 	// TargetServiceSyncTargetUsersProcedure is the fully-qualified name of the TargetService's
 	// SyncTargetUsers RPC.
 	TargetServiceSyncTargetUsersProcedure = "/nokku.v1.TargetService/SyncTargetUsers"
+	// TargetServiceGetAccessGraphProcedure is the fully-qualified name of the TargetService's
+	// GetAccessGraph RPC.
+	TargetServiceGetAccessGraphProcedure = "/nokku.v1.TargetService/GetAccessGraph"
+	// TargetServiceListAccessGraphTargetsProcedure is the fully-qualified name of the TargetService's
+	// ListAccessGraphTargets RPC.
+	TargetServiceListAccessGraphTargetsProcedure = "/nokku.v1.TargetService/ListAccessGraphTargets"
 )
 
 // TargetServiceClient is a client for the nokku.v1.TargetService service.
@@ -76,6 +82,11 @@ type TargetServiceClient interface {
 	GetTargetFilters(context.Context, *v1.GetTargetFiltersRequest) (*v1.GetTargetFiltersResponse, error)
 	GetTargetPrincipals(context.Context, *v1.GetTargetPrincipalsRequest) (*v1.GetTargetPrincipalsResponse, error)
 	SyncTargetUsers(context.Context, *v1.SyncTargetUsersRequest) (*v1.SyncTargetUsersResponse, error)
+	// GetAccessGraph rolls every grant up to subject, login account and target
+	// tag, so a workspace of any size draws as one overview.
+	GetAccessGraph(context.Context, *v1.GetAccessGraphRequest) (*v1.GetAccessGraphResponse, error)
+	// ListAccessGraphTargets is the drill-down into one tag of the graph.
+	ListAccessGraphTargets(context.Context, *v1.ListAccessGraphTargetsRequest) (*v1.ListAccessGraphTargetsResponse, error)
 }
 
 // NewTargetServiceClient constructs a client for the nokku.v1.TargetService service. By default, it
@@ -155,21 +166,37 @@ func NewTargetServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			connect.WithSchema(targetServiceMethods.ByName("SyncTargetUsers")),
 			connect.WithClientOptions(opts...),
 		),
+		getAccessGraph: connect.NewClient[v1.GetAccessGraphRequest, v1.GetAccessGraphResponse](
+			httpClient,
+			baseURL+TargetServiceGetAccessGraphProcedure,
+			connect.WithSchema(targetServiceMethods.ByName("GetAccessGraph")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
+		listAccessGraphTargets: connect.NewClient[v1.ListAccessGraphTargetsRequest, v1.ListAccessGraphTargetsResponse](
+			httpClient,
+			baseURL+TargetServiceListAccessGraphTargetsProcedure,
+			connect.WithSchema(targetServiceMethods.ByName("ListAccessGraphTargets")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // targetServiceClient implements TargetServiceClient.
 type targetServiceClient struct {
-	getTarget           *connect.Client[v1.GetTargetRequest, v1.GetTargetResponse]
-	listTargets         *connect.Client[v1.ListTargetsRequest, v1.ListTargetsResponse]
-	createTarget        *connect.Client[v1.CreateTargetRequest, v1.CreateTargetResponse]
-	updateTarget        *connect.Client[v1.UpdateTargetRequest, v1.UpdateTargetResponse]
-	deleteTarget        *connect.Client[v1.DeleteTargetRequest, v1.DeleteTargetResponse]
-	getSubjectAccess    *connect.Client[v1.GetSubjectAccessRequest, v1.GetSubjectAccessResponse]
-	getMyAccess         *connect.Client[v1.GetMyAccessRequest, v1.GetMyAccessResponse]
-	getTargetFilters    *connect.Client[v1.GetTargetFiltersRequest, v1.GetTargetFiltersResponse]
-	getTargetPrincipals *connect.Client[v1.GetTargetPrincipalsRequest, v1.GetTargetPrincipalsResponse]
-	syncTargetUsers     *connect.Client[v1.SyncTargetUsersRequest, v1.SyncTargetUsersResponse]
+	getTarget              *connect.Client[v1.GetTargetRequest, v1.GetTargetResponse]
+	listTargets            *connect.Client[v1.ListTargetsRequest, v1.ListTargetsResponse]
+	createTarget           *connect.Client[v1.CreateTargetRequest, v1.CreateTargetResponse]
+	updateTarget           *connect.Client[v1.UpdateTargetRequest, v1.UpdateTargetResponse]
+	deleteTarget           *connect.Client[v1.DeleteTargetRequest, v1.DeleteTargetResponse]
+	getSubjectAccess       *connect.Client[v1.GetSubjectAccessRequest, v1.GetSubjectAccessResponse]
+	getMyAccess            *connect.Client[v1.GetMyAccessRequest, v1.GetMyAccessResponse]
+	getTargetFilters       *connect.Client[v1.GetTargetFiltersRequest, v1.GetTargetFiltersResponse]
+	getTargetPrincipals    *connect.Client[v1.GetTargetPrincipalsRequest, v1.GetTargetPrincipalsResponse]
+	syncTargetUsers        *connect.Client[v1.SyncTargetUsersRequest, v1.SyncTargetUsersResponse]
+	getAccessGraph         *connect.Client[v1.GetAccessGraphRequest, v1.GetAccessGraphResponse]
+	listAccessGraphTargets *connect.Client[v1.ListAccessGraphTargetsRequest, v1.ListAccessGraphTargetsResponse]
 }
 
 // GetTarget calls nokku.v1.TargetService.GetTarget.
@@ -262,6 +289,24 @@ func (c *targetServiceClient) SyncTargetUsers(ctx context.Context, req *v1.SyncT
 	return nil, err
 }
 
+// GetAccessGraph calls nokku.v1.TargetService.GetAccessGraph.
+func (c *targetServiceClient) GetAccessGraph(ctx context.Context, req *v1.GetAccessGraphRequest) (*v1.GetAccessGraphResponse, error) {
+	response, err := c.getAccessGraph.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// ListAccessGraphTargets calls nokku.v1.TargetService.ListAccessGraphTargets.
+func (c *targetServiceClient) ListAccessGraphTargets(ctx context.Context, req *v1.ListAccessGraphTargetsRequest) (*v1.ListAccessGraphTargetsResponse, error) {
+	response, err := c.listAccessGraphTargets.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
 // TargetServiceHandler is an implementation of the nokku.v1.TargetService service.
 type TargetServiceHandler interface {
 	GetTarget(context.Context, *v1.GetTargetRequest) (*v1.GetTargetResponse, error)
@@ -274,6 +319,11 @@ type TargetServiceHandler interface {
 	GetTargetFilters(context.Context, *v1.GetTargetFiltersRequest) (*v1.GetTargetFiltersResponse, error)
 	GetTargetPrincipals(context.Context, *v1.GetTargetPrincipalsRequest) (*v1.GetTargetPrincipalsResponse, error)
 	SyncTargetUsers(context.Context, *v1.SyncTargetUsersRequest) (*v1.SyncTargetUsersResponse, error)
+	// GetAccessGraph rolls every grant up to subject, login account and target
+	// tag, so a workspace of any size draws as one overview.
+	GetAccessGraph(context.Context, *v1.GetAccessGraphRequest) (*v1.GetAccessGraphResponse, error)
+	// ListAccessGraphTargets is the drill-down into one tag of the graph.
+	ListAccessGraphTargets(context.Context, *v1.ListAccessGraphTargetsRequest) (*v1.ListAccessGraphTargetsResponse, error)
 }
 
 // NewTargetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -349,6 +399,20 @@ func NewTargetServiceHandler(svc TargetServiceHandler, opts ...connect.HandlerOp
 		connect.WithSchema(targetServiceMethods.ByName("SyncTargetUsers")),
 		connect.WithHandlerOptions(opts...),
 	)
+	targetServiceGetAccessGraphHandler := connect.NewUnaryHandlerSimple(
+		TargetServiceGetAccessGraphProcedure,
+		svc.GetAccessGraph,
+		connect.WithSchema(targetServiceMethods.ByName("GetAccessGraph")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
+	targetServiceListAccessGraphTargetsHandler := connect.NewUnaryHandlerSimple(
+		TargetServiceListAccessGraphTargetsProcedure,
+		svc.ListAccessGraphTargets,
+		connect.WithSchema(targetServiceMethods.ByName("ListAccessGraphTargets")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/nokku.v1.TargetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case TargetServiceGetTargetProcedure:
@@ -371,6 +435,10 @@ func NewTargetServiceHandler(svc TargetServiceHandler, opts ...connect.HandlerOp
 			targetServiceGetTargetPrincipalsHandler.ServeHTTP(w, r)
 		case TargetServiceSyncTargetUsersProcedure:
 			targetServiceSyncTargetUsersHandler.ServeHTTP(w, r)
+		case TargetServiceGetAccessGraphProcedure:
+			targetServiceGetAccessGraphHandler.ServeHTTP(w, r)
+		case TargetServiceListAccessGraphTargetsProcedure:
+			targetServiceListAccessGraphTargetsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -418,4 +486,12 @@ func (UnimplementedTargetServiceHandler) GetTargetPrincipals(context.Context, *v
 
 func (UnimplementedTargetServiceHandler) SyncTargetUsers(context.Context, *v1.SyncTargetUsersRequest) (*v1.SyncTargetUsersResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.TargetService.SyncTargetUsers is not implemented"))
+}
+
+func (UnimplementedTargetServiceHandler) GetAccessGraph(context.Context, *v1.GetAccessGraphRequest) (*v1.GetAccessGraphResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.TargetService.GetAccessGraph is not implemented"))
+}
+
+func (UnimplementedTargetServiceHandler) ListAccessGraphTargets(context.Context, *v1.ListAccessGraphTargetsRequest) (*v1.ListAccessGraphTargetsResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.TargetService.ListAccessGraphTargets is not implemented"))
 }

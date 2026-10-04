@@ -1397,6 +1397,729 @@ func (x *GetTargetFiltersResponse) GetPrincipals() []string {
 	return nil
 }
 
+// AccessGraphFilter narrows the graph to the grants that match every set
+// field. Unset fields match everything.
+type AccessGraphFilter struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// A user, team or service account. A user also matches the grants their
+	// teams hold.
+	SubjectId *string `protobuf:"bytes,1,opt,name=subject_id,json=subjectId" json:"subject_id,omitempty"`
+	TargetId  *string `protobuf:"bytes,2,opt,name=target_id,json=targetId" json:"target_id,omitempty"`
+	Username  *string `protobuf:"bytes,3,opt,name=username" json:"username,omitempty"`
+	// Set but empty means untagged targets.
+	Tag           *string `protobuf:"bytes,4,opt,name=tag" json:"tag,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccessGraphFilter) Reset() {
+	*x = AccessGraphFilter{}
+	mi := &file_nokku_v1_target_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccessGraphFilter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccessGraphFilter) ProtoMessage() {}
+
+func (x *AccessGraphFilter) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccessGraphFilter.ProtoReflect.Descriptor instead.
+func (*AccessGraphFilter) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *AccessGraphFilter) GetSubjectId() string {
+	if x != nil && x.SubjectId != nil {
+		return *x.SubjectId
+	}
+	return ""
+}
+
+func (x *AccessGraphFilter) GetTargetId() string {
+	if x != nil && x.TargetId != nil {
+		return *x.TargetId
+	}
+	return ""
+}
+
+func (x *AccessGraphFilter) GetUsername() string {
+	if x != nil && x.Username != nil {
+		return *x.Username
+	}
+	return ""
+}
+
+func (x *AccessGraphFilter) GetTag() string {
+	if x != nil && x.Tag != nil {
+		return *x.Tag
+	}
+	return ""
+}
+
+type GetAccessGraphRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
+	Filter        *AccessGraphFilter     `protobuf:"bytes,2,opt,name=filter" json:"filter,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAccessGraphRequest) Reset() {
+	*x = GetAccessGraphRequest{}
+	mi := &file_nokku_v1_target_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAccessGraphRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAccessGraphRequest) ProtoMessage() {}
+
+func (x *GetAccessGraphRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAccessGraphRequest.ProtoReflect.Descriptor instead.
+func (*GetAccessGraphRequest) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *GetAccessGraphRequest) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *GetAccessGraphRequest) GetFilter() *AccessGraphFilter {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
+}
+
+// Every count is a number of distinct targets with a matching grant.
+type GetAccessGraphResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The subjects holding a matching grant, plus the filter's own subject.
+	Subjects []*AccessGraphSubject `protobuf:"bytes,1,rep,name=subjects" json:"subjects,omitempty"`
+	Accounts []*AccessGraphAccount `protobuf:"bytes,2,rep,name=accounts" json:"accounts,omitempty"`
+	// Every tag in the workspace, matched or not.
+	Tags          []*AccessGraphTag   `protobuf:"bytes,3,rep,name=tags" json:"tags,omitempty"`
+	Grants        []*AccessGraphGrant `protobuf:"bytes,4,rep,name=grants" json:"grants,omitempty"`
+	Reach         []*AccessGraphReach `protobuf:"bytes,5,rep,name=reach" json:"reach,omitempty"`
+	Targets       *int32              `protobuf:"varint,6,opt,name=targets" json:"targets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAccessGraphResponse) Reset() {
+	*x = GetAccessGraphResponse{}
+	mi := &file_nokku_v1_target_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAccessGraphResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAccessGraphResponse) ProtoMessage() {}
+
+func (x *GetAccessGraphResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAccessGraphResponse.ProtoReflect.Descriptor instead.
+func (*GetAccessGraphResponse) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *GetAccessGraphResponse) GetSubjects() []*AccessGraphSubject {
+	if x != nil {
+		return x.Subjects
+	}
+	return nil
+}
+
+func (x *GetAccessGraphResponse) GetAccounts() []*AccessGraphAccount {
+	if x != nil {
+		return x.Accounts
+	}
+	return nil
+}
+
+func (x *GetAccessGraphResponse) GetTags() []*AccessGraphTag {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
+func (x *GetAccessGraphResponse) GetGrants() []*AccessGraphGrant {
+	if x != nil {
+		return x.Grants
+	}
+	return nil
+}
+
+func (x *GetAccessGraphResponse) GetReach() []*AccessGraphReach {
+	if x != nil {
+		return x.Reach
+	}
+	return nil
+}
+
+func (x *GetAccessGraphResponse) GetTargets() int32 {
+	if x != nil && x.Targets != nil {
+		return *x.Targets
+	}
+	return 0
+}
+
+type AccessGraphSubject struct {
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Id          *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	Kind        *SubjectKind           `protobuf:"varint,2,opt,name=kind,enum=nokku.v1.SubjectKind" json:"kind,omitempty"`
+	Name        *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
+	Email       *string                `protobuf:"bytes,4,opt,name=email" json:"email,omitempty"`                                 // users only
+	MemberCount *int32                 `protobuf:"varint,5,opt,name=member_count,json=memberCount" json:"member_count,omitempty"` // teams only
+	// Targets this subject holds a grant on itself, team grants not included.
+	Targets       *int32 `protobuf:"varint,6,opt,name=targets" json:"targets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccessGraphSubject) Reset() {
+	*x = AccessGraphSubject{}
+	mi := &file_nokku_v1_target_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccessGraphSubject) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccessGraphSubject) ProtoMessage() {}
+
+func (x *AccessGraphSubject) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccessGraphSubject.ProtoReflect.Descriptor instead.
+func (*AccessGraphSubject) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *AccessGraphSubject) GetId() string {
+	if x != nil && x.Id != nil {
+		return *x.Id
+	}
+	return ""
+}
+
+func (x *AccessGraphSubject) GetKind() SubjectKind {
+	if x != nil && x.Kind != nil {
+		return *x.Kind
+	}
+	return SubjectKind_SUBJECT_KIND_UNSPECIFIED
+}
+
+func (x *AccessGraphSubject) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *AccessGraphSubject) GetEmail() string {
+	if x != nil && x.Email != nil {
+		return *x.Email
+	}
+	return ""
+}
+
+func (x *AccessGraphSubject) GetMemberCount() int32 {
+	if x != nil && x.MemberCount != nil {
+		return *x.MemberCount
+	}
+	return 0
+}
+
+func (x *AccessGraphSubject) GetTargets() int32 {
+	if x != nil && x.Targets != nil {
+		return *x.Targets
+	}
+	return 0
+}
+
+type AccessGraphAccount struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      *string                `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
+	Targets       *int32                 `protobuf:"varint,2,opt,name=targets" json:"targets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccessGraphAccount) Reset() {
+	*x = AccessGraphAccount{}
+	mi := &file_nokku_v1_target_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccessGraphAccount) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccessGraphAccount) ProtoMessage() {}
+
+func (x *AccessGraphAccount) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccessGraphAccount.ProtoReflect.Descriptor instead.
+func (*AccessGraphAccount) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *AccessGraphAccount) GetUsername() string {
+	if x != nil && x.Username != nil {
+		return *x.Username
+	}
+	return ""
+}
+
+func (x *AccessGraphAccount) GetTargets() int32 {
+	if x != nil && x.Targets != nil {
+		return *x.Targets
+	}
+	return 0
+}
+
+// A target with several tags counts under each of them.
+type AccessGraphTag struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tag           *string                `protobuf:"bytes,1,opt,name=tag" json:"tag,omitempty"` // empty is the untagged bucket
+	Targets       *int32                 `protobuf:"varint,2,opt,name=targets" json:"targets,omitempty"`
+	Total         *int32                 `protobuf:"varint,3,opt,name=total" json:"total,omitempty"` // all targets with the tag, granted or not
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccessGraphTag) Reset() {
+	*x = AccessGraphTag{}
+	mi := &file_nokku_v1_target_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccessGraphTag) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccessGraphTag) ProtoMessage() {}
+
+func (x *AccessGraphTag) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccessGraphTag.ProtoReflect.Descriptor instead.
+func (*AccessGraphTag) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *AccessGraphTag) GetTag() string {
+	if x != nil && x.Tag != nil {
+		return *x.Tag
+	}
+	return ""
+}
+
+func (x *AccessGraphTag) GetTargets() int32 {
+	if x != nil && x.Targets != nil {
+		return *x.Targets
+	}
+	return 0
+}
+
+func (x *AccessGraphTag) GetTotal() int32 {
+	if x != nil && x.Total != nil {
+		return *x.Total
+	}
+	return 0
+}
+
+// AccessGraphGrant is the edge from a subject to a login account.
+type AccessGraphGrant struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SubjectId     *string                `protobuf:"bytes,1,opt,name=subject_id,json=subjectId" json:"subject_id,omitempty"`
+	Username      *string                `protobuf:"bytes,2,opt,name=username" json:"username,omitempty"`
+	Targets       *int32                 `protobuf:"varint,3,opt,name=targets" json:"targets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccessGraphGrant) Reset() {
+	*x = AccessGraphGrant{}
+	mi := &file_nokku_v1_target_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccessGraphGrant) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccessGraphGrant) ProtoMessage() {}
+
+func (x *AccessGraphGrant) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccessGraphGrant.ProtoReflect.Descriptor instead.
+func (*AccessGraphGrant) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *AccessGraphGrant) GetSubjectId() string {
+	if x != nil && x.SubjectId != nil {
+		return *x.SubjectId
+	}
+	return ""
+}
+
+func (x *AccessGraphGrant) GetUsername() string {
+	if x != nil && x.Username != nil {
+		return *x.Username
+	}
+	return ""
+}
+
+func (x *AccessGraphGrant) GetTargets() int32 {
+	if x != nil && x.Targets != nil {
+		return *x.Targets
+	}
+	return 0
+}
+
+// AccessGraphReach is the edge from a login account to a tag.
+type AccessGraphReach struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      *string                `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
+	Tag           *string                `protobuf:"bytes,2,opt,name=tag" json:"tag,omitempty"`
+	Targets       *int32                 `protobuf:"varint,3,opt,name=targets" json:"targets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccessGraphReach) Reset() {
+	*x = AccessGraphReach{}
+	mi := &file_nokku_v1_target_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccessGraphReach) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccessGraphReach) ProtoMessage() {}
+
+func (x *AccessGraphReach) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccessGraphReach.ProtoReflect.Descriptor instead.
+func (*AccessGraphReach) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *AccessGraphReach) GetUsername() string {
+	if x != nil && x.Username != nil {
+		return *x.Username
+	}
+	return ""
+}
+
+func (x *AccessGraphReach) GetTag() string {
+	if x != nil && x.Tag != nil {
+		return *x.Tag
+	}
+	return ""
+}
+
+func (x *AccessGraphReach) GetTargets() int32 {
+	if x != nil && x.Targets != nil {
+		return *x.Targets
+	}
+	return 0
+}
+
+type ListAccessGraphTargetsRequest struct {
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
+	Filter      *AccessGraphFilter     `protobuf:"bytes,2,opt,name=filter" json:"filter,omitempty"`
+	// Empty lists the untagged targets.
+	Tag           *string `protobuf:"bytes,3,opt,name=tag" json:"tag,omitempty"`
+	Limit         *int32  `protobuf:"varint,4,opt,name=limit" json:"limit,omitempty"`
+	Offset        *int32  `protobuf:"varint,5,opt,name=offset" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAccessGraphTargetsRequest) Reset() {
+	*x = ListAccessGraphTargetsRequest{}
+	mi := &file_nokku_v1_target_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAccessGraphTargetsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAccessGraphTargetsRequest) ProtoMessage() {}
+
+func (x *ListAccessGraphTargetsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAccessGraphTargetsRequest.ProtoReflect.Descriptor instead.
+func (*ListAccessGraphTargetsRequest) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *ListAccessGraphTargetsRequest) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *ListAccessGraphTargetsRequest) GetFilter() *AccessGraphFilter {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
+}
+
+func (x *ListAccessGraphTargetsRequest) GetTag() string {
+	if x != nil && x.Tag != nil {
+		return *x.Tag
+	}
+	return ""
+}
+
+func (x *ListAccessGraphTargetsRequest) GetLimit() int32 {
+	if x != nil && x.Limit != nil {
+		return *x.Limit
+	}
+	return 0
+}
+
+func (x *ListAccessGraphTargetsRequest) GetOffset() int32 {
+	if x != nil && x.Offset != nil {
+		return *x.Offset
+	}
+	return 0
+}
+
+// Matched targets come first.
+type ListAccessGraphTargetsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Targets       []*AccessGraphTarget   `protobuf:"bytes,1,rep,name=targets" json:"targets,omitempty"`
+	Total         *int32                 `protobuf:"varint,2,opt,name=total" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAccessGraphTargetsResponse) Reset() {
+	*x = ListAccessGraphTargetsResponse{}
+	mi := &file_nokku_v1_target_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAccessGraphTargetsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAccessGraphTargetsResponse) ProtoMessage() {}
+
+func (x *ListAccessGraphTargetsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAccessGraphTargetsResponse.ProtoReflect.Descriptor instead.
+func (*ListAccessGraphTargetsResponse) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *ListAccessGraphTargetsResponse) GetTargets() []*AccessGraphTarget {
+	if x != nil {
+		return x.Targets
+	}
+	return nil
+}
+
+func (x *ListAccessGraphTargetsResponse) GetTotal() int32 {
+	if x != nil && x.Total != nil {
+		return *x.Total
+	}
+	return 0
+}
+
+type AccessGraphTarget struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	Name  *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	// Whether a grant matching the filter exists on it.
+	Matched       *bool `protobuf:"varint,3,opt,name=matched" json:"matched,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccessGraphTarget) Reset() {
+	*x = AccessGraphTarget{}
+	mi := &file_nokku_v1_target_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccessGraphTarget) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccessGraphTarget) ProtoMessage() {}
+
+func (x *AccessGraphTarget) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_target_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccessGraphTarget.ProtoReflect.Descriptor instead.
+func (*AccessGraphTarget) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *AccessGraphTarget) GetId() string {
+	if x != nil && x.Id != nil {
+		return *x.Id
+	}
+	return ""
+}
+
+func (x *AccessGraphTarget) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *AccessGraphTarget) GetMatched() bool {
+	if x != nil && x.Matched != nil {
+		return *x.Matched
+	}
+	return false
+}
+
 var File_nokku_v1_target_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_target_proto_rawDesc = "" +
@@ -1510,7 +2233,59 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"\x04tags\x18\x01 \x03(\tR\x04tags\x12\x1e\n" +
 	"\n" +
 	"principals\x18\x02 \x03(\tR\n" +
-	"principals2\xae\a\n" +
+	"principals\"\xa4\x01\n" +
+	"\x11AccessGraphFilter\x12'\n" +
+	"\n" +
+	"subject_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\tsubjectId\x12%\n" +
+	"\ttarget_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\x12#\n" +
+	"\busername\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x18 R\busername\x12\x1a\n" +
+	"\x03tag\x18\x04 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x02R\x03tag\"y\n" +
+	"\x15GetAccessGraphRequest\x12+\n" +
+	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x123\n" +
+	"\x06filter\x18\x02 \x01(\v2\x1b.nokku.v1.AccessGraphFilterR\x06filter\"\xba\x02\n" +
+	"\x16GetAccessGraphResponse\x128\n" +
+	"\bsubjects\x18\x01 \x03(\v2\x1c.nokku.v1.AccessGraphSubjectR\bsubjects\x128\n" +
+	"\baccounts\x18\x02 \x03(\v2\x1c.nokku.v1.AccessGraphAccountR\baccounts\x12,\n" +
+	"\x04tags\x18\x03 \x03(\v2\x18.nokku.v1.AccessGraphTagR\x04tags\x122\n" +
+	"\x06grants\x18\x04 \x03(\v2\x1a.nokku.v1.AccessGraphGrantR\x06grants\x120\n" +
+	"\x05reach\x18\x05 \x03(\v2\x1a.nokku.v1.AccessGraphReachR\x05reach\x12\x18\n" +
+	"\atargets\x18\x06 \x01(\x05R\atargets\"\xb6\x01\n" +
+	"\x12AccessGraphSubject\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
+	"\x04kind\x18\x02 \x01(\x0e2\x15.nokku.v1.SubjectKindR\x04kind\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x14\n" +
+	"\x05email\x18\x04 \x01(\tR\x05email\x12!\n" +
+	"\fmember_count\x18\x05 \x01(\x05R\vmemberCount\x12\x18\n" +
+	"\atargets\x18\x06 \x01(\x05R\atargets\"J\n" +
+	"\x12AccessGraphAccount\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12\x18\n" +
+	"\atargets\x18\x02 \x01(\x05R\atargets\"R\n" +
+	"\x0eAccessGraphTag\x12\x10\n" +
+	"\x03tag\x18\x01 \x01(\tR\x03tag\x12\x18\n" +
+	"\atargets\x18\x02 \x01(\x05R\atargets\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x05R\x05total\"g\n" +
+	"\x10AccessGraphGrant\x12\x1d\n" +
+	"\n" +
+	"subject_id\x18\x01 \x01(\tR\tsubjectId\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12\x18\n" +
+	"\atargets\x18\x03 \x01(\x05R\atargets\"Z\n" +
+	"\x10AccessGraphReach\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12\x10\n" +
+	"\x03tag\x18\x02 \x01(\tR\x03tag\x12\x18\n" +
+	"\atargets\x18\x03 \x01(\x05R\atargets\"\xdf\x01\n" +
+	"\x1dListAccessGraphTargetsRequest\x12+\n" +
+	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x123\n" +
+	"\x06filter\x18\x02 \x01(\v2\x1b.nokku.v1.AccessGraphFilterR\x06filter\x12\x1a\n" +
+	"\x03tag\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x02R\x03tag\x12\x1f\n" +
+	"\x05limit\x18\x04 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
+	"\x06offset\x18\x05 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\"m\n" +
+	"\x1eListAccessGraphTargetsResponse\x125\n" +
+	"\atargets\x18\x01 \x03(\v2\x1b.nokku.v1.AccessGraphTargetR\atargets\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"Q\n" +
+	"\x11AccessGraphTarget\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
+	"\amatched\x18\x03 \x01(\bR\amatched2\x86\t\n" +
 	"\rTargetService\x12O\n" +
 	"\tGetTarget\x12\x1a.nokku.v1.GetTargetRequest\x1a\x1b.nokku.v1.GetTargetResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12U\n" +
 	"\vListTargets\x12\x1c.nokku.v1.ListTargetsRequest\x1a\x1d.nokku.v1.ListTargetsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12U\n" +
@@ -1521,7 +2296,9 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"\vGetMyAccess\x12\x1c.nokku.v1.GetMyAccessRequest\x1a\x1d.nokku.v1.GetMyAccessResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12d\n" +
 	"\x10GetTargetFilters\x12!.nokku.v1.GetTargetFiltersRequest\x1a\".nokku.v1.GetTargetFiltersResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12m\n" +
 	"\x13GetTargetPrincipals\x12$.nokku.v1.GetTargetPrincipalsRequest\x1a%.nokku.v1.GetTargetPrincipalsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12^\n" +
-	"\x0fSyncTargetUsers\x12 .nokku.v1.SyncTargetUsersRequest\x1a!.nokku.v1.SyncTargetUsersResponse\"\x06\xc2\xf3\x18\x02\x18\x03B\x8d\x01\n" +
+	"\x0fSyncTargetUsers\x12 .nokku.v1.SyncTargetUsersRequest\x1a!.nokku.v1.SyncTargetUsersResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12^\n" +
+	"\x0eGetAccessGraph\x12\x1f.nokku.v1.GetAccessGraphRequest\x1a .nokku.v1.GetAccessGraphResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12v\n" +
+	"\x16ListAccessGraphTargets\x12'.nokku.v1.ListAccessGraphTargetsRequest\x1a(.nokku.v1.ListAccessGraphTargetsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01B\x8d\x01\n" +
 	"\fcom.nokku.v1B\vTargetProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (
@@ -1536,82 +2313,107 @@ func file_nokku_v1_target_proto_rawDescGZIP() []byte {
 	return file_nokku_v1_target_proto_rawDescData
 }
 
-var file_nokku_v1_target_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_nokku_v1_target_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
 var file_nokku_v1_target_proto_goTypes = []any{
-	(*GetTargetPrincipalsRequest)(nil),  // 0: nokku.v1.GetTargetPrincipalsRequest
-	(*GetTargetPrincipalsResponse)(nil), // 1: nokku.v1.GetTargetPrincipalsResponse
-	(*SyncTargetUsersRequest)(nil),      // 2: nokku.v1.SyncTargetUsersRequest
-	(*SyncTargetUsersResponse)(nil),     // 3: nokku.v1.SyncTargetUsersResponse
-	(*Target)(nil),                      // 4: nokku.v1.Target
-	(*GetTargetRequest)(nil),            // 5: nokku.v1.GetTargetRequest
-	(*GetTargetResponse)(nil),           // 6: nokku.v1.GetTargetResponse
-	(*CreateTargetRequest)(nil),         // 7: nokku.v1.CreateTargetRequest
-	(*CreateTargetResponse)(nil),        // 8: nokku.v1.CreateTargetResponse
-	(*UpdateTargetRequest)(nil),         // 9: nokku.v1.UpdateTargetRequest
-	(*UpdateTargetResponse)(nil),        // 10: nokku.v1.UpdateTargetResponse
-	(*DeleteTargetRequest)(nil),         // 11: nokku.v1.DeleteTargetRequest
-	(*DeleteTargetResponse)(nil),        // 12: nokku.v1.DeleteTargetResponse
-	(*ListTargetsRequest)(nil),          // 13: nokku.v1.ListTargetsRequest
-	(*ListTargetsResponse)(nil),         // 14: nokku.v1.ListTargetsResponse
-	(*GetSubjectAccessRequest)(nil),     // 15: nokku.v1.GetSubjectAccessRequest
-	(*GetSubjectAccessResponse)(nil),    // 16: nokku.v1.GetSubjectAccessResponse
-	(*GetMyAccessRequest)(nil),          // 17: nokku.v1.GetMyAccessRequest
-	(*GetMyAccessResponse)(nil),         // 18: nokku.v1.GetMyAccessResponse
-	(*WorkspaceAccess)(nil),             // 19: nokku.v1.WorkspaceAccess
-	(*GetTargetFiltersRequest)(nil),     // 20: nokku.v1.GetTargetFiltersRequest
-	(*GetTargetFiltersResponse)(nil),    // 21: nokku.v1.GetTargetFiltersResponse
-	nil,                                 // 22: nokku.v1.Target.MetadataEntry
-	(*PrincipalUsers)(nil),              // 23: nokku.v1.PrincipalUsers
-	(*Principal)(nil),                   // 24: nokku.v1.Principal
-	(*timestamppb.Timestamp)(nil),       // 25: google.protobuf.Timestamp
-	(*Daemon)(nil),                      // 26: nokku.v1.Daemon
-	(*CertificateAuthority)(nil),        // 27: nokku.v1.CertificateAuthority
-	(*User)(nil),                        // 28: nokku.v1.User
-	(*ServiceAccount)(nil),              // 29: nokku.v1.ServiceAccount
+	(*GetTargetPrincipalsRequest)(nil),     // 0: nokku.v1.GetTargetPrincipalsRequest
+	(*GetTargetPrincipalsResponse)(nil),    // 1: nokku.v1.GetTargetPrincipalsResponse
+	(*SyncTargetUsersRequest)(nil),         // 2: nokku.v1.SyncTargetUsersRequest
+	(*SyncTargetUsersResponse)(nil),        // 3: nokku.v1.SyncTargetUsersResponse
+	(*Target)(nil),                         // 4: nokku.v1.Target
+	(*GetTargetRequest)(nil),               // 5: nokku.v1.GetTargetRequest
+	(*GetTargetResponse)(nil),              // 6: nokku.v1.GetTargetResponse
+	(*CreateTargetRequest)(nil),            // 7: nokku.v1.CreateTargetRequest
+	(*CreateTargetResponse)(nil),           // 8: nokku.v1.CreateTargetResponse
+	(*UpdateTargetRequest)(nil),            // 9: nokku.v1.UpdateTargetRequest
+	(*UpdateTargetResponse)(nil),           // 10: nokku.v1.UpdateTargetResponse
+	(*DeleteTargetRequest)(nil),            // 11: nokku.v1.DeleteTargetRequest
+	(*DeleteTargetResponse)(nil),           // 12: nokku.v1.DeleteTargetResponse
+	(*ListTargetsRequest)(nil),             // 13: nokku.v1.ListTargetsRequest
+	(*ListTargetsResponse)(nil),            // 14: nokku.v1.ListTargetsResponse
+	(*GetSubjectAccessRequest)(nil),        // 15: nokku.v1.GetSubjectAccessRequest
+	(*GetSubjectAccessResponse)(nil),       // 16: nokku.v1.GetSubjectAccessResponse
+	(*GetMyAccessRequest)(nil),             // 17: nokku.v1.GetMyAccessRequest
+	(*GetMyAccessResponse)(nil),            // 18: nokku.v1.GetMyAccessResponse
+	(*WorkspaceAccess)(nil),                // 19: nokku.v1.WorkspaceAccess
+	(*GetTargetFiltersRequest)(nil),        // 20: nokku.v1.GetTargetFiltersRequest
+	(*GetTargetFiltersResponse)(nil),       // 21: nokku.v1.GetTargetFiltersResponse
+	(*AccessGraphFilter)(nil),              // 22: nokku.v1.AccessGraphFilter
+	(*GetAccessGraphRequest)(nil),          // 23: nokku.v1.GetAccessGraphRequest
+	(*GetAccessGraphResponse)(nil),         // 24: nokku.v1.GetAccessGraphResponse
+	(*AccessGraphSubject)(nil),             // 25: nokku.v1.AccessGraphSubject
+	(*AccessGraphAccount)(nil),             // 26: nokku.v1.AccessGraphAccount
+	(*AccessGraphTag)(nil),                 // 27: nokku.v1.AccessGraphTag
+	(*AccessGraphGrant)(nil),               // 28: nokku.v1.AccessGraphGrant
+	(*AccessGraphReach)(nil),               // 29: nokku.v1.AccessGraphReach
+	(*ListAccessGraphTargetsRequest)(nil),  // 30: nokku.v1.ListAccessGraphTargetsRequest
+	(*ListAccessGraphTargetsResponse)(nil), // 31: nokku.v1.ListAccessGraphTargetsResponse
+	(*AccessGraphTarget)(nil),              // 32: nokku.v1.AccessGraphTarget
+	nil,                                    // 33: nokku.v1.Target.MetadataEntry
+	(*PrincipalUsers)(nil),                 // 34: nokku.v1.PrincipalUsers
+	(*Principal)(nil),                      // 35: nokku.v1.Principal
+	(*timestamppb.Timestamp)(nil),          // 36: google.protobuf.Timestamp
+	(*Daemon)(nil),                         // 37: nokku.v1.Daemon
+	(*CertificateAuthority)(nil),           // 38: nokku.v1.CertificateAuthority
+	(*User)(nil),                           // 39: nokku.v1.User
+	(*ServiceAccount)(nil),                 // 40: nokku.v1.ServiceAccount
+	(SubjectKind)(0),                       // 41: nokku.v1.SubjectKind
 }
 var file_nokku_v1_target_proto_depIdxs = []int32{
-	23, // 0: nokku.v1.GetTargetPrincipalsResponse.principals:type_name -> nokku.v1.PrincipalUsers
-	24, // 1: nokku.v1.Target.principals:type_name -> nokku.v1.Principal
-	22, // 2: nokku.v1.Target.metadata:type_name -> nokku.v1.Target.MetadataEntry
-	25, // 3: nokku.v1.Target.created_at:type_name -> google.protobuf.Timestamp
-	25, // 4: nokku.v1.Target.updated_at:type_name -> google.protobuf.Timestamp
+	34, // 0: nokku.v1.GetTargetPrincipalsResponse.principals:type_name -> nokku.v1.PrincipalUsers
+	35, // 1: nokku.v1.Target.principals:type_name -> nokku.v1.Principal
+	33, // 2: nokku.v1.Target.metadata:type_name -> nokku.v1.Target.MetadataEntry
+	36, // 3: nokku.v1.Target.created_at:type_name -> google.protobuf.Timestamp
+	36, // 4: nokku.v1.Target.updated_at:type_name -> google.protobuf.Timestamp
 	4,  // 5: nokku.v1.GetTargetResponse.target:type_name -> nokku.v1.Target
 	4,  // 6: nokku.v1.CreateTargetResponse.target:type_name -> nokku.v1.Target
 	4,  // 7: nokku.v1.UpdateTargetResponse.target:type_name -> nokku.v1.Target
 	4,  // 8: nokku.v1.ListTargetsResponse.targets:type_name -> nokku.v1.Target
 	4,  // 9: nokku.v1.GetSubjectAccessResponse.targets:type_name -> nokku.v1.Target
-	26, // 10: nokku.v1.GetSubjectAccessResponse.daemons:type_name -> nokku.v1.Daemon
-	27, // 11: nokku.v1.GetSubjectAccessResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
-	28, // 12: nokku.v1.GetMyAccessResponse.user:type_name -> nokku.v1.User
-	29, // 13: nokku.v1.GetMyAccessResponse.service_account:type_name -> nokku.v1.ServiceAccount
+	37, // 10: nokku.v1.GetSubjectAccessResponse.daemons:type_name -> nokku.v1.Daemon
+	38, // 11: nokku.v1.GetSubjectAccessResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
+	39, // 12: nokku.v1.GetMyAccessResponse.user:type_name -> nokku.v1.User
+	40, // 13: nokku.v1.GetMyAccessResponse.service_account:type_name -> nokku.v1.ServiceAccount
 	19, // 14: nokku.v1.GetMyAccessResponse.workspaces:type_name -> nokku.v1.WorkspaceAccess
 	4,  // 15: nokku.v1.WorkspaceAccess.targets:type_name -> nokku.v1.Target
-	27, // 16: nokku.v1.WorkspaceAccess.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
-	5,  // 17: nokku.v1.TargetService.GetTarget:input_type -> nokku.v1.GetTargetRequest
-	13, // 18: nokku.v1.TargetService.ListTargets:input_type -> nokku.v1.ListTargetsRequest
-	7,  // 19: nokku.v1.TargetService.CreateTarget:input_type -> nokku.v1.CreateTargetRequest
-	9,  // 20: nokku.v1.TargetService.UpdateTarget:input_type -> nokku.v1.UpdateTargetRequest
-	11, // 21: nokku.v1.TargetService.DeleteTarget:input_type -> nokku.v1.DeleteTargetRequest
-	15, // 22: nokku.v1.TargetService.GetSubjectAccess:input_type -> nokku.v1.GetSubjectAccessRequest
-	17, // 23: nokku.v1.TargetService.GetMyAccess:input_type -> nokku.v1.GetMyAccessRequest
-	20, // 24: nokku.v1.TargetService.GetTargetFilters:input_type -> nokku.v1.GetTargetFiltersRequest
-	0,  // 25: nokku.v1.TargetService.GetTargetPrincipals:input_type -> nokku.v1.GetTargetPrincipalsRequest
-	2,  // 26: nokku.v1.TargetService.SyncTargetUsers:input_type -> nokku.v1.SyncTargetUsersRequest
-	6,  // 27: nokku.v1.TargetService.GetTarget:output_type -> nokku.v1.GetTargetResponse
-	14, // 28: nokku.v1.TargetService.ListTargets:output_type -> nokku.v1.ListTargetsResponse
-	8,  // 29: nokku.v1.TargetService.CreateTarget:output_type -> nokku.v1.CreateTargetResponse
-	10, // 30: nokku.v1.TargetService.UpdateTarget:output_type -> nokku.v1.UpdateTargetResponse
-	12, // 31: nokku.v1.TargetService.DeleteTarget:output_type -> nokku.v1.DeleteTargetResponse
-	16, // 32: nokku.v1.TargetService.GetSubjectAccess:output_type -> nokku.v1.GetSubjectAccessResponse
-	18, // 33: nokku.v1.TargetService.GetMyAccess:output_type -> nokku.v1.GetMyAccessResponse
-	21, // 34: nokku.v1.TargetService.GetTargetFilters:output_type -> nokku.v1.GetTargetFiltersResponse
-	1,  // 35: nokku.v1.TargetService.GetTargetPrincipals:output_type -> nokku.v1.GetTargetPrincipalsResponse
-	3,  // 36: nokku.v1.TargetService.SyncTargetUsers:output_type -> nokku.v1.SyncTargetUsersResponse
-	27, // [27:37] is the sub-list for method output_type
-	17, // [17:27] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	38, // 16: nokku.v1.WorkspaceAccess.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
+	22, // 17: nokku.v1.GetAccessGraphRequest.filter:type_name -> nokku.v1.AccessGraphFilter
+	25, // 18: nokku.v1.GetAccessGraphResponse.subjects:type_name -> nokku.v1.AccessGraphSubject
+	26, // 19: nokku.v1.GetAccessGraphResponse.accounts:type_name -> nokku.v1.AccessGraphAccount
+	27, // 20: nokku.v1.GetAccessGraphResponse.tags:type_name -> nokku.v1.AccessGraphTag
+	28, // 21: nokku.v1.GetAccessGraphResponse.grants:type_name -> nokku.v1.AccessGraphGrant
+	29, // 22: nokku.v1.GetAccessGraphResponse.reach:type_name -> nokku.v1.AccessGraphReach
+	41, // 23: nokku.v1.AccessGraphSubject.kind:type_name -> nokku.v1.SubjectKind
+	22, // 24: nokku.v1.ListAccessGraphTargetsRequest.filter:type_name -> nokku.v1.AccessGraphFilter
+	32, // 25: nokku.v1.ListAccessGraphTargetsResponse.targets:type_name -> nokku.v1.AccessGraphTarget
+	5,  // 26: nokku.v1.TargetService.GetTarget:input_type -> nokku.v1.GetTargetRequest
+	13, // 27: nokku.v1.TargetService.ListTargets:input_type -> nokku.v1.ListTargetsRequest
+	7,  // 28: nokku.v1.TargetService.CreateTarget:input_type -> nokku.v1.CreateTargetRequest
+	9,  // 29: nokku.v1.TargetService.UpdateTarget:input_type -> nokku.v1.UpdateTargetRequest
+	11, // 30: nokku.v1.TargetService.DeleteTarget:input_type -> nokku.v1.DeleteTargetRequest
+	15, // 31: nokku.v1.TargetService.GetSubjectAccess:input_type -> nokku.v1.GetSubjectAccessRequest
+	17, // 32: nokku.v1.TargetService.GetMyAccess:input_type -> nokku.v1.GetMyAccessRequest
+	20, // 33: nokku.v1.TargetService.GetTargetFilters:input_type -> nokku.v1.GetTargetFiltersRequest
+	0,  // 34: nokku.v1.TargetService.GetTargetPrincipals:input_type -> nokku.v1.GetTargetPrincipalsRequest
+	2,  // 35: nokku.v1.TargetService.SyncTargetUsers:input_type -> nokku.v1.SyncTargetUsersRequest
+	23, // 36: nokku.v1.TargetService.GetAccessGraph:input_type -> nokku.v1.GetAccessGraphRequest
+	30, // 37: nokku.v1.TargetService.ListAccessGraphTargets:input_type -> nokku.v1.ListAccessGraphTargetsRequest
+	6,  // 38: nokku.v1.TargetService.GetTarget:output_type -> nokku.v1.GetTargetResponse
+	14, // 39: nokku.v1.TargetService.ListTargets:output_type -> nokku.v1.ListTargetsResponse
+	8,  // 40: nokku.v1.TargetService.CreateTarget:output_type -> nokku.v1.CreateTargetResponse
+	10, // 41: nokku.v1.TargetService.UpdateTarget:output_type -> nokku.v1.UpdateTargetResponse
+	12, // 42: nokku.v1.TargetService.DeleteTarget:output_type -> nokku.v1.DeleteTargetResponse
+	16, // 43: nokku.v1.TargetService.GetSubjectAccess:output_type -> nokku.v1.GetSubjectAccessResponse
+	18, // 44: nokku.v1.TargetService.GetMyAccess:output_type -> nokku.v1.GetMyAccessResponse
+	21, // 45: nokku.v1.TargetService.GetTargetFilters:output_type -> nokku.v1.GetTargetFiltersResponse
+	1,  // 46: nokku.v1.TargetService.GetTargetPrincipals:output_type -> nokku.v1.GetTargetPrincipalsResponse
+	3,  // 47: nokku.v1.TargetService.SyncTargetUsers:output_type -> nokku.v1.SyncTargetUsersResponse
+	24, // 48: nokku.v1.TargetService.GetAccessGraph:output_type -> nokku.v1.GetAccessGraphResponse
+	31, // 49: nokku.v1.TargetService.ListAccessGraphTargets:output_type -> nokku.v1.ListAccessGraphTargetsResponse
+	38, // [38:50] is the sub-list for method output_type
+	26, // [26:38] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_target_proto_init() }
@@ -1635,7 +2437,7 @@ func file_nokku_v1_target_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_nokku_v1_target_proto_rawDesc), len(file_nokku_v1_target_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   23,
+			NumMessages:   34,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
