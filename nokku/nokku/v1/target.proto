@@ -29,8 +29,9 @@ service TargetService {
   rpc DeleteTarget(DeleteTargetRequest) returns (DeleteTargetResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
+  // A member may only ask for itself. Viewers ask for anyone and also get the principals.
   rpc GetSubjectAccess(GetSubjectAccessRequest) returns (GetSubjectAccessResponse) {
-    option (access) = {role: WORKSPACE_ROLE_VIEWER};
+    option (access) = {role: WORKSPACE_ROLE_MEMBER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc GetMyAccess(GetMyAccessRequest) returns (GetMyAccessResponse) {
