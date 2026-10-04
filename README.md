@@ -41,17 +41,28 @@ protos.
 
 CI never sees the `go.work`. Each pipeline checks out one repo and uses the
 versions pinned in its `go.mod`. So a proto change that works locally fails
-CI until it is released. The same goes for `mon`, which nk and nokkud pin
-too:
+CI until it is pushed and pinned. The same goes for `mon`, which nk and
+nokkud pin too:
 
 1. Commit and push the proto change with its regenerated `gen/`.
-2. Tag it. Tags must be annotated: `git tag -a v0.x.y -m v0.x.y && git push --follow-tags`
-3. In each consumer: `go get github.com/nokku-sh/protos@v0.x.y`, and
-   `task gen` in nokku for the TS client.
+2. In nokku, pin the pushed commit and build the TS client:
+
+   ```bash
+   go get github.com/nokku-sh/protos@$(git -C ../protos rev-parse HEAD)
+   task gen
+   ```
+
+   nokkud and nk only need the `go get`, and only when they use what
+   changed.
+
+No tag is needed for that. Tag when binaries are published, so a release
+pins a version and not a commit. Tags must be annotated:
+`git tag -a v0.x.y -m v0.x.y && git push --follow-tags`, then
+`go get github.com/nokku-sh/protos@v0.x.y` in each consumer.
 
 To see what CI will see, run with `GOWORK=off`, for example
-`GOWORK=off go build ./...`. `go mod tidy` writes the same `go.mod` with or
-without the workspace.
+`GOWORK=off go build ./...`. `task lint` in nokku does that build.
+`go mod tidy` writes the same `go.mod` with or without the workspace.
 
 Right after a tag, `proxy.golang.org` can briefly answer "unknown revision",
 especially if something asked for the version before it existed. It clears
