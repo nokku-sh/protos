@@ -254,8 +254,13 @@ type CertificateAuthority struct {
 	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,23,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
 	UpdatedAt           *timestamppb.Timestamp `protobuf:"bytes,24,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty"`
 	AuthorityType       *AuthorityType         `protobuf:"varint,25,opt,name=authority_type,json=authorityType,enum=nokku.v1.AuthorityType" json:"authority_type,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// The key this CA had before its last rollover. Certificates it signed stay
+	// trusted until previous_trusted_until. Both are unset after an emergency
+	// rollover.
+	PreviousPublicKey    *string                `protobuf:"bytes,26,opt,name=previous_public_key,json=previousPublicKey" json:"previous_public_key,omitempty"`
+	PreviousTrustedUntil *timestamppb.Timestamp `protobuf:"bytes,27,opt,name=previous_trusted_until,json=previousTrustedUntil" json:"previous_trusted_until,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *CertificateAuthority) Reset() {
@@ -461,6 +466,20 @@ func (x *CertificateAuthority) GetAuthorityType() AuthorityType {
 		return *x.AuthorityType
 	}
 	return AuthorityType_AUTHORITY_TYPE_UNSPECIFIED
+}
+
+func (x *CertificateAuthority) GetPreviousPublicKey() string {
+	if x != nil && x.PreviousPublicKey != nil {
+		return *x.PreviousPublicKey
+	}
+	return ""
+}
+
+func (x *CertificateAuthority) GetPreviousTrustedUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.PreviousTrustedUntil
+	}
+	return nil
 }
 
 type CreateCertificateAuthorityRequest struct {
@@ -1128,13 +1147,15 @@ func (*DeleteCertificateAuthorityResponse) Descriptor() ([]byte, []int) {
 }
 
 type RolloverCertificateAuthorityRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Id            *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
-	KeyBits       *int32                 `protobuf:"varint,3,opt,name=key_bits,json=keyBits" json:"key_bits,omitempty"`
-	KeyType       *CertificateKeyType    `protobuf:"varint,4,opt,name=key_type,json=keyType,enum=nokku.v1.CertificateKeyType" json:"key_type,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
+	Id          *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
+	KeyBits     *int32                 `protobuf:"varint,3,opt,name=key_bits,json=keyBits" json:"key_bits,omitempty"`
+	KeyType     *CertificateKeyType    `protobuf:"varint,4,opt,name=key_type,json=keyType,enum=nokku.v1.CertificateKeyType" json:"key_type,omitempty"`
+	// Stop trusting the replaced key at once. For a key that may have leaked.
+	RevokePrevious *bool `protobuf:"varint,5,opt,name=revoke_previous,json=revokePrevious" json:"revoke_previous,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *RolloverCertificateAuthorityRequest) Reset() {
@@ -1193,6 +1214,13 @@ func (x *RolloverCertificateAuthorityRequest) GetKeyType() CertificateKeyType {
 		return *x.KeyType
 	}
 	return CertificateKeyType_CERTIFICATE_KEY_TYPE_UNSPECIFIED
+}
+
+func (x *RolloverCertificateAuthorityRequest) GetRevokePrevious() bool {
+	if x != nil && x.RevokePrevious != nil {
+		return *x.RevokePrevious
+	}
+	return false
 }
 
 type RolloverCertificateAuthorityResponse struct {
@@ -1547,7 +1575,7 @@ var File_nokku_v1_certificates_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\n" +
-	"\x1bnokku/v1/certificates.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x93\v\n" +
+	"\x1bnokku/v1/certificates.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x95\f\n" +
 	"\x14CertificateAuthority\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x12\n" +
@@ -1581,7 +1609,9 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"created_at\x18\x17 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\x18 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12>\n" +
-	"\x0eauthority_type\x18\x19 \x01(\x0e2\x17.nokku.v1.AuthorityTypeR\rauthorityType\x1aA\n" +
+	"\x0eauthority_type\x18\x19 \x01(\x0e2\x17.nokku.v1.AuthorityTypeR\rauthorityType\x12.\n" +
+	"\x13previous_public_key\x18\x1a \x01(\tR\x11previousPublicKey\x12P\n" +
+	"\x16previous_trusted_until\x18\x1b \x01(\v2\x1a.google.protobuf.TimestampR\x14previousTrustedUntil\x1aA\n" +
 	"\x13UserExtensionsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1aF\n" +
@@ -1658,12 +1688,13 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"!DeleteCertificateAuthorityRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
 	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"$\n" +
-	"\"DeleteCertificateAuthorityResponse\"\xc0\x01\n" +
+	"\"DeleteCertificateAuthorityResponse\"\xe9\x01\n" +
 	"#RolloverCertificateAuthorityRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
 	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x19\n" +
 	"\bkey_bits\x18\x03 \x01(\x05R\akeyBits\x127\n" +
-	"\bkey_type\x18\x04 \x01(\x0e2\x1c.nokku.v1.CertificateKeyTypeR\akeyType\"{\n" +
+	"\bkey_type\x18\x04 \x01(\x0e2\x1c.nokku.v1.CertificateKeyTypeR\akeyType\x12'\n" +
+	"\x0frevoke_previous\x18\x05 \x01(\bR\x0erevokePrevious\"{\n" +
 	"$RolloverCertificateAuthorityResponse\x12S\n" +
 	"\x15certificate_authority\x18\x01 \x01(\v2\x1e.nokku.v1.CertificateAuthorityR\x14certificateAuthority\"\x86\x03\n" +
 	"\x19SignSSHCertificateRequest\x12+\n" +
@@ -1784,57 +1815,58 @@ var file_nokku_v1_certificates_proto_depIdxs = []int32{
 	27, // 11: nokku.v1.CertificateAuthority.created_at:type_name -> google.protobuf.Timestamp
 	27, // 12: nokku.v1.CertificateAuthority.updated_at:type_name -> google.protobuf.Timestamp
 	1,  // 13: nokku.v1.CertificateAuthority.authority_type:type_name -> nokku.v1.AuthorityType
-	0,  // 14: nokku.v1.CreateCertificateAuthorityRequest.key_type:type_name -> nokku.v1.CertificateKeyType
-	0,  // 15: nokku.v1.CreateCertificateAuthorityRequest.allowed_key_types:type_name -> nokku.v1.CertificateKeyType
-	28, // 16: nokku.v1.CreateCertificateAuthorityRequest.lifetime:type_name -> google.protobuf.Duration
-	28, // 17: nokku.v1.CreateCertificateAuthorityRequest.user_default_ttl:type_name -> google.protobuf.Duration
-	28, // 18: nokku.v1.CreateCertificateAuthorityRequest.user_max_ttl:type_name -> google.protobuf.Duration
-	28, // 19: nokku.v1.CreateCertificateAuthorityRequest.host_default_ttl:type_name -> google.protobuf.Duration
-	28, // 20: nokku.v1.CreateCertificateAuthorityRequest.host_max_ttl:type_name -> google.protobuf.Duration
-	23, // 21: nokku.v1.CreateCertificateAuthorityRequest.user_extensions:type_name -> nokku.v1.CreateCertificateAuthorityRequest.UserExtensionsEntry
-	24, // 22: nokku.v1.CreateCertificateAuthorityRequest.user_critical_options:type_name -> nokku.v1.CreateCertificateAuthorityRequest.UserCriticalOptionsEntry
-	1,  // 23: nokku.v1.CreateCertificateAuthorityRequest.authority_type:type_name -> nokku.v1.AuthorityType
-	4,  // 24: nokku.v1.CreateCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
-	4,  // 25: nokku.v1.GetCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
-	4,  // 26: nokku.v1.ListCertificateAuthoritiesResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
-	0,  // 27: nokku.v1.UpdateCertificateAuthorityRequest.allowed_key_types:type_name -> nokku.v1.CertificateKeyType
-	28, // 28: nokku.v1.UpdateCertificateAuthorityRequest.lifetime:type_name -> google.protobuf.Duration
-	28, // 29: nokku.v1.UpdateCertificateAuthorityRequest.user_default_ttl:type_name -> google.protobuf.Duration
-	28, // 30: nokku.v1.UpdateCertificateAuthorityRequest.user_max_ttl:type_name -> google.protobuf.Duration
-	28, // 31: nokku.v1.UpdateCertificateAuthorityRequest.host_default_ttl:type_name -> google.protobuf.Duration
-	28, // 32: nokku.v1.UpdateCertificateAuthorityRequest.host_max_ttl:type_name -> google.protobuf.Duration
-	25, // 33: nokku.v1.UpdateCertificateAuthorityRequest.user_extensions:type_name -> nokku.v1.UpdateCertificateAuthorityRequest.UserExtensionsEntry
-	26, // 34: nokku.v1.UpdateCertificateAuthorityRequest.user_critical_options:type_name -> nokku.v1.UpdateCertificateAuthorityRequest.UserCriticalOptionsEntry
-	4,  // 35: nokku.v1.UpdateCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
-	0,  // 36: nokku.v1.RolloverCertificateAuthorityRequest.key_type:type_name -> nokku.v1.CertificateKeyType
-	4,  // 37: nokku.v1.RolloverCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
-	2,  // 38: nokku.v1.SignSSHCertificateRequest.type:type_name -> nokku.v1.SignSSHCertificateRequest.CertificateType
-	28, // 39: nokku.v1.SignSSHCertificateRequest.ttl:type_name -> google.protobuf.Duration
-	27, // 40: nokku.v1.SignSSHCertificateResponse.expires_at:type_name -> google.protobuf.Timestamp
-	3,  // 41: nokku.v1.SignX509CertificateRequest.usage:type_name -> nokku.v1.SignX509CertificateRequest.X509Usage
-	28, // 42: nokku.v1.SignX509CertificateRequest.ttl:type_name -> google.protobuf.Duration
-	27, // 43: nokku.v1.SignX509CertificateResponse.expires_at:type_name -> google.protobuf.Timestamp
-	7,  // 44: nokku.v1.CertificateService.GetCertificateAuthority:input_type -> nokku.v1.GetCertificateAuthorityRequest
-	5,  // 45: nokku.v1.CertificateService.CreateCertificateAuthority:input_type -> nokku.v1.CreateCertificateAuthorityRequest
-	11, // 46: nokku.v1.CertificateService.UpdateCertificateAuthority:input_type -> nokku.v1.UpdateCertificateAuthorityRequest
-	9,  // 47: nokku.v1.CertificateService.ListCertificateAuthorities:input_type -> nokku.v1.ListCertificateAuthoritiesRequest
-	13, // 48: nokku.v1.CertificateService.DeleteCertificateAuthority:input_type -> nokku.v1.DeleteCertificateAuthorityRequest
-	15, // 49: nokku.v1.CertificateService.RolloverCertificateAuthority:input_type -> nokku.v1.RolloverCertificateAuthorityRequest
-	17, // 50: nokku.v1.CertificateService.SignSSHCertificate:input_type -> nokku.v1.SignSSHCertificateRequest
-	19, // 51: nokku.v1.CertificateService.SignX509Certificate:input_type -> nokku.v1.SignX509CertificateRequest
-	8,  // 52: nokku.v1.CertificateService.GetCertificateAuthority:output_type -> nokku.v1.GetCertificateAuthorityResponse
-	6,  // 53: nokku.v1.CertificateService.CreateCertificateAuthority:output_type -> nokku.v1.CreateCertificateAuthorityResponse
-	12, // 54: nokku.v1.CertificateService.UpdateCertificateAuthority:output_type -> nokku.v1.UpdateCertificateAuthorityResponse
-	10, // 55: nokku.v1.CertificateService.ListCertificateAuthorities:output_type -> nokku.v1.ListCertificateAuthoritiesResponse
-	14, // 56: nokku.v1.CertificateService.DeleteCertificateAuthority:output_type -> nokku.v1.DeleteCertificateAuthorityResponse
-	16, // 57: nokku.v1.CertificateService.RolloverCertificateAuthority:output_type -> nokku.v1.RolloverCertificateAuthorityResponse
-	18, // 58: nokku.v1.CertificateService.SignSSHCertificate:output_type -> nokku.v1.SignSSHCertificateResponse
-	20, // 59: nokku.v1.CertificateService.SignX509Certificate:output_type -> nokku.v1.SignX509CertificateResponse
-	52, // [52:60] is the sub-list for method output_type
-	44, // [44:52] is the sub-list for method input_type
-	44, // [44:44] is the sub-list for extension type_name
-	44, // [44:44] is the sub-list for extension extendee
-	0,  // [0:44] is the sub-list for field type_name
+	27, // 14: nokku.v1.CertificateAuthority.previous_trusted_until:type_name -> google.protobuf.Timestamp
+	0,  // 15: nokku.v1.CreateCertificateAuthorityRequest.key_type:type_name -> nokku.v1.CertificateKeyType
+	0,  // 16: nokku.v1.CreateCertificateAuthorityRequest.allowed_key_types:type_name -> nokku.v1.CertificateKeyType
+	28, // 17: nokku.v1.CreateCertificateAuthorityRequest.lifetime:type_name -> google.protobuf.Duration
+	28, // 18: nokku.v1.CreateCertificateAuthorityRequest.user_default_ttl:type_name -> google.protobuf.Duration
+	28, // 19: nokku.v1.CreateCertificateAuthorityRequest.user_max_ttl:type_name -> google.protobuf.Duration
+	28, // 20: nokku.v1.CreateCertificateAuthorityRequest.host_default_ttl:type_name -> google.protobuf.Duration
+	28, // 21: nokku.v1.CreateCertificateAuthorityRequest.host_max_ttl:type_name -> google.protobuf.Duration
+	23, // 22: nokku.v1.CreateCertificateAuthorityRequest.user_extensions:type_name -> nokku.v1.CreateCertificateAuthorityRequest.UserExtensionsEntry
+	24, // 23: nokku.v1.CreateCertificateAuthorityRequest.user_critical_options:type_name -> nokku.v1.CreateCertificateAuthorityRequest.UserCriticalOptionsEntry
+	1,  // 24: nokku.v1.CreateCertificateAuthorityRequest.authority_type:type_name -> nokku.v1.AuthorityType
+	4,  // 25: nokku.v1.CreateCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
+	4,  // 26: nokku.v1.GetCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
+	4,  // 27: nokku.v1.ListCertificateAuthoritiesResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
+	0,  // 28: nokku.v1.UpdateCertificateAuthorityRequest.allowed_key_types:type_name -> nokku.v1.CertificateKeyType
+	28, // 29: nokku.v1.UpdateCertificateAuthorityRequest.lifetime:type_name -> google.protobuf.Duration
+	28, // 30: nokku.v1.UpdateCertificateAuthorityRequest.user_default_ttl:type_name -> google.protobuf.Duration
+	28, // 31: nokku.v1.UpdateCertificateAuthorityRequest.user_max_ttl:type_name -> google.protobuf.Duration
+	28, // 32: nokku.v1.UpdateCertificateAuthorityRequest.host_default_ttl:type_name -> google.protobuf.Duration
+	28, // 33: nokku.v1.UpdateCertificateAuthorityRequest.host_max_ttl:type_name -> google.protobuf.Duration
+	25, // 34: nokku.v1.UpdateCertificateAuthorityRequest.user_extensions:type_name -> nokku.v1.UpdateCertificateAuthorityRequest.UserExtensionsEntry
+	26, // 35: nokku.v1.UpdateCertificateAuthorityRequest.user_critical_options:type_name -> nokku.v1.UpdateCertificateAuthorityRequest.UserCriticalOptionsEntry
+	4,  // 36: nokku.v1.UpdateCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
+	0,  // 37: nokku.v1.RolloverCertificateAuthorityRequest.key_type:type_name -> nokku.v1.CertificateKeyType
+	4,  // 38: nokku.v1.RolloverCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
+	2,  // 39: nokku.v1.SignSSHCertificateRequest.type:type_name -> nokku.v1.SignSSHCertificateRequest.CertificateType
+	28, // 40: nokku.v1.SignSSHCertificateRequest.ttl:type_name -> google.protobuf.Duration
+	27, // 41: nokku.v1.SignSSHCertificateResponse.expires_at:type_name -> google.protobuf.Timestamp
+	3,  // 42: nokku.v1.SignX509CertificateRequest.usage:type_name -> nokku.v1.SignX509CertificateRequest.X509Usage
+	28, // 43: nokku.v1.SignX509CertificateRequest.ttl:type_name -> google.protobuf.Duration
+	27, // 44: nokku.v1.SignX509CertificateResponse.expires_at:type_name -> google.protobuf.Timestamp
+	7,  // 45: nokku.v1.CertificateService.GetCertificateAuthority:input_type -> nokku.v1.GetCertificateAuthorityRequest
+	5,  // 46: nokku.v1.CertificateService.CreateCertificateAuthority:input_type -> nokku.v1.CreateCertificateAuthorityRequest
+	11, // 47: nokku.v1.CertificateService.UpdateCertificateAuthority:input_type -> nokku.v1.UpdateCertificateAuthorityRequest
+	9,  // 48: nokku.v1.CertificateService.ListCertificateAuthorities:input_type -> nokku.v1.ListCertificateAuthoritiesRequest
+	13, // 49: nokku.v1.CertificateService.DeleteCertificateAuthority:input_type -> nokku.v1.DeleteCertificateAuthorityRequest
+	15, // 50: nokku.v1.CertificateService.RolloverCertificateAuthority:input_type -> nokku.v1.RolloverCertificateAuthorityRequest
+	17, // 51: nokku.v1.CertificateService.SignSSHCertificate:input_type -> nokku.v1.SignSSHCertificateRequest
+	19, // 52: nokku.v1.CertificateService.SignX509Certificate:input_type -> nokku.v1.SignX509CertificateRequest
+	8,  // 53: nokku.v1.CertificateService.GetCertificateAuthority:output_type -> nokku.v1.GetCertificateAuthorityResponse
+	6,  // 54: nokku.v1.CertificateService.CreateCertificateAuthority:output_type -> nokku.v1.CreateCertificateAuthorityResponse
+	12, // 55: nokku.v1.CertificateService.UpdateCertificateAuthority:output_type -> nokku.v1.UpdateCertificateAuthorityResponse
+	10, // 56: nokku.v1.CertificateService.ListCertificateAuthorities:output_type -> nokku.v1.ListCertificateAuthoritiesResponse
+	14, // 57: nokku.v1.CertificateService.DeleteCertificateAuthority:output_type -> nokku.v1.DeleteCertificateAuthorityResponse
+	16, // 58: nokku.v1.CertificateService.RolloverCertificateAuthority:output_type -> nokku.v1.RolloverCertificateAuthorityResponse
+	18, // 59: nokku.v1.CertificateService.SignSSHCertificate:output_type -> nokku.v1.SignSSHCertificateResponse
+	20, // 60: nokku.v1.CertificateService.SignX509Certificate:output_type -> nokku.v1.SignX509CertificateResponse
+	53, // [53:61] is the sub-list for method output_type
+	45, // [45:53] is the sub-list for method input_type
+	45, // [45:45] is the sub-list for extension type_name
+	45, // [45:45] is the sub-list for extension extendee
+	0,  // [0:45] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_certificates_proto_init() }

@@ -85,7 +85,6 @@ message DaemonConfig {
   bool allow_forwarding = 2;
   bool allow_agent_forwarding = 3;
   bool gateway_ports = 4;
-  bool drop_retired_ca = 5;
 }
 
 message GetDaemonRequest {
@@ -201,6 +200,13 @@ message SyncDaemonResponse {
   repeated PrincipalUsers principals = 3;
   int64 state_version = 4;
   string ca_public_key = 5;
+  // Keys the daemon trusts next to ca_public_key, each until its deadline.
+  repeated RetiredCAKey retired_ca_keys = 6;
+}
+
+message RetiredCAKey {
+  string public_key = 1;
+  google.protobuf.Timestamp trusted_until = 2;
 }
 
 // Control Stream -------------------------------------------------------------

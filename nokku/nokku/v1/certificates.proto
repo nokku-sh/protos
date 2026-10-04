@@ -82,6 +82,11 @@ message CertificateAuthority {
   google.protobuf.Timestamp created_at = 23;
   google.protobuf.Timestamp updated_at = 24;
   AuthorityType authority_type = 25;
+  // The key this CA had before its last rollover. Certificates it signed stay
+  // trusted until previous_trusted_until. Both are unset after an emergency
+  // rollover.
+  string previous_public_key = 26;
+  google.protobuf.Timestamp previous_trusted_until = 27;
 }
 
 message CreateCertificateAuthorityRequest {
@@ -190,6 +195,8 @@ message RolloverCertificateAuthorityRequest {
   string id = 2 [(buf.validate.field).string.uuid = true];
   int32 key_bits = 3;
   CertificateKeyType key_type = 4;
+  // Stop trusting the replaced key at once. For a key that may have leaked.
+  bool revoke_previous = 5;
 }
 message RolloverCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;

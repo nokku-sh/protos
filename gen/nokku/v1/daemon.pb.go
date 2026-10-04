@@ -197,7 +197,6 @@ type DaemonConfig struct {
 	AllowForwarding      *bool                  `protobuf:"varint,2,opt,name=allow_forwarding,json=allowForwarding" json:"allow_forwarding,omitempty"`
 	AllowAgentForwarding *bool                  `protobuf:"varint,3,opt,name=allow_agent_forwarding,json=allowAgentForwarding" json:"allow_agent_forwarding,omitempty"`
 	GatewayPorts         *bool                  `protobuf:"varint,4,opt,name=gateway_ports,json=gatewayPorts" json:"gateway_ports,omitempty"`
-	DropRetiredCa        *bool                  `protobuf:"varint,5,opt,name=drop_retired_ca,json=dropRetiredCa" json:"drop_retired_ca,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -256,13 +255,6 @@ func (x *DaemonConfig) GetAllowAgentForwarding() bool {
 func (x *DaemonConfig) GetGatewayPorts() bool {
 	if x != nil && x.GatewayPorts != nil {
 		return *x.GatewayPorts
-	}
-	return false
-}
-
-func (x *DaemonConfig) GetDropRetiredCa() bool {
-	if x != nil && x.DropRetiredCa != nil {
-		return *x.DropRetiredCa
 	}
 	return false
 }
@@ -1244,12 +1236,14 @@ func (x *SyncDaemonRequest) GetMetadata() map[string]string {
 }
 
 type SyncDaemonResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        *DaemonStatus          `protobuf:"varint,1,opt,name=status,enum=nokku.v1.DaemonStatus" json:"status,omitempty"`
-	Config        *DaemonConfig          `protobuf:"bytes,2,opt,name=config" json:"config,omitempty"`
-	Principals    []*PrincipalUsers      `protobuf:"bytes,3,rep,name=principals" json:"principals,omitempty"`
-	StateVersion  *int64                 `protobuf:"varint,4,opt,name=state_version,json=stateVersion" json:"state_version,omitempty"`
-	CaPublicKey   *string                `protobuf:"bytes,5,opt,name=ca_public_key,json=caPublicKey" json:"ca_public_key,omitempty"`
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	Status       *DaemonStatus          `protobuf:"varint,1,opt,name=status,enum=nokku.v1.DaemonStatus" json:"status,omitempty"`
+	Config       *DaemonConfig          `protobuf:"bytes,2,opt,name=config" json:"config,omitempty"`
+	Principals   []*PrincipalUsers      `protobuf:"bytes,3,rep,name=principals" json:"principals,omitempty"`
+	StateVersion *int64                 `protobuf:"varint,4,opt,name=state_version,json=stateVersion" json:"state_version,omitempty"`
+	CaPublicKey  *string                `protobuf:"bytes,5,opt,name=ca_public_key,json=caPublicKey" json:"ca_public_key,omitempty"`
+	// Keys the daemon trusts next to ca_public_key, each until its deadline.
+	RetiredCaKeys []*RetiredCAKey `protobuf:"bytes,6,rep,name=retired_ca_keys,json=retiredCaKeys" json:"retired_ca_keys,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1319,6 +1313,65 @@ func (x *SyncDaemonResponse) GetCaPublicKey() string {
 	return ""
 }
 
+func (x *SyncDaemonResponse) GetRetiredCaKeys() []*RetiredCAKey {
+	if x != nil {
+		return x.RetiredCaKeys
+	}
+	return nil
+}
+
+type RetiredCAKey struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PublicKey     *string                `protobuf:"bytes,1,opt,name=public_key,json=publicKey" json:"public_key,omitempty"`
+	TrustedUntil  *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=trusted_until,json=trustedUntil" json:"trusted_until,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RetiredCAKey) Reset() {
+	*x = RetiredCAKey{}
+	mi := &file_nokku_v1_daemon_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RetiredCAKey) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RetiredCAKey) ProtoMessage() {}
+
+func (x *RetiredCAKey) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_daemon_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RetiredCAKey.ProtoReflect.Descriptor instead.
+func (*RetiredCAKey) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *RetiredCAKey) GetPublicKey() string {
+	if x != nil && x.PublicKey != nil {
+		return *x.PublicKey
+	}
+	return ""
+}
+
+func (x *RetiredCAKey) GetTrustedUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.TrustedUntil
+	}
+	return nil
+}
+
 type ConnectRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Msg:
@@ -1331,7 +1384,7 @@ type ConnectRequest struct {
 
 func (x *ConnectRequest) Reset() {
 	*x = ConnectRequest{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[21]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1343,7 +1396,7 @@ func (x *ConnectRequest) String() string {
 func (*ConnectRequest) ProtoMessage() {}
 
 func (x *ConnectRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[21]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1356,7 +1409,7 @@ func (x *ConnectRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConnectRequest.ProtoReflect.Descriptor instead.
 func (*ConnectRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{21}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ConnectRequest) GetMsg() isConnectRequest_Msg {
@@ -1398,7 +1451,7 @@ type ConnectResponse struct {
 
 func (x *ConnectResponse) Reset() {
 	*x = ConnectResponse{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[22]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1410,7 +1463,7 @@ func (x *ConnectResponse) String() string {
 func (*ConnectResponse) ProtoMessage() {}
 
 func (x *ConnectResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[22]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1423,7 +1476,7 @@ func (x *ConnectResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConnectResponse.ProtoReflect.Descriptor instead.
 func (*ConnectResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{22}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ConnectResponse) GetMsg() isConnectResponse_Msg {
@@ -1476,7 +1529,7 @@ type Heartbeat struct {
 
 func (x *Heartbeat) Reset() {
 	*x = Heartbeat{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[23]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1488,7 +1541,7 @@ func (x *Heartbeat) String() string {
 func (*Heartbeat) ProtoMessage() {}
 
 func (x *Heartbeat) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[23]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1501,7 +1554,7 @@ func (x *Heartbeat) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Heartbeat.ProtoReflect.Descriptor instead.
 func (*Heartbeat) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{23}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *Heartbeat) GetStateVersion() int64 {
@@ -1520,7 +1573,7 @@ type StateUpdate struct {
 
 func (x *StateUpdate) Reset() {
 	*x = StateUpdate{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[24]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1532,7 +1585,7 @@ func (x *StateUpdate) String() string {
 func (*StateUpdate) ProtoMessage() {}
 
 func (x *StateUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[24]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1545,7 +1598,7 @@ func (x *StateUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateUpdate.ProtoReflect.Descriptor instead.
 func (*StateUpdate) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{24}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{25}
 }
 
 type DaemonSession struct {
@@ -1559,7 +1612,7 @@ type DaemonSession struct {
 
 func (x *DaemonSession) Reset() {
 	*x = DaemonSession{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[25]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1571,7 +1624,7 @@ func (x *DaemonSession) String() string {
 func (*DaemonSession) ProtoMessage() {}
 
 func (x *DaemonSession) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[25]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1584,7 +1637,7 @@ func (x *DaemonSession) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DaemonSession.ProtoReflect.Descriptor instead.
 func (*DaemonSession) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{25}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *DaemonSession) GetSessionId() string {
@@ -1617,7 +1670,7 @@ type RelayOpen struct {
 
 func (x *RelayOpen) Reset() {
 	*x = RelayOpen{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[26]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1629,7 +1682,7 @@ func (x *RelayOpen) String() string {
 func (*RelayOpen) ProtoMessage() {}
 
 func (x *RelayOpen) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[26]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1642,7 +1695,7 @@ func (x *RelayOpen) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayOpen.ProtoReflect.Descriptor instead.
 func (*RelayOpen) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{26}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *RelayOpen) GetRelayId() string {
@@ -1662,7 +1715,7 @@ type RelayStart struct {
 
 func (x *RelayStart) Reset() {
 	*x = RelayStart{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[27]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1674,7 +1727,7 @@ func (x *RelayStart) String() string {
 func (*RelayStart) ProtoMessage() {}
 
 func (x *RelayStart) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[27]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1687,7 +1740,7 @@ func (x *RelayStart) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayStart.ProtoReflect.Descriptor instead.
 func (*RelayStart) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{27}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *RelayStart) GetWorkspaceId() string {
@@ -1717,7 +1770,7 @@ type RelayRequest struct {
 
 func (x *RelayRequest) Reset() {
 	*x = RelayRequest{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[28]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1729,7 +1782,7 @@ func (x *RelayRequest) String() string {
 func (*RelayRequest) ProtoMessage() {}
 
 func (x *RelayRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[28]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1742,7 +1795,7 @@ func (x *RelayRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayRequest.ProtoReflect.Descriptor instead.
 func (*RelayRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{28}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *RelayRequest) GetMsg() isRelayRequest_Msg {
@@ -1795,7 +1848,7 @@ type RelayReady struct {
 
 func (x *RelayReady) Reset() {
 	*x = RelayReady{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[29]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1807,7 +1860,7 @@ func (x *RelayReady) String() string {
 func (*RelayReady) ProtoMessage() {}
 
 func (x *RelayReady) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[29]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1820,7 +1873,7 @@ func (x *RelayReady) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayReady.ProtoReflect.Descriptor instead.
 func (*RelayReady) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{29}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *RelayReady) GetRelayId() string {
@@ -1844,7 +1897,7 @@ type RelayResponse struct {
 
 func (x *RelayResponse) Reset() {
 	*x = RelayResponse{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[30]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1856,7 +1909,7 @@ func (x *RelayResponse) String() string {
 func (*RelayResponse) ProtoMessage() {}
 
 func (x *RelayResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[30]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1869,7 +1922,7 @@ func (x *RelayResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayResponse.ProtoReflect.Descriptor instead.
 func (*RelayResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{30}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *RelayResponse) GetMsg() isRelayResponse_Msg {
@@ -1936,7 +1989,7 @@ type RelayClosed struct {
 
 func (x *RelayClosed) Reset() {
 	*x = RelayClosed{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[31]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1948,7 +2001,7 @@ func (x *RelayClosed) String() string {
 func (*RelayClosed) ProtoMessage() {}
 
 func (x *RelayClosed) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[31]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1961,7 +2014,7 @@ func (x *RelayClosed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayClosed.ProtoReflect.Descriptor instead.
 func (*RelayClosed) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{31}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{32}
 }
 
 type DaemonRelayRequest struct {
@@ -1978,7 +2031,7 @@ type DaemonRelayRequest struct {
 
 func (x *DaemonRelayRequest) Reset() {
 	*x = DaemonRelayRequest{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[32]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1990,7 +2043,7 @@ func (x *DaemonRelayRequest) String() string {
 func (*DaemonRelayRequest) ProtoMessage() {}
 
 func (x *DaemonRelayRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[32]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2003,7 +2056,7 @@ func (x *DaemonRelayRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DaemonRelayRequest.ProtoReflect.Descriptor instead.
 func (*DaemonRelayRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{32}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *DaemonRelayRequest) GetMsg() isDaemonRelayRequest_Msg {
@@ -2075,7 +2128,7 @@ type DaemonRelayResponse struct {
 
 func (x *DaemonRelayResponse) Reset() {
 	*x = DaemonRelayResponse{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[33]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2087,7 +2140,7 @@ func (x *DaemonRelayResponse) String() string {
 func (*DaemonRelayResponse) ProtoMessage() {}
 
 func (x *DaemonRelayResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[33]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2100,7 +2153,7 @@ func (x *DaemonRelayResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DaemonRelayResponse.ProtoReflect.Descriptor instead.
 func (*DaemonRelayResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{33}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *DaemonRelayResponse) GetMsg() isDaemonRelayResponse_Msg {
@@ -2153,7 +2206,7 @@ type DaemonRelayReady struct {
 
 func (x *DaemonRelayReady) Reset() {
 	*x = DaemonRelayReady{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[34]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2165,7 +2218,7 @@ func (x *DaemonRelayReady) String() string {
 func (*DaemonRelayReady) ProtoMessage() {}
 
 func (x *DaemonRelayReady) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[34]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2178,7 +2231,7 @@ func (x *DaemonRelayReady) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DaemonRelayReady.ProtoReflect.Descriptor instead.
 func (*DaemonRelayReady) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{34}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *DaemonRelayReady) GetRelayId() string {
@@ -2196,7 +2249,7 @@ type DaemonRelayClosed struct {
 
 func (x *DaemonRelayClosed) Reset() {
 	*x = DaemonRelayClosed{}
-	mi := &file_nokku_v1_daemon_proto_msgTypes[35]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2208,7 +2261,7 @@ func (x *DaemonRelayClosed) String() string {
 func (*DaemonRelayClosed) ProtoMessage() {}
 
 func (x *DaemonRelayClosed) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_daemon_proto_msgTypes[35]
+	mi := &file_nokku_v1_daemon_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2221,7 +2274,7 @@ func (x *DaemonRelayClosed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DaemonRelayClosed.ProtoReflect.Descriptor instead.
 func (*DaemonRelayClosed) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{35}
+	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{36}
 }
 
 var File_nokku_v1_daemon_proto protoreflect.FileDescriptor
@@ -2246,13 +2299,12 @@ const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"lastSeenAt\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xe5\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xbd\x01\n" +
 	"\fDaemonConfig\x12'\n" +
 	"\x0frecord_sessions\x18\x01 \x01(\bR\x0erecordSessions\x12)\n" +
 	"\x10allow_forwarding\x18\x02 \x01(\bR\x0fallowForwarding\x124\n" +
 	"\x16allow_agent_forwarding\x18\x03 \x01(\bR\x14allowAgentForwarding\x12#\n" +
-	"\rgateway_ports\x18\x04 \x01(\bR\fgatewayPorts\x12&\n" +
-	"\x0fdrop_retired_ca\x18\x05 \x01(\bR\rdropRetiredCa\"Y\n" +
+	"\rgateway_ports\x18\x04 \x01(\bR\fgatewayPorts\"Y\n" +
 	"\x10GetDaemonRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
 	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"=\n" +
@@ -2319,7 +2371,7 @@ const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"\bmetadata\x18\x03 \x03(\v2).nokku.v1.SyncDaemonRequest.MetadataEntryR\bmetadata\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xf7\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xb7\x02\n" +
 	"\x12SyncDaemonResponse\x12.\n" +
 	"\x06status\x18\x01 \x01(\x0e2\x16.nokku.v1.DaemonStatusR\x06status\x12.\n" +
 	"\x06config\x18\x02 \x01(\v2\x16.nokku.v1.DaemonConfigR\x06config\x128\n" +
@@ -2327,7 +2379,12 @@ const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"principals\x18\x03 \x03(\v2\x18.nokku.v1.PrincipalUsersR\n" +
 	"principals\x12#\n" +
 	"\rstate_version\x18\x04 \x01(\x03R\fstateVersion\x12\"\n" +
-	"\rca_public_key\x18\x05 \x01(\tR\vcaPublicKey\"L\n" +
+	"\rca_public_key\x18\x05 \x01(\tR\vcaPublicKey\x12>\n" +
+	"\x0fretired_ca_keys\x18\x06 \x03(\v2\x16.nokku.v1.RetiredCAKeyR\rretiredCaKeys\"n\n" +
+	"\fRetiredCAKey\x12\x1d\n" +
+	"\n" +
+	"public_key\x18\x01 \x01(\tR\tpublicKey\x12?\n" +
+	"\rtrusted_until\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\ftrustedUntil\"L\n" +
 	"\x0eConnectRequest\x123\n" +
 	"\theartbeat\x18\x01 \x01(\v2\x13.nokku.v1.HeartbeatH\x00R\theartbeatB\x05\n" +
 	"\x03msg\"\x8a\x01\n" +
@@ -2411,7 +2468,7 @@ func file_nokku_v1_daemon_proto_rawDescGZIP() []byte {
 }
 
 var file_nokku_v1_daemon_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_nokku_v1_daemon_proto_msgTypes = make([]protoimpl.MessageInfo, 38)
+var file_nokku_v1_daemon_proto_msgTypes = make([]protoimpl.MessageInfo, 39)
 var file_nokku_v1_daemon_proto_goTypes = []any{
 	(DaemonStatus)(0),             // 0: nokku.v1.DaemonStatus
 	(*Daemon)(nil),                // 1: nokku.v1.Daemon
@@ -2435,83 +2492,86 @@ var file_nokku_v1_daemon_proto_goTypes = []any{
 	(*PrincipalUsers)(nil),        // 19: nokku.v1.PrincipalUsers
 	(*SyncDaemonRequest)(nil),     // 20: nokku.v1.SyncDaemonRequest
 	(*SyncDaemonResponse)(nil),    // 21: nokku.v1.SyncDaemonResponse
-	(*ConnectRequest)(nil),        // 22: nokku.v1.ConnectRequest
-	(*ConnectResponse)(nil),       // 23: nokku.v1.ConnectResponse
-	(*Heartbeat)(nil),             // 24: nokku.v1.Heartbeat
-	(*StateUpdate)(nil),           // 25: nokku.v1.StateUpdate
-	(*DaemonSession)(nil),         // 26: nokku.v1.DaemonSession
-	(*RelayOpen)(nil),             // 27: nokku.v1.RelayOpen
-	(*RelayStart)(nil),            // 28: nokku.v1.RelayStart
-	(*RelayRequest)(nil),          // 29: nokku.v1.RelayRequest
-	(*RelayReady)(nil),            // 30: nokku.v1.RelayReady
-	(*RelayResponse)(nil),         // 31: nokku.v1.RelayResponse
-	(*RelayClosed)(nil),           // 32: nokku.v1.RelayClosed
-	(*DaemonRelayRequest)(nil),    // 33: nokku.v1.DaemonRelayRequest
-	(*DaemonRelayResponse)(nil),   // 34: nokku.v1.DaemonRelayResponse
-	(*DaemonRelayReady)(nil),      // 35: nokku.v1.DaemonRelayReady
-	(*DaemonRelayClosed)(nil),     // 36: nokku.v1.DaemonRelayClosed
-	nil,                           // 37: nokku.v1.Daemon.MetadataEntry
-	nil,                           // 38: nokku.v1.SyncDaemonRequest.MetadataEntry
-	(*timestamppb.Timestamp)(nil), // 39: google.protobuf.Timestamp
+	(*RetiredCAKey)(nil),          // 22: nokku.v1.RetiredCAKey
+	(*ConnectRequest)(nil),        // 23: nokku.v1.ConnectRequest
+	(*ConnectResponse)(nil),       // 24: nokku.v1.ConnectResponse
+	(*Heartbeat)(nil),             // 25: nokku.v1.Heartbeat
+	(*StateUpdate)(nil),           // 26: nokku.v1.StateUpdate
+	(*DaemonSession)(nil),         // 27: nokku.v1.DaemonSession
+	(*RelayOpen)(nil),             // 28: nokku.v1.RelayOpen
+	(*RelayStart)(nil),            // 29: nokku.v1.RelayStart
+	(*RelayRequest)(nil),          // 30: nokku.v1.RelayRequest
+	(*RelayReady)(nil),            // 31: nokku.v1.RelayReady
+	(*RelayResponse)(nil),         // 32: nokku.v1.RelayResponse
+	(*RelayClosed)(nil),           // 33: nokku.v1.RelayClosed
+	(*DaemonRelayRequest)(nil),    // 34: nokku.v1.DaemonRelayRequest
+	(*DaemonRelayResponse)(nil),   // 35: nokku.v1.DaemonRelayResponse
+	(*DaemonRelayReady)(nil),      // 36: nokku.v1.DaemonRelayReady
+	(*DaemonRelayClosed)(nil),     // 37: nokku.v1.DaemonRelayClosed
+	nil,                           // 38: nokku.v1.Daemon.MetadataEntry
+	nil,                           // 39: nokku.v1.SyncDaemonRequest.MetadataEntry
+	(*timestamppb.Timestamp)(nil), // 40: google.protobuf.Timestamp
 }
 var file_nokku_v1_daemon_proto_depIdxs = []int32{
 	0,  // 0: nokku.v1.Daemon.status:type_name -> nokku.v1.DaemonStatus
 	2,  // 1: nokku.v1.Daemon.config:type_name -> nokku.v1.DaemonConfig
-	37, // 2: nokku.v1.Daemon.metadata:type_name -> nokku.v1.Daemon.MetadataEntry
-	39, // 3: nokku.v1.Daemon.updated_at:type_name -> google.protobuf.Timestamp
-	39, // 4: nokku.v1.Daemon.created_at:type_name -> google.protobuf.Timestamp
-	39, // 5: nokku.v1.Daemon.last_seen_at:type_name -> google.protobuf.Timestamp
+	38, // 2: nokku.v1.Daemon.metadata:type_name -> nokku.v1.Daemon.MetadataEntry
+	40, // 3: nokku.v1.Daemon.updated_at:type_name -> google.protobuf.Timestamp
+	40, // 4: nokku.v1.Daemon.created_at:type_name -> google.protobuf.Timestamp
+	40, // 5: nokku.v1.Daemon.last_seen_at:type_name -> google.protobuf.Timestamp
 	1,  // 6: nokku.v1.GetDaemonResponse.daemon:type_name -> nokku.v1.Daemon
 	0,  // 7: nokku.v1.UpdateDaemonRequest.status:type_name -> nokku.v1.DaemonStatus
 	2,  // 8: nokku.v1.UpdateDaemonRequest.config:type_name -> nokku.v1.DaemonConfig
 	0,  // 9: nokku.v1.ListDaemonsRequest.status:type_name -> nokku.v1.DaemonStatus
 	1,  // 10: nokku.v1.ListDaemonsResponse.daemons:type_name -> nokku.v1.Daemon
-	26, // 11: nokku.v1.CreateSessionResponse.session:type_name -> nokku.v1.DaemonSession
-	26, // 12: nokku.v1.ListSessionsResponse.sessions:type_name -> nokku.v1.DaemonSession
+	27, // 11: nokku.v1.CreateSessionResponse.session:type_name -> nokku.v1.DaemonSession
+	27, // 12: nokku.v1.ListSessionsResponse.sessions:type_name -> nokku.v1.DaemonSession
 	0,  // 13: nokku.v1.EnrollDaemonResponse.status:type_name -> nokku.v1.DaemonStatus
 	2,  // 14: nokku.v1.EnrollDaemonResponse.config:type_name -> nokku.v1.DaemonConfig
-	38, // 15: nokku.v1.SyncDaemonRequest.metadata:type_name -> nokku.v1.SyncDaemonRequest.MetadataEntry
+	39, // 15: nokku.v1.SyncDaemonRequest.metadata:type_name -> nokku.v1.SyncDaemonRequest.MetadataEntry
 	0,  // 16: nokku.v1.SyncDaemonResponse.status:type_name -> nokku.v1.DaemonStatus
 	2,  // 17: nokku.v1.SyncDaemonResponse.config:type_name -> nokku.v1.DaemonConfig
 	19, // 18: nokku.v1.SyncDaemonResponse.principals:type_name -> nokku.v1.PrincipalUsers
-	24, // 19: nokku.v1.ConnectRequest.heartbeat:type_name -> nokku.v1.Heartbeat
-	25, // 20: nokku.v1.ConnectResponse.state_update:type_name -> nokku.v1.StateUpdate
-	27, // 21: nokku.v1.ConnectResponse.relay_open:type_name -> nokku.v1.RelayOpen
-	28, // 22: nokku.v1.RelayRequest.start:type_name -> nokku.v1.RelayStart
-	30, // 23: nokku.v1.RelayResponse.ready:type_name -> nokku.v1.RelayReady
-	32, // 24: nokku.v1.RelayResponse.closed:type_name -> nokku.v1.RelayClosed
-	35, // 25: nokku.v1.DaemonRelayRequest.ready:type_name -> nokku.v1.DaemonRelayReady
-	36, // 26: nokku.v1.DaemonRelayRequest.closed:type_name -> nokku.v1.DaemonRelayClosed
-	36, // 27: nokku.v1.DaemonRelayResponse.closed:type_name -> nokku.v1.DaemonRelayClosed
-	3,  // 28: nokku.v1.DaemonService.GetDaemon:input_type -> nokku.v1.GetDaemonRequest
-	5,  // 29: nokku.v1.DaemonService.UpdateDaemon:input_type -> nokku.v1.UpdateDaemonRequest
-	7,  // 30: nokku.v1.DaemonService.DeleteDaemon:input_type -> nokku.v1.DeleteDaemonRequest
-	9,  // 31: nokku.v1.DaemonService.ListDaemons:input_type -> nokku.v1.ListDaemonsRequest
-	13, // 32: nokku.v1.DaemonService.ListSessions:input_type -> nokku.v1.ListSessionsRequest
-	11, // 33: nokku.v1.DaemonService.CreateSession:input_type -> nokku.v1.CreateSessionRequest
-	15, // 34: nokku.v1.DaemonService.CloseSession:input_type -> nokku.v1.CloseSessionRequest
-	17, // 35: nokku.v1.DaemonService.EnrollDaemon:input_type -> nokku.v1.EnrollDaemonRequest
-	20, // 36: nokku.v1.DaemonService.SyncDaemon:input_type -> nokku.v1.SyncDaemonRequest
-	29, // 37: nokku.v1.DaemonService.Relay:input_type -> nokku.v1.RelayRequest
-	22, // 38: nokku.v1.DaemonControlService.Connect:input_type -> nokku.v1.ConnectRequest
-	33, // 39: nokku.v1.DaemonSessionService.DaemonRelay:input_type -> nokku.v1.DaemonRelayRequest
-	4,  // 40: nokku.v1.DaemonService.GetDaemon:output_type -> nokku.v1.GetDaemonResponse
-	6,  // 41: nokku.v1.DaemonService.UpdateDaemon:output_type -> nokku.v1.UpdateDaemonResponse
-	8,  // 42: nokku.v1.DaemonService.DeleteDaemon:output_type -> nokku.v1.DeleteDaemonResponse
-	10, // 43: nokku.v1.DaemonService.ListDaemons:output_type -> nokku.v1.ListDaemonsResponse
-	14, // 44: nokku.v1.DaemonService.ListSessions:output_type -> nokku.v1.ListSessionsResponse
-	12, // 45: nokku.v1.DaemonService.CreateSession:output_type -> nokku.v1.CreateSessionResponse
-	16, // 46: nokku.v1.DaemonService.CloseSession:output_type -> nokku.v1.CloseSessionResponse
-	18, // 47: nokku.v1.DaemonService.EnrollDaemon:output_type -> nokku.v1.EnrollDaemonResponse
-	21, // 48: nokku.v1.DaemonService.SyncDaemon:output_type -> nokku.v1.SyncDaemonResponse
-	31, // 49: nokku.v1.DaemonService.Relay:output_type -> nokku.v1.RelayResponse
-	23, // 50: nokku.v1.DaemonControlService.Connect:output_type -> nokku.v1.ConnectResponse
-	34, // 51: nokku.v1.DaemonSessionService.DaemonRelay:output_type -> nokku.v1.DaemonRelayResponse
-	40, // [40:52] is the sub-list for method output_type
-	28, // [28:40] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	22, // 19: nokku.v1.SyncDaemonResponse.retired_ca_keys:type_name -> nokku.v1.RetiredCAKey
+	40, // 20: nokku.v1.RetiredCAKey.trusted_until:type_name -> google.protobuf.Timestamp
+	25, // 21: nokku.v1.ConnectRequest.heartbeat:type_name -> nokku.v1.Heartbeat
+	26, // 22: nokku.v1.ConnectResponse.state_update:type_name -> nokku.v1.StateUpdate
+	28, // 23: nokku.v1.ConnectResponse.relay_open:type_name -> nokku.v1.RelayOpen
+	29, // 24: nokku.v1.RelayRequest.start:type_name -> nokku.v1.RelayStart
+	31, // 25: nokku.v1.RelayResponse.ready:type_name -> nokku.v1.RelayReady
+	33, // 26: nokku.v1.RelayResponse.closed:type_name -> nokku.v1.RelayClosed
+	36, // 27: nokku.v1.DaemonRelayRequest.ready:type_name -> nokku.v1.DaemonRelayReady
+	37, // 28: nokku.v1.DaemonRelayRequest.closed:type_name -> nokku.v1.DaemonRelayClosed
+	37, // 29: nokku.v1.DaemonRelayResponse.closed:type_name -> nokku.v1.DaemonRelayClosed
+	3,  // 30: nokku.v1.DaemonService.GetDaemon:input_type -> nokku.v1.GetDaemonRequest
+	5,  // 31: nokku.v1.DaemonService.UpdateDaemon:input_type -> nokku.v1.UpdateDaemonRequest
+	7,  // 32: nokku.v1.DaemonService.DeleteDaemon:input_type -> nokku.v1.DeleteDaemonRequest
+	9,  // 33: nokku.v1.DaemonService.ListDaemons:input_type -> nokku.v1.ListDaemonsRequest
+	13, // 34: nokku.v1.DaemonService.ListSessions:input_type -> nokku.v1.ListSessionsRequest
+	11, // 35: nokku.v1.DaemonService.CreateSession:input_type -> nokku.v1.CreateSessionRequest
+	15, // 36: nokku.v1.DaemonService.CloseSession:input_type -> nokku.v1.CloseSessionRequest
+	17, // 37: nokku.v1.DaemonService.EnrollDaemon:input_type -> nokku.v1.EnrollDaemonRequest
+	20, // 38: nokku.v1.DaemonService.SyncDaemon:input_type -> nokku.v1.SyncDaemonRequest
+	30, // 39: nokku.v1.DaemonService.Relay:input_type -> nokku.v1.RelayRequest
+	23, // 40: nokku.v1.DaemonControlService.Connect:input_type -> nokku.v1.ConnectRequest
+	34, // 41: nokku.v1.DaemonSessionService.DaemonRelay:input_type -> nokku.v1.DaemonRelayRequest
+	4,  // 42: nokku.v1.DaemonService.GetDaemon:output_type -> nokku.v1.GetDaemonResponse
+	6,  // 43: nokku.v1.DaemonService.UpdateDaemon:output_type -> nokku.v1.UpdateDaemonResponse
+	8,  // 44: nokku.v1.DaemonService.DeleteDaemon:output_type -> nokku.v1.DeleteDaemonResponse
+	10, // 45: nokku.v1.DaemonService.ListDaemons:output_type -> nokku.v1.ListDaemonsResponse
+	14, // 46: nokku.v1.DaemonService.ListSessions:output_type -> nokku.v1.ListSessionsResponse
+	12, // 47: nokku.v1.DaemonService.CreateSession:output_type -> nokku.v1.CreateSessionResponse
+	16, // 48: nokku.v1.DaemonService.CloseSession:output_type -> nokku.v1.CloseSessionResponse
+	18, // 49: nokku.v1.DaemonService.EnrollDaemon:output_type -> nokku.v1.EnrollDaemonResponse
+	21, // 50: nokku.v1.DaemonService.SyncDaemon:output_type -> nokku.v1.SyncDaemonResponse
+	32, // 51: nokku.v1.DaemonService.Relay:output_type -> nokku.v1.RelayResponse
+	24, // 52: nokku.v1.DaemonControlService.Connect:output_type -> nokku.v1.ConnectResponse
+	35, // 53: nokku.v1.DaemonSessionService.DaemonRelay:output_type -> nokku.v1.DaemonRelayResponse
+	42, // [42:54] is the sub-list for method output_type
+	30, // [30:42] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_daemon_proto_init() }
@@ -2520,28 +2580,28 @@ func file_nokku_v1_daemon_proto_init() {
 		return
 	}
 	file_nokku_v1_access_proto_init()
-	file_nokku_v1_daemon_proto_msgTypes[21].OneofWrappers = []any{
+	file_nokku_v1_daemon_proto_msgTypes[22].OneofWrappers = []any{
 		(*ConnectRequest_Heartbeat)(nil),
 	}
-	file_nokku_v1_daemon_proto_msgTypes[22].OneofWrappers = []any{
+	file_nokku_v1_daemon_proto_msgTypes[23].OneofWrappers = []any{
 		(*ConnectResponse_StateUpdate)(nil),
 		(*ConnectResponse_RelayOpen)(nil),
 	}
-	file_nokku_v1_daemon_proto_msgTypes[28].OneofWrappers = []any{
+	file_nokku_v1_daemon_proto_msgTypes[29].OneofWrappers = []any{
 		(*RelayRequest_Start)(nil),
 		(*RelayRequest_Data)(nil),
 	}
-	file_nokku_v1_daemon_proto_msgTypes[30].OneofWrappers = []any{
+	file_nokku_v1_daemon_proto_msgTypes[31].OneofWrappers = []any{
 		(*RelayResponse_Ready)(nil),
 		(*RelayResponse_Data)(nil),
 		(*RelayResponse_Closed)(nil),
 	}
-	file_nokku_v1_daemon_proto_msgTypes[32].OneofWrappers = []any{
+	file_nokku_v1_daemon_proto_msgTypes[33].OneofWrappers = []any{
 		(*DaemonRelayRequest_Ready)(nil),
 		(*DaemonRelayRequest_Data)(nil),
 		(*DaemonRelayRequest_Closed)(nil),
 	}
-	file_nokku_v1_daemon_proto_msgTypes[33].OneofWrappers = []any{
+	file_nokku_v1_daemon_proto_msgTypes[34].OneofWrappers = []any{
 		(*DaemonRelayResponse_Data)(nil),
 		(*DaemonRelayResponse_Closed)(nil),
 	}
@@ -2551,7 +2611,7 @@ func file_nokku_v1_daemon_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_nokku_v1_daemon_proto_rawDesc), len(file_nokku_v1_daemon_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   38,
+			NumMessages:   39,
 			NumExtensions: 0,
 			NumServices:   3,
 		},
