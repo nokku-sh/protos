@@ -24,15 +24,18 @@ const (
 )
 
 type Recording struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	WorkspaceId   *string                `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	DaemonId      *string                `protobuf:"bytes,3,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
-	Username      *string                `protobuf:"bytes,4,opt,name=username" json:"username,omitempty"`
-	SizeBytes     *int64                 `protobuf:"varint,5,opt,name=size_bytes,json=sizeBytes" json:"size_bytes,omitempty"`
-	Complete      *bool                  `protobuf:"varint,6,opt,name=complete" json:"complete,omitempty"`
-	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=started_at,json=startedAt" json:"started_at,omitempty"`
-	EndedAt       *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=ended_at,json=endedAt" json:"ended_at,omitempty"`
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Id          *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	WorkspaceId *string                `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
+	// Empty once the daemon is deleted, the recording stays.
+	DaemonId  *string                `protobuf:"bytes,3,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
+	Username  *string                `protobuf:"bytes,4,opt,name=username" json:"username,omitempty"`
+	SizeBytes *int64                 `protobuf:"varint,5,opt,name=size_bytes,json=sizeBytes" json:"size_bytes,omitempty"`
+	Complete  *bool                  `protobuf:"varint,6,opt,name=complete" json:"complete,omitempty"`
+	StartedAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=started_at,json=startedAt" json:"started_at,omitempty"`
+	EndedAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=ended_at,json=endedAt" json:"ended_at,omitempty"`
+	// The daemon's name when the session ran.
+	DaemonName    *string `protobuf:"bytes,9,opt,name=daemon_name,json=daemonName" json:"daemon_name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -121,6 +124,13 @@ func (x *Recording) GetEndedAt() *timestamppb.Timestamp {
 		return x.EndedAt
 	}
 	return nil
+}
+
+func (x *Recording) GetDaemonName() string {
+	if x != nil && x.DaemonName != nil {
+		return *x.DaemonName
+	}
+	return ""
 }
 
 type UploadRecordingRequest struct {
@@ -723,7 +733,7 @@ var File_nokku_v1_recordings_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"\n" +
-	"\x19nokku/v1/recordings.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xa4\x02\n" +
+	"\x19nokku/v1/recordings.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xc5\x02\n" +
 	"\tRecording\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x1b\n" +
@@ -734,7 +744,9 @@ const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"\bcomplete\x18\x06 \x01(\bR\bcomplete\x129\n" +
 	"\n" +
 	"started_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x125\n" +
-	"\bended_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\aendedAt\"\x98\x01\n" +
+	"\bended_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\aendedAt\x12\x1f\n" +
+	"\vdaemon_name\x18\t \x01(\tR\n" +
+	"daemonName\"\x98\x01\n" +
 	"\x16UploadRecordingRequest\x12-\n" +
 	"\x04meta\x18\x01 \x01(\v2\x17.nokku.v1.RecordingMetaH\x00R\x04meta\x12\x16\n" +
 	"\x05chunk\x18\x02 \x01(\fH\x00R\x05chunk\x120\n" +

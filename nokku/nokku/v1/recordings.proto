@@ -23,12 +23,15 @@ service RecordingService {
 message Recording {
   string id = 1;
   string workspace_id = 2;
+  // Empty once the daemon is deleted, the recording stays.
   string daemon_id = 3;
   string username = 4;
   int64 size_bytes = 5;
   bool complete = 6;
   google.protobuf.Timestamp started_at = 7;
   google.protobuf.Timestamp ended_at = 8;
+  // The daemon's name when the session ran.
+  string daemon_name = 9;
 }
 
 message UploadRecordingRequest {
