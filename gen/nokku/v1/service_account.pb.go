@@ -372,13 +372,14 @@ func (x *CreateServiceAccountResponse) GetToken() string {
 }
 
 type UpdateServiceAccountRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Id            *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
-	Name          *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
-	Description   *string                `protobuf:"bytes,4,opt,name=description" json:"description,omitempty"`
-	RoleName      *string                `protobuf:"bytes,5,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
-	Tags          []string               `protobuf:"bytes,6,rep,name=tags" json:"tags,omitempty"`
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
+	Id          *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
+	Name        *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
+	Description *string                `protobuf:"bytes,4,opt,name=description" json:"description,omitempty"`
+	RoleName    *string                `protobuf:"bytes,5,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
+	// Tags are replaced as sent. Leaving them out clears them.
+	Tags          []string `protobuf:"bytes,6,rep,name=tags" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

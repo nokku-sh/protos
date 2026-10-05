@@ -143,6 +143,7 @@ message UpdateTargetRequest {
   }];
   string description = 5 [(buf.validate.field).string.max_len = 1000];
   string host_public_key = 6;
+  // Endpoints and tags are replaced as sent. Leaving one out clears it.
   repeated string endpoints = 7;
   repeated string tags = 8;
 }

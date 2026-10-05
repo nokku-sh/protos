@@ -619,8 +619,9 @@ type UpdateTargetRequest struct {
 	Name          *string                `protobuf:"bytes,4,opt,name=name" json:"name,omitempty"`
 	Description   *string                `protobuf:"bytes,5,opt,name=description" json:"description,omitempty"`
 	HostPublicKey *string                `protobuf:"bytes,6,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"`
-	Endpoints     []string               `protobuf:"bytes,7,rep,name=endpoints" json:"endpoints,omitempty"`
-	Tags          []string               `protobuf:"bytes,8,rep,name=tags" json:"tags,omitempty"`
+	// Endpoints and tags are replaced as sent. Leaving one out clears it.
+	Endpoints     []string `protobuf:"bytes,7,rep,name=endpoints" json:"endpoints,omitempty"`
+	Tags          []string `protobuf:"bytes,8,rep,name=tags" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
