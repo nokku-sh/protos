@@ -35,8 +35,9 @@ service CertificateService {
   rpc SignSSHCertificate(SignSSHCertificateRequest) returns (SignSSHCertificateResponse) {
     option (access) = {self: true};
   }
+  // Subject and SANs come from the CSR untouched, so signing equals holding the CA.
   rpc SignX509Certificate(SignX509CertificateRequest) returns (SignX509CertificateResponse) {
-    option (access) = {self: true};
+    option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
 }
 

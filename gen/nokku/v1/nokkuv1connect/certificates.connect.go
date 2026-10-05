@@ -72,6 +72,7 @@ type CertificateServiceClient interface {
 	// Signs a user certificate for the caller. Daemons get host certificates
 	// from DaemonControlService.
 	SignSSHCertificate(context.Context, *v1.SignSSHCertificateRequest) (*v1.SignSSHCertificateResponse, error)
+	// Subject and SANs come from the CSR untouched, so signing equals holding the CA.
 	SignX509Certificate(context.Context, *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error)
 }
 
@@ -236,6 +237,7 @@ type CertificateServiceHandler interface {
 	// Signs a user certificate for the caller. Daemons get host certificates
 	// from DaemonControlService.
 	SignSSHCertificate(context.Context, *v1.SignSSHCertificateRequest) (*v1.SignSSHCertificateResponse, error)
+	// Subject and SANs come from the CSR untouched, so signing equals holding the CA.
 	SignX509Certificate(context.Context, *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error)
 }
 

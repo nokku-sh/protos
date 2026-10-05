@@ -1690,7 +1690,7 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\x1aDeleteCertificateAuthority\x12+.nokku.v1.DeleteCertificateAuthorityRequest\x1a,.nokku.v1.DeleteCertificateAuthorityResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12\x85\x01\n" +
 	"\x1cRolloverCertificateAuthority\x12-.nokku.v1.RolloverCertificateAuthorityRequest\x1a..nokku.v1.RolloverCertificateAuthorityResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12g\n" +
 	"\x12SignSSHCertificate\x12#.nokku.v1.SignSSHCertificateRequest\x1a$.nokku.v1.SignSSHCertificateResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12j\n" +
-	"\x13SignX509Certificate\x12$.nokku.v1.SignX509CertificateRequest\x1a%.nokku.v1.SignX509CertificateResponse\"\x06\xc2\xf3\x18\x02\x10\x01B\x93\x01\n" +
+	"\x13SignX509Certificate\x12$.nokku.v1.SignX509CertificateRequest\x1a%.nokku.v1.SignX509CertificateResponse\"\x06\xc2\xf3\x18\x02\x18\x03B\x93\x01\n" +
 	"\fcom.nokku.v1B\x11CertificatesProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (
