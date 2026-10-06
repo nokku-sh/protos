@@ -6,22 +6,24 @@ import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
+// A verified domain gives the workspace authority over its accounts, so only
+// the owner changes one.
 service WorkspaceDomainService {
   rpc ListWorkspaceDomains(ListWorkspaceDomainsRequest) returns (ListWorkspaceDomainsResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc CreateWorkspaceDomain(CreateWorkspaceDomainRequest) returns (CreateWorkspaceDomainResponse) {
-    option (access) = {role: WORKSPACE_ROLE_ADMIN};
+    option (access) = {role: WORKSPACE_ROLE_OWNER};
   }
   rpc DeleteWorkspaceDomain(DeleteWorkspaceDomainRequest) returns (DeleteWorkspaceDomainResponse) {
-    option (access) = {role: WORKSPACE_ROLE_ADMIN};
+    option (access) = {role: WORKSPACE_ROLE_OWNER};
   }
   rpc VerifyWorkspaceDomain(VerifyWorkspaceDomainRequest) returns (VerifyWorkspaceDomainResponse) {
-    option (access) = {role: WORKSPACE_ROLE_ADMIN};
+    option (access) = {role: WORKSPACE_ROLE_OWNER};
   }
   rpc RegenerateWorkspaceDomainToken(RegenerateWorkspaceDomainTokenRequest) returns (RegenerateWorkspaceDomainTokenResponse) {
-    option (access) = {role: WORKSPACE_ROLE_ADMIN};
+    option (access) = {role: WORKSPACE_ROLE_OWNER};
   }
 }
 

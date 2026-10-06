@@ -6,13 +6,15 @@ import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
+// The provider can vouch for every account under the workspace's domains,
+// so only the owner sets it.
 service SSOService {
   rpc GetSSOProvider(GetSSOProviderRequest) returns (GetSSOProviderResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc UpdateSSOProvider(UpdateSSOProviderRequest) returns (UpdateSSOProviderResponse) {
-    option (access) = {role: WORKSPACE_ROLE_ADMIN};
+    option (access) = {role: WORKSPACE_ROLE_OWNER};
   }
 }
 

@@ -475,7 +475,7 @@ const file_nokku_v1_sso_proto_rawDesc = "" +
 	"\n" +
 	"SSOService\x12^\n" +
 	"\x0eGetSSOProvider\x12\x1f.nokku.v1.GetSSOProviderRequest\x1a .nokku.v1.GetSSOProviderResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12d\n" +
-	"\x11UpdateSSOProvider\x12\".nokku.v1.UpdateSSOProviderRequest\x1a#.nokku.v1.UpdateSSOProviderResponse\"\x06\xc2\xf3\x18\x02\x18\x04B\x8a\x01\n" +
+	"\x11UpdateSSOProvider\x12\".nokku.v1.UpdateSSOProviderRequest\x1a#.nokku.v1.UpdateSSOProviderResponse\"\x06\xc2\xf3\x18\x02\x18\x05B\x8a\x01\n" +
 	"\fcom.nokku.v1B\bSsoProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

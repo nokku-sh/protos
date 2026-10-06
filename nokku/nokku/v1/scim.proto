@@ -6,16 +6,18 @@ import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
+// A token creates accounts and switches them off, so only the owner issues
+// or revokes one.
 service SCIMService {
   rpc CreateSCIMToken(CreateSCIMTokenRequest) returns (CreateSCIMTokenResponse) {
-    option (access) = {role: WORKSPACE_ROLE_ADMIN};
+    option (access) = {role: WORKSPACE_ROLE_OWNER};
   }
   rpc ListSCIMTokens(ListSCIMTokensRequest) returns (ListSCIMTokensResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc DeleteSCIMToken(DeleteSCIMTokenRequest) returns (DeleteSCIMTokenResponse) {
-    option (access) = {role: WORKSPACE_ROLE_ADMIN};
+    option (access) = {role: WORKSPACE_ROLE_OWNER};
   }
 }
 

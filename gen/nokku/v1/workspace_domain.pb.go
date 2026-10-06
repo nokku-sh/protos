@@ -611,10 +611,10 @@ const file_nokku_v1_workspace_domain_proto_rawDesc = "" +
 	"\x06domain\x18\x01 \x01(\v2\x19.nokku.v1.WorkspaceDomainR\x06domain2\xee\x04\n" +
 	"\x16WorkspaceDomainService\x12p\n" +
 	"\x14ListWorkspaceDomains\x12%.nokku.v1.ListWorkspaceDomainsRequest\x1a&.nokku.v1.ListWorkspaceDomainsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12p\n" +
-	"\x15CreateWorkspaceDomain\x12&.nokku.v1.CreateWorkspaceDomainRequest\x1a'.nokku.v1.CreateWorkspaceDomainResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12p\n" +
-	"\x15DeleteWorkspaceDomain\x12&.nokku.v1.DeleteWorkspaceDomainRequest\x1a'.nokku.v1.DeleteWorkspaceDomainResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12p\n" +
-	"\x15VerifyWorkspaceDomain\x12&.nokku.v1.VerifyWorkspaceDomainRequest\x1a'.nokku.v1.VerifyWorkspaceDomainResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12\x8b\x01\n" +
-	"\x1eRegenerateWorkspaceDomainToken\x12/.nokku.v1.RegenerateWorkspaceDomainTokenRequest\x1a0.nokku.v1.RegenerateWorkspaceDomainTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x04B\x96\x01\n" +
+	"\x15CreateWorkspaceDomain\x12&.nokku.v1.CreateWorkspaceDomainRequest\x1a'.nokku.v1.CreateWorkspaceDomainResponse\"\x06\xc2\xf3\x18\x02\x18\x05\x12p\n" +
+	"\x15DeleteWorkspaceDomain\x12&.nokku.v1.DeleteWorkspaceDomainRequest\x1a'.nokku.v1.DeleteWorkspaceDomainResponse\"\x06\xc2\xf3\x18\x02\x18\x05\x12p\n" +
+	"\x15VerifyWorkspaceDomain\x12&.nokku.v1.VerifyWorkspaceDomainRequest\x1a'.nokku.v1.VerifyWorkspaceDomainResponse\"\x06\xc2\xf3\x18\x02\x18\x05\x12\x8b\x01\n" +
+	"\x1eRegenerateWorkspaceDomainToken\x12/.nokku.v1.RegenerateWorkspaceDomainTokenRequest\x1a0.nokku.v1.RegenerateWorkspaceDomainTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x05B\x96\x01\n" +
 	"\fcom.nokku.v1B\x14WorkspaceDomainProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

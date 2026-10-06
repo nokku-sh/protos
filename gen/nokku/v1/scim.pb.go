@@ -408,9 +408,9 @@ const file_nokku_v1_scim_proto_rawDesc = "" +
 	"\btoken_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\atokenId\"\x19\n" +
 	"\x17DeleteSCIMTokenResponse2\xad\x02\n" +
 	"\vSCIMService\x12^\n" +
-	"\x0fCreateSCIMToken\x12 .nokku.v1.CreateSCIMTokenRequest\x1a!.nokku.v1.CreateSCIMTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12^\n" +
+	"\x0fCreateSCIMToken\x12 .nokku.v1.CreateSCIMTokenRequest\x1a!.nokku.v1.CreateSCIMTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x05\x12^\n" +
 	"\x0eListSCIMTokens\x12\x1f.nokku.v1.ListSCIMTokensRequest\x1a .nokku.v1.ListSCIMTokensResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12^\n" +
-	"\x0fDeleteSCIMToken\x12 .nokku.v1.DeleteSCIMTokenRequest\x1a!.nokku.v1.DeleteSCIMTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x04B\x8b\x01\n" +
+	"\x0fDeleteSCIMToken\x12 .nokku.v1.DeleteSCIMTokenRequest\x1a!.nokku.v1.DeleteSCIMTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x05B\x8b\x01\n" +
 	"\fcom.nokku.v1B\tScimProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (
