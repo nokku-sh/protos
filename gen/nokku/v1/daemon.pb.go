@@ -1123,12 +1123,15 @@ func (x *EnrollDaemonResponse) GetAccessToken() string {
 	return ""
 }
 
+// Who may log in as one Linux account. A host lets a certificate in when it
+// carries one of these principals, compared as whole strings. Each one names
+// a subject, this server and this account.
 type PrincipalUsers struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Username      *string                `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
-	Ids           []string               `protobuf:"bytes,2,rep,name=ids" json:"ids,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Username       *string                `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
+	CertPrincipals []string               `protobuf:"bytes,2,rep,name=cert_principals,json=certPrincipals" json:"cert_principals,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *PrincipalUsers) Reset() {
@@ -1168,9 +1171,9 @@ func (x *PrincipalUsers) GetUsername() string {
 	return ""
 }
 
-func (x *PrincipalUsers) GetIds() []string {
+func (x *PrincipalUsers) GetCertPrincipals() []string {
 	if x != nil {
-		return x.Ids
+		return x.CertPrincipals
 	}
 	return nil
 }
@@ -2533,10 +2536,10 @@ const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"\ttarget_id\x18\x03 \x01(\tR\btargetId\x12.\n" +
 	"\x06status\x18\x04 \x01(\x0e2\x16.nokku.v1.DaemonStatusR\x06status\x12.\n" +
 	"\x06config\x18\x05 \x01(\v2\x16.nokku.v1.DaemonConfigR\x06config\x12!\n" +
-	"\faccess_token\x18\x06 \x01(\tR\vaccessToken\">\n" +
+	"\faccess_token\x18\x06 \x01(\tR\vaccessToken\"U\n" +
 	"\x0ePrincipalUsers\x12\x1a\n" +
-	"\busername\x18\x01 \x01(\tR\busername\x12\x10\n" +
-	"\x03ids\x18\x02 \x03(\tR\x03ids\"\x87\x02\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12'\n" +
+	"\x0fcert_principals\x18\x02 \x03(\tR\x0ecertPrincipals\"\x87\x02\n" +
 	"\x11SyncDaemonRequest\x12&\n" +
 	"\x05users\x18\x01 \x03(\tB\x10\xbaH\r\x92\x01\n" +
 	"\x10\xc8\x01\"\x05r\x03\x18\x80\x02R\x05users\x12/\n" +

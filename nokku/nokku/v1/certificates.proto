@@ -30,8 +30,10 @@ service CertificateService {
   rpc RolloverCertificateAuthority(RolloverCertificateAuthorityRequest) returns (RolloverCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  // Signs a user certificate for the caller. Daemons get host certificates
-  // from DaemonControlService.
+  // Signs a user certificate for the caller, for one server. It names the
+  // accounts the caller is granted there at that moment, so it works nowhere
+  // else and a revoked grant ends with it. Daemons get host certificates from
+  // DaemonControlService.
   rpc SignSSHCertificate(SignSSHCertificateRequest) returns (SignSSHCertificateResponse) {
     option (access) = {self: true};
   }
@@ -205,7 +207,6 @@ message RolloverCertificateAuthorityResponse {
 
 message SignSSHCertificateRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string ca_id = 2 [(buf.validate.field).string.uuid = true];
   string public_key = 5 [(buf.validate.field).string = {
     min_len: 1
     max_len: 10000
@@ -214,9 +215,11 @@ message SignSSHCertificateRequest {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  // The server the certificate is for. It is signed for the accounts the
-  // caller is granted there at that moment, and works nowhere else.
-  string target_id = 7 [(buf.validate.field).string.uuid = true];
+  // The server the certificate is for. Its certificate authority signs.
+  string target_id = 7 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
 }
 message SignSSHCertificateResponse {
   string ca_id = 1;

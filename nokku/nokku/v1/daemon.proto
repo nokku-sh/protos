@@ -191,9 +191,12 @@ message EnrollDaemonResponse {
   string access_token = 6;
 }
 
+// Who may log in as one Linux account. A host lets a certificate in when it
+// carries one of these principals, compared as whole strings. Each one names
+// a subject, this server and this account.
 message PrincipalUsers {
   string username = 1;
-  repeated string ids = 2;
+  repeated string cert_principals = 2;
 }
 
 // The sizes are bounded here. The backend drops entries that are not valid

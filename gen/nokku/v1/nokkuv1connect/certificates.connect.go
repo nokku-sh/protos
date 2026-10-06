@@ -69,8 +69,10 @@ type CertificateServiceClient interface {
 	ListCertificateAuthorities(context.Context, *v1.ListCertificateAuthoritiesRequest) (*v1.ListCertificateAuthoritiesResponse, error)
 	DeleteCertificateAuthority(context.Context, *v1.DeleteCertificateAuthorityRequest) (*v1.DeleteCertificateAuthorityResponse, error)
 	RolloverCertificateAuthority(context.Context, *v1.RolloverCertificateAuthorityRequest) (*v1.RolloverCertificateAuthorityResponse, error)
-	// Signs a user certificate for the caller. Daemons get host certificates
-	// from DaemonControlService.
+	// Signs a user certificate for the caller, for one server. It names the
+	// accounts the caller is granted there at that moment, so it works nowhere
+	// else and a revoked grant ends with it. Daemons get host certificates from
+	// DaemonControlService.
 	SignSSHCertificate(context.Context, *v1.SignSSHCertificateRequest) (*v1.SignSSHCertificateResponse, error)
 	// Subject and SANs come from the CSR untouched, so signing equals holding the CA.
 	SignX509Certificate(context.Context, *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error)
@@ -234,8 +236,10 @@ type CertificateServiceHandler interface {
 	ListCertificateAuthorities(context.Context, *v1.ListCertificateAuthoritiesRequest) (*v1.ListCertificateAuthoritiesResponse, error)
 	DeleteCertificateAuthority(context.Context, *v1.DeleteCertificateAuthorityRequest) (*v1.DeleteCertificateAuthorityResponse, error)
 	RolloverCertificateAuthority(context.Context, *v1.RolloverCertificateAuthorityRequest) (*v1.RolloverCertificateAuthorityResponse, error)
-	// Signs a user certificate for the caller. Daemons get host certificates
-	// from DaemonControlService.
+	// Signs a user certificate for the caller, for one server. It names the
+	// accounts the caller is granted there at that moment, so it works nowhere
+	// else and a revoked grant ends with it. Daemons get host certificates from
+	// DaemonControlService.
 	SignSSHCertificate(context.Context, *v1.SignSSHCertificateRequest) (*v1.SignSSHCertificateResponse, error)
 	// Subject and SANs come from the CSR untouched, so signing equals holding the CA.
 	SignX509Certificate(context.Context, *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error)
