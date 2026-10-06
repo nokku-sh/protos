@@ -214,6 +214,9 @@ message SignSSHCertificateRequest {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
+  // The server the certificate is for. It is signed for the accounts the
+  // caller is granted there at that moment, and works nowhere else.
+  string target_id = 7 [(buf.validate.field).string.uuid = true];
 }
 message SignSSHCertificateResponse {
   string ca_id = 1;

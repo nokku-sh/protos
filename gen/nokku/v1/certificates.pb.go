@@ -1219,11 +1219,14 @@ func (x *RolloverCertificateAuthorityResponse) GetCertificateAuthority() *Certif
 }
 
 type SignSSHCertificateRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	CaId          *string                `protobuf:"bytes,2,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	PublicKey     *string                `protobuf:"bytes,5,opt,name=public_key,json=publicKey" json:"public_key,omitempty"`
-	Ttl           *durationpb.Duration   `protobuf:"bytes,6,opt,name=ttl" json:"ttl,omitempty"`
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
+	CaId        *string                `protobuf:"bytes,2,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
+	PublicKey   *string                `protobuf:"bytes,5,opt,name=public_key,json=publicKey" json:"public_key,omitempty"`
+	Ttl         *durationpb.Duration   `protobuf:"bytes,6,opt,name=ttl" json:"ttl,omitempty"`
+	// The server the certificate is for. It is signed for the accounts the
+	// caller is granted there at that moment, and works nowhere else.
+	TargetId      *string `protobuf:"bytes,7,opt,name=target_id,json=targetId" json:"target_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1284,6 +1287,13 @@ func (x *SignSSHCertificateRequest) GetTtl() *durationpb.Duration {
 		return x.Ttl
 	}
 	return nil
+}
+
+func (x *SignSSHCertificateRequest) GetTargetId() string {
+	if x != nil && x.TargetId != nil {
+		return *x.TargetId
+	}
+	return ""
 }
 
 type SignSSHCertificateResponse struct {
@@ -1639,14 +1649,15 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\bkey_type\x18\x04 \x01(\x0e2\x1c.nokku.v1.CertificateKeyTypeR\akeyType\x12'\n" +
 	"\x0frevoke_previous\x18\x05 \x01(\bR\x0erevokePrevious\"{\n" +
 	"$RolloverCertificateAuthorityResponse\x12S\n" +
-	"\x15certificate_authority\x18\x01 \x01(\v2\x1e.nokku.v1.CertificateAuthorityR\x14certificateAuthority\"\xd2\x01\n" +
+	"\x15certificate_authority\x18\x01 \x01(\v2\x1e.nokku.v1.CertificateAuthorityR\x14certificateAuthority\"\xf9\x01\n" +
 	"\x19SignSSHCertificateRequest\x12+\n" +
 	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1d\n" +
 	"\x05ca_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12)\n" +
 	"\n" +
 	"public_key\x18\x05 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x90NR\tpublicKey\x12>\n" +
-	"\x03ttl\x18\x06 \x01(\v2\x19.google.protobuf.DurationB\x11\xbaH\x0e\xaa\x01\v\"\x05\b\x80\xe7\x84\x0f2\x02\b<R\x03ttl\"\xd8\x01\n" +
+	"\x03ttl\x18\x06 \x01(\v2\x19.google.protobuf.DurationB\x11\xbaH\x0e\xaa\x01\v\"\x05\b\x80\xe7\x84\x0f2\x02\b<R\x03ttl\x12%\n" +
+	"\ttarget_id\x18\a \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\"\xd8\x01\n" +
 	"\x1aSignSSHCertificateResponse\x12\x13\n" +
 	"\x05ca_id\x18\x01 \x01(\tR\x04caId\x12\x17\n" +
 	"\aca_name\x18\x02 \x01(\tR\x06caName\x12\"\n" +
