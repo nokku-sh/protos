@@ -90,7 +90,7 @@ type DaemonServiceClient interface {
 	// A web session only opens the transport, sshd still checks the cert against synced grants.
 	CreateSession(context.Context, *v1.CreateSessionRequest) (*v1.CreateSessionResponse, error)
 	CloseSession(context.Context, *v1.CloseSessionRequest) (*v1.CloseSessionResponse, error)
-	// Streams are self-scoped since their workspace only arrives with the first message.
+	// The handler checks the grant on the daemon named in the first message.
 	Relay(context.Context) (*connect.BidiStreamForClientSimple[v1.RelayRequest, v1.RelayResponse], error)
 }
 
@@ -249,7 +249,7 @@ type DaemonServiceHandler interface {
 	// A web session only opens the transport, sshd still checks the cert against synced grants.
 	CreateSession(context.Context, *v1.CreateSessionRequest) (*v1.CreateSessionResponse, error)
 	CloseSession(context.Context, *v1.CloseSessionRequest) (*v1.CloseSessionResponse, error)
-	// Streams are self-scoped since their workspace only arrives with the first message.
+	// The handler checks the grant on the daemon named in the first message.
 	Relay(context.Context, *connect.BidiStream[v1.RelayRequest, v1.RelayResponse]) error
 }
 

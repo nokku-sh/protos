@@ -25,8 +25,7 @@ const (
 
 type GetTargetPrincipalsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	TargetId      *string                `protobuf:"bytes,2,opt,name=target_id,json=targetId" json:"target_id,omitempty"`
+	TargetId      *string                `protobuf:"bytes,1,opt,name=target_id,json=targetId" json:"target_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,13 +58,6 @@ func (x *GetTargetPrincipalsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetTargetPrincipalsRequest.ProtoReflect.Descriptor instead.
 func (*GetTargetPrincipalsRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_target_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *GetTargetPrincipalsRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *GetTargetPrincipalsRequest) GetTargetId() string {
@@ -121,11 +113,10 @@ func (x *GetTargetPrincipalsResponse) GetPrincipals() []*PrincipalUsers {
 
 type SyncTargetUsersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	TargetId      *string                `protobuf:"bytes,2,opt,name=target_id,json=targetId" json:"target_id,omitempty"`
-	HostPublicKey *string                `protobuf:"bytes,3,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"`
-	Usernames     []string               `protobuf:"bytes,4,rep,name=usernames" json:"usernames,omitempty"`
-	Endpoints     []string               `protobuf:"bytes,5,rep,name=endpoints" json:"endpoints,omitempty"`
+	TargetId      *string                `protobuf:"bytes,1,opt,name=target_id,json=targetId" json:"target_id,omitempty"`
+	HostPublicKey *string                `protobuf:"bytes,2,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"`
+	Usernames     []string               `protobuf:"bytes,3,rep,name=usernames" json:"usernames,omitempty"`
+	Endpoints     []string               `protobuf:"bytes,4,rep,name=endpoints" json:"endpoints,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -158,13 +149,6 @@ func (x *SyncTargetUsersRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SyncTargetUsersRequest.ProtoReflect.Descriptor instead.
 func (*SyncTargetUsersRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_target_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *SyncTargetUsersRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *SyncTargetUsersRequest) GetTargetId() string {
@@ -234,19 +218,18 @@ func (*SyncTargetUsersResponse) Descriptor() ([]byte, []int) {
 type Target struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	WorkspaceId   *string                `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	CaId          *string                `protobuf:"bytes,3,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	DaemonId      *string                `protobuf:"bytes,4,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
-	Name          *string                `protobuf:"bytes,5,opt,name=name" json:"name,omitempty"`
-	Description   *string                `protobuf:"bytes,6,opt,name=description" json:"description,omitempty"`
-	HostPublicKey *string                `protobuf:"bytes,7,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"` // pinned SSH host public key (manual mode)
-	Tags          []string               `protobuf:"bytes,8,rep,name=tags" json:"tags,omitempty"`
-	Endpoints     []string               `protobuf:"bytes,9,rep,name=endpoints" json:"endpoints,omitempty"`
-	Usernames     []string               `protobuf:"bytes,10,rep,name=usernames" json:"usernames,omitempty"`
-	Principals    []*Principal           `protobuf:"bytes,11,rep,name=principals" json:"principals,omitempty"`
-	Metadata      map[string]string      `protobuf:"bytes,12,rep,name=metadata" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty"`
+	CaId          *string                `protobuf:"bytes,2,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
+	DaemonId      *string                `protobuf:"bytes,3,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
+	Name          *string                `protobuf:"bytes,4,opt,name=name" json:"name,omitempty"`
+	Description   *string                `protobuf:"bytes,5,opt,name=description" json:"description,omitempty"`
+	HostPublicKey *string                `protobuf:"bytes,6,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"` // pinned SSH host public key (manual mode)
+	Tags          []string               `protobuf:"bytes,7,rep,name=tags" json:"tags,omitempty"`
+	Endpoints     []string               `protobuf:"bytes,8,rep,name=endpoints" json:"endpoints,omitempty"`
+	Usernames     []string               `protobuf:"bytes,9,rep,name=usernames" json:"usernames,omitempty"`
+	Principals    []*Principal           `protobuf:"bytes,10,rep,name=principals" json:"principals,omitempty"`
+	Metadata      map[string]string      `protobuf:"bytes,11,rep,name=metadata" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -284,13 +267,6 @@ func (*Target) Descriptor() ([]byte, []int) {
 func (x *Target) GetId() string {
 	if x != nil && x.Id != nil {
 		return *x.Id
-	}
-	return ""
-}
-
-func (x *Target) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -381,8 +357,7 @@ func (x *Target) GetUpdatedAt() *timestamppb.Timestamp {
 
 type GetTargetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Id            *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -415,13 +390,6 @@ func (x *GetTargetRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetTargetRequest.ProtoReflect.Descriptor instead.
 func (*GetTargetRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_target_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *GetTargetRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *GetTargetRequest) GetId() string {
@@ -477,13 +445,12 @@ func (x *GetTargetResponse) GetTarget() *Target {
 
 type CreateTargetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	CaId          *string                `protobuf:"bytes,2,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	Name          *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"` // can be empty
-	Description   *string                `protobuf:"bytes,4,opt,name=description" json:"description,omitempty"`
-	HostPublicKey *string                `protobuf:"bytes,5,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"`
-	Endpoints     []string               `protobuf:"bytes,6,rep,name=endpoints" json:"endpoints,omitempty"`
-	Tags          []string               `protobuf:"bytes,7,rep,name=tags" json:"tags,omitempty"`
+	CaId          *string                `protobuf:"bytes,1,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
+	Name          *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"` // can be empty
+	Description   *string                `protobuf:"bytes,3,opt,name=description" json:"description,omitempty"`
+	HostPublicKey *string                `protobuf:"bytes,4,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"`
+	Endpoints     []string               `protobuf:"bytes,5,rep,name=endpoints" json:"endpoints,omitempty"`
+	Tags          []string               `protobuf:"bytes,6,rep,name=tags" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -516,13 +483,6 @@ func (x *CreateTargetRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreateTargetRequest.ProtoReflect.Descriptor instead.
 func (*CreateTargetRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_target_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *CreateTargetRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *CreateTargetRequest) GetCaId() string {
@@ -613,15 +573,14 @@ func (x *CreateTargetResponse) GetTarget() *Target {
 
 type UpdateTargetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Id            *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
-	CaId          *string                `protobuf:"bytes,3,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	Name          *string                `protobuf:"bytes,4,opt,name=name" json:"name,omitempty"`
-	Description   *string                `protobuf:"bytes,5,opt,name=description" json:"description,omitempty"`
-	HostPublicKey *string                `protobuf:"bytes,6,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	CaId          *string                `protobuf:"bytes,2,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
+	Name          *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
+	Description   *string                `protobuf:"bytes,4,opt,name=description" json:"description,omitempty"`
+	HostPublicKey *string                `protobuf:"bytes,5,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"`
 	// Endpoints and tags are replaced as sent. Leaving one out clears it.
-	Endpoints     []string `protobuf:"bytes,7,rep,name=endpoints" json:"endpoints,omitempty"`
-	Tags          []string `protobuf:"bytes,8,rep,name=tags" json:"tags,omitempty"`
+	Endpoints     []string `protobuf:"bytes,6,rep,name=endpoints" json:"endpoints,omitempty"`
+	Tags          []string `protobuf:"bytes,7,rep,name=tags" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -654,13 +613,6 @@ func (x *UpdateTargetRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use UpdateTargetRequest.ProtoReflect.Descriptor instead.
 func (*UpdateTargetRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_target_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *UpdateTargetRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *UpdateTargetRequest) GetId() string {
@@ -758,8 +710,7 @@ func (x *UpdateTargetResponse) GetTarget() *Target {
 
 type DeleteTargetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Id            *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -792,13 +743,6 @@ func (x *DeleteTargetRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DeleteTargetRequest.ProtoReflect.Descriptor instead.
 func (*DeleteTargetRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_target_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *DeleteTargetRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *DeleteTargetRequest) GetId() string {
@@ -846,14 +790,13 @@ func (*DeleteTargetResponse) Descriptor() ([]byte, []int) {
 
 type ListTargetsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Limit         *int32                 `protobuf:"varint,2,opt,name=limit" json:"limit,omitempty"`
-	Offset        *int32                 `protobuf:"varint,3,opt,name=offset" json:"offset,omitempty"`
-	Query         *string                `protobuf:"bytes,4,opt,name=query" json:"query,omitempty"`
-	DaemonId      *string                `protobuf:"bytes,5,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
-	CaId          *string                `protobuf:"bytes,6,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	Principals    []string               `protobuf:"bytes,7,rep,name=principals" json:"principals,omitempty"`
-	Tags          []string               `protobuf:"bytes,8,rep,name=tags" json:"tags,omitempty"`
+	Limit         *int32                 `protobuf:"varint,1,opt,name=limit" json:"limit,omitempty"`
+	Offset        *int32                 `protobuf:"varint,2,opt,name=offset" json:"offset,omitempty"`
+	Query         *string                `protobuf:"bytes,3,opt,name=query" json:"query,omitempty"`
+	DaemonId      *string                `protobuf:"bytes,4,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
+	CaId          *string                `protobuf:"bytes,5,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
+	Principals    []string               `protobuf:"bytes,6,rep,name=principals" json:"principals,omitempty"`
+	Tags          []string               `protobuf:"bytes,7,rep,name=tags" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -886,13 +829,6 @@ func (x *ListTargetsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ListTargetsRequest.ProtoReflect.Descriptor instead.
 func (*ListTargetsRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_target_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *ListTargetsRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *ListTargetsRequest) GetLimit() int32 {
@@ -998,8 +934,7 @@ func (x *ListTargetsResponse) GetTotal() int32 {
 
 type GetSubjectAccessRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	SubjectId     *string                `protobuf:"bytes,2,opt,name=subject_id,json=subjectId" json:"subject_id,omitempty"`
+	SubjectId     *string                `protobuf:"bytes,1,opt,name=subject_id,json=subjectId" json:"subject_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1032,13 +967,6 @@ func (x *GetSubjectAccessRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetSubjectAccessRequest.ProtoReflect.Descriptor instead.
 func (*GetSubjectAccessRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_target_proto_rawDescGZIP(), []int{15}
-}
-
-func (x *GetSubjectAccessRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *GetSubjectAccessRequest) GetSubjectId() string {
@@ -1150,10 +1078,11 @@ type GetMyAccessResponse struct {
 	//
 	//	*GetMyAccessResponse_User
 	//	*GetMyAccessResponse_ServiceAccount
-	Subject       isGetMyAccessResponse_Subject `protobuf_oneof:"subject"`
-	Workspaces    []*WorkspaceAccess            `protobuf:"bytes,3,rep,name=workspaces" json:"workspaces,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Subject                isGetMyAccessResponse_Subject `protobuf_oneof:"subject"`
+	Targets                []*Target                     `protobuf:"bytes,3,rep,name=targets" json:"targets,omitempty"`
+	CertificateAuthorities []*CertificateAuthority       `protobuf:"bytes,4,rep,name=certificate_authorities,json=certificateAuthorities" json:"certificate_authorities,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *GetMyAccessResponse) Reset() {
@@ -1211,9 +1140,16 @@ func (x *GetMyAccessResponse) GetServiceAccount() *ServiceAccount {
 	return nil
 }
 
-func (x *GetMyAccessResponse) GetWorkspaces() []*WorkspaceAccess {
+func (x *GetMyAccessResponse) GetTargets() []*Target {
 	if x != nil {
-		return x.Workspaces
+		return x.Targets
+	}
+	return nil
+}
+
+func (x *GetMyAccessResponse) GetCertificateAuthorities() []*CertificateAuthority {
+	if x != nil {
+		return x.CertificateAuthorities
 	}
 	return nil
 }
@@ -1234,84 +1170,15 @@ func (*GetMyAccessResponse_User) isGetMyAccessResponse_Subject() {}
 
 func (*GetMyAccessResponse_ServiceAccount) isGetMyAccessResponse_Subject() {}
 
-type WorkspaceAccess struct {
-	state                  protoimpl.MessageState  `protogen:"open.v1"`
-	WorkspaceId            *string                 `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	WorkspaceName          *string                 `protobuf:"bytes,2,opt,name=workspace_name,json=workspaceName" json:"workspace_name,omitempty"`
-	Targets                []*Target               `protobuf:"bytes,3,rep,name=targets" json:"targets,omitempty"`
-	CertificateAuthorities []*CertificateAuthority `protobuf:"bytes,4,rep,name=certificate_authorities,json=certificateAuthorities" json:"certificate_authorities,omitempty"`
-	unknownFields          protoimpl.UnknownFields
-	sizeCache              protoimpl.SizeCache
-}
-
-func (x *WorkspaceAccess) Reset() {
-	*x = WorkspaceAccess{}
-	mi := &file_nokku_v1_target_proto_msgTypes[19]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *WorkspaceAccess) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*WorkspaceAccess) ProtoMessage() {}
-
-func (x *WorkspaceAccess) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[19]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use WorkspaceAccess.ProtoReflect.Descriptor instead.
-func (*WorkspaceAccess) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{19}
-}
-
-func (x *WorkspaceAccess) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
-}
-
-func (x *WorkspaceAccess) GetWorkspaceName() string {
-	if x != nil && x.WorkspaceName != nil {
-		return *x.WorkspaceName
-	}
-	return ""
-}
-
-func (x *WorkspaceAccess) GetTargets() []*Target {
-	if x != nil {
-		return x.Targets
-	}
-	return nil
-}
-
-func (x *WorkspaceAccess) GetCertificateAuthorities() []*CertificateAuthority {
-	if x != nil {
-		return x.CertificateAuthorities
-	}
-	return nil
-}
-
 type GetTargetFiltersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetTargetFiltersRequest) Reset() {
 	*x = GetTargetFiltersRequest{}
-	mi := &file_nokku_v1_target_proto_msgTypes[20]
+	mi := &file_nokku_v1_target_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1323,7 +1190,7 @@ func (x *GetTargetFiltersRequest) String() string {
 func (*GetTargetFiltersRequest) ProtoMessage() {}
 
 func (x *GetTargetFiltersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[20]
+	mi := &file_nokku_v1_target_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1336,14 +1203,7 @@ func (x *GetTargetFiltersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTargetFiltersRequest.ProtoReflect.Descriptor instead.
 func (*GetTargetFiltersRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{20}
-}
-
-func (x *GetTargetFiltersRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{19}
 }
 
 type GetTargetFiltersResponse struct {
@@ -1356,7 +1216,7 @@ type GetTargetFiltersResponse struct {
 
 func (x *GetTargetFiltersResponse) Reset() {
 	*x = GetTargetFiltersResponse{}
-	mi := &file_nokku_v1_target_proto_msgTypes[21]
+	mi := &file_nokku_v1_target_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1368,7 +1228,7 @@ func (x *GetTargetFiltersResponse) String() string {
 func (*GetTargetFiltersResponse) ProtoMessage() {}
 
 func (x *GetTargetFiltersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[21]
+	mi := &file_nokku_v1_target_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1381,7 +1241,7 @@ func (x *GetTargetFiltersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTargetFiltersResponse.ProtoReflect.Descriptor instead.
 func (*GetTargetFiltersResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{21}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GetTargetFiltersResponse) GetTags() []string {
@@ -1415,7 +1275,7 @@ type AccessGraphFilter struct {
 
 func (x *AccessGraphFilter) Reset() {
 	*x = AccessGraphFilter{}
-	mi := &file_nokku_v1_target_proto_msgTypes[22]
+	mi := &file_nokku_v1_target_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1427,7 +1287,7 @@ func (x *AccessGraphFilter) String() string {
 func (*AccessGraphFilter) ProtoMessage() {}
 
 func (x *AccessGraphFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[22]
+	mi := &file_nokku_v1_target_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1440,7 +1300,7 @@ func (x *AccessGraphFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccessGraphFilter.ProtoReflect.Descriptor instead.
 func (*AccessGraphFilter) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{22}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *AccessGraphFilter) GetSubjectId() string {
@@ -1473,15 +1333,14 @@ func (x *AccessGraphFilter) GetTag() string {
 
 type GetAccessGraphRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Filter        *AccessGraphFilter     `protobuf:"bytes,2,opt,name=filter" json:"filter,omitempty"`
+	Filter        *AccessGraphFilter     `protobuf:"bytes,1,opt,name=filter" json:"filter,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetAccessGraphRequest) Reset() {
 	*x = GetAccessGraphRequest{}
-	mi := &file_nokku_v1_target_proto_msgTypes[23]
+	mi := &file_nokku_v1_target_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1493,7 +1352,7 @@ func (x *GetAccessGraphRequest) String() string {
 func (*GetAccessGraphRequest) ProtoMessage() {}
 
 func (x *GetAccessGraphRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[23]
+	mi := &file_nokku_v1_target_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1506,14 +1365,7 @@ func (x *GetAccessGraphRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAccessGraphRequest.ProtoReflect.Descriptor instead.
 func (*GetAccessGraphRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{23}
-}
-
-func (x *GetAccessGraphRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *GetAccessGraphRequest) GetFilter() *AccessGraphFilter {
@@ -1540,7 +1392,7 @@ type GetAccessGraphResponse struct {
 
 func (x *GetAccessGraphResponse) Reset() {
 	*x = GetAccessGraphResponse{}
-	mi := &file_nokku_v1_target_proto_msgTypes[24]
+	mi := &file_nokku_v1_target_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1552,7 +1404,7 @@ func (x *GetAccessGraphResponse) String() string {
 func (*GetAccessGraphResponse) ProtoMessage() {}
 
 func (x *GetAccessGraphResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[24]
+	mi := &file_nokku_v1_target_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1565,7 +1417,7 @@ func (x *GetAccessGraphResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAccessGraphResponse.ProtoReflect.Descriptor instead.
 func (*GetAccessGraphResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{24}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *GetAccessGraphResponse) GetSubjects() []*AccessGraphSubject {
@@ -1625,7 +1477,7 @@ type AccessGraphSubject struct {
 
 func (x *AccessGraphSubject) Reset() {
 	*x = AccessGraphSubject{}
-	mi := &file_nokku_v1_target_proto_msgTypes[25]
+	mi := &file_nokku_v1_target_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1637,7 +1489,7 @@ func (x *AccessGraphSubject) String() string {
 func (*AccessGraphSubject) ProtoMessage() {}
 
 func (x *AccessGraphSubject) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[25]
+	mi := &file_nokku_v1_target_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1650,7 +1502,7 @@ func (x *AccessGraphSubject) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccessGraphSubject.ProtoReflect.Descriptor instead.
 func (*AccessGraphSubject) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{25}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *AccessGraphSubject) GetId() string {
@@ -1705,7 +1557,7 @@ type AccessGraphAccount struct {
 
 func (x *AccessGraphAccount) Reset() {
 	*x = AccessGraphAccount{}
-	mi := &file_nokku_v1_target_proto_msgTypes[26]
+	mi := &file_nokku_v1_target_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1717,7 +1569,7 @@ func (x *AccessGraphAccount) String() string {
 func (*AccessGraphAccount) ProtoMessage() {}
 
 func (x *AccessGraphAccount) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[26]
+	mi := &file_nokku_v1_target_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1730,7 +1582,7 @@ func (x *AccessGraphAccount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccessGraphAccount.ProtoReflect.Descriptor instead.
 func (*AccessGraphAccount) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{26}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *AccessGraphAccount) GetUsername() string {
@@ -1759,7 +1611,7 @@ type AccessGraphTag struct {
 
 func (x *AccessGraphTag) Reset() {
 	*x = AccessGraphTag{}
-	mi := &file_nokku_v1_target_proto_msgTypes[27]
+	mi := &file_nokku_v1_target_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1771,7 +1623,7 @@ func (x *AccessGraphTag) String() string {
 func (*AccessGraphTag) ProtoMessage() {}
 
 func (x *AccessGraphTag) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[27]
+	mi := &file_nokku_v1_target_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1784,7 +1636,7 @@ func (x *AccessGraphTag) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccessGraphTag.ProtoReflect.Descriptor instead.
 func (*AccessGraphTag) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{27}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *AccessGraphTag) GetTag() string {
@@ -1820,7 +1672,7 @@ type AccessGraphGrant struct {
 
 func (x *AccessGraphGrant) Reset() {
 	*x = AccessGraphGrant{}
-	mi := &file_nokku_v1_target_proto_msgTypes[28]
+	mi := &file_nokku_v1_target_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1832,7 +1684,7 @@ func (x *AccessGraphGrant) String() string {
 func (*AccessGraphGrant) ProtoMessage() {}
 
 func (x *AccessGraphGrant) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[28]
+	mi := &file_nokku_v1_target_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1845,7 +1697,7 @@ func (x *AccessGraphGrant) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccessGraphGrant.ProtoReflect.Descriptor instead.
 func (*AccessGraphGrant) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{28}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *AccessGraphGrant) GetSubjectId() string {
@@ -1881,7 +1733,7 @@ type AccessGraphReach struct {
 
 func (x *AccessGraphReach) Reset() {
 	*x = AccessGraphReach{}
-	mi := &file_nokku_v1_target_proto_msgTypes[29]
+	mi := &file_nokku_v1_target_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1893,7 +1745,7 @@ func (x *AccessGraphReach) String() string {
 func (*AccessGraphReach) ProtoMessage() {}
 
 func (x *AccessGraphReach) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[29]
+	mi := &file_nokku_v1_target_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1906,7 +1758,7 @@ func (x *AccessGraphReach) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccessGraphReach.ProtoReflect.Descriptor instead.
 func (*AccessGraphReach) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{29}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *AccessGraphReach) GetUsername() string {
@@ -1931,20 +1783,19 @@ func (x *AccessGraphReach) GetTargets() int32 {
 }
 
 type ListAccessGraphTargetsRequest struct {
-	state       protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Filter      *AccessGraphFilter     `protobuf:"bytes,2,opt,name=filter" json:"filter,omitempty"`
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Filter *AccessGraphFilter     `protobuf:"bytes,1,opt,name=filter" json:"filter,omitempty"`
 	// Empty lists the untagged targets.
-	Tag           *string `protobuf:"bytes,3,opt,name=tag" json:"tag,omitempty"`
-	Limit         *int32  `protobuf:"varint,4,opt,name=limit" json:"limit,omitempty"`
-	Offset        *int32  `protobuf:"varint,5,opt,name=offset" json:"offset,omitempty"`
+	Tag           *string `protobuf:"bytes,2,opt,name=tag" json:"tag,omitempty"`
+	Limit         *int32  `protobuf:"varint,3,opt,name=limit" json:"limit,omitempty"`
+	Offset        *int32  `protobuf:"varint,4,opt,name=offset" json:"offset,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ListAccessGraphTargetsRequest) Reset() {
 	*x = ListAccessGraphTargetsRequest{}
-	mi := &file_nokku_v1_target_proto_msgTypes[30]
+	mi := &file_nokku_v1_target_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1956,7 +1807,7 @@ func (x *ListAccessGraphTargetsRequest) String() string {
 func (*ListAccessGraphTargetsRequest) ProtoMessage() {}
 
 func (x *ListAccessGraphTargetsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[30]
+	mi := &file_nokku_v1_target_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1969,14 +1820,7 @@ func (x *ListAccessGraphTargetsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListAccessGraphTargetsRequest.ProtoReflect.Descriptor instead.
 func (*ListAccessGraphTargetsRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{30}
-}
-
-func (x *ListAccessGraphTargetsRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *ListAccessGraphTargetsRequest) GetFilter() *AccessGraphFilter {
@@ -2018,7 +1862,7 @@ type ListAccessGraphTargetsResponse struct {
 
 func (x *ListAccessGraphTargetsResponse) Reset() {
 	*x = ListAccessGraphTargetsResponse{}
-	mi := &file_nokku_v1_target_proto_msgTypes[31]
+	mi := &file_nokku_v1_target_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2030,7 +1874,7 @@ func (x *ListAccessGraphTargetsResponse) String() string {
 func (*ListAccessGraphTargetsResponse) ProtoMessage() {}
 
 func (x *ListAccessGraphTargetsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[31]
+	mi := &file_nokku_v1_target_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2043,7 +1887,7 @@ func (x *ListAccessGraphTargetsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListAccessGraphTargetsResponse.ProtoReflect.Descriptor instead.
 func (*ListAccessGraphTargetsResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{31}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ListAccessGraphTargetsResponse) GetTargets() []*AccessGraphTarget {
@@ -2072,7 +1916,7 @@ type AccessGraphTarget struct {
 
 func (x *AccessGraphTarget) Reset() {
 	*x = AccessGraphTarget{}
-	mi := &file_nokku_v1_target_proto_msgTypes[32]
+	mi := &file_nokku_v1_target_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2084,7 +1928,7 @@ func (x *AccessGraphTarget) String() string {
 func (*AccessGraphTarget) ProtoMessage() {}
 
 func (x *AccessGraphTarget) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_target_proto_msgTypes[32]
+	mi := &file_nokku_v1_target_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2097,7 +1941,7 @@ func (x *AccessGraphTarget) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccessGraphTarget.ProtoReflect.Descriptor instead.
 func (*AccessGraphTarget) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_target_proto_rawDescGZIP(), []int{32}
+	return file_nokku_v1_target_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *AccessGraphTarget) GetId() string {
@@ -2125,112 +1969,96 @@ var File_nokku_v1_target_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_target_proto_rawDesc = "" +
 	"\n" +
-	"\x15nokku/v1/target.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x18nokku/v1/principal.proto\x1a\x1enokku/v1/service_account.proto\"p\n" +
-	"\x1aGetTargetPrincipalsRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12%\n" +
-	"\ttarget_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\"W\n" +
+	"\x15nokku/v1/target.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x18nokku/v1/principal.proto\x1a\x1enokku/v1/service_account.proto\"C\n" +
+	"\x1aGetTargetPrincipalsRequest\x12%\n" +
+	"\ttarget_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\"W\n" +
 	"\x1bGetTargetPrincipalsResponse\x128\n" +
 	"\n" +
 	"principals\x18\x01 \x03(\v2\x18.nokku.v1.PrincipalUsersR\n" +
-	"principals\"\xf3\x01\n" +
-	"\x16SyncTargetUsersRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12%\n" +
-	"\ttarget_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\x12&\n" +
-	"\x0fhost_public_key\x18\x03 \x01(\tR\rhostPublicKey\x12.\n" +
-	"\tusernames\x18\x04 \x03(\tB\x10\xbaH\r\x92\x01\n" +
+	"principals\"\xc6\x01\n" +
+	"\x16SyncTargetUsersRequest\x12%\n" +
+	"\ttarget_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\x12&\n" +
+	"\x0fhost_public_key\x18\x02 \x01(\tR\rhostPublicKey\x12.\n" +
+	"\tusernames\x18\x03 \x03(\tB\x10\xbaH\r\x92\x01\n" +
 	"\x10\xc8\x01\"\x05r\x03\x18\x80\x02R\tusernames\x12-\n" +
-	"\tendpoints\x18\x05 \x03(\tB\x0f\xbaH\f\x92\x01\t\x10\x10\"\x05r\x03\x18\xff\x01R\tendpoints\"\x19\n" +
-	"\x17SyncTargetUsersResponse\"\xbf\x04\n" +
+	"\tendpoints\x18\x04 \x03(\tB\x0f\xbaH\f\x92\x01\t\x10\x10\"\x05r\x03\x18\xff\x01R\tendpoints\"\x19\n" +
+	"\x17SyncTargetUsersResponse\"\x9c\x04\n" +
 	"\x06Target\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
-	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x13\n" +
-	"\x05ca_id\x18\x03 \x01(\tR\x04caId\x12\x1b\n" +
-	"\tdaemon_id\x18\x04 \x01(\tR\bdaemonId\x12\x12\n" +
-	"\x04name\x18\x05 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x06 \x01(\tR\vdescription\x12&\n" +
-	"\x0fhost_public_key\x18\a \x01(\tR\rhostPublicKey\x12\x12\n" +
-	"\x04tags\x18\b \x03(\tR\x04tags\x12\x1c\n" +
-	"\tendpoints\x18\t \x03(\tR\tendpoints\x12\x1c\n" +
-	"\tusernames\x18\n" +
-	" \x03(\tR\tusernames\x123\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x13\n" +
+	"\x05ca_id\x18\x02 \x01(\tR\x04caId\x12\x1b\n" +
+	"\tdaemon_id\x18\x03 \x01(\tR\bdaemonId\x12\x12\n" +
+	"\x04name\x18\x04 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x05 \x01(\tR\vdescription\x12&\n" +
+	"\x0fhost_public_key\x18\x06 \x01(\tR\rhostPublicKey\x12\x12\n" +
+	"\x04tags\x18\a \x03(\tR\x04tags\x12\x1c\n" +
+	"\tendpoints\x18\b \x03(\tR\tendpoints\x12\x1c\n" +
+	"\tusernames\x18\t \x03(\tR\tusernames\x123\n" +
 	"\n" +
-	"principals\x18\v \x03(\v2\x13.nokku.v1.PrincipalR\n" +
+	"principals\x18\n" +
+	" \x03(\v2\x13.nokku.v1.PrincipalR\n" +
 	"principals\x12:\n" +
-	"\bmetadata\x18\f \x03(\v2\x1e.nokku.v1.Target.MetadataEntryR\bmetadata\x129\n" +
+	"\bmetadata\x18\v \x03(\v2\x1e.nokku.v1.Target.MetadataEntryR\bmetadata\x129\n" +
 	"\n" +
-	"created_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x1a;\n" +
+	"updated_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"Y\n" +
-	"\x10GetTargetRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
-	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"=\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\",\n" +
+	"\x10GetTargetRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"=\n" +
 	"\x11GetTargetResponse\x12(\n" +
-	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"\xa5\x02\n" +
-	"\x13CreateTargetRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1d\n" +
-	"\x05ca_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12<\n" +
-	"\x04name\x18\x03 \x01(\tB(\xbaH%r#\x18\x80\x022\x1e^$|^[a-zA-Z0-9][a-zA-Z0-9-_]*$R\x04name\x12*\n" +
+	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"\xf8\x01\n" +
+	"\x13CreateTargetRequest\x12\x1d\n" +
+	"\x05ca_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12<\n" +
+	"\x04name\x18\x02 \x01(\tB(\xbaH%r#\x18\x80\x022\x1e^$|^[a-zA-Z0-9][a-zA-Z0-9-_]*$R\x04name\x12*\n" +
+	"\vdescription\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\vdescription\x12&\n" +
+	"\x0fhost_public_key\x18\x04 \x01(\tR\rhostPublicKey\x12\x1c\n" +
+	"\tendpoints\x18\x05 \x03(\tR\tendpoints\x12\x12\n" +
+	"\x04tags\x18\x06 \x03(\tR\x04tags\"@\n" +
+	"\x14CreateTargetResponse\x12(\n" +
+	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"\x91\x02\n" +
+	"\x13UpdateTargetRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x1d\n" +
+	"\x05ca_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12;\n" +
+	"\x04name\x18\x03 \x01(\tB'\xbaH$r\"\x10\x01\x18\x80\x022\x1b^[a-zA-Z0-9][a-zA-Z0-9-_]*$R\x04name\x12*\n" +
 	"\vdescription\x18\x04 \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\vdescription\x12&\n" +
 	"\x0fhost_public_key\x18\x05 \x01(\tR\rhostPublicKey\x12\x1c\n" +
 	"\tendpoints\x18\x06 \x03(\tR\tendpoints\x12\x12\n" +
 	"\x04tags\x18\a \x03(\tR\x04tags\"@\n" +
-	"\x14CreateTargetResponse\x12(\n" +
-	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"\xbe\x02\n" +
-	"\x13UpdateTargetRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
-	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x1d\n" +
-	"\x05ca_id\x18\x03 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12;\n" +
-	"\x04name\x18\x04 \x01(\tB'\xbaH$r\"\x10\x01\x18\x80\x022\x1b^[a-zA-Z0-9][a-zA-Z0-9-_]*$R\x04name\x12*\n" +
-	"\vdescription\x18\x05 \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\vdescription\x12&\n" +
-	"\x0fhost_public_key\x18\x06 \x01(\tR\rhostPublicKey\x12\x1c\n" +
-	"\tendpoints\x18\a \x03(\tR\tendpoints\x12\x12\n" +
-	"\x04tags\x18\b \x03(\tR\x04tags\"@\n" +
 	"\x14UpdateTargetResponse\x12(\n" +
-	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"\\\n" +
-	"\x13DeleteTargetRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
-	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x16\n" +
-	"\x14DeleteTargetResponse\"\xff\x01\n" +
-	"\x12ListTargetsRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1f\n" +
-	"\x05limit\x18\x02 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
-	"\x06offset\x18\x03 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x14\n" +
-	"\x05query\x18\x04 \x01(\tR\x05query\x12\x1b\n" +
-	"\tdaemon_id\x18\x05 \x01(\tR\bdaemonId\x12\x13\n" +
-	"\x05ca_id\x18\x06 \x01(\tR\x04caId\x12\x1e\n" +
+	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"/\n" +
+	"\x13DeleteTargetRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x16\n" +
+	"\x14DeleteTargetResponse\"\xd2\x01\n" +
+	"\x12ListTargetsRequest\x12\x1f\n" +
+	"\x05limit\x18\x01 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
+	"\x06offset\x18\x02 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x14\n" +
+	"\x05query\x18\x03 \x01(\tR\x05query\x12\x1b\n" +
+	"\tdaemon_id\x18\x04 \x01(\tR\bdaemonId\x12\x13\n" +
+	"\x05ca_id\x18\x05 \x01(\tR\x04caId\x12\x1e\n" +
 	"\n" +
-	"principals\x18\a \x03(\tR\n" +
+	"principals\x18\x06 \x03(\tR\n" +
 	"principals\x12\x12\n" +
-	"\x04tags\x18\b \x03(\tR\x04tags\"W\n" +
+	"\x04tags\x18\a \x03(\tR\x04tags\"W\n" +
 	"\x13ListTargetsResponse\x12*\n" +
 	"\atargets\x18\x01 \x03(\v2\x10.nokku.v1.TargetR\atargets\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\"o\n" +
-	"\x17GetSubjectAccessRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12'\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"B\n" +
+	"\x17GetSubjectAccessRequest\x12'\n" +
 	"\n" +
-	"subject_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\tsubjectId\"\xcb\x01\n" +
+	"subject_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\tsubjectId\"\xcb\x01\n" +
 	"\x18GetSubjectAccessResponse\x12*\n" +
 	"\atargets\x18\x01 \x03(\v2\x10.nokku.v1.TargetR\atargets\x12*\n" +
 	"\adaemons\x18\x02 \x03(\v2\x10.nokku.v1.DaemonR\adaemons\x12W\n" +
 	"\x17certificate_authorities\x18\x03 \x03(\v2\x1e.nokku.v1.CertificateAuthorityR\x16certificateAuthorities\"\x14\n" +
-	"\x12GetMyAccessRequest\"\xc6\x01\n" +
+	"\x12GetMyAccessRequest\"\x90\x02\n" +
 	"\x13GetMyAccessResponse\x12$\n" +
 	"\x04user\x18\x01 \x01(\v2\x0e.nokku.v1.UserH\x00R\x04user\x12C\n" +
-	"\x0fservice_account\x18\x02 \x01(\v2\x18.nokku.v1.ServiceAccountH\x00R\x0eserviceAccount\x129\n" +
-	"\n" +
-	"workspaces\x18\x03 \x03(\v2\x19.nokku.v1.WorkspaceAccessR\n" +
-	"workspacesB\t\n" +
-	"\asubject\"\xe0\x01\n" +
-	"\x0fWorkspaceAccess\x12!\n" +
-	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12%\n" +
-	"\x0eworkspace_name\x18\x02 \x01(\tR\rworkspaceName\x12*\n" +
+	"\x0fservice_account\x18\x02 \x01(\v2\x18.nokku.v1.ServiceAccountH\x00R\x0eserviceAccount\x12*\n" +
 	"\atargets\x18\x03 \x03(\v2\x10.nokku.v1.TargetR\atargets\x12W\n" +
-	"\x17certificate_authorities\x18\x04 \x03(\v2\x1e.nokku.v1.CertificateAuthorityR\x16certificateAuthorities\"F\n" +
-	"\x17GetTargetFiltersRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\"N\n" +
+	"\x17certificate_authorities\x18\x04 \x03(\v2\x1e.nokku.v1.CertificateAuthorityR\x16certificateAuthoritiesB\t\n" +
+	"\asubject\"\x19\n" +
+	"\x17GetTargetFiltersRequest\"N\n" +
 	"\x18GetTargetFiltersResponse\x12\x12\n" +
 	"\x04tags\x18\x01 \x03(\tR\x04tags\x12\x1e\n" +
 	"\n" +
@@ -2241,10 +2069,9 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"subject_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\tsubjectId\x12%\n" +
 	"\ttarget_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\x12#\n" +
 	"\busername\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x18 R\busername\x12\x1a\n" +
-	"\x03tag\x18\x04 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x02R\x03tag\"y\n" +
-	"\x15GetAccessGraphRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x123\n" +
-	"\x06filter\x18\x02 \x01(\v2\x1b.nokku.v1.AccessGraphFilterR\x06filter\"\xba\x02\n" +
+	"\x03tag\x18\x04 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x02R\x03tag\"L\n" +
+	"\x15GetAccessGraphRequest\x123\n" +
+	"\x06filter\x18\x01 \x01(\v2\x1b.nokku.v1.AccessGraphFilterR\x06filter\"\xba\x02\n" +
 	"\x16GetAccessGraphResponse\x128\n" +
 	"\bsubjects\x18\x01 \x03(\v2\x1c.nokku.v1.AccessGraphSubjectR\bsubjects\x128\n" +
 	"\baccounts\x18\x02 \x03(\v2\x1c.nokku.v1.AccessGraphAccountR\baccounts\x12,\n" +
@@ -2274,13 +2101,12 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"\x10AccessGraphReach\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x10\n" +
 	"\x03tag\x18\x02 \x01(\tR\x03tag\x12\x18\n" +
-	"\atargets\x18\x03 \x01(\x05R\atargets\"\xdf\x01\n" +
-	"\x1dListAccessGraphTargetsRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x123\n" +
-	"\x06filter\x18\x02 \x01(\v2\x1b.nokku.v1.AccessGraphFilterR\x06filter\x12\x1a\n" +
-	"\x03tag\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x02R\x03tag\x12\x1f\n" +
-	"\x05limit\x18\x04 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
-	"\x06offset\x18\x05 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\"m\n" +
+	"\atargets\x18\x03 \x01(\x05R\atargets\"\xb2\x01\n" +
+	"\x1dListAccessGraphTargetsRequest\x123\n" +
+	"\x06filter\x18\x01 \x01(\v2\x1b.nokku.v1.AccessGraphFilterR\x06filter\x12\x1a\n" +
+	"\x03tag\x18\x02 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x02R\x03tag\x12\x1f\n" +
+	"\x05limit\x18\x03 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
+	"\x06offset\x18\x04 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\"m\n" +
 	"\x1eListAccessGraphTargetsResponse\x125\n" +
 	"\atargets\x18\x01 \x03(\v2\x1b.nokku.v1.AccessGraphTargetR\atargets\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\"Q\n" +
@@ -2315,7 +2141,7 @@ func file_nokku_v1_target_proto_rawDescGZIP() []byte {
 	return file_nokku_v1_target_proto_rawDescData
 }
 
-var file_nokku_v1_target_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
+var file_nokku_v1_target_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
 var file_nokku_v1_target_proto_goTypes = []any{
 	(*GetTargetPrincipalsRequest)(nil),     // 0: nokku.v1.GetTargetPrincipalsRequest
 	(*GetTargetPrincipalsResponse)(nil),    // 1: nokku.v1.GetTargetPrincipalsResponse
@@ -2336,86 +2162,84 @@ var file_nokku_v1_target_proto_goTypes = []any{
 	(*GetSubjectAccessResponse)(nil),       // 16: nokku.v1.GetSubjectAccessResponse
 	(*GetMyAccessRequest)(nil),             // 17: nokku.v1.GetMyAccessRequest
 	(*GetMyAccessResponse)(nil),            // 18: nokku.v1.GetMyAccessResponse
-	(*WorkspaceAccess)(nil),                // 19: nokku.v1.WorkspaceAccess
-	(*GetTargetFiltersRequest)(nil),        // 20: nokku.v1.GetTargetFiltersRequest
-	(*GetTargetFiltersResponse)(nil),       // 21: nokku.v1.GetTargetFiltersResponse
-	(*AccessGraphFilter)(nil),              // 22: nokku.v1.AccessGraphFilter
-	(*GetAccessGraphRequest)(nil),          // 23: nokku.v1.GetAccessGraphRequest
-	(*GetAccessGraphResponse)(nil),         // 24: nokku.v1.GetAccessGraphResponse
-	(*AccessGraphSubject)(nil),             // 25: nokku.v1.AccessGraphSubject
-	(*AccessGraphAccount)(nil),             // 26: nokku.v1.AccessGraphAccount
-	(*AccessGraphTag)(nil),                 // 27: nokku.v1.AccessGraphTag
-	(*AccessGraphGrant)(nil),               // 28: nokku.v1.AccessGraphGrant
-	(*AccessGraphReach)(nil),               // 29: nokku.v1.AccessGraphReach
-	(*ListAccessGraphTargetsRequest)(nil),  // 30: nokku.v1.ListAccessGraphTargetsRequest
-	(*ListAccessGraphTargetsResponse)(nil), // 31: nokku.v1.ListAccessGraphTargetsResponse
-	(*AccessGraphTarget)(nil),              // 32: nokku.v1.AccessGraphTarget
-	nil,                                    // 33: nokku.v1.Target.MetadataEntry
-	(*PrincipalUsers)(nil),                 // 34: nokku.v1.PrincipalUsers
-	(*Principal)(nil),                      // 35: nokku.v1.Principal
-	(*timestamppb.Timestamp)(nil),          // 36: google.protobuf.Timestamp
-	(*Daemon)(nil),                         // 37: nokku.v1.Daemon
-	(*CertificateAuthority)(nil),           // 38: nokku.v1.CertificateAuthority
-	(*User)(nil),                           // 39: nokku.v1.User
-	(*ServiceAccount)(nil),                 // 40: nokku.v1.ServiceAccount
-	(SubjectKind)(0),                       // 41: nokku.v1.SubjectKind
+	(*GetTargetFiltersRequest)(nil),        // 19: nokku.v1.GetTargetFiltersRequest
+	(*GetTargetFiltersResponse)(nil),       // 20: nokku.v1.GetTargetFiltersResponse
+	(*AccessGraphFilter)(nil),              // 21: nokku.v1.AccessGraphFilter
+	(*GetAccessGraphRequest)(nil),          // 22: nokku.v1.GetAccessGraphRequest
+	(*GetAccessGraphResponse)(nil),         // 23: nokku.v1.GetAccessGraphResponse
+	(*AccessGraphSubject)(nil),             // 24: nokku.v1.AccessGraphSubject
+	(*AccessGraphAccount)(nil),             // 25: nokku.v1.AccessGraphAccount
+	(*AccessGraphTag)(nil),                 // 26: nokku.v1.AccessGraphTag
+	(*AccessGraphGrant)(nil),               // 27: nokku.v1.AccessGraphGrant
+	(*AccessGraphReach)(nil),               // 28: nokku.v1.AccessGraphReach
+	(*ListAccessGraphTargetsRequest)(nil),  // 29: nokku.v1.ListAccessGraphTargetsRequest
+	(*ListAccessGraphTargetsResponse)(nil), // 30: nokku.v1.ListAccessGraphTargetsResponse
+	(*AccessGraphTarget)(nil),              // 31: nokku.v1.AccessGraphTarget
+	nil,                                    // 32: nokku.v1.Target.MetadataEntry
+	(*PrincipalUsers)(nil),                 // 33: nokku.v1.PrincipalUsers
+	(*Principal)(nil),                      // 34: nokku.v1.Principal
+	(*timestamppb.Timestamp)(nil),          // 35: google.protobuf.Timestamp
+	(*Daemon)(nil),                         // 36: nokku.v1.Daemon
+	(*CertificateAuthority)(nil),           // 37: nokku.v1.CertificateAuthority
+	(*User)(nil),                           // 38: nokku.v1.User
+	(*ServiceAccount)(nil),                 // 39: nokku.v1.ServiceAccount
+	(SubjectKind)(0),                       // 40: nokku.v1.SubjectKind
 }
 var file_nokku_v1_target_proto_depIdxs = []int32{
-	34, // 0: nokku.v1.GetTargetPrincipalsResponse.principals:type_name -> nokku.v1.PrincipalUsers
-	35, // 1: nokku.v1.Target.principals:type_name -> nokku.v1.Principal
-	33, // 2: nokku.v1.Target.metadata:type_name -> nokku.v1.Target.MetadataEntry
-	36, // 3: nokku.v1.Target.created_at:type_name -> google.protobuf.Timestamp
-	36, // 4: nokku.v1.Target.updated_at:type_name -> google.protobuf.Timestamp
+	33, // 0: nokku.v1.GetTargetPrincipalsResponse.principals:type_name -> nokku.v1.PrincipalUsers
+	34, // 1: nokku.v1.Target.principals:type_name -> nokku.v1.Principal
+	32, // 2: nokku.v1.Target.metadata:type_name -> nokku.v1.Target.MetadataEntry
+	35, // 3: nokku.v1.Target.created_at:type_name -> google.protobuf.Timestamp
+	35, // 4: nokku.v1.Target.updated_at:type_name -> google.protobuf.Timestamp
 	4,  // 5: nokku.v1.GetTargetResponse.target:type_name -> nokku.v1.Target
 	4,  // 6: nokku.v1.CreateTargetResponse.target:type_name -> nokku.v1.Target
 	4,  // 7: nokku.v1.UpdateTargetResponse.target:type_name -> nokku.v1.Target
 	4,  // 8: nokku.v1.ListTargetsResponse.targets:type_name -> nokku.v1.Target
 	4,  // 9: nokku.v1.GetSubjectAccessResponse.targets:type_name -> nokku.v1.Target
-	37, // 10: nokku.v1.GetSubjectAccessResponse.daemons:type_name -> nokku.v1.Daemon
-	38, // 11: nokku.v1.GetSubjectAccessResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
-	39, // 12: nokku.v1.GetMyAccessResponse.user:type_name -> nokku.v1.User
-	40, // 13: nokku.v1.GetMyAccessResponse.service_account:type_name -> nokku.v1.ServiceAccount
-	19, // 14: nokku.v1.GetMyAccessResponse.workspaces:type_name -> nokku.v1.WorkspaceAccess
-	4,  // 15: nokku.v1.WorkspaceAccess.targets:type_name -> nokku.v1.Target
-	38, // 16: nokku.v1.WorkspaceAccess.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
-	22, // 17: nokku.v1.GetAccessGraphRequest.filter:type_name -> nokku.v1.AccessGraphFilter
-	25, // 18: nokku.v1.GetAccessGraphResponse.subjects:type_name -> nokku.v1.AccessGraphSubject
-	26, // 19: nokku.v1.GetAccessGraphResponse.accounts:type_name -> nokku.v1.AccessGraphAccount
-	27, // 20: nokku.v1.GetAccessGraphResponse.tags:type_name -> nokku.v1.AccessGraphTag
-	28, // 21: nokku.v1.GetAccessGraphResponse.grants:type_name -> nokku.v1.AccessGraphGrant
-	29, // 22: nokku.v1.GetAccessGraphResponse.reach:type_name -> nokku.v1.AccessGraphReach
-	41, // 23: nokku.v1.AccessGraphSubject.kind:type_name -> nokku.v1.SubjectKind
-	22, // 24: nokku.v1.ListAccessGraphTargetsRequest.filter:type_name -> nokku.v1.AccessGraphFilter
-	32, // 25: nokku.v1.ListAccessGraphTargetsResponse.targets:type_name -> nokku.v1.AccessGraphTarget
-	5,  // 26: nokku.v1.TargetService.GetTarget:input_type -> nokku.v1.GetTargetRequest
-	13, // 27: nokku.v1.TargetService.ListTargets:input_type -> nokku.v1.ListTargetsRequest
-	7,  // 28: nokku.v1.TargetService.CreateTarget:input_type -> nokku.v1.CreateTargetRequest
-	9,  // 29: nokku.v1.TargetService.UpdateTarget:input_type -> nokku.v1.UpdateTargetRequest
-	11, // 30: nokku.v1.TargetService.DeleteTarget:input_type -> nokku.v1.DeleteTargetRequest
-	15, // 31: nokku.v1.TargetService.GetSubjectAccess:input_type -> nokku.v1.GetSubjectAccessRequest
-	17, // 32: nokku.v1.TargetService.GetMyAccess:input_type -> nokku.v1.GetMyAccessRequest
-	20, // 33: nokku.v1.TargetService.GetTargetFilters:input_type -> nokku.v1.GetTargetFiltersRequest
-	0,  // 34: nokku.v1.TargetService.GetTargetPrincipals:input_type -> nokku.v1.GetTargetPrincipalsRequest
-	2,  // 35: nokku.v1.TargetService.SyncTargetUsers:input_type -> nokku.v1.SyncTargetUsersRequest
-	23, // 36: nokku.v1.TargetService.GetAccessGraph:input_type -> nokku.v1.GetAccessGraphRequest
-	30, // 37: nokku.v1.TargetService.ListAccessGraphTargets:input_type -> nokku.v1.ListAccessGraphTargetsRequest
-	6,  // 38: nokku.v1.TargetService.GetTarget:output_type -> nokku.v1.GetTargetResponse
-	14, // 39: nokku.v1.TargetService.ListTargets:output_type -> nokku.v1.ListTargetsResponse
-	8,  // 40: nokku.v1.TargetService.CreateTarget:output_type -> nokku.v1.CreateTargetResponse
-	10, // 41: nokku.v1.TargetService.UpdateTarget:output_type -> nokku.v1.UpdateTargetResponse
-	12, // 42: nokku.v1.TargetService.DeleteTarget:output_type -> nokku.v1.DeleteTargetResponse
-	16, // 43: nokku.v1.TargetService.GetSubjectAccess:output_type -> nokku.v1.GetSubjectAccessResponse
-	18, // 44: nokku.v1.TargetService.GetMyAccess:output_type -> nokku.v1.GetMyAccessResponse
-	21, // 45: nokku.v1.TargetService.GetTargetFilters:output_type -> nokku.v1.GetTargetFiltersResponse
-	1,  // 46: nokku.v1.TargetService.GetTargetPrincipals:output_type -> nokku.v1.GetTargetPrincipalsResponse
-	3,  // 47: nokku.v1.TargetService.SyncTargetUsers:output_type -> nokku.v1.SyncTargetUsersResponse
-	24, // 48: nokku.v1.TargetService.GetAccessGraph:output_type -> nokku.v1.GetAccessGraphResponse
-	31, // 49: nokku.v1.TargetService.ListAccessGraphTargets:output_type -> nokku.v1.ListAccessGraphTargetsResponse
-	38, // [38:50] is the sub-list for method output_type
-	26, // [26:38] is the sub-list for method input_type
-	26, // [26:26] is the sub-list for extension type_name
-	26, // [26:26] is the sub-list for extension extendee
-	0,  // [0:26] is the sub-list for field type_name
+	36, // 10: nokku.v1.GetSubjectAccessResponse.daemons:type_name -> nokku.v1.Daemon
+	37, // 11: nokku.v1.GetSubjectAccessResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
+	38, // 12: nokku.v1.GetMyAccessResponse.user:type_name -> nokku.v1.User
+	39, // 13: nokku.v1.GetMyAccessResponse.service_account:type_name -> nokku.v1.ServiceAccount
+	4,  // 14: nokku.v1.GetMyAccessResponse.targets:type_name -> nokku.v1.Target
+	37, // 15: nokku.v1.GetMyAccessResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
+	21, // 16: nokku.v1.GetAccessGraphRequest.filter:type_name -> nokku.v1.AccessGraphFilter
+	24, // 17: nokku.v1.GetAccessGraphResponse.subjects:type_name -> nokku.v1.AccessGraphSubject
+	25, // 18: nokku.v1.GetAccessGraphResponse.accounts:type_name -> nokku.v1.AccessGraphAccount
+	26, // 19: nokku.v1.GetAccessGraphResponse.tags:type_name -> nokku.v1.AccessGraphTag
+	27, // 20: nokku.v1.GetAccessGraphResponse.grants:type_name -> nokku.v1.AccessGraphGrant
+	28, // 21: nokku.v1.GetAccessGraphResponse.reach:type_name -> nokku.v1.AccessGraphReach
+	40, // 22: nokku.v1.AccessGraphSubject.kind:type_name -> nokku.v1.SubjectKind
+	21, // 23: nokku.v1.ListAccessGraphTargetsRequest.filter:type_name -> nokku.v1.AccessGraphFilter
+	31, // 24: nokku.v1.ListAccessGraphTargetsResponse.targets:type_name -> nokku.v1.AccessGraphTarget
+	5,  // 25: nokku.v1.TargetService.GetTarget:input_type -> nokku.v1.GetTargetRequest
+	13, // 26: nokku.v1.TargetService.ListTargets:input_type -> nokku.v1.ListTargetsRequest
+	7,  // 27: nokku.v1.TargetService.CreateTarget:input_type -> nokku.v1.CreateTargetRequest
+	9,  // 28: nokku.v1.TargetService.UpdateTarget:input_type -> nokku.v1.UpdateTargetRequest
+	11, // 29: nokku.v1.TargetService.DeleteTarget:input_type -> nokku.v1.DeleteTargetRequest
+	15, // 30: nokku.v1.TargetService.GetSubjectAccess:input_type -> nokku.v1.GetSubjectAccessRequest
+	17, // 31: nokku.v1.TargetService.GetMyAccess:input_type -> nokku.v1.GetMyAccessRequest
+	19, // 32: nokku.v1.TargetService.GetTargetFilters:input_type -> nokku.v1.GetTargetFiltersRequest
+	0,  // 33: nokku.v1.TargetService.GetTargetPrincipals:input_type -> nokku.v1.GetTargetPrincipalsRequest
+	2,  // 34: nokku.v1.TargetService.SyncTargetUsers:input_type -> nokku.v1.SyncTargetUsersRequest
+	22, // 35: nokku.v1.TargetService.GetAccessGraph:input_type -> nokku.v1.GetAccessGraphRequest
+	29, // 36: nokku.v1.TargetService.ListAccessGraphTargets:input_type -> nokku.v1.ListAccessGraphTargetsRequest
+	6,  // 37: nokku.v1.TargetService.GetTarget:output_type -> nokku.v1.GetTargetResponse
+	14, // 38: nokku.v1.TargetService.ListTargets:output_type -> nokku.v1.ListTargetsResponse
+	8,  // 39: nokku.v1.TargetService.CreateTarget:output_type -> nokku.v1.CreateTargetResponse
+	10, // 40: nokku.v1.TargetService.UpdateTarget:output_type -> nokku.v1.UpdateTargetResponse
+	12, // 41: nokku.v1.TargetService.DeleteTarget:output_type -> nokku.v1.DeleteTargetResponse
+	16, // 42: nokku.v1.TargetService.GetSubjectAccess:output_type -> nokku.v1.GetSubjectAccessResponse
+	18, // 43: nokku.v1.TargetService.GetMyAccess:output_type -> nokku.v1.GetMyAccessResponse
+	20, // 44: nokku.v1.TargetService.GetTargetFilters:output_type -> nokku.v1.GetTargetFiltersResponse
+	1,  // 45: nokku.v1.TargetService.GetTargetPrincipals:output_type -> nokku.v1.GetTargetPrincipalsResponse
+	3,  // 46: nokku.v1.TargetService.SyncTargetUsers:output_type -> nokku.v1.SyncTargetUsersResponse
+	23, // 47: nokku.v1.TargetService.GetAccessGraph:output_type -> nokku.v1.GetAccessGraphResponse
+	30, // 48: nokku.v1.TargetService.ListAccessGraphTargets:output_type -> nokku.v1.ListAccessGraphTargetsResponse
+	37, // [37:49] is the sub-list for method output_type
+	25, // [25:37] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_target_proto_init() }
@@ -2439,7 +2263,7 @@ func file_nokku_v1_target_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_nokku_v1_target_proto_rawDesc), len(file_nokku_v1_target_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   34,
+			NumMessages:   33,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

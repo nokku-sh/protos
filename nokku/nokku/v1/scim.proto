@@ -29,8 +29,7 @@ message SCIMToken {
 }
 
 message CreateSCIMTokenRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string label = 2 [(buf.validate.field).string = {
+  string label = 1 [(buf.validate.field).string = {
     min_len: 1
     max_len: 256
   }];
@@ -41,15 +40,12 @@ message CreateSCIMTokenResponse {
   string base_url = 3;
 }
 
-message ListSCIMTokensRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
+message ListSCIMTokensRequest {}
 message ListSCIMTokensResponse {
   repeated SCIMToken tokens = 1;
 }
 
 message DeleteSCIMTokenRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string token_id = 2 [(buf.validate.field).string.uuid = true];
+  string token_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message DeleteSCIMTokenResponse {}

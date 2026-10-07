@@ -48,6 +48,9 @@ const (
 	// UtilServiceExportAuditLogsProcedure is the fully-qualified name of the UtilService's
 	// ExportAuditLogs RPC.
 	UtilServiceExportAuditLogsProcedure = "/nokku.v1.UtilService/ExportAuditLogs"
+	// UtilServiceListMyActivityProcedure is the fully-qualified name of the UtilService's
+	// ListMyActivity RPC.
+	UtilServiceListMyActivityProcedure = "/nokku.v1.UtilService/ListMyActivity"
 )
 
 // UtilServiceClient is a client for the nokku.v1.UtilService service.
@@ -60,6 +63,8 @@ type UtilServiceClient interface {
 	ListRoles(context.Context, *v1.ListRolesRequest) (*v1.ListRolesResponse, error)
 	ListAuditLogs(context.Context, *v1.ListAuditLogsRequest) (*v1.ListAuditLogsResponse, error)
 	ExportAuditLogs(context.Context, *v1.ExportAuditLogsRequest) (*v1.ExportAuditLogsResponse, error)
+	// The caller's own events.
+	ListMyActivity(context.Context, *v1.ListMyActivityRequest) (*v1.ListMyActivityResponse, error)
 }
 
 // NewUtilServiceClient constructs a client for the nokku.v1.UtilService service. By default, it
@@ -114,6 +119,13 @@ func NewUtilServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(utilServiceMethods.ByName("ExportAuditLogs")),
 			connect.WithClientOptions(opts...),
 		),
+		listMyActivity: connect.NewClient[v1.ListMyActivityRequest, v1.ListMyActivityResponse](
+			httpClient,
+			baseURL+UtilServiceListMyActivityProcedure,
+			connect.WithSchema(utilServiceMethods.ByName("ListMyActivity")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -125,6 +137,7 @@ type utilServiceClient struct {
 	listRoles       *connect.Client[v1.ListRolesRequest, v1.ListRolesResponse]
 	listAuditLogs   *connect.Client[v1.ListAuditLogsRequest, v1.ListAuditLogsResponse]
 	exportAuditLogs *connect.Client[v1.ExportAuditLogsRequest, v1.ExportAuditLogsResponse]
+	listMyActivity  *connect.Client[v1.ListMyActivityRequest, v1.ListMyActivityResponse]
 }
 
 // GetVersion calls nokku.v1.UtilService.GetVersion.
@@ -181,6 +194,15 @@ func (c *utilServiceClient) ExportAuditLogs(ctx context.Context, req *v1.ExportA
 	return nil, err
 }
 
+// ListMyActivity calls nokku.v1.UtilService.ListMyActivity.
+func (c *utilServiceClient) ListMyActivity(ctx context.Context, req *v1.ListMyActivityRequest) (*v1.ListMyActivityResponse, error) {
+	response, err := c.listMyActivity.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
 // UtilServiceHandler is an implementation of the nokku.v1.UtilService service.
 type UtilServiceHandler interface {
 	GetVersion(context.Context, *v1.GetVersionRequest) (*v1.GetVersionResponse, error)
@@ -191,6 +213,8 @@ type UtilServiceHandler interface {
 	ListRoles(context.Context, *v1.ListRolesRequest) (*v1.ListRolesResponse, error)
 	ListAuditLogs(context.Context, *v1.ListAuditLogsRequest) (*v1.ListAuditLogsResponse, error)
 	ExportAuditLogs(context.Context, *v1.ExportAuditLogsRequest) (*v1.ExportAuditLogsResponse, error)
+	// The caller's own events.
+	ListMyActivity(context.Context, *v1.ListMyActivityRequest) (*v1.ListMyActivityResponse, error)
 }
 
 // NewUtilServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -241,6 +265,13 @@ func NewUtilServiceHandler(svc UtilServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(utilServiceMethods.ByName("ExportAuditLogs")),
 		connect.WithHandlerOptions(opts...),
 	)
+	utilServiceListMyActivityHandler := connect.NewUnaryHandlerSimple(
+		UtilServiceListMyActivityProcedure,
+		svc.ListMyActivity,
+		connect.WithSchema(utilServiceMethods.ByName("ListMyActivity")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/nokku.v1.UtilService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UtilServiceGetVersionProcedure:
@@ -255,6 +286,8 @@ func NewUtilServiceHandler(svc UtilServiceHandler, opts ...connect.HandlerOption
 			utilServiceListAuditLogsHandler.ServeHTTP(w, r)
 		case UtilServiceExportAuditLogsProcedure:
 			utilServiceExportAuditLogsHandler.ServeHTTP(w, r)
+		case UtilServiceListMyActivityProcedure:
+			utilServiceListMyActivityHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -286,4 +319,8 @@ func (UnimplementedUtilServiceHandler) ListAuditLogs(context.Context, *v1.ListAu
 
 func (UnimplementedUtilServiceHandler) ExportAuditLogs(context.Context, *v1.ExportAuditLogsRequest) (*v1.ExportAuditLogsResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.UtilService.ExportAuditLogs is not implemented"))
+}
+
+func (UnimplementedUtilServiceHandler) ListMyActivity(context.Context, *v1.ListMyActivityRequest) (*v1.ListMyActivityResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.UtilService.ListMyActivity is not implemented"))
 }

@@ -7,7 +7,6 @@
 package nokkuv1
 
 import (
-	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -25,7 +24,6 @@ const (
 
 type GetDashboardRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -60,13 +58,6 @@ func (*GetDashboardRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_dashboard_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GetDashboardRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
-}
-
 type GetDashboardResponse struct {
 	state   protoimpl.MessageState `protogen:"open.v1"`
 	Targets *int32                 `protobuf:"varint,1,opt,name=targets" json:"targets,omitempty"`
@@ -80,7 +71,7 @@ type GetDashboardResponse struct {
 	PendingDaemons []*Daemon `protobuf:"bytes,6,rep,name=pending_daemons,json=pendingDaemons" json:"pending_daemons,omitempty"`
 	// Accepted but not connected, at most 5.
 	OfflineDaemons []*Daemon `protobuf:"bytes,7,rep,name=offline_daemons,json=offlineDaemons" json:"offline_daemons,omitempty"`
-	Members        *int32    `protobuf:"varint,8,opt,name=members" json:"members,omitempty"`
+	Users          *int32    `protobuf:"varint,8,opt,name=users" json:"users,omitempty"`
 	// Active CAs that expire first, at most 3.
 	SoonestCas     []*CertificateAuthority `protobuf:"bytes,9,rep,name=soonest_cas,json=soonestCas" json:"soonest_cas,omitempty"`
 	RecordingBytes *int64                  `protobuf:"varint,10,opt,name=recording_bytes,json=recordingBytes" json:"recording_bytes,omitempty"`
@@ -176,9 +167,9 @@ func (x *GetDashboardResponse) GetOfflineDaemons() []*Daemon {
 	return nil
 }
 
-func (x *GetDashboardResponse) GetMembers() int32 {
-	if x != nil && x.Members != nil {
-		return *x.Members
+func (x *GetDashboardResponse) GetUsers() int32 {
+	if x != nil && x.Users != nil {
+		return *x.Users
 	}
 	return 0
 }
@@ -340,9 +331,8 @@ var File_nokku_v1_dashboard_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_dashboard_proto_rawDesc = "" +
 	"\n" +
-	"\x18nokku/v1/dashboard.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x13nokku/v1/util.proto\"B\n" +
-	"\x13GetDashboardRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\"\x9c\x05\n" +
+	"\x18nokku/v1/dashboard.proto\x12\bnokku.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x13nokku/v1/util.proto\"\x15\n" +
+	"\x13GetDashboardRequest\"\x98\x05\n" +
 	"\x14GetDashboardResponse\x12\x18\n" +
 	"\atargets\x18\x01 \x01(\x05R\atargets\x12%\n" +
 	"\x0etargets_online\x18\x02 \x01(\x05R\rtargetsOnline\x12%\n" +
@@ -350,8 +340,8 @@ const file_nokku_v1_dashboard_proto_rawDesc = "" +
 	"\adaemons\x18\x04 \x01(\x05R\adaemons\x12%\n" +
 	"\x0edaemons_online\x18\x05 \x01(\x05R\rdaemonsOnline\x129\n" +
 	"\x0fpending_daemons\x18\x06 \x03(\v2\x10.nokku.v1.DaemonR\x0ependingDaemons\x129\n" +
-	"\x0foffline_daemons\x18\a \x03(\v2\x10.nokku.v1.DaemonR\x0eofflineDaemons\x12\x18\n" +
-	"\amembers\x18\b \x01(\x05R\amembers\x12?\n" +
+	"\x0foffline_daemons\x18\a \x03(\v2\x10.nokku.v1.DaemonR\x0eofflineDaemons\x12\x14\n" +
+	"\x05users\x18\b \x01(\x05R\x05users\x12?\n" +
 	"\vsoonest_cas\x18\t \x03(\v2\x1e.nokku.v1.CertificateAuthorityR\n" +
 	"soonestCas\x12'\n" +
 	"\x0frecording_bytes\x18\n" +

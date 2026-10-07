@@ -26,13 +26,12 @@ const (
 type Team struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	WorkspaceId   *string                `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Name          *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
-	Description   *string                `protobuf:"bytes,4,opt,name=description" json:"description,omitempty"`
-	Tags          []string               `protobuf:"bytes,5,rep,name=tags" json:"tags,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty"`
-	MemberCount   *int32                 `protobuf:"varint,8,opt,name=member_count,json=memberCount" json:"member_count,omitempty"`
+	Name          *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Description   *string                `protobuf:"bytes,3,opt,name=description" json:"description,omitempty"`
+	Tags          []string               `protobuf:"bytes,4,rep,name=tags" json:"tags,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty"`
+	MemberCount   *int32                 `protobuf:"varint,7,opt,name=member_count,json=memberCount" json:"member_count,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -70,13 +69,6 @@ func (*Team) Descriptor() ([]byte, []int) {
 func (x *Team) GetId() string {
 	if x != nil && x.Id != nil {
 		return *x.Id
-	}
-	return ""
-}
-
-func (x *Team) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -125,8 +117,7 @@ func (x *Team) GetMemberCount() int32 {
 
 type GetTeamRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Id            *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -159,13 +150,6 @@ func (x *GetTeamRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetTeamRequest.ProtoReflect.Descriptor instead.
 func (*GetTeamRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *GetTeamRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *GetTeamRequest) GetId() string {
@@ -221,10 +205,9 @@ func (x *GetTeamResponse) GetTeam() *Team {
 
 type CreateTeamRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Name          *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
-	Description   *string                `protobuf:"bytes,3,opt,name=description" json:"description,omitempty"`
-	Tags          []string               `protobuf:"bytes,4,rep,name=tags" json:"tags,omitempty"`
+	Name          *string                `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	Description   *string                `protobuf:"bytes,2,opt,name=description" json:"description,omitempty"`
+	Tags          []string               `protobuf:"bytes,3,rep,name=tags" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -257,13 +240,6 @@ func (x *CreateTeamRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreateTeamRequest.ProtoReflect.Descriptor instead.
 func (*CreateTeamRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *CreateTeamRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *CreateTeamRequest) GetName() string {
@@ -333,11 +309,10 @@ func (x *CreateTeamResponse) GetTeam() *Team {
 
 type UpdateTeamRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Id            *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
-	Name          *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
-	Description   *string                `protobuf:"bytes,4,opt,name=description" json:"description,omitempty"`
-	Tags          []string               `protobuf:"bytes,5,rep,name=tags" json:"tags,omitempty"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	Name          *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Description   *string                `protobuf:"bytes,3,opt,name=description" json:"description,omitempty"`
+	Tags          []string               `protobuf:"bytes,4,rep,name=tags" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -370,13 +345,6 @@ func (x *UpdateTeamRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use UpdateTeamRequest.ProtoReflect.Descriptor instead.
 func (*UpdateTeamRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *UpdateTeamRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *UpdateTeamRequest) GetId() string {
@@ -453,8 +421,7 @@ func (x *UpdateTeamResponse) GetTeam() *Team {
 
 type DeleteTeamRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Id            *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -487,13 +454,6 @@ func (x *DeleteTeamRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DeleteTeamRequest.ProtoReflect.Descriptor instead.
 func (*DeleteTeamRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *DeleteTeamRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *DeleteTeamRequest) GetId() string {
@@ -541,11 +501,10 @@ func (*DeleteTeamResponse) Descriptor() ([]byte, []int) {
 
 type ListTeamsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Limit         *int32                 `protobuf:"varint,2,opt,name=limit" json:"limit,omitempty"`
-	Offset        *int32                 `protobuf:"varint,3,opt,name=offset" json:"offset,omitempty"`
-	Query         *string                `protobuf:"bytes,4,opt,name=query" json:"query,omitempty"`
-	Tags          []string               `protobuf:"bytes,5,rep,name=tags" json:"tags,omitempty"`
+	Limit         *int32                 `protobuf:"varint,1,opt,name=limit" json:"limit,omitempty"`
+	Offset        *int32                 `protobuf:"varint,2,opt,name=offset" json:"offset,omitempty"`
+	Query         *string                `protobuf:"bytes,3,opt,name=query" json:"query,omitempty"`
+	Tags          []string               `protobuf:"bytes,4,rep,name=tags" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -578,13 +537,6 @@ func (x *ListTeamsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ListTeamsRequest.ProtoReflect.Descriptor instead.
 func (*ListTeamsRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *ListTeamsRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *ListTeamsRequest) GetLimit() int32 {
@@ -669,9 +621,8 @@ func (x *ListTeamsResponse) GetTotal() int32 {
 
 type AddTeamMemberRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	TeamId        *string                `protobuf:"bytes,2,opt,name=team_id,json=teamId" json:"team_id,omitempty"`
-	UserId        *string                `protobuf:"bytes,3,opt,name=user_id,json=userId" json:"user_id,omitempty"`
+	TeamId        *string                `protobuf:"bytes,1,opt,name=team_id,json=teamId" json:"team_id,omitempty"`
+	UserId        *string                `protobuf:"bytes,2,opt,name=user_id,json=userId" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -704,13 +655,6 @@ func (x *AddTeamMemberRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AddTeamMemberRequest.ProtoReflect.Descriptor instead.
 func (*AddTeamMemberRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *AddTeamMemberRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *AddTeamMemberRequest) GetTeamId() string {
@@ -765,9 +709,8 @@ func (*AddTeamMemberResponse) Descriptor() ([]byte, []int) {
 
 type RemoveTeamMemberRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	TeamId        *string                `protobuf:"bytes,2,opt,name=team_id,json=teamId" json:"team_id,omitempty"`
-	UserId        *string                `protobuf:"bytes,3,opt,name=user_id,json=userId" json:"user_id,omitempty"`
+	TeamId        *string                `protobuf:"bytes,1,opt,name=team_id,json=teamId" json:"team_id,omitempty"`
+	UserId        *string                `protobuf:"bytes,2,opt,name=user_id,json=userId" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -800,13 +743,6 @@ func (x *RemoveTeamMemberRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use RemoveTeamMemberRequest.ProtoReflect.Descriptor instead.
 func (*RemoveTeamMemberRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *RemoveTeamMemberRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *RemoveTeamMemberRequest) GetTeamId() string {
@@ -861,8 +797,7 @@ func (*RemoveTeamMemberResponse) Descriptor() ([]byte, []int) {
 
 type ListTeamMembersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	TeamId        *string                `protobuf:"bytes,2,opt,name=team_id,json=teamId" json:"team_id,omitempty"`
+	TeamId        *string                `protobuf:"bytes,1,opt,name=team_id,json=teamId" json:"team_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -897,13 +832,6 @@ func (*ListTeamMembersRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{15}
 }
 
-func (x *ListTeamMembersRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
-}
-
 func (x *ListTeamMembersRequest) GetTeamId() string {
 	if x != nil && x.TeamId != nil {
 		return *x.TeamId
@@ -913,7 +841,7 @@ func (x *ListTeamMembersRequest) GetTeamId() string {
 
 type ListTeamMembersResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Members       []*WorkspaceMember     `protobuf:"bytes,1,rep,name=members" json:"members,omitempty"`
+	Members       []*User                `protobuf:"bytes,1,rep,name=members" json:"members,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -948,7 +876,7 @@ func (*ListTeamMembersResponse) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{16}
 }
 
-func (x *ListTeamMembersResponse) GetMembers() []*WorkspaceMember {
+func (x *ListTeamMembersResponse) GetMembers() []*User {
 	if x != nil {
 		return x.Members
 	}
@@ -957,8 +885,7 @@ func (x *ListTeamMembersResponse) GetMembers() []*WorkspaceMember {
 
 type ListTeamsForUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	UserId        *string                `protobuf:"bytes,2,opt,name=user_id,json=userId" json:"user_id,omitempty"`
+	UserId        *string                `protobuf:"bytes,1,opt,name=user_id,json=userId" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -991,13 +918,6 @@ func (x *ListTeamsForUserRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ListTeamsForUserRequest.ProtoReflect.Descriptor instead.
 func (*ListTeamsForUserRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_team_proto_rawDescGZIP(), []int{17}
-}
-
-func (x *ListTeamsForUserRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *ListTeamsForUserRequest) GetUserId() string {
@@ -1055,71 +975,61 @@ var File_nokku_v1_team_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_team_proto_rawDesc = "" +
 	"\n" +
-	"\x13nokku/v1/team.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x18nokku/v1/workspace.proto\"\x9c\x02\n" +
+	"\x13nokku/v1/team.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\"\xf9\x01\n" +
 	"\x04Team\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
-	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x04 \x01(\tR\vdescription\x12\x12\n" +
-	"\x04tags\x18\x05 \x03(\tR\x04tags\x129\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x12\n" +
+	"\x04tags\x18\x04 \x03(\tR\x04tags\x129\n" +
 	"\n" +
-	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12!\n" +
-	"\fmember_count\x18\b \x01(\x05R\vmemberCount\"W\n" +
-	"\x0eGetTeamRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
-	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"5\n" +
+	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12!\n" +
+	"\fmember_count\x18\a \x01(\x05R\vmemberCount\"*\n" +
+	"\x0eGetTeamRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"5\n" +
 	"\x0fGetTeamResponse\x12\"\n" +
-	"\x04team\x18\x01 \x01(\v2\x0e.nokku.v1.TeamR\x04team\"\xa0\x01\n" +
-	"\x11CreateTeamRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1e\n" +
+	"\x04team\x18\x01 \x01(\v2\x0e.nokku.v1.TeamR\x04team\"s\n" +
+	"\x11CreateTeamRequest\x12\x1e\n" +
+	"\x04name\x18\x01 \x01(\tB\n" +
+	"\xbaH\ar\x05\x10\x01\x18\x80\x02R\x04name\x12*\n" +
+	"\vdescription\x18\x02 \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\vdescription\x12\x12\n" +
+	"\x04tags\x18\x03 \x03(\tR\x04tags\"8\n" +
+	"\x12CreateTeamResponse\x12\"\n" +
+	"\x04team\x18\x01 \x01(\v2\x0e.nokku.v1.TeamR\x04team\"\x8d\x01\n" +
+	"\x11UpdateTeamRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x1e\n" +
 	"\x04name\x18\x02 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x80\x02R\x04name\x12*\n" +
 	"\vdescription\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\vdescription\x12\x12\n" +
 	"\x04tags\x18\x04 \x03(\tR\x04tags\"8\n" +
-	"\x12CreateTeamResponse\x12\"\n" +
-	"\x04team\x18\x01 \x01(\v2\x0e.nokku.v1.TeamR\x04team\"\xba\x01\n" +
-	"\x11UpdateTeamRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
-	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12\x1e\n" +
-	"\x04name\x18\x03 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\x01\x18\x80\x02R\x04name\x12*\n" +
-	"\vdescription\x18\x04 \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\vdescription\x12\x12\n" +
-	"\x04tags\x18\x05 \x03(\tR\x04tags\"8\n" +
 	"\x12UpdateTeamResponse\x12\"\n" +
-	"\x04team\x18\x01 \x01(\v2\x0e.nokku.v1.TeamR\x04team\"Z\n" +
-	"\x11DeleteTeamRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
-	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x14\n" +
-	"\x12DeleteTeamResponse\"\xab\x01\n" +
-	"\x10ListTeamsRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1f\n" +
-	"\x05limit\x18\x02 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
-	"\x06offset\x18\x03 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x14\n" +
-	"\x05query\x18\x04 \x01(\tR\x05query\x12\x12\n" +
-	"\x04tags\x18\x05 \x03(\tR\x04tags\"O\n" +
+	"\x04team\x18\x01 \x01(\v2\x0e.nokku.v1.TeamR\x04team\"-\n" +
+	"\x11DeleteTeamRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x14\n" +
+	"\x12DeleteTeamResponse\"~\n" +
+	"\x10ListTeamsRequest\x12\x1f\n" +
+	"\x05limit\x18\x01 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
+	"\x06offset\x18\x02 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x14\n" +
+	"\x05query\x18\x03 \x01(\tR\x05query\x12\x12\n" +
+	"\x04tags\x18\x04 \x03(\tR\x04tags\"O\n" +
 	"\x11ListTeamsResponse\x12$\n" +
 	"\x05teams\x18\x01 \x03(\v2\x0e.nokku.v1.TeamR\x05teams\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\"\x89\x01\n" +
-	"\x14AddTeamMemberRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12!\n" +
-	"\ateam_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId\x12!\n" +
-	"\auser_id\x18\x03 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\"\x17\n" +
-	"\x15AddTeamMemberResponse\"\x8c\x01\n" +
-	"\x17RemoveTeamMemberRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12!\n" +
-	"\ateam_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId\x12!\n" +
-	"\auser_id\x18\x03 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\"\x1a\n" +
-	"\x18RemoveTeamMemberResponse\"h\n" +
-	"\x16ListTeamMembersRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12!\n" +
-	"\ateam_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId\"N\n" +
-	"\x17ListTeamMembersResponse\x123\n" +
-	"\amembers\x18\x01 \x03(\v2\x19.nokku.v1.WorkspaceMemberR\amembers\"i\n" +
-	"\x17ListTeamsForUserRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12!\n" +
-	"\auser_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\"@\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"\\\n" +
+	"\x14AddTeamMemberRequest\x12!\n" +
+	"\ateam_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId\x12!\n" +
+	"\auser_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\"\x17\n" +
+	"\x15AddTeamMemberResponse\"_\n" +
+	"\x17RemoveTeamMemberRequest\x12!\n" +
+	"\ateam_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId\x12!\n" +
+	"\auser_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\"\x1a\n" +
+	"\x18RemoveTeamMemberResponse\";\n" +
+	"\x16ListTeamMembersRequest\x12!\n" +
+	"\ateam_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06teamId\"C\n" +
+	"\x17ListTeamMembersResponse\x12(\n" +
+	"\amembers\x18\x01 \x03(\v2\x0e.nokku.v1.UserR\amembers\"<\n" +
+	"\x17ListTeamsForUserRequest\x12!\n" +
+	"\auser_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\"@\n" +
 	"\x18ListTeamsForUserResponse\x12$\n" +
 	"\x05teams\x18\x01 \x03(\v2\x0e.nokku.v1.TeamR\x05teams2\xa2\x06\n" +
 	"\vTeamService\x12I\n" +
@@ -1171,7 +1081,7 @@ var file_nokku_v1_team_proto_goTypes = []any{
 	(*ListTeamsForUserRequest)(nil),  // 17: nokku.v1.ListTeamsForUserRequest
 	(*ListTeamsForUserResponse)(nil), // 18: nokku.v1.ListTeamsForUserResponse
 	(*timestamppb.Timestamp)(nil),    // 19: google.protobuf.Timestamp
-	(*WorkspaceMember)(nil),          // 20: nokku.v1.WorkspaceMember
+	(*User)(nil),                     // 20: nokku.v1.User
 }
 var file_nokku_v1_team_proto_depIdxs = []int32{
 	19, // 0: nokku.v1.Team.created_at:type_name -> google.protobuf.Timestamp
@@ -1180,7 +1090,7 @@ var file_nokku_v1_team_proto_depIdxs = []int32{
 	0,  // 3: nokku.v1.CreateTeamResponse.team:type_name -> nokku.v1.Team
 	0,  // 4: nokku.v1.UpdateTeamResponse.team:type_name -> nokku.v1.Team
 	0,  // 5: nokku.v1.ListTeamsResponse.teams:type_name -> nokku.v1.Team
-	20, // 6: nokku.v1.ListTeamMembersResponse.members:type_name -> nokku.v1.WorkspaceMember
+	20, // 6: nokku.v1.ListTeamMembersResponse.members:type_name -> nokku.v1.User
 	0,  // 7: nokku.v1.ListTeamsForUserResponse.teams:type_name -> nokku.v1.Team
 	1,  // 8: nokku.v1.TeamService.GetTeam:input_type -> nokku.v1.GetTeamRequest
 	9,  // 9: nokku.v1.TeamService.ListTeams:input_type -> nokku.v1.ListTeamsRequest
@@ -1213,7 +1123,7 @@ func file_nokku_v1_team_proto_init() {
 		return
 	}
 	file_nokku_v1_access_proto_init()
-	file_nokku_v1_workspace_proto_init()
+	file_nokku_v1_account_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

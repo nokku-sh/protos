@@ -30,17 +30,16 @@ service UtilService {
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc ListAuditLogs(ListAuditLogsRequest) returns (ListAuditLogsResponse) {
-    option (access) = {
-      role: WORKSPACE_ROLE_VIEWER
-      personal: true
-    };
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc ExportAuditLogs(ExportAuditLogsRequest) returns (ExportAuditLogsResponse) {
-    option (access) = {
-      role: WORKSPACE_ROLE_VIEWER
-      personal: true
-    };
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
+  }
+  // The caller's own events.
+  rpc ListMyActivity(ListMyActivityRequest) returns (ListMyActivityResponse) {
+    option (access) = {self: true};
+    option idempotency_level = NO_SIDE_EFFECTS;
   }
 }
 
@@ -50,7 +49,8 @@ message GetVersionResponse {
 }
 
 message GetInstanceInfoRequest {}
-// Empty fields are not configured. Self-hosted servers usually leave them all empty.
+// Empty fields are not configured. Self-hosted servers usually leave the
+// operator fields empty.
 message GetInstanceInfoResponse {
   string operator_name = 1;
   string support_email = 2;
@@ -58,17 +58,20 @@ message GetInstanceInfoResponse {
   string terms_url = 4;
   string privacy_url = 5;
   string imprint_url = 6;
+  // self_hosted or saas
+  string mode = 7;
+  // Whether this host offers workspace signup, true only on the hosted
+  // service's root host.
+  bool signup = 8;
 }
 
 message WhoamiRequest {}
 message WhoamiResponse {
   string kind = 1;
   string subject_id = 2;
-  string user_id = 3;
-  string workspace_id = 4;
-  User user = 5;
-  ServiceAccount service_account = 6;
-  Daemon daemon = 7;
+  User user = 3;
+  ServiceAccount service_account = 4;
+  Daemon daemon = 5;
 }
 
 message Role {
@@ -82,17 +85,16 @@ message ListRolesResponse {
 
 message EventLog {
   string id = 1;
-  string workspace_id = 2;
-  string actor_id = 3;
-  string actor_kind = 4;
-  string actor_name = 5;
-  string action = 6;
-  string target = 7;
-  bool ok = 8;
-  string ip = 9;
-  string user_agent = 10;
-  google.protobuf.Struct details = 11;
-  google.protobuf.Timestamp timestamp = 12;
+  string actor_id = 2;
+  string actor_kind = 3;
+  string actor_name = 4;
+  string action = 5;
+  string target = 6;
+  bool ok = 7;
+  string ip = 8;
+  string user_agent = 9;
+  google.protobuf.Struct details = 10;
+  google.protobuf.Timestamp timestamp = 11;
 }
 
 // AuditOutcome FAILED matches every failed call, DENIED only the ones an auth
@@ -118,20 +120,18 @@ message AuditLogFilter {
   google.protobuf.Timestamp end_date = 8;
 }
 
-// An empty workspace_id lists the caller's own activity across workspaces.
 message ListAuditLogsRequest {
-  string workspace_id = 1;
-  int32 limit = 2 [(buf.validate.field).int32 = {
+  int32 limit = 1 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }];
-  int32 offset = 3 [(buf.validate.field).int32.gte = 0];
-  AuditLogFilter filter = 4;
+  int32 offset = 2 [(buf.validate.field).int32.gte = 0];
+  AuditLogFilter filter = 3;
 }
 message ListAuditLogsResponse {
   repeated EventLog logs = 1;
   int32 total = 2;
-  // How long the workspace's plan keeps events, 0 for the personal log.
+  // How long the workspace's plan keeps events.
   int32 retention_days = 3;
 }
 
@@ -141,12 +141,23 @@ message ExportAuditLogsRequest {
     FORMAT_CSV = 1;
     FORMAT_JSON = 2;
   }
-  string workspace_id = 1;
-  Format format = 2 [(buf.validate.field).enum = {defined_only: true}];
-  AuditLogFilter filter = 3;
+  Format format = 1 [(buf.validate.field).enum = {defined_only: true}];
+  AuditLogFilter filter = 2;
 }
 message ExportAuditLogsResponse {
   bytes data = 1;
   string filename = 2;
   string content_type = 3;
+}
+
+message ListMyActivityRequest {
+  int32 limit = 1 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }];
+  int32 offset = 2 [(buf.validate.field).int32.gte = 0];
+}
+message ListMyActivityResponse {
+  repeated EventLog logs = 1;
+  int32 total = 2;
 }

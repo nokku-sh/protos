@@ -36,47 +36,54 @@ const (
 	// WorkspaceServiceGetWorkspaceProcedure is the fully-qualified name of the WorkspaceService's
 	// GetWorkspace RPC.
 	WorkspaceServiceGetWorkspaceProcedure = "/nokku.v1.WorkspaceService/GetWorkspace"
-	// WorkspaceServiceListWorkspacesProcedure is the fully-qualified name of the WorkspaceService's
-	// ListWorkspaces RPC.
-	WorkspaceServiceListWorkspacesProcedure = "/nokku.v1.WorkspaceService/ListWorkspaces"
-	// WorkspaceServiceCreateWorkspaceProcedure is the fully-qualified name of the WorkspaceService's
-	// CreateWorkspace RPC.
-	WorkspaceServiceCreateWorkspaceProcedure = "/nokku.v1.WorkspaceService/CreateWorkspace"
 	// WorkspaceServiceUpdateWorkspaceProcedure is the fully-qualified name of the WorkspaceService's
 	// UpdateWorkspace RPC.
 	WorkspaceServiceUpdateWorkspaceProcedure = "/nokku.v1.WorkspaceService/UpdateWorkspace"
 	// WorkspaceServiceDeleteWorkspaceProcedure is the fully-qualified name of the WorkspaceService's
 	// DeleteWorkspace RPC.
 	WorkspaceServiceDeleteWorkspaceProcedure = "/nokku.v1.WorkspaceService/DeleteWorkspace"
-	// WorkspaceServiceGetWorkspaceMemberProcedure is the fully-qualified name of the WorkspaceService's
-	// GetWorkspaceMember RPC.
-	WorkspaceServiceGetWorkspaceMemberProcedure = "/nokku.v1.WorkspaceService/GetWorkspaceMember"
-	// WorkspaceServiceListWorkspaceMembersProcedure is the fully-qualified name of the
-	// WorkspaceService's ListWorkspaceMembers RPC.
-	WorkspaceServiceListWorkspaceMembersProcedure = "/nokku.v1.WorkspaceService/ListWorkspaceMembers"
-	// WorkspaceServiceRemoveWorkspaceMemberProcedure is the fully-qualified name of the
-	// WorkspaceService's RemoveWorkspaceMember RPC.
-	WorkspaceServiceRemoveWorkspaceMemberProcedure = "/nokku.v1.WorkspaceService/RemoveWorkspaceMember"
-	// WorkspaceServiceUpdateWorkspaceMemberProcedure is the fully-qualified name of the
-	// WorkspaceService's UpdateWorkspaceMember RPC.
-	WorkspaceServiceUpdateWorkspaceMemberProcedure = "/nokku.v1.WorkspaceService/UpdateWorkspaceMember"
-	// WorkspaceServiceUpdateWorkspaceOwnerProcedure is the fully-qualified name of the
-	// WorkspaceService's UpdateWorkspaceOwner RPC.
-	WorkspaceServiceUpdateWorkspaceOwnerProcedure = "/nokku.v1.WorkspaceService/UpdateWorkspaceOwner"
+	// WorkspaceServiceListUsersProcedure is the fully-qualified name of the WorkspaceService's
+	// ListUsers RPC.
+	WorkspaceServiceListUsersProcedure = "/nokku.v1.WorkspaceService/ListUsers"
+	// WorkspaceServiceGetUserProcedure is the fully-qualified name of the WorkspaceService's GetUser
+	// RPC.
+	WorkspaceServiceGetUserProcedure = "/nokku.v1.WorkspaceService/GetUser"
+	// WorkspaceServiceUpdateUserRoleProcedure is the fully-qualified name of the WorkspaceService's
+	// UpdateUserRole RPC.
+	WorkspaceServiceUpdateUserRoleProcedure = "/nokku.v1.WorkspaceService/UpdateUserRole"
+	// WorkspaceServiceSetUserActiveProcedure is the fully-qualified name of the WorkspaceService's
+	// SetUserActive RPC.
+	WorkspaceServiceSetUserActiveProcedure = "/nokku.v1.WorkspaceService/SetUserActive"
+	// WorkspaceServiceDeleteUserProcedure is the fully-qualified name of the WorkspaceService's
+	// DeleteUser RPC.
+	WorkspaceServiceDeleteUserProcedure = "/nokku.v1.WorkspaceService/DeleteUser"
+	// WorkspaceServiceTransferOwnershipProcedure is the fully-qualified name of the WorkspaceService's
+	// TransferOwnership RPC.
+	WorkspaceServiceTransferOwnershipProcedure = "/nokku.v1.WorkspaceService/TransferOwnership"
+	// WorkspaceServiceCreateWorkspaceProcedure is the fully-qualified name of the WorkspaceService's
+	// CreateWorkspace RPC.
+	WorkspaceServiceCreateWorkspaceProcedure = "/nokku.v1.WorkspaceService/CreateWorkspace"
 )
 
 // WorkspaceServiceClient is a client for the nokku.v1.WorkspaceService service.
 type WorkspaceServiceClient interface {
 	GetWorkspace(context.Context, *v1.GetWorkspaceRequest) (*v1.GetWorkspaceResponse, error)
-	ListWorkspaces(context.Context, *v1.ListWorkspacesRequest) (*v1.ListWorkspacesResponse, error)
-	CreateWorkspace(context.Context, *v1.CreateWorkspaceRequest) (*v1.CreateWorkspaceResponse, error)
 	UpdateWorkspace(context.Context, *v1.UpdateWorkspaceRequest) (*v1.UpdateWorkspaceResponse, error)
+	// Refused on a self-hosted server.
 	DeleteWorkspace(context.Context, *v1.DeleteWorkspaceRequest) (*v1.DeleteWorkspaceResponse, error)
-	GetWorkspaceMember(context.Context, *v1.GetWorkspaceMemberRequest) (*v1.GetWorkspaceMemberResponse, error)
-	ListWorkspaceMembers(context.Context, *v1.ListWorkspaceMembersRequest) (*v1.ListWorkspaceMembersResponse, error)
-	RemoveWorkspaceMember(context.Context, *v1.RemoveWorkspaceMemberRequest) (*v1.RemoveWorkspaceMemberResponse, error)
-	UpdateWorkspaceMember(context.Context, *v1.UpdateWorkspaceMemberRequest) (*v1.UpdateWorkspaceMemberResponse, error)
-	UpdateWorkspaceOwner(context.Context, *v1.UpdateWorkspaceOwnerRequest) (*v1.UpdateWorkspaceOwnerResponse, error)
+	ListUsers(context.Context, *v1.ListUsersRequest) (*v1.ListUsersResponse, error)
+	GetUser(context.Context, *v1.GetUserRequest) (*v1.GetUserResponse, error)
+	// Never touches the owner, see TransferOwnership.
+	UpdateUserRole(context.Context, *v1.UpdateUserRoleRequest) (*v1.UpdateUserRoleResponse, error)
+	// A deactivated user keeps their grants and history but cannot sign in or
+	// get certificates.
+	SetUserActive(context.Context, *v1.SetUserActiveRequest) (*v1.SetUserActiveResponse, error)
+	DeleteUser(context.Context, *v1.DeleteUserRequest) (*v1.DeleteUserResponse, error)
+	// The caller becomes an admin.
+	TransferOwnership(context.Context, *v1.TransferOwnershipRequest) (*v1.TransferOwnershipResponse, error)
+	// Public signup on the hosted service's root host. Creates the workspace
+	// and its owner and mails the owner a sign-in link. Refused elsewhere.
+	CreateWorkspace(context.Context, *v1.CreateWorkspaceRequest) (*v1.CreateWorkspaceResponse, error)
 }
 
 // NewWorkspaceServiceClient constructs a client for the nokku.v1.WorkspaceService service. By
@@ -97,19 +104,6 @@ func NewWorkspaceServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
-		listWorkspaces: connect.NewClient[v1.ListWorkspacesRequest, v1.ListWorkspacesResponse](
-			httpClient,
-			baseURL+WorkspaceServiceListWorkspacesProcedure,
-			connect.WithSchema(workspaceServiceMethods.ByName("ListWorkspaces")),
-			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-			connect.WithClientOptions(opts...),
-		),
-		createWorkspace: connect.NewClient[v1.CreateWorkspaceRequest, v1.CreateWorkspaceResponse](
-			httpClient,
-			baseURL+WorkspaceServiceCreateWorkspaceProcedure,
-			connect.WithSchema(workspaceServiceMethods.ByName("CreateWorkspace")),
-			connect.WithClientOptions(opts...),
-		),
 		updateWorkspace: connect.NewClient[v1.UpdateWorkspaceRequest, v1.UpdateWorkspaceResponse](
 			httpClient,
 			baseURL+WorkspaceServiceUpdateWorkspaceProcedure,
@@ -122,36 +116,48 @@ func NewWorkspaceServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithSchema(workspaceServiceMethods.ByName("DeleteWorkspace")),
 			connect.WithClientOptions(opts...),
 		),
-		getWorkspaceMember: connect.NewClient[v1.GetWorkspaceMemberRequest, v1.GetWorkspaceMemberResponse](
+		listUsers: connect.NewClient[v1.ListUsersRequest, v1.ListUsersResponse](
 			httpClient,
-			baseURL+WorkspaceServiceGetWorkspaceMemberProcedure,
-			connect.WithSchema(workspaceServiceMethods.ByName("GetWorkspaceMember")),
+			baseURL+WorkspaceServiceListUsersProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("ListUsers")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
-		listWorkspaceMembers: connect.NewClient[v1.ListWorkspaceMembersRequest, v1.ListWorkspaceMembersResponse](
+		getUser: connect.NewClient[v1.GetUserRequest, v1.GetUserResponse](
 			httpClient,
-			baseURL+WorkspaceServiceListWorkspaceMembersProcedure,
-			connect.WithSchema(workspaceServiceMethods.ByName("ListWorkspaceMembers")),
+			baseURL+WorkspaceServiceGetUserProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("GetUser")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
-		removeWorkspaceMember: connect.NewClient[v1.RemoveWorkspaceMemberRequest, v1.RemoveWorkspaceMemberResponse](
+		updateUserRole: connect.NewClient[v1.UpdateUserRoleRequest, v1.UpdateUserRoleResponse](
 			httpClient,
-			baseURL+WorkspaceServiceRemoveWorkspaceMemberProcedure,
-			connect.WithSchema(workspaceServiceMethods.ByName("RemoveWorkspaceMember")),
+			baseURL+WorkspaceServiceUpdateUserRoleProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("UpdateUserRole")),
 			connect.WithClientOptions(opts...),
 		),
-		updateWorkspaceMember: connect.NewClient[v1.UpdateWorkspaceMemberRequest, v1.UpdateWorkspaceMemberResponse](
+		setUserActive: connect.NewClient[v1.SetUserActiveRequest, v1.SetUserActiveResponse](
 			httpClient,
-			baseURL+WorkspaceServiceUpdateWorkspaceMemberProcedure,
-			connect.WithSchema(workspaceServiceMethods.ByName("UpdateWorkspaceMember")),
+			baseURL+WorkspaceServiceSetUserActiveProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("SetUserActive")),
 			connect.WithClientOptions(opts...),
 		),
-		updateWorkspaceOwner: connect.NewClient[v1.UpdateWorkspaceOwnerRequest, v1.UpdateWorkspaceOwnerResponse](
+		deleteUser: connect.NewClient[v1.DeleteUserRequest, v1.DeleteUserResponse](
 			httpClient,
-			baseURL+WorkspaceServiceUpdateWorkspaceOwnerProcedure,
-			connect.WithSchema(workspaceServiceMethods.ByName("UpdateWorkspaceOwner")),
+			baseURL+WorkspaceServiceDeleteUserProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("DeleteUser")),
+			connect.WithClientOptions(opts...),
+		),
+		transferOwnership: connect.NewClient[v1.TransferOwnershipRequest, v1.TransferOwnershipResponse](
+			httpClient,
+			baseURL+WorkspaceServiceTransferOwnershipProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("TransferOwnership")),
+			connect.WithClientOptions(opts...),
+		),
+		createWorkspace: connect.NewClient[v1.CreateWorkspaceRequest, v1.CreateWorkspaceResponse](
+			httpClient,
+			baseURL+WorkspaceServiceCreateWorkspaceProcedure,
+			connect.WithSchema(workspaceServiceMethods.ByName("CreateWorkspace")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -159,39 +165,21 @@ func NewWorkspaceServiceClient(httpClient connect.HTTPClient, baseURL string, op
 
 // workspaceServiceClient implements WorkspaceServiceClient.
 type workspaceServiceClient struct {
-	getWorkspace          *connect.Client[v1.GetWorkspaceRequest, v1.GetWorkspaceResponse]
-	listWorkspaces        *connect.Client[v1.ListWorkspacesRequest, v1.ListWorkspacesResponse]
-	createWorkspace       *connect.Client[v1.CreateWorkspaceRequest, v1.CreateWorkspaceResponse]
-	updateWorkspace       *connect.Client[v1.UpdateWorkspaceRequest, v1.UpdateWorkspaceResponse]
-	deleteWorkspace       *connect.Client[v1.DeleteWorkspaceRequest, v1.DeleteWorkspaceResponse]
-	getWorkspaceMember    *connect.Client[v1.GetWorkspaceMemberRequest, v1.GetWorkspaceMemberResponse]
-	listWorkspaceMembers  *connect.Client[v1.ListWorkspaceMembersRequest, v1.ListWorkspaceMembersResponse]
-	removeWorkspaceMember *connect.Client[v1.RemoveWorkspaceMemberRequest, v1.RemoveWorkspaceMemberResponse]
-	updateWorkspaceMember *connect.Client[v1.UpdateWorkspaceMemberRequest, v1.UpdateWorkspaceMemberResponse]
-	updateWorkspaceOwner  *connect.Client[v1.UpdateWorkspaceOwnerRequest, v1.UpdateWorkspaceOwnerResponse]
+	getWorkspace      *connect.Client[v1.GetWorkspaceRequest, v1.GetWorkspaceResponse]
+	updateWorkspace   *connect.Client[v1.UpdateWorkspaceRequest, v1.UpdateWorkspaceResponse]
+	deleteWorkspace   *connect.Client[v1.DeleteWorkspaceRequest, v1.DeleteWorkspaceResponse]
+	listUsers         *connect.Client[v1.ListUsersRequest, v1.ListUsersResponse]
+	getUser           *connect.Client[v1.GetUserRequest, v1.GetUserResponse]
+	updateUserRole    *connect.Client[v1.UpdateUserRoleRequest, v1.UpdateUserRoleResponse]
+	setUserActive     *connect.Client[v1.SetUserActiveRequest, v1.SetUserActiveResponse]
+	deleteUser        *connect.Client[v1.DeleteUserRequest, v1.DeleteUserResponse]
+	transferOwnership *connect.Client[v1.TransferOwnershipRequest, v1.TransferOwnershipResponse]
+	createWorkspace   *connect.Client[v1.CreateWorkspaceRequest, v1.CreateWorkspaceResponse]
 }
 
 // GetWorkspace calls nokku.v1.WorkspaceService.GetWorkspace.
 func (c *workspaceServiceClient) GetWorkspace(ctx context.Context, req *v1.GetWorkspaceRequest) (*v1.GetWorkspaceResponse, error) {
 	response, err := c.getWorkspace.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// ListWorkspaces calls nokku.v1.WorkspaceService.ListWorkspaces.
-func (c *workspaceServiceClient) ListWorkspaces(ctx context.Context, req *v1.ListWorkspacesRequest) (*v1.ListWorkspacesResponse, error) {
-	response, err := c.listWorkspaces.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// CreateWorkspace calls nokku.v1.WorkspaceService.CreateWorkspace.
-func (c *workspaceServiceClient) CreateWorkspace(ctx context.Context, req *v1.CreateWorkspaceRequest) (*v1.CreateWorkspaceResponse, error) {
-	response, err := c.createWorkspace.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
@@ -216,45 +204,63 @@ func (c *workspaceServiceClient) DeleteWorkspace(ctx context.Context, req *v1.De
 	return nil, err
 }
 
-// GetWorkspaceMember calls nokku.v1.WorkspaceService.GetWorkspaceMember.
-func (c *workspaceServiceClient) GetWorkspaceMember(ctx context.Context, req *v1.GetWorkspaceMemberRequest) (*v1.GetWorkspaceMemberResponse, error) {
-	response, err := c.getWorkspaceMember.CallUnary(ctx, connect.NewRequest(req))
+// ListUsers calls nokku.v1.WorkspaceService.ListUsers.
+func (c *workspaceServiceClient) ListUsers(ctx context.Context, req *v1.ListUsersRequest) (*v1.ListUsersResponse, error) {
+	response, err := c.listUsers.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
 	return nil, err
 }
 
-// ListWorkspaceMembers calls nokku.v1.WorkspaceService.ListWorkspaceMembers.
-func (c *workspaceServiceClient) ListWorkspaceMembers(ctx context.Context, req *v1.ListWorkspaceMembersRequest) (*v1.ListWorkspaceMembersResponse, error) {
-	response, err := c.listWorkspaceMembers.CallUnary(ctx, connect.NewRequest(req))
+// GetUser calls nokku.v1.WorkspaceService.GetUser.
+func (c *workspaceServiceClient) GetUser(ctx context.Context, req *v1.GetUserRequest) (*v1.GetUserResponse, error) {
+	response, err := c.getUser.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
 	return nil, err
 }
 
-// RemoveWorkspaceMember calls nokku.v1.WorkspaceService.RemoveWorkspaceMember.
-func (c *workspaceServiceClient) RemoveWorkspaceMember(ctx context.Context, req *v1.RemoveWorkspaceMemberRequest) (*v1.RemoveWorkspaceMemberResponse, error) {
-	response, err := c.removeWorkspaceMember.CallUnary(ctx, connect.NewRequest(req))
+// UpdateUserRole calls nokku.v1.WorkspaceService.UpdateUserRole.
+func (c *workspaceServiceClient) UpdateUserRole(ctx context.Context, req *v1.UpdateUserRoleRequest) (*v1.UpdateUserRoleResponse, error) {
+	response, err := c.updateUserRole.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
 	return nil, err
 }
 
-// UpdateWorkspaceMember calls nokku.v1.WorkspaceService.UpdateWorkspaceMember.
-func (c *workspaceServiceClient) UpdateWorkspaceMember(ctx context.Context, req *v1.UpdateWorkspaceMemberRequest) (*v1.UpdateWorkspaceMemberResponse, error) {
-	response, err := c.updateWorkspaceMember.CallUnary(ctx, connect.NewRequest(req))
+// SetUserActive calls nokku.v1.WorkspaceService.SetUserActive.
+func (c *workspaceServiceClient) SetUserActive(ctx context.Context, req *v1.SetUserActiveRequest) (*v1.SetUserActiveResponse, error) {
+	response, err := c.setUserActive.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
 	return nil, err
 }
 
-// UpdateWorkspaceOwner calls nokku.v1.WorkspaceService.UpdateWorkspaceOwner.
-func (c *workspaceServiceClient) UpdateWorkspaceOwner(ctx context.Context, req *v1.UpdateWorkspaceOwnerRequest) (*v1.UpdateWorkspaceOwnerResponse, error) {
-	response, err := c.updateWorkspaceOwner.CallUnary(ctx, connect.NewRequest(req))
+// DeleteUser calls nokku.v1.WorkspaceService.DeleteUser.
+func (c *workspaceServiceClient) DeleteUser(ctx context.Context, req *v1.DeleteUserRequest) (*v1.DeleteUserResponse, error) {
+	response, err := c.deleteUser.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// TransferOwnership calls nokku.v1.WorkspaceService.TransferOwnership.
+func (c *workspaceServiceClient) TransferOwnership(ctx context.Context, req *v1.TransferOwnershipRequest) (*v1.TransferOwnershipResponse, error) {
+	response, err := c.transferOwnership.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// CreateWorkspace calls nokku.v1.WorkspaceService.CreateWorkspace.
+func (c *workspaceServiceClient) CreateWorkspace(ctx context.Context, req *v1.CreateWorkspaceRequest) (*v1.CreateWorkspaceResponse, error) {
+	response, err := c.createWorkspace.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
@@ -264,15 +270,22 @@ func (c *workspaceServiceClient) UpdateWorkspaceOwner(ctx context.Context, req *
 // WorkspaceServiceHandler is an implementation of the nokku.v1.WorkspaceService service.
 type WorkspaceServiceHandler interface {
 	GetWorkspace(context.Context, *v1.GetWorkspaceRequest) (*v1.GetWorkspaceResponse, error)
-	ListWorkspaces(context.Context, *v1.ListWorkspacesRequest) (*v1.ListWorkspacesResponse, error)
-	CreateWorkspace(context.Context, *v1.CreateWorkspaceRequest) (*v1.CreateWorkspaceResponse, error)
 	UpdateWorkspace(context.Context, *v1.UpdateWorkspaceRequest) (*v1.UpdateWorkspaceResponse, error)
+	// Refused on a self-hosted server.
 	DeleteWorkspace(context.Context, *v1.DeleteWorkspaceRequest) (*v1.DeleteWorkspaceResponse, error)
-	GetWorkspaceMember(context.Context, *v1.GetWorkspaceMemberRequest) (*v1.GetWorkspaceMemberResponse, error)
-	ListWorkspaceMembers(context.Context, *v1.ListWorkspaceMembersRequest) (*v1.ListWorkspaceMembersResponse, error)
-	RemoveWorkspaceMember(context.Context, *v1.RemoveWorkspaceMemberRequest) (*v1.RemoveWorkspaceMemberResponse, error)
-	UpdateWorkspaceMember(context.Context, *v1.UpdateWorkspaceMemberRequest) (*v1.UpdateWorkspaceMemberResponse, error)
-	UpdateWorkspaceOwner(context.Context, *v1.UpdateWorkspaceOwnerRequest) (*v1.UpdateWorkspaceOwnerResponse, error)
+	ListUsers(context.Context, *v1.ListUsersRequest) (*v1.ListUsersResponse, error)
+	GetUser(context.Context, *v1.GetUserRequest) (*v1.GetUserResponse, error)
+	// Never touches the owner, see TransferOwnership.
+	UpdateUserRole(context.Context, *v1.UpdateUserRoleRequest) (*v1.UpdateUserRoleResponse, error)
+	// A deactivated user keeps their grants and history but cannot sign in or
+	// get certificates.
+	SetUserActive(context.Context, *v1.SetUserActiveRequest) (*v1.SetUserActiveResponse, error)
+	DeleteUser(context.Context, *v1.DeleteUserRequest) (*v1.DeleteUserResponse, error)
+	// The caller becomes an admin.
+	TransferOwnership(context.Context, *v1.TransferOwnershipRequest) (*v1.TransferOwnershipResponse, error)
+	// Public signup on the hosted service's root host. Creates the workspace
+	// and its owner and mails the owner a sign-in link. Refused elsewhere.
+	CreateWorkspace(context.Context, *v1.CreateWorkspaceRequest) (*v1.CreateWorkspaceResponse, error)
 }
 
 // NewWorkspaceServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -289,19 +302,6 @@ func NewWorkspaceServiceHandler(svc WorkspaceServiceHandler, opts ...connect.Han
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
-	workspaceServiceListWorkspacesHandler := connect.NewUnaryHandlerSimple(
-		WorkspaceServiceListWorkspacesProcedure,
-		svc.ListWorkspaces,
-		connect.WithSchema(workspaceServiceMethods.ByName("ListWorkspaces")),
-		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-		connect.WithHandlerOptions(opts...),
-	)
-	workspaceServiceCreateWorkspaceHandler := connect.NewUnaryHandlerSimple(
-		WorkspaceServiceCreateWorkspaceProcedure,
-		svc.CreateWorkspace,
-		connect.WithSchema(workspaceServiceMethods.ByName("CreateWorkspace")),
-		connect.WithHandlerOptions(opts...),
-	)
 	workspaceServiceUpdateWorkspaceHandler := connect.NewUnaryHandlerSimple(
 		WorkspaceServiceUpdateWorkspaceProcedure,
 		svc.UpdateWorkspace,
@@ -314,60 +314,72 @@ func NewWorkspaceServiceHandler(svc WorkspaceServiceHandler, opts ...connect.Han
 		connect.WithSchema(workspaceServiceMethods.ByName("DeleteWorkspace")),
 		connect.WithHandlerOptions(opts...),
 	)
-	workspaceServiceGetWorkspaceMemberHandler := connect.NewUnaryHandlerSimple(
-		WorkspaceServiceGetWorkspaceMemberProcedure,
-		svc.GetWorkspaceMember,
-		connect.WithSchema(workspaceServiceMethods.ByName("GetWorkspaceMember")),
+	workspaceServiceListUsersHandler := connect.NewUnaryHandlerSimple(
+		WorkspaceServiceListUsersProcedure,
+		svc.ListUsers,
+		connect.WithSchema(workspaceServiceMethods.ByName("ListUsers")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
-	workspaceServiceListWorkspaceMembersHandler := connect.NewUnaryHandlerSimple(
-		WorkspaceServiceListWorkspaceMembersProcedure,
-		svc.ListWorkspaceMembers,
-		connect.WithSchema(workspaceServiceMethods.ByName("ListWorkspaceMembers")),
+	workspaceServiceGetUserHandler := connect.NewUnaryHandlerSimple(
+		WorkspaceServiceGetUserProcedure,
+		svc.GetUser,
+		connect.WithSchema(workspaceServiceMethods.ByName("GetUser")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
-	workspaceServiceRemoveWorkspaceMemberHandler := connect.NewUnaryHandlerSimple(
-		WorkspaceServiceRemoveWorkspaceMemberProcedure,
-		svc.RemoveWorkspaceMember,
-		connect.WithSchema(workspaceServiceMethods.ByName("RemoveWorkspaceMember")),
+	workspaceServiceUpdateUserRoleHandler := connect.NewUnaryHandlerSimple(
+		WorkspaceServiceUpdateUserRoleProcedure,
+		svc.UpdateUserRole,
+		connect.WithSchema(workspaceServiceMethods.ByName("UpdateUserRole")),
 		connect.WithHandlerOptions(opts...),
 	)
-	workspaceServiceUpdateWorkspaceMemberHandler := connect.NewUnaryHandlerSimple(
-		WorkspaceServiceUpdateWorkspaceMemberProcedure,
-		svc.UpdateWorkspaceMember,
-		connect.WithSchema(workspaceServiceMethods.ByName("UpdateWorkspaceMember")),
+	workspaceServiceSetUserActiveHandler := connect.NewUnaryHandlerSimple(
+		WorkspaceServiceSetUserActiveProcedure,
+		svc.SetUserActive,
+		connect.WithSchema(workspaceServiceMethods.ByName("SetUserActive")),
 		connect.WithHandlerOptions(opts...),
 	)
-	workspaceServiceUpdateWorkspaceOwnerHandler := connect.NewUnaryHandlerSimple(
-		WorkspaceServiceUpdateWorkspaceOwnerProcedure,
-		svc.UpdateWorkspaceOwner,
-		connect.WithSchema(workspaceServiceMethods.ByName("UpdateWorkspaceOwner")),
+	workspaceServiceDeleteUserHandler := connect.NewUnaryHandlerSimple(
+		WorkspaceServiceDeleteUserProcedure,
+		svc.DeleteUser,
+		connect.WithSchema(workspaceServiceMethods.ByName("DeleteUser")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceTransferOwnershipHandler := connect.NewUnaryHandlerSimple(
+		WorkspaceServiceTransferOwnershipProcedure,
+		svc.TransferOwnership,
+		connect.WithSchema(workspaceServiceMethods.ByName("TransferOwnership")),
+		connect.WithHandlerOptions(opts...),
+	)
+	workspaceServiceCreateWorkspaceHandler := connect.NewUnaryHandlerSimple(
+		WorkspaceServiceCreateWorkspaceProcedure,
+		svc.CreateWorkspace,
+		connect.WithSchema(workspaceServiceMethods.ByName("CreateWorkspace")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/nokku.v1.WorkspaceService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case WorkspaceServiceGetWorkspaceProcedure:
 			workspaceServiceGetWorkspaceHandler.ServeHTTP(w, r)
-		case WorkspaceServiceListWorkspacesProcedure:
-			workspaceServiceListWorkspacesHandler.ServeHTTP(w, r)
-		case WorkspaceServiceCreateWorkspaceProcedure:
-			workspaceServiceCreateWorkspaceHandler.ServeHTTP(w, r)
 		case WorkspaceServiceUpdateWorkspaceProcedure:
 			workspaceServiceUpdateWorkspaceHandler.ServeHTTP(w, r)
 		case WorkspaceServiceDeleteWorkspaceProcedure:
 			workspaceServiceDeleteWorkspaceHandler.ServeHTTP(w, r)
-		case WorkspaceServiceGetWorkspaceMemberProcedure:
-			workspaceServiceGetWorkspaceMemberHandler.ServeHTTP(w, r)
-		case WorkspaceServiceListWorkspaceMembersProcedure:
-			workspaceServiceListWorkspaceMembersHandler.ServeHTTP(w, r)
-		case WorkspaceServiceRemoveWorkspaceMemberProcedure:
-			workspaceServiceRemoveWorkspaceMemberHandler.ServeHTTP(w, r)
-		case WorkspaceServiceUpdateWorkspaceMemberProcedure:
-			workspaceServiceUpdateWorkspaceMemberHandler.ServeHTTP(w, r)
-		case WorkspaceServiceUpdateWorkspaceOwnerProcedure:
-			workspaceServiceUpdateWorkspaceOwnerHandler.ServeHTTP(w, r)
+		case WorkspaceServiceListUsersProcedure:
+			workspaceServiceListUsersHandler.ServeHTTP(w, r)
+		case WorkspaceServiceGetUserProcedure:
+			workspaceServiceGetUserHandler.ServeHTTP(w, r)
+		case WorkspaceServiceUpdateUserRoleProcedure:
+			workspaceServiceUpdateUserRoleHandler.ServeHTTP(w, r)
+		case WorkspaceServiceSetUserActiveProcedure:
+			workspaceServiceSetUserActiveHandler.ServeHTTP(w, r)
+		case WorkspaceServiceDeleteUserProcedure:
+			workspaceServiceDeleteUserHandler.ServeHTTP(w, r)
+		case WorkspaceServiceTransferOwnershipProcedure:
+			workspaceServiceTransferOwnershipHandler.ServeHTTP(w, r)
+		case WorkspaceServiceCreateWorkspaceProcedure:
+			workspaceServiceCreateWorkspaceHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -381,14 +393,6 @@ func (UnimplementedWorkspaceServiceHandler) GetWorkspace(context.Context, *v1.Ge
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.GetWorkspace is not implemented"))
 }
 
-func (UnimplementedWorkspaceServiceHandler) ListWorkspaces(context.Context, *v1.ListWorkspacesRequest) (*v1.ListWorkspacesResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.ListWorkspaces is not implemented"))
-}
-
-func (UnimplementedWorkspaceServiceHandler) CreateWorkspace(context.Context, *v1.CreateWorkspaceRequest) (*v1.CreateWorkspaceResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.CreateWorkspace is not implemented"))
-}
-
 func (UnimplementedWorkspaceServiceHandler) UpdateWorkspace(context.Context, *v1.UpdateWorkspaceRequest) (*v1.UpdateWorkspaceResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.UpdateWorkspace is not implemented"))
 }
@@ -397,22 +401,30 @@ func (UnimplementedWorkspaceServiceHandler) DeleteWorkspace(context.Context, *v1
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.DeleteWorkspace is not implemented"))
 }
 
-func (UnimplementedWorkspaceServiceHandler) GetWorkspaceMember(context.Context, *v1.GetWorkspaceMemberRequest) (*v1.GetWorkspaceMemberResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.GetWorkspaceMember is not implemented"))
+func (UnimplementedWorkspaceServiceHandler) ListUsers(context.Context, *v1.ListUsersRequest) (*v1.ListUsersResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.ListUsers is not implemented"))
 }
 
-func (UnimplementedWorkspaceServiceHandler) ListWorkspaceMembers(context.Context, *v1.ListWorkspaceMembersRequest) (*v1.ListWorkspaceMembersResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.ListWorkspaceMembers is not implemented"))
+func (UnimplementedWorkspaceServiceHandler) GetUser(context.Context, *v1.GetUserRequest) (*v1.GetUserResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.GetUser is not implemented"))
 }
 
-func (UnimplementedWorkspaceServiceHandler) RemoveWorkspaceMember(context.Context, *v1.RemoveWorkspaceMemberRequest) (*v1.RemoveWorkspaceMemberResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.RemoveWorkspaceMember is not implemented"))
+func (UnimplementedWorkspaceServiceHandler) UpdateUserRole(context.Context, *v1.UpdateUserRoleRequest) (*v1.UpdateUserRoleResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.UpdateUserRole is not implemented"))
 }
 
-func (UnimplementedWorkspaceServiceHandler) UpdateWorkspaceMember(context.Context, *v1.UpdateWorkspaceMemberRequest) (*v1.UpdateWorkspaceMemberResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.UpdateWorkspaceMember is not implemented"))
+func (UnimplementedWorkspaceServiceHandler) SetUserActive(context.Context, *v1.SetUserActiveRequest) (*v1.SetUserActiveResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.SetUserActive is not implemented"))
 }
 
-func (UnimplementedWorkspaceServiceHandler) UpdateWorkspaceOwner(context.Context, *v1.UpdateWorkspaceOwnerRequest) (*v1.UpdateWorkspaceOwnerResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.UpdateWorkspaceOwner is not implemented"))
+func (UnimplementedWorkspaceServiceHandler) DeleteUser(context.Context, *v1.DeleteUserRequest) (*v1.DeleteUserResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.DeleteUser is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) TransferOwnership(context.Context, *v1.TransferOwnershipRequest) (*v1.TransferOwnershipResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.TransferOwnership is not implemented"))
+}
+
+func (UnimplementedWorkspaceServiceHandler) CreateWorkspace(context.Context, *v1.CreateWorkspaceRequest) (*v1.CreateWorkspaceResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.WorkspaceService.CreateWorkspace is not implemented"))
 }

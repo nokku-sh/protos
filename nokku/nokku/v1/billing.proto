@@ -30,15 +30,13 @@ service BillingService {
   }
 }
 
-message GetBillingRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
+message GetBillingRequest {}
 message GetBillingResponse {
   string plan = 1;
   string mode = 2;
   map<string, bool> features = 3;
   Quotas quotas = 4;
-  int64 member_count = 5;
+  int64 user_count = 5;
   int64 resource_count = 6;
   Subscription subscription = 7;
 }
@@ -56,24 +54,19 @@ message Subscription {
   google.protobuf.Timestamp current_period_end = 3;
 }
 
-message CreatePortalRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
+message CreatePortalRequest {}
 message CreatePortalResponse {
   string url = 1;
 }
 
-message CreateCheckoutRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
+message CreateCheckoutRequest {}
 message CreateCheckoutResponse {
   string url = 1;
 }
 
 message CancelSubscriptionRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  bool immediate = 2;
-  string reason = 3 [(buf.validate.field).string.max_len = 1000];
+  bool immediate = 1;
+  string reason = 2 [(buf.validate.field).string.max_len = 1000];
 }
 message CancelSubscriptionResponse {}
 
@@ -84,11 +77,9 @@ message GetLicenseResponse {
   google.protobuf.Timestamp expires_at = 3;
 }
 
-// The license covers the whole instance. The workspace only says where the
-// caller is an owner.
+// The license covers the whole instance.
 message ActivateLicenseRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string key = 2 [(buf.validate.field).string = {
+  string key = 1 [(buf.validate.field).string = {
     min_len: 1
     max_len: 4096
   }];

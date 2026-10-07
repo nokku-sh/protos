@@ -33,18 +33,24 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// SSOServiceGetSSOProviderProcedure is the fully-qualified name of the SSOService's GetSSOProvider
+	// SSOServiceListSSOProvidersProcedure is the fully-qualified name of the SSOService's
+	// ListSSOProviders RPC.
+	SSOServiceListSSOProvidersProcedure = "/nokku.v1.SSOService/ListSSOProviders"
+	// SSOServicePutSSOProviderProcedure is the fully-qualified name of the SSOService's PutSSOProvider
 	// RPC.
-	SSOServiceGetSSOProviderProcedure = "/nokku.v1.SSOService/GetSSOProvider"
-	// SSOServiceUpdateSSOProviderProcedure is the fully-qualified name of the SSOService's
-	// UpdateSSOProvider RPC.
-	SSOServiceUpdateSSOProviderProcedure = "/nokku.v1.SSOService/UpdateSSOProvider"
+	SSOServicePutSSOProviderProcedure = "/nokku.v1.SSOService/PutSSOProvider"
+	// SSOServiceDeleteSSOProviderProcedure is the fully-qualified name of the SSOService's
+	// DeleteSSOProvider RPC.
+	SSOServiceDeleteSSOProviderProcedure = "/nokku.v1.SSOService/DeleteSSOProvider"
 )
 
 // SSOServiceClient is a client for the nokku.v1.SSOService service.
 type SSOServiceClient interface {
-	GetSSOProvider(context.Context, *v1.GetSSOProviderRequest) (*v1.GetSSOProviderResponse, error)
-	UpdateSSOProvider(context.Context, *v1.UpdateSSOProviderRequest) (*v1.UpdateSSOProviderResponse, error)
+	ListSSOProviders(context.Context, *v1.ListSSOProvidersRequest) (*v1.ListSSOProvidersResponse, error)
+	// Creates or replaces the provider with that id.
+	PutSSOProvider(context.Context, *v1.PutSSOProviderRequest) (*v1.PutSSOProviderResponse, error)
+	// Also unlinks every identity the provider vouched for.
+	DeleteSSOProvider(context.Context, *v1.DeleteSSOProviderRequest) (*v1.DeleteSSOProviderResponse, error)
 }
 
 // NewSSOServiceClient constructs a client for the nokku.v1.SSOService service. By default, it uses
@@ -58,17 +64,23 @@ func NewSSOServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...
 	baseURL = strings.TrimRight(baseURL, "/")
 	sSOServiceMethods := v1.File_nokku_v1_sso_proto.Services().ByName("SSOService").Methods()
 	return &sSOServiceClient{
-		getSSOProvider: connect.NewClient[v1.GetSSOProviderRequest, v1.GetSSOProviderResponse](
+		listSSOProviders: connect.NewClient[v1.ListSSOProvidersRequest, v1.ListSSOProvidersResponse](
 			httpClient,
-			baseURL+SSOServiceGetSSOProviderProcedure,
-			connect.WithSchema(sSOServiceMethods.ByName("GetSSOProvider")),
+			baseURL+SSOServiceListSSOProvidersProcedure,
+			connect.WithSchema(sSOServiceMethods.ByName("ListSSOProviders")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
-		updateSSOProvider: connect.NewClient[v1.UpdateSSOProviderRequest, v1.UpdateSSOProviderResponse](
+		putSSOProvider: connect.NewClient[v1.PutSSOProviderRequest, v1.PutSSOProviderResponse](
 			httpClient,
-			baseURL+SSOServiceUpdateSSOProviderProcedure,
-			connect.WithSchema(sSOServiceMethods.ByName("UpdateSSOProvider")),
+			baseURL+SSOServicePutSSOProviderProcedure,
+			connect.WithSchema(sSOServiceMethods.ByName("PutSSOProvider")),
+			connect.WithClientOptions(opts...),
+		),
+		deleteSSOProvider: connect.NewClient[v1.DeleteSSOProviderRequest, v1.DeleteSSOProviderResponse](
+			httpClient,
+			baseURL+SSOServiceDeleteSSOProviderProcedure,
+			connect.WithSchema(sSOServiceMethods.ByName("DeleteSSOProvider")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -76,22 +88,32 @@ func NewSSOServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...
 
 // sSOServiceClient implements SSOServiceClient.
 type sSOServiceClient struct {
-	getSSOProvider    *connect.Client[v1.GetSSOProviderRequest, v1.GetSSOProviderResponse]
-	updateSSOProvider *connect.Client[v1.UpdateSSOProviderRequest, v1.UpdateSSOProviderResponse]
+	listSSOProviders  *connect.Client[v1.ListSSOProvidersRequest, v1.ListSSOProvidersResponse]
+	putSSOProvider    *connect.Client[v1.PutSSOProviderRequest, v1.PutSSOProviderResponse]
+	deleteSSOProvider *connect.Client[v1.DeleteSSOProviderRequest, v1.DeleteSSOProviderResponse]
 }
 
-// GetSSOProvider calls nokku.v1.SSOService.GetSSOProvider.
-func (c *sSOServiceClient) GetSSOProvider(ctx context.Context, req *v1.GetSSOProviderRequest) (*v1.GetSSOProviderResponse, error) {
-	response, err := c.getSSOProvider.CallUnary(ctx, connect.NewRequest(req))
+// ListSSOProviders calls nokku.v1.SSOService.ListSSOProviders.
+func (c *sSOServiceClient) ListSSOProviders(ctx context.Context, req *v1.ListSSOProvidersRequest) (*v1.ListSSOProvidersResponse, error) {
+	response, err := c.listSSOProviders.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
 	return nil, err
 }
 
-// UpdateSSOProvider calls nokku.v1.SSOService.UpdateSSOProvider.
-func (c *sSOServiceClient) UpdateSSOProvider(ctx context.Context, req *v1.UpdateSSOProviderRequest) (*v1.UpdateSSOProviderResponse, error) {
-	response, err := c.updateSSOProvider.CallUnary(ctx, connect.NewRequest(req))
+// PutSSOProvider calls nokku.v1.SSOService.PutSSOProvider.
+func (c *sSOServiceClient) PutSSOProvider(ctx context.Context, req *v1.PutSSOProviderRequest) (*v1.PutSSOProviderResponse, error) {
+	response, err := c.putSSOProvider.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
+// DeleteSSOProvider calls nokku.v1.SSOService.DeleteSSOProvider.
+func (c *sSOServiceClient) DeleteSSOProvider(ctx context.Context, req *v1.DeleteSSOProviderRequest) (*v1.DeleteSSOProviderResponse, error) {
+	response, err := c.deleteSSOProvider.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
@@ -100,8 +122,11 @@ func (c *sSOServiceClient) UpdateSSOProvider(ctx context.Context, req *v1.Update
 
 // SSOServiceHandler is an implementation of the nokku.v1.SSOService service.
 type SSOServiceHandler interface {
-	GetSSOProvider(context.Context, *v1.GetSSOProviderRequest) (*v1.GetSSOProviderResponse, error)
-	UpdateSSOProvider(context.Context, *v1.UpdateSSOProviderRequest) (*v1.UpdateSSOProviderResponse, error)
+	ListSSOProviders(context.Context, *v1.ListSSOProvidersRequest) (*v1.ListSSOProvidersResponse, error)
+	// Creates or replaces the provider with that id.
+	PutSSOProvider(context.Context, *v1.PutSSOProviderRequest) (*v1.PutSSOProviderResponse, error)
+	// Also unlinks every identity the provider vouched for.
+	DeleteSSOProvider(context.Context, *v1.DeleteSSOProviderRequest) (*v1.DeleteSSOProviderResponse, error)
 }
 
 // NewSSOServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -111,25 +136,33 @@ type SSOServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewSSOServiceHandler(svc SSOServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	sSOServiceMethods := v1.File_nokku_v1_sso_proto.Services().ByName("SSOService").Methods()
-	sSOServiceGetSSOProviderHandler := connect.NewUnaryHandlerSimple(
-		SSOServiceGetSSOProviderProcedure,
-		svc.GetSSOProvider,
-		connect.WithSchema(sSOServiceMethods.ByName("GetSSOProvider")),
+	sSOServiceListSSOProvidersHandler := connect.NewUnaryHandlerSimple(
+		SSOServiceListSSOProvidersProcedure,
+		svc.ListSSOProviders,
+		connect.WithSchema(sSOServiceMethods.ByName("ListSSOProviders")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
-	sSOServiceUpdateSSOProviderHandler := connect.NewUnaryHandlerSimple(
-		SSOServiceUpdateSSOProviderProcedure,
-		svc.UpdateSSOProvider,
-		connect.WithSchema(sSOServiceMethods.ByName("UpdateSSOProvider")),
+	sSOServicePutSSOProviderHandler := connect.NewUnaryHandlerSimple(
+		SSOServicePutSSOProviderProcedure,
+		svc.PutSSOProvider,
+		connect.WithSchema(sSOServiceMethods.ByName("PutSSOProvider")),
+		connect.WithHandlerOptions(opts...),
+	)
+	sSOServiceDeleteSSOProviderHandler := connect.NewUnaryHandlerSimple(
+		SSOServiceDeleteSSOProviderProcedure,
+		svc.DeleteSSOProvider,
+		connect.WithSchema(sSOServiceMethods.ByName("DeleteSSOProvider")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/nokku.v1.SSOService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case SSOServiceGetSSOProviderProcedure:
-			sSOServiceGetSSOProviderHandler.ServeHTTP(w, r)
-		case SSOServiceUpdateSSOProviderProcedure:
-			sSOServiceUpdateSSOProviderHandler.ServeHTTP(w, r)
+		case SSOServiceListSSOProvidersProcedure:
+			sSOServiceListSSOProvidersHandler.ServeHTTP(w, r)
+		case SSOServicePutSSOProviderProcedure:
+			sSOServicePutSSOProviderHandler.ServeHTTP(w, r)
+		case SSOServiceDeleteSSOProviderProcedure:
+			sSOServiceDeleteSSOProviderHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -139,10 +172,14 @@ func NewSSOServiceHandler(svc SSOServiceHandler, opts ...connect.HandlerOption) 
 // UnimplementedSSOServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedSSOServiceHandler struct{}
 
-func (UnimplementedSSOServiceHandler) GetSSOProvider(context.Context, *v1.GetSSOProviderRequest) (*v1.GetSSOProviderResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.SSOService.GetSSOProvider is not implemented"))
+func (UnimplementedSSOServiceHandler) ListSSOProviders(context.Context, *v1.ListSSOProvidersRequest) (*v1.ListSSOProvidersResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.SSOService.ListSSOProviders is not implemented"))
 }
 
-func (UnimplementedSSOServiceHandler) UpdateSSOProvider(context.Context, *v1.UpdateSSOProviderRequest) (*v1.UpdateSSOProviderResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.SSOService.UpdateSSOProvider is not implemented"))
+func (UnimplementedSSOServiceHandler) PutSSOProvider(context.Context, *v1.PutSSOProviderRequest) (*v1.PutSSOProviderResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.SSOService.PutSSOProvider is not implemented"))
+}
+
+func (UnimplementedSSOServiceHandler) DeleteSSOProvider(context.Context, *v1.DeleteSSOProviderRequest) (*v1.DeleteSSOProviderResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.SSOService.DeleteSSOProvider is not implemented"))
 }

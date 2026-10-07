@@ -8,7 +8,7 @@ import "nokku/v1/access.proto";
 
 service RecordingService {
   rpc GetRecording(GetRecordingRequest) returns (stream GetRecordingResponse) {
-    option (access) = {self: true};
+    option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc ListRecordings(ListRecordingsRequest) returns (ListRecordingsResponse) {
@@ -22,16 +22,15 @@ service RecordingService {
 
 message Recording {
   string id = 1;
-  string workspace_id = 2;
   // Empty once the daemon is deleted, the recording stays.
-  string daemon_id = 3;
-  string username = 4;
-  int64 size_bytes = 5;
-  bool complete = 6;
-  google.protobuf.Timestamp started_at = 7;
-  google.protobuf.Timestamp ended_at = 8;
+  string daemon_id = 2;
+  string username = 3;
+  int64 size_bytes = 4;
+  bool complete = 5;
+  google.protobuf.Timestamp started_at = 6;
+  google.protobuf.Timestamp ended_at = 7;
   // The daemon's name when the session ran.
-  string daemon_name = 9;
+  string daemon_name = 8;
 }
 
 message UploadRecordingRequest {
@@ -55,14 +54,13 @@ message UploadRecordingResponse {
 }
 
 message ListRecordingsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string daemon_id = 2 [(buf.validate.field).string.uuid = true];
-  int32 limit = 3 [(buf.validate.field).int32 = {
+  string daemon_id = 1 [(buf.validate.field).string.uuid = true];
+  int32 limit = 2 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }];
-  int32 offset = 4 [(buf.validate.field).int32.gte = 0];
-  string username = 5;
+  int32 offset = 3 [(buf.validate.field).int32.gte = 0];
+  string username = 4;
 }
 message ListRecordingsResponse {
   repeated Recording recordings = 1;
@@ -71,8 +69,7 @@ message ListRecordingsResponse {
 }
 
 message GetRecordingRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string recording_id = 2 [(buf.validate.field).string.uuid = true];
+  string recording_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message GetRecordingResponse {
   oneof msg {
@@ -82,7 +79,6 @@ message GetRecordingResponse {
 }
 
 message DeleteRecordingRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string recording_id = 2 [(buf.validate.field).string.uuid = true];
+  string recording_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message DeleteRecordingResponse {}

@@ -22,29 +22,27 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type RegisterRequest struct {
+type RequestMagicLinkRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          *string                `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
-	Email         *string                `protobuf:"bytes,2,opt,name=email" json:"email,omitempty"`
-	Password      *string                `protobuf:"bytes,3,opt,name=password" json:"password,omitempty"`
+	Email         *string                `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *RegisterRequest) Reset() {
-	*x = RegisterRequest{}
+func (x *RequestMagicLinkRequest) Reset() {
+	*x = RequestMagicLinkRequest{}
 	mi := &file_nokku_v1_auth_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RegisterRequest) String() string {
+func (x *RequestMagicLinkRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RegisterRequest) ProtoMessage() {}
+func (*RequestMagicLinkRequest) ProtoMessage() {}
 
-func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
+func (x *RequestMagicLinkRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_nokku_v1_auth_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -56,52 +54,38 @@ func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
-func (*RegisterRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use RequestMagicLinkRequest.ProtoReflect.Descriptor instead.
+func (*RequestMagicLinkRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *RegisterRequest) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
-	}
-	return ""
-}
-
-func (x *RegisterRequest) GetEmail() string {
+func (x *RequestMagicLinkRequest) GetEmail() string {
 	if x != nil && x.Email != nil {
 		return *x.Email
 	}
 	return ""
 }
 
-func (x *RegisterRequest) GetPassword() string {
-	if x != nil && x.Password != nil {
-		return *x.Password
-	}
-	return ""
-}
-
-type RegisterResponse struct {
+type RequestMagicLinkResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *RegisterResponse) Reset() {
-	*x = RegisterResponse{}
+func (x *RequestMagicLinkResponse) Reset() {
+	*x = RequestMagicLinkResponse{}
 	mi := &file_nokku_v1_auth_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RegisterResponse) String() string {
+func (x *RequestMagicLinkResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RegisterResponse) ProtoMessage() {}
+func (*RequestMagicLinkResponse) ProtoMessage() {}
 
-func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
+func (x *RequestMagicLinkResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_nokku_v1_auth_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -113,33 +97,32 @@ func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
-func (*RegisterResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use RequestMagicLinkResponse.ProtoReflect.Descriptor instead.
+func (*RequestMagicLinkResponse) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{1}
 }
 
-type LoginRequest struct {
+type ConsumeMagicLinkRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         *string                `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
-	Password      *string                `protobuf:"bytes,2,opt,name=password" json:"password,omitempty"`
+	Token         *string                `protobuf:"bytes,1,opt,name=token" json:"token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *LoginRequest) Reset() {
-	*x = LoginRequest{}
+func (x *ConsumeMagicLinkRequest) Reset() {
+	*x = ConsumeMagicLinkRequest{}
 	mi := &file_nokku_v1_auth_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *LoginRequest) String() string {
+func (x *ConsumeMagicLinkRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LoginRequest) ProtoMessage() {}
+func (*ConsumeMagicLinkRequest) ProtoMessage() {}
 
-func (x *LoginRequest) ProtoReflect() protoreflect.Message {
+func (x *ConsumeMagicLinkRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_nokku_v1_auth_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -151,46 +134,39 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
-func (*LoginRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ConsumeMagicLinkRequest.ProtoReflect.Descriptor instead.
+func (*ConsumeMagicLinkRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *LoginRequest) GetEmail() string {
-	if x != nil && x.Email != nil {
-		return *x.Email
+func (x *ConsumeMagicLinkRequest) GetToken() string {
+	if x != nil && x.Token != nil {
+		return *x.Token
 	}
 	return ""
 }
 
-func (x *LoginRequest) GetPassword() string {
-	if x != nil && x.Password != nil {
-		return *x.Password
-	}
-	return ""
-}
-
-type LoginResponse struct {
+type ConsumeMagicLinkResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	User          *User                  `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *LoginResponse) Reset() {
-	*x = LoginResponse{}
+func (x *ConsumeMagicLinkResponse) Reset() {
+	*x = ConsumeMagicLinkResponse{}
 	mi := &file_nokku_v1_auth_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *LoginResponse) String() string {
+func (x *ConsumeMagicLinkResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LoginResponse) ProtoMessage() {}
+func (*ConsumeMagicLinkResponse) ProtoMessage() {}
 
-func (x *LoginResponse) ProtoReflect() protoreflect.Message {
+func (x *ConsumeMagicLinkResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_nokku_v1_auth_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -202,108 +178,12 @@ func (x *LoginResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LoginResponse.ProtoReflect.Descriptor instead.
-func (*LoginResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ConsumeMagicLinkResponse.ProtoReflect.Descriptor instead.
+func (*ConsumeMagicLinkResponse) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *LoginResponse) GetUser() *User {
-	if x != nil {
-		return x.User
-	}
-	return nil
-}
-
-type LoginWithBackupCodeRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         *string                `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
-	Code          *string                `protobuf:"bytes,2,opt,name=code" json:"code,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *LoginWithBackupCodeRequest) Reset() {
-	*x = LoginWithBackupCodeRequest{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *LoginWithBackupCodeRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LoginWithBackupCodeRequest) ProtoMessage() {}
-
-func (x *LoginWithBackupCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LoginWithBackupCodeRequest.ProtoReflect.Descriptor instead.
-func (*LoginWithBackupCodeRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *LoginWithBackupCodeRequest) GetEmail() string {
-	if x != nil && x.Email != nil {
-		return *x.Email
-	}
-	return ""
-}
-
-func (x *LoginWithBackupCodeRequest) GetCode() string {
-	if x != nil && x.Code != nil {
-		return *x.Code
-	}
-	return ""
-}
-
-type LoginWithBackupCodeResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	User          *User                  `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *LoginWithBackupCodeResponse) Reset() {
-	*x = LoginWithBackupCodeResponse{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *LoginWithBackupCodeResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LoginWithBackupCodeResponse) ProtoMessage() {}
-
-func (x *LoginWithBackupCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LoginWithBackupCodeResponse.ProtoReflect.Descriptor instead.
-func (*LoginWithBackupCodeResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *LoginWithBackupCodeResponse) GetUser() *User {
+func (x *ConsumeMagicLinkResponse) GetUser() *User {
 	if x != nil {
 		return x.User
 	}
@@ -318,7 +198,7 @@ type LogoutRequest struct {
 
 func (x *LogoutRequest) Reset() {
 	*x = LogoutRequest{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[6]
+	mi := &file_nokku_v1_auth_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -330,7 +210,7 @@ func (x *LogoutRequest) String() string {
 func (*LogoutRequest) ProtoMessage() {}
 
 func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[6]
+	mi := &file_nokku_v1_auth_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -343,7 +223,7 @@ func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutRequest.ProtoReflect.Descriptor instead.
 func (*LogoutRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{6}
+	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{4}
 }
 
 type LogoutResponse struct {
@@ -354,7 +234,7 @@ type LogoutResponse struct {
 
 func (x *LogoutResponse) Reset() {
 	*x = LogoutResponse{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[7]
+	mi := &file_nokku_v1_auth_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -366,7 +246,7 @@ func (x *LogoutResponse) String() string {
 func (*LogoutResponse) ProtoMessage() {}
 
 func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[7]
+	mi := &file_nokku_v1_auth_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -379,30 +259,137 @@ func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutResponse.ProtoReflect.Descriptor instead.
 func (*LogoutResponse) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{5}
+}
+
+type GetLoginOptionsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetLoginOptionsRequest) Reset() {
+	*x = GetLoginOptionsRequest{}
+	mi := &file_nokku_v1_auth_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetLoginOptionsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetLoginOptionsRequest) ProtoMessage() {}
+
+func (x *GetLoginOptionsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_auth_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetLoginOptionsRequest.ProtoReflect.Descriptor instead.
+func (*GetLoginOptionsRequest) Descriptor() ([]byte, []int) {
+	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{6}
+}
+
+type GetLoginOptionsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceName *string                `protobuf:"bytes,1,opt,name=workspace_name,json=workspaceName" json:"workspace_name,omitempty"`
+	// Mail is configured and SSO is not enforced.
+	MagicLink *bool `protobuf:"varint,2,opt,name=magic_link,json=magicLink" json:"magic_link,omitempty"`
+	// SSO is not enforced.
+	Passkey       *bool              `protobuf:"varint,3,opt,name=passkey" json:"passkey,omitempty"`
+	Providers     []*SSOProviderInfo `protobuf:"bytes,4,rep,name=providers" json:"providers,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetLoginOptionsResponse) Reset() {
+	*x = GetLoginOptionsResponse{}
+	mi := &file_nokku_v1_auth_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetLoginOptionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetLoginOptionsResponse) ProtoMessage() {}
+
+func (x *GetLoginOptionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_nokku_v1_auth_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetLoginOptionsResponse.ProtoReflect.Descriptor instead.
+func (*GetLoginOptionsResponse) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{7}
 }
 
-type ForgotPasswordRequest struct {
+func (x *GetLoginOptionsResponse) GetWorkspaceName() string {
+	if x != nil && x.WorkspaceName != nil {
+		return *x.WorkspaceName
+	}
+	return ""
+}
+
+func (x *GetLoginOptionsResponse) GetMagicLink() bool {
+	if x != nil && x.MagicLink != nil {
+		return *x.MagicLink
+	}
+	return false
+}
+
+func (x *GetLoginOptionsResponse) GetPasskey() bool {
+	if x != nil && x.Passkey != nil {
+		return *x.Passkey
+	}
+	return false
+}
+
+func (x *GetLoginOptionsResponse) GetProviders() []*SSOProviderInfo {
+	if x != nil {
+		return x.Providers
+	}
+	return nil
+}
+
+type SSOProviderInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         *string                `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
+	ProviderId    *string                `protobuf:"bytes,1,opt,name=provider_id,json=providerId" json:"provider_id,omitempty"`
+	Name          *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ForgotPasswordRequest) Reset() {
-	*x = ForgotPasswordRequest{}
+func (x *SSOProviderInfo) Reset() {
+	*x = SSOProviderInfo{}
 	mi := &file_nokku_v1_auth_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ForgotPasswordRequest) String() string {
+func (x *SSOProviderInfo) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ForgotPasswordRequest) ProtoMessage() {}
+func (*SSOProviderInfo) ProtoMessage() {}
 
-func (x *ForgotPasswordRequest) ProtoReflect() protoreflect.Message {
+func (x *SSOProviderInfo) ProtoReflect() protoreflect.Message {
 	mi := &file_nokku_v1_auth_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -414,220 +401,23 @@ func (x *ForgotPasswordRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ForgotPasswordRequest.ProtoReflect.Descriptor instead.
-func (*ForgotPasswordRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use SSOProviderInfo.ProtoReflect.Descriptor instead.
+func (*SSOProviderInfo) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *ForgotPasswordRequest) GetEmail() string {
-	if x != nil && x.Email != nil {
-		return *x.Email
+func (x *SSOProviderInfo) GetProviderId() string {
+	if x != nil && x.ProviderId != nil {
+		return *x.ProviderId
 	}
 	return ""
 }
 
-type ForgotPasswordResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ForgotPasswordResponse) Reset() {
-	*x = ForgotPasswordResponse{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ForgotPasswordResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ForgotPasswordResponse) ProtoMessage() {}
-
-func (x *ForgotPasswordResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ForgotPasswordResponse.ProtoReflect.Descriptor instead.
-func (*ForgotPasswordResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{9}
-}
-
-type ResetPasswordRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         *string                `protobuf:"bytes,1,opt,name=token" json:"token,omitempty"`
-	NewPassword   *string                `protobuf:"bytes,2,opt,name=new_password,json=newPassword" json:"new_password,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ResetPasswordRequest) Reset() {
-	*x = ResetPasswordRequest{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ResetPasswordRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResetPasswordRequest) ProtoMessage() {}
-
-func (x *ResetPasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResetPasswordRequest.ProtoReflect.Descriptor instead.
-func (*ResetPasswordRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *ResetPasswordRequest) GetToken() string {
-	if x != nil && x.Token != nil {
-		return *x.Token
+func (x *SSOProviderInfo) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
 	}
 	return ""
-}
-
-func (x *ResetPasswordRequest) GetNewPassword() string {
-	if x != nil && x.NewPassword != nil {
-		return *x.NewPassword
-	}
-	return ""
-}
-
-type ResetPasswordResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ResetPasswordResponse) Reset() {
-	*x = ResetPasswordResponse{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[11]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ResetPasswordResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResetPasswordResponse) ProtoMessage() {}
-
-func (x *ResetPasswordResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[11]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResetPasswordResponse.ProtoReflect.Descriptor instead.
-func (*ResetPasswordResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{11}
-}
-
-type VerifyEmailRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         *string                `protobuf:"bytes,1,opt,name=token" json:"token,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *VerifyEmailRequest) Reset() {
-	*x = VerifyEmailRequest{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[12]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *VerifyEmailRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VerifyEmailRequest) ProtoMessage() {}
-
-func (x *VerifyEmailRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[12]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VerifyEmailRequest.ProtoReflect.Descriptor instead.
-func (*VerifyEmailRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{12}
-}
-
-func (x *VerifyEmailRequest) GetToken() string {
-	if x != nil && x.Token != nil {
-		return *x.Token
-	}
-	return ""
-}
-
-type VerifyEmailResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *VerifyEmailResponse) Reset() {
-	*x = VerifyEmailResponse{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *VerifyEmailResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VerifyEmailResponse) ProtoMessage() {}
-
-func (x *VerifyEmailResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VerifyEmailResponse.ProtoReflect.Descriptor instead.
-func (*VerifyEmailResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{13}
 }
 
 type ConfirmEmailChangeRequest struct {
@@ -639,7 +429,7 @@ type ConfirmEmailChangeRequest struct {
 
 func (x *ConfirmEmailChangeRequest) Reset() {
 	*x = ConfirmEmailChangeRequest{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[14]
+	mi := &file_nokku_v1_auth_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -651,7 +441,7 @@ func (x *ConfirmEmailChangeRequest) String() string {
 func (*ConfirmEmailChangeRequest) ProtoMessage() {}
 
 func (x *ConfirmEmailChangeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[14]
+	mi := &file_nokku_v1_auth_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -664,7 +454,7 @@ func (x *ConfirmEmailChangeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfirmEmailChangeRequest.ProtoReflect.Descriptor instead.
 func (*ConfirmEmailChangeRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{14}
+	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ConfirmEmailChangeRequest) GetToken() string {
@@ -682,7 +472,7 @@ type ConfirmEmailChangeResponse struct {
 
 func (x *ConfirmEmailChangeResponse) Reset() {
 	*x = ConfirmEmailChangeResponse{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[15]
+	mi := &file_nokku_v1_auth_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -694,7 +484,7 @@ func (x *ConfirmEmailChangeResponse) String() string {
 func (*ConfirmEmailChangeResponse) ProtoMessage() {}
 
 func (x *ConfirmEmailChangeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[15]
+	mi := &file_nokku_v1_auth_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -707,7 +497,7 @@ func (x *ConfirmEmailChangeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfirmEmailChangeResponse.ProtoReflect.Descriptor instead.
 func (*ConfirmEmailChangeResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{15}
+	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{10}
 }
 
 type CancelEmailChangeRequest struct {
@@ -719,7 +509,7 @@ type CancelEmailChangeRequest struct {
 
 func (x *CancelEmailChangeRequest) Reset() {
 	*x = CancelEmailChangeRequest{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[16]
+	mi := &file_nokku_v1_auth_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -731,7 +521,7 @@ func (x *CancelEmailChangeRequest) String() string {
 func (*CancelEmailChangeRequest) ProtoMessage() {}
 
 func (x *CancelEmailChangeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[16]
+	mi := &file_nokku_v1_auth_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -744,7 +534,7 @@ func (x *CancelEmailChangeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelEmailChangeRequest.ProtoReflect.Descriptor instead.
 func (*CancelEmailChangeRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{16}
+	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CancelEmailChangeRequest) GetToken() string {
@@ -762,7 +552,7 @@ type CancelEmailChangeResponse struct {
 
 func (x *CancelEmailChangeResponse) Reset() {
 	*x = CancelEmailChangeResponse{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[17]
+	mi := &file_nokku_v1_auth_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -774,7 +564,7 @@ func (x *CancelEmailChangeResponse) String() string {
 func (*CancelEmailChangeResponse) ProtoMessage() {}
 
 func (x *CancelEmailChangeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[17]
+	mi := &file_nokku_v1_auth_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -787,319 +577,47 @@ func (x *CancelEmailChangeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelEmailChangeResponse.ProtoReflect.Descriptor instead.
 func (*CancelEmailChangeResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{17}
-}
-
-type ResendVerificationRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         *string                `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ResendVerificationRequest) Reset() {
-	*x = ResendVerificationRequest{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[18]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ResendVerificationRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResendVerificationRequest) ProtoMessage() {}
-
-func (x *ResendVerificationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[18]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResendVerificationRequest.ProtoReflect.Descriptor instead.
-func (*ResendVerificationRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{18}
-}
-
-func (x *ResendVerificationRequest) GetEmail() string {
-	if x != nil && x.Email != nil {
-		return *x.Email
-	}
-	return ""
-}
-
-type ResendVerificationResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ResendVerificationResponse) Reset() {
-	*x = ResendVerificationResponse{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[19]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ResendVerificationResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResendVerificationResponse) ProtoMessage() {}
-
-func (x *ResendVerificationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[19]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResendVerificationResponse.ProtoReflect.Descriptor instead.
-func (*ResendVerificationResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{19}
-}
-
-type DiscoverSSORequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         *string                `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DiscoverSSORequest) Reset() {
-	*x = DiscoverSSORequest{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[20]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DiscoverSSORequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DiscoverSSORequest) ProtoMessage() {}
-
-func (x *DiscoverSSORequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[20]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DiscoverSSORequest.ProtoReflect.Descriptor instead.
-func (*DiscoverSSORequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{20}
-}
-
-func (x *DiscoverSSORequest) GetEmail() string {
-	if x != nil && x.Email != nil {
-		return *x.Email
-	}
-	return ""
-}
-
-type DiscoverSSOResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	HasSso        *bool                  `protobuf:"varint,1,opt,name=has_sso,json=hasSso" json:"has_sso,omitempty"`
-	Enforce       *bool                  `protobuf:"varint,2,opt,name=enforce" json:"enforce,omitempty"`
-	Providers     []*SSOProviderInfo     `protobuf:"bytes,3,rep,name=providers" json:"providers,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DiscoverSSOResponse) Reset() {
-	*x = DiscoverSSOResponse{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[21]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DiscoverSSOResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DiscoverSSOResponse) ProtoMessage() {}
-
-func (x *DiscoverSSOResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[21]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DiscoverSSOResponse.ProtoReflect.Descriptor instead.
-func (*DiscoverSSOResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{21}
-}
-
-func (x *DiscoverSSOResponse) GetHasSso() bool {
-	if x != nil && x.HasSso != nil {
-		return *x.HasSso
-	}
-	return false
-}
-
-func (x *DiscoverSSOResponse) GetEnforce() bool {
-	if x != nil && x.Enforce != nil {
-		return *x.Enforce
-	}
-	return false
-}
-
-func (x *DiscoverSSOResponse) GetProviders() []*SSOProviderInfo {
-	if x != nil {
-		return x.Providers
-	}
-	return nil
-}
-
-type SSOProviderInfo struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Method        *string                `protobuf:"bytes,1,opt,name=method" json:"method,omitempty"`
-	Provider      *string                `protobuf:"bytes,2,opt,name=provider" json:"provider,omitempty"`
-	Name          *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SSOProviderInfo) Reset() {
-	*x = SSOProviderInfo{}
-	mi := &file_nokku_v1_auth_proto_msgTypes[22]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SSOProviderInfo) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SSOProviderInfo) ProtoMessage() {}
-
-func (x *SSOProviderInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_auth_proto_msgTypes[22]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SSOProviderInfo.ProtoReflect.Descriptor instead.
-func (*SSOProviderInfo) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{22}
-}
-
-func (x *SSOProviderInfo) GetMethod() string {
-	if x != nil && x.Method != nil {
-		return *x.Method
-	}
-	return ""
-}
-
-func (x *SSOProviderInfo) GetProvider() string {
-	if x != nil && x.Provider != nil {
-		return *x.Provider
-	}
-	return ""
-}
-
-func (x *SSOProviderInfo) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
-	}
-	return ""
+	return file_nokku_v1_auth_proto_rawDescGZIP(), []int{12}
 }
 
 var File_nokku_v1_auth_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_auth_proto_rawDesc = "" +
 	"\n" +
-	"\x13nokku/v1/auth.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\"v\n" +
-	"\x0fRegisterRequest\x12\x1c\n" +
-	"\x04name\x18\x01 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x02R\x04name\x12\x1d\n" +
-	"\x05email\x18\x02 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\x12&\n" +
-	"\bpassword\x18\x03 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\b\x18\x80\x01R\bpassword\"\x12\n" +
-	"\x10RegisterResponse\"U\n" +
-	"\fLoginRequest\x12\x1d\n" +
-	"\x05email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\x12&\n" +
-	"\bpassword\x18\x02 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\x01\x18\x80\x01R\bpassword\"3\n" +
-	"\rLoginResponse\x12\"\n" +
-	"\x04user\x18\x01 \x01(\v2\x0e.nokku.v1.UserR\x04user\"X\n" +
-	"\x1aLoginWithBackupCodeRequest\x12\x1d\n" +
-	"\x05email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\x12\x1b\n" +
-	"\x04code\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04code\"A\n" +
-	"\x1bLoginWithBackupCodeResponse\x12\"\n" +
+	"\x13nokku/v1/auth.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\"8\n" +
+	"\x17RequestMagicLinkRequest\x12\x1d\n" +
+	"\x05email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\"\x1a\n" +
+	"\x18RequestMagicLinkResponse\"8\n" +
+	"\x17ConsumeMagicLinkRequest\x12\x1d\n" +
+	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\">\n" +
+	"\x18ConsumeMagicLinkResponse\x12\"\n" +
 	"\x04user\x18\x01 \x01(\v2\x0e.nokku.v1.UserR\x04user\"\x0f\n" +
 	"\rLogoutRequest\"\x10\n" +
-	"\x0eLogoutResponse\"6\n" +
-	"\x15ForgotPasswordRequest\x12\x1d\n" +
-	"\x05email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\"\x18\n" +
-	"\x16ForgotPasswordResponse\"d\n" +
-	"\x14ResetPasswordRequest\x12\x1d\n" +
-	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\x12-\n" +
-	"\fnew_password\x18\x02 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\b\x18\x80\x01R\vnewPassword\"\x17\n" +
-	"\x15ResetPasswordResponse\"3\n" +
-	"\x12VerifyEmailRequest\x12\x1d\n" +
-	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"\x15\n" +
-	"\x13VerifyEmailResponse\":\n" +
+	"\x0eLogoutResponse\"\x18\n" +
+	"\x16GetLoginOptionsRequest\"\xb2\x01\n" +
+	"\x17GetLoginOptionsResponse\x12%\n" +
+	"\x0eworkspace_name\x18\x01 \x01(\tR\rworkspaceName\x12\x1d\n" +
+	"\n" +
+	"magic_link\x18\x02 \x01(\bR\tmagicLink\x12\x18\n" +
+	"\apasskey\x18\x03 \x01(\bR\apasskey\x127\n" +
+	"\tproviders\x18\x04 \x03(\v2\x19.nokku.v1.SSOProviderInfoR\tproviders\"F\n" +
+	"\x0fSSOProviderInfo\x12\x1f\n" +
+	"\vprovider_id\x18\x01 \x01(\tR\n" +
+	"providerId\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\":\n" +
 	"\x19ConfirmEmailChangeRequest\x12\x1d\n" +
 	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"\x1c\n" +
 	"\x1aConfirmEmailChangeResponse\"9\n" +
 	"\x18CancelEmailChangeRequest\x12\x1d\n" +
 	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"\x1b\n" +
-	"\x19CancelEmailChangeResponse\":\n" +
-	"\x19ResendVerificationRequest\x12\x1d\n" +
-	"\x05email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\"\x1c\n" +
-	"\x1aResendVerificationResponse\"3\n" +
-	"\x12DiscoverSSORequest\x12\x1d\n" +
-	"\x05email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\"\x81\x01\n" +
-	"\x13DiscoverSSOResponse\x12\x17\n" +
-	"\ahas_sso\x18\x01 \x01(\bR\x06hasSso\x12\x18\n" +
-	"\aenforce\x18\x02 \x01(\bR\aenforce\x127\n" +
-	"\tproviders\x18\x03 \x03(\v2\x19.nokku.v1.SSOProviderInfoR\tproviders\"Y\n" +
-	"\x0fSSOProviderInfo\x12\x16\n" +
-	"\x06method\x18\x01 \x01(\tR\x06method\x12\x1a\n" +
-	"\bprovider\x18\x02 \x01(\tR\bprovider\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name2\xe5\a\n" +
-	"\vAuthService\x12I\n" +
-	"\bRegister\x12\x19.nokku.v1.RegisterRequest\x1a\x1a.nokku.v1.RegisterResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12@\n" +
-	"\x05Login\x12\x16.nokku.v1.LoginRequest\x1a\x17.nokku.v1.LoginResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12j\n" +
-	"\x13LoginWithBackupCode\x12$.nokku.v1.LoginWithBackupCodeRequest\x1a%.nokku.v1.LoginWithBackupCodeResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12C\n" +
-	"\x06Logout\x12\x17.nokku.v1.LogoutRequest\x1a\x18.nokku.v1.LogoutResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12[\n" +
-	"\x0eForgotPassword\x12\x1f.nokku.v1.ForgotPasswordRequest\x1a .nokku.v1.ForgotPasswordResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12X\n" +
-	"\rResetPassword\x12\x1e.nokku.v1.ResetPasswordRequest\x1a\x1f.nokku.v1.ResetPasswordResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12R\n" +
-	"\vVerifyEmail\x12\x1c.nokku.v1.VerifyEmailRequest\x1a\x1d.nokku.v1.VerifyEmailResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12g\n" +
-	"\x12ResendVerification\x12#.nokku.v1.ResendVerificationRequest\x1a$.nokku.v1.ResendVerificationResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12g\n" +
+	"\x19CancelEmailChangeResponse2\xca\x04\n" +
+	"\vAuthService\x12a\n" +
+	"\x10RequestMagicLink\x12!.nokku.v1.RequestMagicLinkRequest\x1a\".nokku.v1.RequestMagicLinkResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12a\n" +
+	"\x10ConsumeMagicLink\x12!.nokku.v1.ConsumeMagicLinkRequest\x1a\".nokku.v1.ConsumeMagicLinkResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12C\n" +
+	"\x06Logout\x12\x17.nokku.v1.LogoutRequest\x1a\x18.nokku.v1.LogoutResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12a\n" +
+	"\x0fGetLoginOptions\x12 .nokku.v1.GetLoginOptionsRequest\x1a!.nokku.v1.GetLoginOptionsResponse\"\t\xc2\xf3\x18\x02\b\x01\x90\x02\x01\x12g\n" +
 	"\x12ConfirmEmailChange\x12#.nokku.v1.ConfirmEmailChangeRequest\x1a$.nokku.v1.ConfirmEmailChangeResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12d\n" +
-	"\x11CancelEmailChange\x12\".nokku.v1.CancelEmailChangeRequest\x1a#.nokku.v1.CancelEmailChangeResponse\"\x06\xc2\xf3\x18\x02\b\x01\x12U\n" +
-	"\vDiscoverSSO\x12\x1c.nokku.v1.DiscoverSSORequest\x1a\x1d.nokku.v1.DiscoverSSOResponse\"\t\xc2\xf3\x18\x02\b\x01\x90\x02\x01B\x8b\x01\n" +
+	"\x11CancelEmailChange\x12\".nokku.v1.CancelEmailChangeRequest\x1a#.nokku.v1.CancelEmailChangeResponse\"\x06\xc2\xf3\x18\x02\b\x01B\x8b\x01\n" +
 	"\fcom.nokku.v1B\tAuthProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (
@@ -1114,64 +632,43 @@ func file_nokku_v1_auth_proto_rawDescGZIP() []byte {
 	return file_nokku_v1_auth_proto_rawDescData
 }
 
-var file_nokku_v1_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_nokku_v1_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_nokku_v1_auth_proto_goTypes = []any{
-	(*RegisterRequest)(nil),             // 0: nokku.v1.RegisterRequest
-	(*RegisterResponse)(nil),            // 1: nokku.v1.RegisterResponse
-	(*LoginRequest)(nil),                // 2: nokku.v1.LoginRequest
-	(*LoginResponse)(nil),               // 3: nokku.v1.LoginResponse
-	(*LoginWithBackupCodeRequest)(nil),  // 4: nokku.v1.LoginWithBackupCodeRequest
-	(*LoginWithBackupCodeResponse)(nil), // 5: nokku.v1.LoginWithBackupCodeResponse
-	(*LogoutRequest)(nil),               // 6: nokku.v1.LogoutRequest
-	(*LogoutResponse)(nil),              // 7: nokku.v1.LogoutResponse
-	(*ForgotPasswordRequest)(nil),       // 8: nokku.v1.ForgotPasswordRequest
-	(*ForgotPasswordResponse)(nil),      // 9: nokku.v1.ForgotPasswordResponse
-	(*ResetPasswordRequest)(nil),        // 10: nokku.v1.ResetPasswordRequest
-	(*ResetPasswordResponse)(nil),       // 11: nokku.v1.ResetPasswordResponse
-	(*VerifyEmailRequest)(nil),          // 12: nokku.v1.VerifyEmailRequest
-	(*VerifyEmailResponse)(nil),         // 13: nokku.v1.VerifyEmailResponse
-	(*ConfirmEmailChangeRequest)(nil),   // 14: nokku.v1.ConfirmEmailChangeRequest
-	(*ConfirmEmailChangeResponse)(nil),  // 15: nokku.v1.ConfirmEmailChangeResponse
-	(*CancelEmailChangeRequest)(nil),    // 16: nokku.v1.CancelEmailChangeRequest
-	(*CancelEmailChangeResponse)(nil),   // 17: nokku.v1.CancelEmailChangeResponse
-	(*ResendVerificationRequest)(nil),   // 18: nokku.v1.ResendVerificationRequest
-	(*ResendVerificationResponse)(nil),  // 19: nokku.v1.ResendVerificationResponse
-	(*DiscoverSSORequest)(nil),          // 20: nokku.v1.DiscoverSSORequest
-	(*DiscoverSSOResponse)(nil),         // 21: nokku.v1.DiscoverSSOResponse
-	(*SSOProviderInfo)(nil),             // 22: nokku.v1.SSOProviderInfo
-	(*User)(nil),                        // 23: nokku.v1.User
+	(*RequestMagicLinkRequest)(nil),    // 0: nokku.v1.RequestMagicLinkRequest
+	(*RequestMagicLinkResponse)(nil),   // 1: nokku.v1.RequestMagicLinkResponse
+	(*ConsumeMagicLinkRequest)(nil),    // 2: nokku.v1.ConsumeMagicLinkRequest
+	(*ConsumeMagicLinkResponse)(nil),   // 3: nokku.v1.ConsumeMagicLinkResponse
+	(*LogoutRequest)(nil),              // 4: nokku.v1.LogoutRequest
+	(*LogoutResponse)(nil),             // 5: nokku.v1.LogoutResponse
+	(*GetLoginOptionsRequest)(nil),     // 6: nokku.v1.GetLoginOptionsRequest
+	(*GetLoginOptionsResponse)(nil),    // 7: nokku.v1.GetLoginOptionsResponse
+	(*SSOProviderInfo)(nil),            // 8: nokku.v1.SSOProviderInfo
+	(*ConfirmEmailChangeRequest)(nil),  // 9: nokku.v1.ConfirmEmailChangeRequest
+	(*ConfirmEmailChangeResponse)(nil), // 10: nokku.v1.ConfirmEmailChangeResponse
+	(*CancelEmailChangeRequest)(nil),   // 11: nokku.v1.CancelEmailChangeRequest
+	(*CancelEmailChangeResponse)(nil),  // 12: nokku.v1.CancelEmailChangeResponse
+	(*User)(nil),                       // 13: nokku.v1.User
 }
 var file_nokku_v1_auth_proto_depIdxs = []int32{
-	23, // 0: nokku.v1.LoginResponse.user:type_name -> nokku.v1.User
-	23, // 1: nokku.v1.LoginWithBackupCodeResponse.user:type_name -> nokku.v1.User
-	22, // 2: nokku.v1.DiscoverSSOResponse.providers:type_name -> nokku.v1.SSOProviderInfo
-	0,  // 3: nokku.v1.AuthService.Register:input_type -> nokku.v1.RegisterRequest
-	2,  // 4: nokku.v1.AuthService.Login:input_type -> nokku.v1.LoginRequest
-	4,  // 5: nokku.v1.AuthService.LoginWithBackupCode:input_type -> nokku.v1.LoginWithBackupCodeRequest
-	6,  // 6: nokku.v1.AuthService.Logout:input_type -> nokku.v1.LogoutRequest
-	8,  // 7: nokku.v1.AuthService.ForgotPassword:input_type -> nokku.v1.ForgotPasswordRequest
-	10, // 8: nokku.v1.AuthService.ResetPassword:input_type -> nokku.v1.ResetPasswordRequest
-	12, // 9: nokku.v1.AuthService.VerifyEmail:input_type -> nokku.v1.VerifyEmailRequest
-	18, // 10: nokku.v1.AuthService.ResendVerification:input_type -> nokku.v1.ResendVerificationRequest
-	14, // 11: nokku.v1.AuthService.ConfirmEmailChange:input_type -> nokku.v1.ConfirmEmailChangeRequest
-	16, // 12: nokku.v1.AuthService.CancelEmailChange:input_type -> nokku.v1.CancelEmailChangeRequest
-	20, // 13: nokku.v1.AuthService.DiscoverSSO:input_type -> nokku.v1.DiscoverSSORequest
-	1,  // 14: nokku.v1.AuthService.Register:output_type -> nokku.v1.RegisterResponse
-	3,  // 15: nokku.v1.AuthService.Login:output_type -> nokku.v1.LoginResponse
-	5,  // 16: nokku.v1.AuthService.LoginWithBackupCode:output_type -> nokku.v1.LoginWithBackupCodeResponse
-	7,  // 17: nokku.v1.AuthService.Logout:output_type -> nokku.v1.LogoutResponse
-	9,  // 18: nokku.v1.AuthService.ForgotPassword:output_type -> nokku.v1.ForgotPasswordResponse
-	11, // 19: nokku.v1.AuthService.ResetPassword:output_type -> nokku.v1.ResetPasswordResponse
-	13, // 20: nokku.v1.AuthService.VerifyEmail:output_type -> nokku.v1.VerifyEmailResponse
-	19, // 21: nokku.v1.AuthService.ResendVerification:output_type -> nokku.v1.ResendVerificationResponse
-	15, // 22: nokku.v1.AuthService.ConfirmEmailChange:output_type -> nokku.v1.ConfirmEmailChangeResponse
-	17, // 23: nokku.v1.AuthService.CancelEmailChange:output_type -> nokku.v1.CancelEmailChangeResponse
-	21, // 24: nokku.v1.AuthService.DiscoverSSO:output_type -> nokku.v1.DiscoverSSOResponse
-	14, // [14:25] is the sub-list for method output_type
-	3,  // [3:14] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	13, // 0: nokku.v1.ConsumeMagicLinkResponse.user:type_name -> nokku.v1.User
+	8,  // 1: nokku.v1.GetLoginOptionsResponse.providers:type_name -> nokku.v1.SSOProviderInfo
+	0,  // 2: nokku.v1.AuthService.RequestMagicLink:input_type -> nokku.v1.RequestMagicLinkRequest
+	2,  // 3: nokku.v1.AuthService.ConsumeMagicLink:input_type -> nokku.v1.ConsumeMagicLinkRequest
+	4,  // 4: nokku.v1.AuthService.Logout:input_type -> nokku.v1.LogoutRequest
+	6,  // 5: nokku.v1.AuthService.GetLoginOptions:input_type -> nokku.v1.GetLoginOptionsRequest
+	9,  // 6: nokku.v1.AuthService.ConfirmEmailChange:input_type -> nokku.v1.ConfirmEmailChangeRequest
+	11, // 7: nokku.v1.AuthService.CancelEmailChange:input_type -> nokku.v1.CancelEmailChangeRequest
+	1,  // 8: nokku.v1.AuthService.RequestMagicLink:output_type -> nokku.v1.RequestMagicLinkResponse
+	3,  // 9: nokku.v1.AuthService.ConsumeMagicLink:output_type -> nokku.v1.ConsumeMagicLinkResponse
+	5,  // 10: nokku.v1.AuthService.Logout:output_type -> nokku.v1.LogoutResponse
+	7,  // 11: nokku.v1.AuthService.GetLoginOptions:output_type -> nokku.v1.GetLoginOptionsResponse
+	10, // 12: nokku.v1.AuthService.ConfirmEmailChange:output_type -> nokku.v1.ConfirmEmailChangeResponse
+	12, // 13: nokku.v1.AuthService.CancelEmailChange:output_type -> nokku.v1.CancelEmailChangeResponse
+	8,  // [8:14] is the sub-list for method output_type
+	2,  // [2:8] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_auth_proto_init() }
@@ -1187,7 +684,7 @@ func file_nokku_v1_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_nokku_v1_auth_proto_rawDesc), len(file_nokku_v1_auth_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   23,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -93,8 +93,7 @@ func (x *SCIMToken) GetLastUsedAt() *timestamppb.Timestamp {
 
 type CreateSCIMTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Label         *string                `protobuf:"bytes,2,opt,name=label" json:"label,omitempty"`
+	Label         *string                `protobuf:"bytes,1,opt,name=label" json:"label,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -127,13 +126,6 @@ func (x *CreateSCIMTokenRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreateSCIMTokenRequest.ProtoReflect.Descriptor instead.
 func (*CreateSCIMTokenRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_scim_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *CreateSCIMTokenRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *CreateSCIMTokenRequest) GetLabel() string {
@@ -205,7 +197,6 @@ func (x *CreateSCIMTokenResponse) GetBaseUrl() string {
 
 type ListSCIMTokensRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -238,13 +229,6 @@ func (x *ListSCIMTokensRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ListSCIMTokensRequest.ProtoReflect.Descriptor instead.
 func (*ListSCIMTokensRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_scim_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *ListSCIMTokensRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 type ListSCIMTokensResponse struct {
@@ -293,8 +277,7 @@ func (x *ListSCIMTokensResponse) GetTokens() []*SCIMToken {
 
 type DeleteSCIMTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	TokenId       *string                `protobuf:"bytes,2,opt,name=token_id,json=tokenId" json:"token_id,omitempty"`
+	TokenId       *string                `protobuf:"bytes,1,opt,name=token_id,json=tokenId" json:"token_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -327,13 +310,6 @@ func (x *DeleteSCIMTokenRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DeleteSCIMTokenRequest.ProtoReflect.Descriptor instead.
 func (*DeleteSCIMTokenRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_scim_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *DeleteSCIMTokenRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *DeleteSCIMTokenRequest) GetTokenId() string {
@@ -390,22 +366,19 @@ const file_nokku_v1_scim_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12<\n" +
 	"\flast_used_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"lastUsedAt\"g\n" +
-	"\x16CreateSCIMTokenRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12 \n" +
-	"\x05label\x18\x02 \x01(\tB\n" +
+	"lastUsedAt\":\n" +
+	"\x16CreateSCIMTokenRequest\x12 \n" +
+	"\x05label\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x80\x02R\x05label\"u\n" +
 	"\x17CreateSCIMTokenResponse\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12)\n" +
 	"\x05entry\x18\x02 \x01(\v2\x13.nokku.v1.SCIMTokenR\x05entry\x12\x19\n" +
-	"\bbase_url\x18\x03 \x01(\tR\abaseUrl\"D\n" +
-	"\x15ListSCIMTokensRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\"E\n" +
+	"\bbase_url\x18\x03 \x01(\tR\abaseUrl\"\x17\n" +
+	"\x15ListSCIMTokensRequest\"E\n" +
 	"\x16ListSCIMTokensResponse\x12+\n" +
-	"\x06tokens\x18\x01 \x03(\v2\x13.nokku.v1.SCIMTokenR\x06tokens\"j\n" +
-	"\x16DeleteSCIMTokenRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12#\n" +
-	"\btoken_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\atokenId\"\x19\n" +
+	"\x06tokens\x18\x01 \x03(\v2\x13.nokku.v1.SCIMTokenR\x06tokens\"=\n" +
+	"\x16DeleteSCIMTokenRequest\x12#\n" +
+	"\btoken_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\atokenId\"\x19\n" +
 	"\x17DeleteSCIMTokenResponse2\xad\x02\n" +
 	"\vSCIMService\x12^\n" +
 	"\x0fCreateSCIMToken\x12 .nokku.v1.CreateSCIMTokenRequest\x1a!.nokku.v1.CreateSCIMTokenResponse\"\x06\xc2\xf3\x18\x02\x18\x05\x12^\n" +

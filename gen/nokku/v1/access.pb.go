@@ -82,21 +82,19 @@ func (WorkspaceRole) EnumDescriptor() ([]byte, []int) {
 }
 
 // Access declares who may call an RPC. An RPC without it is denied, so new
-// RPCs fail closed.
+// RPCs fail closed. The workspace is always known, the request's host names
+// it, so every check below runs inside one workspace.
 type Access struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Skips authentication entirely.
 	Public *bool `protobuf:"varint,1,opt,name=public" json:"public,omitempty"`
-	// Open to any authenticated caller. The handler scopes to the caller or
-	// checks rights itself.
+	// Open to any authenticated caller but daemons. The handler scopes to the
+	// caller or checks rights itself.
 	Self *bool `protobuf:"varint,2,opt,name=self" json:"self,omitempty"`
-	// The least workspace role the caller needs.
+	// The least role the caller's user or service account needs.
 	Role *WorkspaceRole `protobuf:"varint,3,opt,name=role,enum=nokku.v1.WorkspaceRole" json:"role,omitempty"`
-	// Without a pinned workspace, the role check is skipped and the handler
-	// serves the caller's own rows.
-	Personal *bool `protobuf:"varint,4,opt,name=personal" json:"personal,omitempty"`
 	// Daemons may call it. With nothing else set, only daemons may.
-	Daemon        *bool `protobuf:"varint,5,opt,name=daemon" json:"daemon,omitempty"`
+	Daemon        *bool `protobuf:"varint,4,opt,name=daemon" json:"daemon,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -152,13 +150,6 @@ func (x *Access) GetRole() WorkspaceRole {
 	return WorkspaceRole_WORKSPACE_ROLE_UNSPECIFIED
 }
 
-func (x *Access) GetPersonal() bool {
-	if x != nil && x.Personal != nil {
-		return *x.Personal
-	}
-	return false
-}
-
 func (x *Access) GetDaemon() bool {
 	if x != nil && x.Daemon != nil {
 		return *x.Daemon
@@ -187,13 +178,12 @@ var File_nokku_v1_access_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_access_proto_rawDesc = "" +
 	"\n" +
-	"\x15nokku/v1/access.proto\x12\bnokku.v1\x1a google/protobuf/descriptor.proto\"\x95\x01\n" +
+	"\x15nokku/v1/access.proto\x12\bnokku.v1\x1a google/protobuf/descriptor.proto\"y\n" +
 	"\x06Access\x12\x16\n" +
 	"\x06public\x18\x01 \x01(\bR\x06public\x12\x12\n" +
 	"\x04self\x18\x02 \x01(\bR\x04self\x12+\n" +
-	"\x04role\x18\x03 \x01(\x0e2\x17.nokku.v1.WorkspaceRoleR\x04role\x12\x1a\n" +
-	"\bpersonal\x18\x04 \x01(\bR\bpersonal\x12\x16\n" +
-	"\x06daemon\x18\x05 \x01(\bR\x06daemon*\xb4\x01\n" +
+	"\x04role\x18\x03 \x01(\x0e2\x17.nokku.v1.WorkspaceRoleR\x04role\x12\x16\n" +
+	"\x06daemon\x18\x04 \x01(\bR\x06daemon*\xb4\x01\n" +
 	"\rWorkspaceRole\x12\x1e\n" +
 	"\x1aWORKSPACE_ROLE_UNSPECIFIED\x10\x00\x12\x19\n" +
 	"\x15WORKSPACE_ROLE_MEMBER\x10\x01\x12\x19\n" +

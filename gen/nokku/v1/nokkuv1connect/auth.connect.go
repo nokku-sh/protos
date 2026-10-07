@@ -33,53 +33,41 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// AuthServiceRegisterProcedure is the fully-qualified name of the AuthService's Register RPC.
-	AuthServiceRegisterProcedure = "/nokku.v1.AuthService/Register"
-	// AuthServiceLoginProcedure is the fully-qualified name of the AuthService's Login RPC.
-	AuthServiceLoginProcedure = "/nokku.v1.AuthService/Login"
-	// AuthServiceLoginWithBackupCodeProcedure is the fully-qualified name of the AuthService's
-	// LoginWithBackupCode RPC.
-	AuthServiceLoginWithBackupCodeProcedure = "/nokku.v1.AuthService/LoginWithBackupCode"
+	// AuthServiceRequestMagicLinkProcedure is the fully-qualified name of the AuthService's
+	// RequestMagicLink RPC.
+	AuthServiceRequestMagicLinkProcedure = "/nokku.v1.AuthService/RequestMagicLink"
+	// AuthServiceConsumeMagicLinkProcedure is the fully-qualified name of the AuthService's
+	// ConsumeMagicLink RPC.
+	AuthServiceConsumeMagicLinkProcedure = "/nokku.v1.AuthService/ConsumeMagicLink"
 	// AuthServiceLogoutProcedure is the fully-qualified name of the AuthService's Logout RPC.
 	AuthServiceLogoutProcedure = "/nokku.v1.AuthService/Logout"
-	// AuthServiceForgotPasswordProcedure is the fully-qualified name of the AuthService's
-	// ForgotPassword RPC.
-	AuthServiceForgotPasswordProcedure = "/nokku.v1.AuthService/ForgotPassword"
-	// AuthServiceResetPasswordProcedure is the fully-qualified name of the AuthService's ResetPassword
-	// RPC.
-	AuthServiceResetPasswordProcedure = "/nokku.v1.AuthService/ResetPassword"
-	// AuthServiceVerifyEmailProcedure is the fully-qualified name of the AuthService's VerifyEmail RPC.
-	AuthServiceVerifyEmailProcedure = "/nokku.v1.AuthService/VerifyEmail"
-	// AuthServiceResendVerificationProcedure is the fully-qualified name of the AuthService's
-	// ResendVerification RPC.
-	AuthServiceResendVerificationProcedure = "/nokku.v1.AuthService/ResendVerification"
+	// AuthServiceGetLoginOptionsProcedure is the fully-qualified name of the AuthService's
+	// GetLoginOptions RPC.
+	AuthServiceGetLoginOptionsProcedure = "/nokku.v1.AuthService/GetLoginOptions"
 	// AuthServiceConfirmEmailChangeProcedure is the fully-qualified name of the AuthService's
 	// ConfirmEmailChange RPC.
 	AuthServiceConfirmEmailChangeProcedure = "/nokku.v1.AuthService/ConfirmEmailChange"
 	// AuthServiceCancelEmailChangeProcedure is the fully-qualified name of the AuthService's
 	// CancelEmailChange RPC.
 	AuthServiceCancelEmailChangeProcedure = "/nokku.v1.AuthService/CancelEmailChange"
-	// AuthServiceDiscoverSSOProcedure is the fully-qualified name of the AuthService's DiscoverSSO RPC.
-	AuthServiceDiscoverSSOProcedure = "/nokku.v1.AuthService/DiscoverSSO"
 )
 
 // AuthServiceClient is a client for the nokku.v1.AuthService service.
 type AuthServiceClient interface {
-	Register(context.Context, *v1.RegisterRequest) (*v1.RegisterResponse, error)
-	Login(context.Context, *v1.LoginRequest) (*v1.LoginResponse, error)
-	LoginWithBackupCode(context.Context, *v1.LoginWithBackupCodeRequest) (*v1.LoginWithBackupCodeResponse, error)
+	// Mails a sign-in link to a user of this workspace. Always answers OK, so
+	// it never tells whether an address exists.
+	RequestMagicLink(context.Context, *v1.RequestMagicLinkRequest) (*v1.RequestMagicLinkResponse, error)
+	// Spends the token from a sign-in or signup link and signs this browser in.
+	ConsumeMagicLink(context.Context, *v1.ConsumeMagicLinkRequest) (*v1.ConsumeMagicLinkResponse, error)
 	// Public so a stale session can still clear its cookie.
 	Logout(context.Context, *v1.LogoutRequest) (*v1.LogoutResponse, error)
-	ForgotPassword(context.Context, *v1.ForgotPasswordRequest) (*v1.ForgotPasswordResponse, error)
-	ResetPassword(context.Context, *v1.ResetPasswordRequest) (*v1.ResetPasswordResponse, error)
-	VerifyEmail(context.Context, *v1.VerifyEmailRequest) (*v1.VerifyEmailResponse, error)
-	ResendVerification(context.Context, *v1.ResendVerificationRequest) (*v1.ResendVerificationResponse, error)
+	// What the login page may offer in this workspace.
+	GetLoginOptions(context.Context, *v1.GetLoginOptionsRequest) (*v1.GetLoginOptionsResponse, error)
 	// Takes the token mailed to the new address and switches the account to it.
 	ConfirmEmailChange(context.Context, *v1.ConfirmEmailChangeRequest) (*v1.ConfirmEmailChangeResponse, error)
 	// Takes the token mailed to the old address. Drops a pending change, or
 	// puts the old address back when the change already happened.
 	CancelEmailChange(context.Context, *v1.CancelEmailChangeRequest) (*v1.CancelEmailChangeResponse, error)
-	DiscoverSSO(context.Context, *v1.DiscoverSSORequest) (*v1.DiscoverSSOResponse, error)
 }
 
 // NewAuthServiceClient constructs a client for the nokku.v1.AuthService service. By default, it
@@ -93,22 +81,16 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 	baseURL = strings.TrimRight(baseURL, "/")
 	authServiceMethods := v1.File_nokku_v1_auth_proto.Services().ByName("AuthService").Methods()
 	return &authServiceClient{
-		register: connect.NewClient[v1.RegisterRequest, v1.RegisterResponse](
+		requestMagicLink: connect.NewClient[v1.RequestMagicLinkRequest, v1.RequestMagicLinkResponse](
 			httpClient,
-			baseURL+AuthServiceRegisterProcedure,
-			connect.WithSchema(authServiceMethods.ByName("Register")),
+			baseURL+AuthServiceRequestMagicLinkProcedure,
+			connect.WithSchema(authServiceMethods.ByName("RequestMagicLink")),
 			connect.WithClientOptions(opts...),
 		),
-		login: connect.NewClient[v1.LoginRequest, v1.LoginResponse](
+		consumeMagicLink: connect.NewClient[v1.ConsumeMagicLinkRequest, v1.ConsumeMagicLinkResponse](
 			httpClient,
-			baseURL+AuthServiceLoginProcedure,
-			connect.WithSchema(authServiceMethods.ByName("Login")),
-			connect.WithClientOptions(opts...),
-		),
-		loginWithBackupCode: connect.NewClient[v1.LoginWithBackupCodeRequest, v1.LoginWithBackupCodeResponse](
-			httpClient,
-			baseURL+AuthServiceLoginWithBackupCodeProcedure,
-			connect.WithSchema(authServiceMethods.ByName("LoginWithBackupCode")),
+			baseURL+AuthServiceConsumeMagicLinkProcedure,
+			connect.WithSchema(authServiceMethods.ByName("ConsumeMagicLink")),
 			connect.WithClientOptions(opts...),
 		),
 		logout: connect.NewClient[v1.LogoutRequest, v1.LogoutResponse](
@@ -117,28 +99,11 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(authServiceMethods.ByName("Logout")),
 			connect.WithClientOptions(opts...),
 		),
-		forgotPassword: connect.NewClient[v1.ForgotPasswordRequest, v1.ForgotPasswordResponse](
+		getLoginOptions: connect.NewClient[v1.GetLoginOptionsRequest, v1.GetLoginOptionsResponse](
 			httpClient,
-			baseURL+AuthServiceForgotPasswordProcedure,
-			connect.WithSchema(authServiceMethods.ByName("ForgotPassword")),
-			connect.WithClientOptions(opts...),
-		),
-		resetPassword: connect.NewClient[v1.ResetPasswordRequest, v1.ResetPasswordResponse](
-			httpClient,
-			baseURL+AuthServiceResetPasswordProcedure,
-			connect.WithSchema(authServiceMethods.ByName("ResetPassword")),
-			connect.WithClientOptions(opts...),
-		),
-		verifyEmail: connect.NewClient[v1.VerifyEmailRequest, v1.VerifyEmailResponse](
-			httpClient,
-			baseURL+AuthServiceVerifyEmailProcedure,
-			connect.WithSchema(authServiceMethods.ByName("VerifyEmail")),
-			connect.WithClientOptions(opts...),
-		),
-		resendVerification: connect.NewClient[v1.ResendVerificationRequest, v1.ResendVerificationResponse](
-			httpClient,
-			baseURL+AuthServiceResendVerificationProcedure,
-			connect.WithSchema(authServiceMethods.ByName("ResendVerification")),
+			baseURL+AuthServiceGetLoginOptionsProcedure,
+			connect.WithSchema(authServiceMethods.ByName("GetLoginOptions")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		confirmEmailChange: connect.NewClient[v1.ConfirmEmailChangeRequest, v1.ConfirmEmailChangeResponse](
@@ -153,52 +118,31 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(authServiceMethods.ByName("CancelEmailChange")),
 			connect.WithClientOptions(opts...),
 		),
-		discoverSSO: connect.NewClient[v1.DiscoverSSORequest, v1.DiscoverSSOResponse](
-			httpClient,
-			baseURL+AuthServiceDiscoverSSOProcedure,
-			connect.WithSchema(authServiceMethods.ByName("DiscoverSSO")),
-			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-			connect.WithClientOptions(opts...),
-		),
 	}
 }
 
 // authServiceClient implements AuthServiceClient.
 type authServiceClient struct {
-	register            *connect.Client[v1.RegisterRequest, v1.RegisterResponse]
-	login               *connect.Client[v1.LoginRequest, v1.LoginResponse]
-	loginWithBackupCode *connect.Client[v1.LoginWithBackupCodeRequest, v1.LoginWithBackupCodeResponse]
-	logout              *connect.Client[v1.LogoutRequest, v1.LogoutResponse]
-	forgotPassword      *connect.Client[v1.ForgotPasswordRequest, v1.ForgotPasswordResponse]
-	resetPassword       *connect.Client[v1.ResetPasswordRequest, v1.ResetPasswordResponse]
-	verifyEmail         *connect.Client[v1.VerifyEmailRequest, v1.VerifyEmailResponse]
-	resendVerification  *connect.Client[v1.ResendVerificationRequest, v1.ResendVerificationResponse]
-	confirmEmailChange  *connect.Client[v1.ConfirmEmailChangeRequest, v1.ConfirmEmailChangeResponse]
-	cancelEmailChange   *connect.Client[v1.CancelEmailChangeRequest, v1.CancelEmailChangeResponse]
-	discoverSSO         *connect.Client[v1.DiscoverSSORequest, v1.DiscoverSSOResponse]
+	requestMagicLink   *connect.Client[v1.RequestMagicLinkRequest, v1.RequestMagicLinkResponse]
+	consumeMagicLink   *connect.Client[v1.ConsumeMagicLinkRequest, v1.ConsumeMagicLinkResponse]
+	logout             *connect.Client[v1.LogoutRequest, v1.LogoutResponse]
+	getLoginOptions    *connect.Client[v1.GetLoginOptionsRequest, v1.GetLoginOptionsResponse]
+	confirmEmailChange *connect.Client[v1.ConfirmEmailChangeRequest, v1.ConfirmEmailChangeResponse]
+	cancelEmailChange  *connect.Client[v1.CancelEmailChangeRequest, v1.CancelEmailChangeResponse]
 }
 
-// Register calls nokku.v1.AuthService.Register.
-func (c *authServiceClient) Register(ctx context.Context, req *v1.RegisterRequest) (*v1.RegisterResponse, error) {
-	response, err := c.register.CallUnary(ctx, connect.NewRequest(req))
+// RequestMagicLink calls nokku.v1.AuthService.RequestMagicLink.
+func (c *authServiceClient) RequestMagicLink(ctx context.Context, req *v1.RequestMagicLinkRequest) (*v1.RequestMagicLinkResponse, error) {
+	response, err := c.requestMagicLink.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
 	return nil, err
 }
 
-// Login calls nokku.v1.AuthService.Login.
-func (c *authServiceClient) Login(ctx context.Context, req *v1.LoginRequest) (*v1.LoginResponse, error) {
-	response, err := c.login.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// LoginWithBackupCode calls nokku.v1.AuthService.LoginWithBackupCode.
-func (c *authServiceClient) LoginWithBackupCode(ctx context.Context, req *v1.LoginWithBackupCodeRequest) (*v1.LoginWithBackupCodeResponse, error) {
-	response, err := c.loginWithBackupCode.CallUnary(ctx, connect.NewRequest(req))
+// ConsumeMagicLink calls nokku.v1.AuthService.ConsumeMagicLink.
+func (c *authServiceClient) ConsumeMagicLink(ctx context.Context, req *v1.ConsumeMagicLinkRequest) (*v1.ConsumeMagicLinkResponse, error) {
+	response, err := c.consumeMagicLink.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
@@ -214,36 +158,9 @@ func (c *authServiceClient) Logout(ctx context.Context, req *v1.LogoutRequest) (
 	return nil, err
 }
 
-// ForgotPassword calls nokku.v1.AuthService.ForgotPassword.
-func (c *authServiceClient) ForgotPassword(ctx context.Context, req *v1.ForgotPasswordRequest) (*v1.ForgotPasswordResponse, error) {
-	response, err := c.forgotPassword.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// ResetPassword calls nokku.v1.AuthService.ResetPassword.
-func (c *authServiceClient) ResetPassword(ctx context.Context, req *v1.ResetPasswordRequest) (*v1.ResetPasswordResponse, error) {
-	response, err := c.resetPassword.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// VerifyEmail calls nokku.v1.AuthService.VerifyEmail.
-func (c *authServiceClient) VerifyEmail(ctx context.Context, req *v1.VerifyEmailRequest) (*v1.VerifyEmailResponse, error) {
-	response, err := c.verifyEmail.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// ResendVerification calls nokku.v1.AuthService.ResendVerification.
-func (c *authServiceClient) ResendVerification(ctx context.Context, req *v1.ResendVerificationRequest) (*v1.ResendVerificationResponse, error) {
-	response, err := c.resendVerification.CallUnary(ctx, connect.NewRequest(req))
+// GetLoginOptions calls nokku.v1.AuthService.GetLoginOptions.
+func (c *authServiceClient) GetLoginOptions(ctx context.Context, req *v1.GetLoginOptionsRequest) (*v1.GetLoginOptionsResponse, error) {
+	response, err := c.getLoginOptions.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
@@ -268,32 +185,22 @@ func (c *authServiceClient) CancelEmailChange(ctx context.Context, req *v1.Cance
 	return nil, err
 }
 
-// DiscoverSSO calls nokku.v1.AuthService.DiscoverSSO.
-func (c *authServiceClient) DiscoverSSO(ctx context.Context, req *v1.DiscoverSSORequest) (*v1.DiscoverSSOResponse, error) {
-	response, err := c.discoverSSO.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
 // AuthServiceHandler is an implementation of the nokku.v1.AuthService service.
 type AuthServiceHandler interface {
-	Register(context.Context, *v1.RegisterRequest) (*v1.RegisterResponse, error)
-	Login(context.Context, *v1.LoginRequest) (*v1.LoginResponse, error)
-	LoginWithBackupCode(context.Context, *v1.LoginWithBackupCodeRequest) (*v1.LoginWithBackupCodeResponse, error)
+	// Mails a sign-in link to a user of this workspace. Always answers OK, so
+	// it never tells whether an address exists.
+	RequestMagicLink(context.Context, *v1.RequestMagicLinkRequest) (*v1.RequestMagicLinkResponse, error)
+	// Spends the token from a sign-in or signup link and signs this browser in.
+	ConsumeMagicLink(context.Context, *v1.ConsumeMagicLinkRequest) (*v1.ConsumeMagicLinkResponse, error)
 	// Public so a stale session can still clear its cookie.
 	Logout(context.Context, *v1.LogoutRequest) (*v1.LogoutResponse, error)
-	ForgotPassword(context.Context, *v1.ForgotPasswordRequest) (*v1.ForgotPasswordResponse, error)
-	ResetPassword(context.Context, *v1.ResetPasswordRequest) (*v1.ResetPasswordResponse, error)
-	VerifyEmail(context.Context, *v1.VerifyEmailRequest) (*v1.VerifyEmailResponse, error)
-	ResendVerification(context.Context, *v1.ResendVerificationRequest) (*v1.ResendVerificationResponse, error)
+	// What the login page may offer in this workspace.
+	GetLoginOptions(context.Context, *v1.GetLoginOptionsRequest) (*v1.GetLoginOptionsResponse, error)
 	// Takes the token mailed to the new address and switches the account to it.
 	ConfirmEmailChange(context.Context, *v1.ConfirmEmailChangeRequest) (*v1.ConfirmEmailChangeResponse, error)
 	// Takes the token mailed to the old address. Drops a pending change, or
 	// puts the old address back when the change already happened.
 	CancelEmailChange(context.Context, *v1.CancelEmailChangeRequest) (*v1.CancelEmailChangeResponse, error)
-	DiscoverSSO(context.Context, *v1.DiscoverSSORequest) (*v1.DiscoverSSOResponse, error)
 }
 
 // NewAuthServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -303,22 +210,16 @@ type AuthServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	authServiceMethods := v1.File_nokku_v1_auth_proto.Services().ByName("AuthService").Methods()
-	authServiceRegisterHandler := connect.NewUnaryHandlerSimple(
-		AuthServiceRegisterProcedure,
-		svc.Register,
-		connect.WithSchema(authServiceMethods.ByName("Register")),
+	authServiceRequestMagicLinkHandler := connect.NewUnaryHandlerSimple(
+		AuthServiceRequestMagicLinkProcedure,
+		svc.RequestMagicLink,
+		connect.WithSchema(authServiceMethods.ByName("RequestMagicLink")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authServiceLoginHandler := connect.NewUnaryHandlerSimple(
-		AuthServiceLoginProcedure,
-		svc.Login,
-		connect.WithSchema(authServiceMethods.ByName("Login")),
-		connect.WithHandlerOptions(opts...),
-	)
-	authServiceLoginWithBackupCodeHandler := connect.NewUnaryHandlerSimple(
-		AuthServiceLoginWithBackupCodeProcedure,
-		svc.LoginWithBackupCode,
-		connect.WithSchema(authServiceMethods.ByName("LoginWithBackupCode")),
+	authServiceConsumeMagicLinkHandler := connect.NewUnaryHandlerSimple(
+		AuthServiceConsumeMagicLinkProcedure,
+		svc.ConsumeMagicLink,
+		connect.WithSchema(authServiceMethods.ByName("ConsumeMagicLink")),
 		connect.WithHandlerOptions(opts...),
 	)
 	authServiceLogoutHandler := connect.NewUnaryHandlerSimple(
@@ -327,28 +228,11 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(authServiceMethods.ByName("Logout")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authServiceForgotPasswordHandler := connect.NewUnaryHandlerSimple(
-		AuthServiceForgotPasswordProcedure,
-		svc.ForgotPassword,
-		connect.WithSchema(authServiceMethods.ByName("ForgotPassword")),
-		connect.WithHandlerOptions(opts...),
-	)
-	authServiceResetPasswordHandler := connect.NewUnaryHandlerSimple(
-		AuthServiceResetPasswordProcedure,
-		svc.ResetPassword,
-		connect.WithSchema(authServiceMethods.ByName("ResetPassword")),
-		connect.WithHandlerOptions(opts...),
-	)
-	authServiceVerifyEmailHandler := connect.NewUnaryHandlerSimple(
-		AuthServiceVerifyEmailProcedure,
-		svc.VerifyEmail,
-		connect.WithSchema(authServiceMethods.ByName("VerifyEmail")),
-		connect.WithHandlerOptions(opts...),
-	)
-	authServiceResendVerificationHandler := connect.NewUnaryHandlerSimple(
-		AuthServiceResendVerificationProcedure,
-		svc.ResendVerification,
-		connect.WithSchema(authServiceMethods.ByName("ResendVerification")),
+	authServiceGetLoginOptionsHandler := connect.NewUnaryHandlerSimple(
+		AuthServiceGetLoginOptionsProcedure,
+		svc.GetLoginOptions,
+		connect.WithSchema(authServiceMethods.ByName("GetLoginOptions")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	authServiceConfirmEmailChangeHandler := connect.NewUnaryHandlerSimple(
@@ -363,37 +247,20 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(authServiceMethods.ByName("CancelEmailChange")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authServiceDiscoverSSOHandler := connect.NewUnaryHandlerSimple(
-		AuthServiceDiscoverSSOProcedure,
-		svc.DiscoverSSO,
-		connect.WithSchema(authServiceMethods.ByName("DiscoverSSO")),
-		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-		connect.WithHandlerOptions(opts...),
-	)
 	return "/nokku.v1.AuthService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case AuthServiceRegisterProcedure:
-			authServiceRegisterHandler.ServeHTTP(w, r)
-		case AuthServiceLoginProcedure:
-			authServiceLoginHandler.ServeHTTP(w, r)
-		case AuthServiceLoginWithBackupCodeProcedure:
-			authServiceLoginWithBackupCodeHandler.ServeHTTP(w, r)
+		case AuthServiceRequestMagicLinkProcedure:
+			authServiceRequestMagicLinkHandler.ServeHTTP(w, r)
+		case AuthServiceConsumeMagicLinkProcedure:
+			authServiceConsumeMagicLinkHandler.ServeHTTP(w, r)
 		case AuthServiceLogoutProcedure:
 			authServiceLogoutHandler.ServeHTTP(w, r)
-		case AuthServiceForgotPasswordProcedure:
-			authServiceForgotPasswordHandler.ServeHTTP(w, r)
-		case AuthServiceResetPasswordProcedure:
-			authServiceResetPasswordHandler.ServeHTTP(w, r)
-		case AuthServiceVerifyEmailProcedure:
-			authServiceVerifyEmailHandler.ServeHTTP(w, r)
-		case AuthServiceResendVerificationProcedure:
-			authServiceResendVerificationHandler.ServeHTTP(w, r)
+		case AuthServiceGetLoginOptionsProcedure:
+			authServiceGetLoginOptionsHandler.ServeHTTP(w, r)
 		case AuthServiceConfirmEmailChangeProcedure:
 			authServiceConfirmEmailChangeHandler.ServeHTTP(w, r)
 		case AuthServiceCancelEmailChangeProcedure:
 			authServiceCancelEmailChangeHandler.ServeHTTP(w, r)
-		case AuthServiceDiscoverSSOProcedure:
-			authServiceDiscoverSSOHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -403,36 +270,20 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 // UnimplementedAuthServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedAuthServiceHandler struct{}
 
-func (UnimplementedAuthServiceHandler) Register(context.Context, *v1.RegisterRequest) (*v1.RegisterResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.Register is not implemented"))
+func (UnimplementedAuthServiceHandler) RequestMagicLink(context.Context, *v1.RequestMagicLinkRequest) (*v1.RequestMagicLinkResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.RequestMagicLink is not implemented"))
 }
 
-func (UnimplementedAuthServiceHandler) Login(context.Context, *v1.LoginRequest) (*v1.LoginResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.Login is not implemented"))
-}
-
-func (UnimplementedAuthServiceHandler) LoginWithBackupCode(context.Context, *v1.LoginWithBackupCodeRequest) (*v1.LoginWithBackupCodeResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.LoginWithBackupCode is not implemented"))
+func (UnimplementedAuthServiceHandler) ConsumeMagicLink(context.Context, *v1.ConsumeMagicLinkRequest) (*v1.ConsumeMagicLinkResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.ConsumeMagicLink is not implemented"))
 }
 
 func (UnimplementedAuthServiceHandler) Logout(context.Context, *v1.LogoutRequest) (*v1.LogoutResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.Logout is not implemented"))
 }
 
-func (UnimplementedAuthServiceHandler) ForgotPassword(context.Context, *v1.ForgotPasswordRequest) (*v1.ForgotPasswordResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.ForgotPassword is not implemented"))
-}
-
-func (UnimplementedAuthServiceHandler) ResetPassword(context.Context, *v1.ResetPasswordRequest) (*v1.ResetPasswordResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.ResetPassword is not implemented"))
-}
-
-func (UnimplementedAuthServiceHandler) VerifyEmail(context.Context, *v1.VerifyEmailRequest) (*v1.VerifyEmailResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.VerifyEmail is not implemented"))
-}
-
-func (UnimplementedAuthServiceHandler) ResendVerification(context.Context, *v1.ResendVerificationRequest) (*v1.ResendVerificationResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.ResendVerification is not implemented"))
+func (UnimplementedAuthServiceHandler) GetLoginOptions(context.Context, *v1.GetLoginOptionsRequest) (*v1.GetLoginOptionsResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.GetLoginOptions is not implemented"))
 }
 
 func (UnimplementedAuthServiceHandler) ConfirmEmailChange(context.Context, *v1.ConfirmEmailChangeRequest) (*v1.ConfirmEmailChangeResponse, error) {
@@ -441,8 +292,4 @@ func (UnimplementedAuthServiceHandler) ConfirmEmailChange(context.Context, *v1.C
 
 func (UnimplementedAuthServiceHandler) CancelEmailChange(context.Context, *v1.CancelEmailChangeRequest) (*v1.CancelEmailChangeResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.CancelEmailChange is not implemented"))
-}
-
-func (UnimplementedAuthServiceHandler) DiscoverSSO(context.Context, *v1.DiscoverSSORequest) (*v1.DiscoverSSOResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AuthService.DiscoverSSO is not implemented"))
 }

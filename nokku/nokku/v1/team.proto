@@ -5,7 +5,7 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
-import "nokku/v1/workspace.proto";
+import "nokku/v1/account.proto";
 
 service TeamService {
   rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {
@@ -43,25 +43,35 @@ service TeamService {
 
 message Team {
   string id = 1;
-  string workspace_id = 2;
-  string name = 3;
-  string description = 4;
-  repeated string tags = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
-  int32 member_count = 8;
+  string name = 2;
+  string description = 3;
+  repeated string tags = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  int32 member_count = 7;
 }
 
 message GetTeamRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message GetTeamResponse {
   Team team = 1;
 }
 
 message CreateTeamRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 256
+  }];
+  string description = 2 [(buf.validate.field).string.max_len = 1000];
+  repeated string tags = 3;
+}
+message CreateTeamResponse {
+  Team team = 1;
+}
+
+message UpdateTeamRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string = {
     min_len: 1
     max_len: 256
@@ -69,39 +79,23 @@ message CreateTeamRequest {
   string description = 3 [(buf.validate.field).string.max_len = 1000];
   repeated string tags = 4;
 }
-message CreateTeamResponse {
-  Team team = 1;
-}
-
-message UpdateTeamRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
-  string name = 3 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 256
-  }];
-  string description = 4 [(buf.validate.field).string.max_len = 1000];
-  repeated string tags = 5;
-}
 message UpdateTeamResponse {
   Team team = 1;
 }
 
 message DeleteTeamRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message DeleteTeamResponse {}
 
 message ListTeamsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  int32 limit = 2 [(buf.validate.field).int32 = {
+  int32 limit = 1 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }];
-  int32 offset = 3 [(buf.validate.field).int32.gte = 0];
-  string query = 4;
-  repeated string tags = 5;
+  int32 offset = 2 [(buf.validate.field).int32.gte = 0];
+  string query = 3;
+  repeated string tags = 4;
 }
 message ListTeamsResponse {
   repeated Team teams = 1;
@@ -109,30 +103,26 @@ message ListTeamsResponse {
 }
 
 message AddTeamMemberRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string team_id = 2 [(buf.validate.field).string.uuid = true];
-  string user_id = 3 [(buf.validate.field).string.uuid = true];
+  string team_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message AddTeamMemberResponse {}
 
 message RemoveTeamMemberRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string team_id = 2 [(buf.validate.field).string.uuid = true];
-  string user_id = 3 [(buf.validate.field).string.uuid = true];
+  string team_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message RemoveTeamMemberResponse {}
 
 message ListTeamMembersRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string team_id = 2 [(buf.validate.field).string.uuid = true];
+  string team_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message ListTeamMembersResponse {
-  repeated WorkspaceMember members = 1;
+  repeated User members = 1;
 }
 
 message ListTeamsForUserRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  string user_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message ListTeamsForUserResponse {
   repeated Team teams = 1;

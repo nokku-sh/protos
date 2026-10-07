@@ -5,153 +5,158 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
+import "nokku/v1/account.proto";
 import "nokku/v1/daemon.proto";
 
+// The workspace is the tenant. Users live inside it, so this service also
+// manages them. A self-hosted server has exactly one workspace.
 service WorkspaceService {
   rpc GetWorkspace(GetWorkspaceRequest) returns (GetWorkspaceResponse) {
     option (access) = {self: true};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
-  rpc ListWorkspaces(ListWorkspacesRequest) returns (ListWorkspacesResponse) {
-    option (access) = {self: true};
-    option idempotency_level = NO_SIDE_EFFECTS;
-  }
-  rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse) {
-    option (access) = {self: true};
-  }
   rpc UpdateWorkspace(UpdateWorkspaceRequest) returns (UpdateWorkspaceResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
   }
+  // Refused on a self-hosted server.
   rpc DeleteWorkspace(DeleteWorkspaceRequest) returns (DeleteWorkspaceResponse) {
     option (access) = {role: WORKSPACE_ROLE_OWNER};
   }
-  rpc GetWorkspaceMember(GetWorkspaceMemberRequest) returns (GetWorkspaceMemberResponse) {
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
-  rpc ListWorkspaceMembers(ListWorkspaceMembersRequest) returns (ListWorkspaceMembersResponse) {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
-  rpc RemoveWorkspaceMember(RemoveWorkspaceMemberRequest) returns (RemoveWorkspaceMemberResponse) {
+  // Never touches the owner, see TransferOwnership.
+  rpc UpdateUserRole(UpdateUserRoleRequest) returns (UpdateUserRoleResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
   }
-  rpc UpdateWorkspaceMember(UpdateWorkspaceMemberRequest) returns (UpdateWorkspaceMemberResponse) {
+  // A deactivated user keeps their grants and history but cannot sign in or
+  // get certificates.
+  rpc SetUserActive(SetUserActiveRequest) returns (SetUserActiveResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
   }
-  rpc UpdateWorkspaceOwner(UpdateWorkspaceOwnerRequest) returns (UpdateWorkspaceOwnerResponse) {
-    option (access) = {self: true};
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
+    option (access) = {role: WORKSPACE_ROLE_ADMIN};
+  }
+  // The caller becomes an admin.
+  rpc TransferOwnership(TransferOwnershipRequest) returns (TransferOwnershipResponse) {
+    option (access) = {role: WORKSPACE_ROLE_OWNER};
+  }
+  // Public signup on the hosted service's root host. Creates the workspace
+  // and its owner and mails the owner a sign-in link. Refused elsewhere.
+  rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse) {
+    option (access) = {public: true};
   }
 }
 
 message Workspace {
   string id = 1;
-  string name = 2;
-  string description = 3;
-  string created_by = 4;
-  string role = 5; // The caller's role in this workspace.
-  WorkspaceSettings settings = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
-}
-message WorkspaceMember {
-  string id = 1;
-  string workspace_id = 2;
+  // The subdomain on the hosted service.
+  string slug = 2;
   string name = 3;
-  string email = 4;
-  bool email_verified = 5;
-  string picture = 6;
-  string role_name = 7;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp updated_at = 10;
+  string description = 4;
+  WorkspaceSettings settings = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
+
 message WorkspaceSettings {
   nokku.v1.DaemonConfig default_daemon_config = 1;
   string audit_webhook_url = 2;
   string audit_webhook_secret = 3;
+  // Only the workspace's OIDC providers may sign users in.
+  bool enforce_sso = 4;
 }
 
-message GetWorkspaceRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
+message GetWorkspaceRequest {}
 message GetWorkspaceResponse {
   Workspace workspace = 1;
 }
 
-message CreateWorkspaceRequest {
+message UpdateWorkspaceRequest {
   string name = 1 [(buf.validate.field).string = {
     min_len: 3
     max_len: 256
   }];
   string description = 2 [(buf.validate.field).string.max_len = 1000];
-}
-message CreateWorkspaceResponse {
-  Workspace workspace = 1;
-}
-
-message UpdateWorkspaceRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string = {
-    min_len: 3
-    max_len: 256
-  }];
-  string description = 3 [(buf.validate.field).string.max_len = 1000];
-  WorkspaceSettings settings = 4;
+  WorkspaceSettings settings = 3;
 }
 message UpdateWorkspaceResponse {
   Workspace workspace = 1;
 }
 
-message DeleteWorkspaceRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
+message DeleteWorkspaceRequest {}
 message DeleteWorkspaceResponse {}
 
-message ListWorkspacesRequest {}
-message ListWorkspacesResponse {
-  repeated Workspace workspaces = 1;
+message CreateWorkspaceRequest {
+  string slug = 1 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 63
+    pattern: "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$"
+  }];
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 256
+  }];
+  string owner_email = 3 [(buf.validate.field).string.email = true];
+  string owner_name = 4 [(buf.validate.field).string.max_len = 256];
+}
+message CreateWorkspaceResponse {
+  // Where the new workspace lives.
+  string url = 1;
 }
 
-// Members --------------------------------------------------------------------
-message GetWorkspaceMemberRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string user_id = 2 [(buf.validate.field).string.uuid = true];
-}
-message GetWorkspaceMemberResponse {
-  WorkspaceMember member = 1;
-}
-
-message ListWorkspaceMembersRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  int32 limit = 2 [(buf.validate.field).int32 = {
+// Users ----------------------------------------------------------------------
+message ListUsersRequest {
+  int32 limit = 1 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }];
-  int32 offset = 3 [(buf.validate.field).int32.gte = 0];
-  string query = 4;
-  string role_name = 5;
+  int32 offset = 2 [(buf.validate.field).int32.gte = 0];
+  string query = 3;
+  string role = 4;
 }
-message ListWorkspaceMembersResponse {
-  repeated WorkspaceMember members = 1;
+message ListUsersResponse {
+  repeated User users = 1;
   int32 total = 2;
 }
 
-message RemoveWorkspaceMemberRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string user_id = 2 [(buf.validate.field).string.uuid = true];
+message GetUserRequest {
+  string user_id = 1 [(buf.validate.field).string.uuid = true];
 }
-message RemoveWorkspaceMemberResponse {}
+message GetUserResponse {
+  User user = 1;
+}
 
-message UpdateWorkspaceMemberRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string user_id = 2 [(buf.validate.field).string.uuid = true];
-  string role_name = 3;
+message UpdateUserRoleRequest {
+  string user_id = 1 [(buf.validate.field).string.uuid = true];
+  string role = 2 [(buf.validate.field).string = {
+    in: [
+      "member",
+      "viewer",
+      "editor",
+      "admin"
+    ]
+  }];
 }
-message UpdateWorkspaceMemberResponse {}
+message UpdateUserRoleResponse {}
 
-// Various --------------------------------------------------------------------
-message UpdateWorkspaceOwnerRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string new_owner = 2 [(buf.validate.field).string.uuid = true];
+message SetUserActiveRequest {
+  string user_id = 1 [(buf.validate.field).string.uuid = true];
+  bool active = 2;
 }
-message UpdateWorkspaceOwnerResponse {}
+message SetUserActiveResponse {}
+
+message DeleteUserRequest {
+  string user_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message DeleteUserResponse {}
+
+message TransferOwnershipRequest {
+  string new_owner_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message TransferOwnershipResponse {}

@@ -33,9 +33,9 @@ service DaemonService {
   rpc CloseSession(CloseSessionRequest) returns (CloseSessionResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  // Streams are self-scoped since their workspace only arrives with the first message.
+  // The handler checks the grant on the daemon named in the first message.
   rpc Relay(stream RelayRequest) returns (stream RelayResponse) {
-    option (access) = {self: true};
+    option (access) = {role: WORKSPACE_ROLE_MEMBER};
   }
 }
 
@@ -77,15 +77,14 @@ enum DaemonStatus {
 
 message Daemon {
   string id = 1;
-  string workspace_id = 2;
-  string name = 3;
-  bool online = 4; // Derived from last_seen_at: seen by a core instance in the last 30 seconds.
-  DaemonStatus status = 5;
-  DaemonConfig config = 6;
-  map<string, string> metadata = 7;
-  google.protobuf.Timestamp updated_at = 8;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp last_seen_at = 10;
+  string name = 2;
+  bool online = 3; // Derived from last_seen_at: seen by a core instance in the last 30 seconds.
+  DaemonStatus status = 4;
+  DaemonConfig config = 5;
+  map<string, string> metadata = 6;
+  google.protobuf.Timestamp updated_at = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp last_seen_at = 9;
 }
 
 message DaemonConfig {
@@ -96,41 +95,37 @@ message DaemonConfig {
 }
 
 message GetDaemonRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message GetDaemonResponse {
   Daemon daemon = 1;
 }
 
 message UpdateDaemonRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
-  DaemonStatus status = 3 [(buf.validate.field).enum = {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  DaemonStatus status = 2 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0] /* Prevent UNSPECIFIED */
   }];
-  DaemonConfig config = 4;
+  DaemonConfig config = 3;
 }
 
 message UpdateDaemonResponse {}
 
 message DeleteDaemonRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message DeleteDaemonResponse {}
 
 message ListDaemonsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  int32 limit = 2 [(buf.validate.field).int32 = {
+  int32 limit = 1 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }];
-  int32 offset = 3 [(buf.validate.field).int32.gte = 0];
-  string query = 4;
-  bool online = 5;
-  DaemonStatus status = 6;
+  int32 offset = 2 [(buf.validate.field).int32.gte = 0];
+  string query = 3;
+  bool online = 4;
+  DaemonStatus status = 5;
 }
 message ListDaemonsResponse {
   repeated Daemon daemons = 1;
@@ -138,12 +133,11 @@ message ListDaemonsResponse {
 }
 
 message CreateSessionRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string daemon_id = 2 [
+  string daemon_id = 1 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
-  string username = 3 [(buf.validate.field).string = {
+  string username = 2 [(buf.validate.field).string = {
     min_len: 1
     max_len: 32
     pattern: "^[A-Za-z_][A-Za-z0-9._-]*\\$?$"
@@ -155,8 +149,7 @@ message CreateSessionResponse {
 }
 
 message ListSessionsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string daemon_id = 2 [
+  string daemon_id = 1 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
@@ -167,12 +160,11 @@ message ListSessionsResponse {
 }
 
 message CloseSessionRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string daemon_id = 2 [
+  string daemon_id = 1 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
-  string session_id = 3 [
+  string session_id = 2 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
@@ -184,11 +176,10 @@ message EnrollDaemonRequest {
 }
 message EnrollDaemonResponse {
   string id = 1;
-  string workspace_id = 2;
-  string target_id = 3;
-  DaemonStatus status = 4;
-  DaemonConfig config = 5;
-  string access_token = 6;
+  string target_id = 2;
+  DaemonStatus status = 3;
+  DaemonConfig config = 4;
+  string access_token = 5;
 }
 
 // Who may log in as one Linux account. A host lets a certificate in when it
@@ -292,8 +283,7 @@ message RelayOpen {
 }
 
 message RelayStart {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string daemon_id = 2 [
+  string daemon_id = 1 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];

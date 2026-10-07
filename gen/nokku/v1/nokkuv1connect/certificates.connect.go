@@ -61,11 +61,11 @@ const (
 
 // CertificateServiceClient is a client for the nokku.v1.CertificateService service.
 type CertificateServiceClient interface {
-	// Members read CAs because nk trusts the X.509 CAs of every workspace it belongs to.
+	// Members read CAs because nk trusts the workspace's X.509 CAs.
 	GetCertificateAuthority(context.Context, *v1.GetCertificateAuthorityRequest) (*v1.GetCertificateAuthorityResponse, error)
 	CreateCertificateAuthority(context.Context, *v1.CreateCertificateAuthorityRequest) (*v1.CreateCertificateAuthorityResponse, error)
 	UpdateCertificateAuthority(context.Context, *v1.UpdateCertificateAuthorityRequest) (*v1.UpdateCertificateAuthorityResponse, error)
-	// Members read CAs because nk trusts the X.509 CAs of every workspace it belongs to.
+	// Members read CAs because nk trusts the workspace's X.509 CAs.
 	ListCertificateAuthorities(context.Context, *v1.ListCertificateAuthoritiesRequest) (*v1.ListCertificateAuthoritiesResponse, error)
 	DeleteCertificateAuthority(context.Context, *v1.DeleteCertificateAuthorityRequest) (*v1.DeleteCertificateAuthorityResponse, error)
 	RolloverCertificateAuthority(context.Context, *v1.RolloverCertificateAuthorityRequest) (*v1.RolloverCertificateAuthorityResponse, error)
@@ -228,11 +228,11 @@ func (c *certificateServiceClient) SignX509Certificate(ctx context.Context, req 
 
 // CertificateServiceHandler is an implementation of the nokku.v1.CertificateService service.
 type CertificateServiceHandler interface {
-	// Members read CAs because nk trusts the X.509 CAs of every workspace it belongs to.
+	// Members read CAs because nk trusts the workspace's X.509 CAs.
 	GetCertificateAuthority(context.Context, *v1.GetCertificateAuthorityRequest) (*v1.GetCertificateAuthorityResponse, error)
 	CreateCertificateAuthority(context.Context, *v1.CreateCertificateAuthorityRequest) (*v1.CreateCertificateAuthorityResponse, error)
 	UpdateCertificateAuthority(context.Context, *v1.UpdateCertificateAuthorityRequest) (*v1.UpdateCertificateAuthorityResponse, error)
-	// Members read CAs because nk trusts the X.509 CAs of every workspace it belongs to.
+	// Members read CAs because nk trusts the workspace's X.509 CAs.
 	ListCertificateAuthorities(context.Context, *v1.ListCertificateAuthoritiesRequest) (*v1.ListCertificateAuthoritiesResponse, error)
 	DeleteCertificateAuthority(context.Context, *v1.DeleteCertificateAuthorityRequest) (*v1.DeleteCertificateAuthorityResponse, error)
 	RolloverCertificateAuthority(context.Context, *v1.RolloverCertificateAuthorityRequest) (*v1.RolloverCertificateAuthorityResponse, error)

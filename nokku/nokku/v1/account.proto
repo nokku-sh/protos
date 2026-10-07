@@ -14,15 +14,10 @@ service AccountService {
   rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {
     option (access) = {self: true};
   }
-  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
-    option (access) = {self: true};
-  }
   // Starts an email change. The address stays the old one until the link
   // sent to the new address is used with AuthService.ConfirmEmailChange.
+  // Refused for accounts an identity provider manages.
   rpc RequestEmailChange(RequestEmailChangeRequest) returns (RequestEmailChangeResponse) {
-    option (access) = {self: true};
-  }
-  rpc RemovePassword(RemovePasswordRequest) returns (RemovePasswordResponse) {
     option (access) = {self: true};
   }
   rpc ListCredentials(ListCredentialsRequest) returns (ListCredentialsResponse) {
@@ -32,20 +27,8 @@ service AccountService {
   rpc RenameCredential(RenameCredentialRequest) returns (RenameCredentialResponse) {
     option (access) = {self: true};
   }
+  // Removes a passkey or a linked identity. The last way in stays.
   rpc RemoveCredential(RemoveCredentialRequest) returns (RemoveCredentialResponse) {
-    option (access) = {self: true};
-  }
-  rpc RemoveIdentity(RemoveIdentityRequest) returns (RemoveIdentityResponse) {
-    option (access) = {self: true};
-  }
-  rpc ListBackupCodes(ListBackupCodesRequest) returns (ListBackupCodesResponse) {
-    option (access) = {self: true};
-    option idempotency_level = NO_SIDE_EFFECTS;
-  }
-  rpc RotateBackupCodes(RotateBackupCodesRequest) returns (RotateBackupCodesResponse) {
-    option (access) = {self: true};
-  }
-  rpc RemoveBackupCodes(RemoveBackupCodesRequest) returns (RemoveBackupCodesResponse) {
     option (access) = {self: true};
   }
   rpc ListAccountSessions(ListAccountSessionsRequest) returns (ListAccountSessionsResponse) {
@@ -55,6 +38,7 @@ service AccountService {
   rpc RemoveSession(RemoveSessionRequest) returns (RemoveSessionResponse) {
     option (access) = {self: true};
   }
+  // Refused for the owner, ownership moves first.
   rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
     option (access) = {self: true};
   }
@@ -64,17 +48,19 @@ message User {
   string id = 1;
   string name = 2;
   string email = 3;
-  bool email_verified = 4;
-  string picture = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
-  bool disable_password_reset = 8;
+  string picture = 4;
+  // member, viewer, editor, admin, owner
+  string role = 5;
+  bool active = 6;
   // The address an email change is waiting on, empty when none is pending.
-  string pending_email = 9;
+  string pending_email = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
 }
 
 message AccountCredential {
   string id = 1;
+  // passkey, oidc
   string type = 2;
   string provider = 3;
   string subject = 4;
@@ -103,40 +89,15 @@ message GetAccountResponse {
 message UpdateAccountRequest {
   string name = 1 [(buf.validate.field).string.max_len = 256];
   string picture = 2;
-  bool disable_password_reset = 3;
 }
 message UpdateAccountResponse {
   User user = 1;
 }
 
-message ChangePasswordRequest {
-  string current_password = 1 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 128
-  }];
-  string new_password = 2 [(buf.validate.field).string = {
-    min_len: 8
-    max_len: 128
-  }];
-}
-message ChangePasswordResponse {}
-
 message RequestEmailChangeRequest {
   string new_email = 1 [(buf.validate.field).string.email = true];
-  string current_password = 2 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 128
-  }];
 }
 message RequestEmailChangeResponse {}
-
-message RemovePasswordRequest {
-  string current_password = 1 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 128
-  }];
-}
-message RemovePasswordResponse {}
 
 message ListCredentialsRequest {}
 message ListCredentialsResponse {
@@ -157,31 +118,13 @@ message RemoveCredentialRequest {
 }
 message RemoveCredentialResponse {}
 
-message RemoveIdentityRequest {
-  string provider = 1 [(buf.validate.field).string.min_len = 1];
-}
-message RemoveIdentityResponse {}
-
-message ListBackupCodesRequest {}
-message ListBackupCodesResponse {
-  repeated AccountCredential codes = 1;
-}
-
-message RotateBackupCodesRequest {}
-message RotateBackupCodesResponse {
-  repeated string codes = 1;
-}
-
-message RemoveBackupCodesRequest {}
-message RemoveBackupCodesResponse {}
-
 message ListAccountSessionsRequest {}
 message ListAccountSessionsResponse {
   repeated AccountSession sessions = 1;
 }
 
 message RemoveSessionRequest {
-  // The hex token hash of the session, as returned by ListSessions.
+  // The hex token hash of the session, as returned by ListAccountSessions.
   string id = 1 [(buf.validate.field).string.min_len = 1];
 }
 message RemoveSessionResponse {}

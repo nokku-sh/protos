@@ -41,17 +41,16 @@ message Token {
 }
 
 message CreateTokenRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  TokenKind kind = 2 [(buf.validate.field).enum = {
+  TokenKind kind = 1 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
-  string label = 3 [(buf.validate.field).string.max_len = 100];
-  google.protobuf.Duration ttl = 4 [(buf.validate.field).duration.gt = {seconds: 0}];
-  int32 max_uses = 5 [(buf.validate.field).int32.gt = 0];
-  bool auto_approve = 6;
-  string ca_id = 7 [(buf.validate.field).string.uuid = true];
-  string role_name = 8;
+  string label = 2 [(buf.validate.field).string.max_len = 100];
+  google.protobuf.Duration ttl = 3 [(buf.validate.field).duration.gt = {seconds: 0}];
+  int32 max_uses = 4 [(buf.validate.field).int32.gt = 0];
+  bool auto_approve = 5;
+  string ca_id = 6 [(buf.validate.field).string.uuid = true];
+  string role_name = 7;
 }
 message CreateTokenResponse {
   Token token = 1;
@@ -59,15 +58,13 @@ message CreateTokenResponse {
 }
 
 message ListTokensRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  TokenKind kind = 2 [(buf.validate.field).enum.defined_only = true];
+  TokenKind kind = 1 [(buf.validate.field).enum.defined_only = true];
 }
 message ListTokensResponse {
   repeated Token tokens = 1;
 }
 
 message DeleteTokenRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message DeleteTokenResponse {}

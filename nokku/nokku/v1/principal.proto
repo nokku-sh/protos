@@ -47,14 +47,13 @@ message Principal {
 }
 
 message ListPrincipalsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string target_id = 2 [(buf.validate.field).string.uuid = true];
-  int32 limit = 3 [(buf.validate.field).int32 = {
+  string target_id = 1 [(buf.validate.field).string.uuid = true];
+  int32 limit = 2 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }];
-  int32 offset = 4 [(buf.validate.field).int32.gte = 0];
-  string query = 5;
+  int32 offset = 3 [(buf.validate.field).int32.gte = 0];
+  string query = 4;
 }
 message ListPrincipalsResponse {
   repeated Principal principals = 1;
@@ -62,16 +61,15 @@ message ListPrincipalsResponse {
 }
 
 message AddSubjectsToPrincipalRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
-  repeated string subject_ids = 3 [(buf.validate.field).repeated = {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  repeated string subject_ids = 2 [(buf.validate.field).repeated = {
     min_items: 1
     max_items: 50
     items: {
       string: {uuid: true}
     }
   }];
-  SubjectKind kind = 4 [(buf.validate.field).enum = {
+  SubjectKind kind = 3 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -79,16 +77,15 @@ message AddSubjectsToPrincipalRequest {
 message AddSubjectsToPrincipalResponse {}
 
 message RemoveSubjectsFromPrincipalRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
-  repeated string subject_ids = 3 [(buf.validate.field).repeated = {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  repeated string subject_ids = 2 [(buf.validate.field).repeated = {
     min_items: 1
     max_items: 50
     items: {
       string: {uuid: true}
     }
   }];
-  SubjectKind kind = 4 [(buf.validate.field).enum = {
+  SubjectKind kind = 3 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -97,8 +94,7 @@ message RemoveSubjectsFromPrincipalResponse {}
 
 message RevokeAllAccessRequest {
   string subject_id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  SubjectKind kind = 3 [(buf.validate.field).enum = {
+  SubjectKind kind = 2 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -106,9 +102,8 @@ message RevokeAllAccessRequest {
 message RevokeAllAccessResponse {}
 
 message AddPrincipalRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string target_id = 2 [(buf.validate.field).string.uuid = true];
-  string username = 3 [(buf.validate.field).string = {
+  string target_id = 1 [(buf.validate.field).string.uuid = true];
+  string username = 2 [(buf.validate.field).string = {
     min_len: 1
     max_len: 32
     pattern: "^[A-Za-z_][A-Za-z0-9._-]*\\$?$"
@@ -119,7 +114,6 @@ message AddPrincipalResponse {
 }
 
 message RemovePrincipalRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message RemovePrincipalResponse {}

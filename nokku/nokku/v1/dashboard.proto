@@ -2,7 +2,6 @@ edition = "2023";
 
 package nokku.v1;
 
-import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 import "nokku/v1/certificates.proto";
@@ -17,9 +16,7 @@ service DashboardService {
   }
 }
 
-message GetDashboardRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
+message GetDashboardRequest {}
 
 message GetDashboardResponse {
   int32 targets = 1;
@@ -33,7 +30,7 @@ message GetDashboardResponse {
   repeated Daemon pending_daemons = 6;
   // Accepted but not connected, at most 5.
   repeated Daemon offline_daemons = 7;
-  int32 members = 8;
+  int32 users = 8;
   // Active CAs that expire first, at most 3.
   repeated CertificateAuthority soonest_cas = 9;
   int64 recording_bytes = 10;

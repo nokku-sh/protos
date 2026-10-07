@@ -199,14 +199,13 @@ func (x *Token) GetLastUsedAt() *timestamppb.Timestamp {
 
 type CreateTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Kind          *TokenKind             `protobuf:"varint,2,opt,name=kind,enum=nokku.v1.TokenKind" json:"kind,omitempty"`
-	Label         *string                `protobuf:"bytes,3,opt,name=label" json:"label,omitempty"`
-	Ttl           *durationpb.Duration   `protobuf:"bytes,4,opt,name=ttl" json:"ttl,omitempty"`
-	MaxUses       *int32                 `protobuf:"varint,5,opt,name=max_uses,json=maxUses" json:"max_uses,omitempty"`
-	AutoApprove   *bool                  `protobuf:"varint,6,opt,name=auto_approve,json=autoApprove" json:"auto_approve,omitempty"`
-	CaId          *string                `protobuf:"bytes,7,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	RoleName      *string                `protobuf:"bytes,8,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
+	Kind          *TokenKind             `protobuf:"varint,1,opt,name=kind,enum=nokku.v1.TokenKind" json:"kind,omitempty"`
+	Label         *string                `protobuf:"bytes,2,opt,name=label" json:"label,omitempty"`
+	Ttl           *durationpb.Duration   `protobuf:"bytes,3,opt,name=ttl" json:"ttl,omitempty"`
+	MaxUses       *int32                 `protobuf:"varint,4,opt,name=max_uses,json=maxUses" json:"max_uses,omitempty"`
+	AutoApprove   *bool                  `protobuf:"varint,5,opt,name=auto_approve,json=autoApprove" json:"auto_approve,omitempty"`
+	CaId          *string                `protobuf:"bytes,6,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
+	RoleName      *string                `protobuf:"bytes,7,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -239,13 +238,6 @@ func (x *CreateTokenRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreateTokenRequest.ProtoReflect.Descriptor instead.
 func (*CreateTokenRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_token_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *CreateTokenRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *CreateTokenRequest) GetKind() TokenKind {
@@ -351,8 +343,7 @@ func (x *CreateTokenResponse) GetSecret() string {
 
 type ListTokensRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Kind          *TokenKind             `protobuf:"varint,2,opt,name=kind,enum=nokku.v1.TokenKind" json:"kind,omitempty"`
+	Kind          *TokenKind             `protobuf:"varint,1,opt,name=kind,enum=nokku.v1.TokenKind" json:"kind,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -385,13 +376,6 @@ func (x *ListTokensRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ListTokensRequest.ProtoReflect.Descriptor instead.
 func (*ListTokensRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_token_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *ListTokensRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *ListTokensRequest) GetKind() TokenKind {
@@ -447,8 +431,7 @@ func (x *ListTokensResponse) GetTokens() []*Token {
 
 type DeleteTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Id            *string                `protobuf:"bytes,2,opt,name=id" json:"id,omitempty"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -481,13 +464,6 @@ func (x *DeleteTokenRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DeleteTokenRequest.ProtoReflect.Descriptor instead.
 func (*DeleteTokenRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_token_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *DeleteTokenRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *DeleteTokenRequest) GetId() string {
@@ -553,28 +529,25 @@ const file_nokku_v1_token_proto_rawDesc = "" +
 	"created_at\x18\n" +
 	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12<\n" +
 	"\flast_used_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"lastUsedAt\"\xcf\x02\n" +
-	"\x12CreateTokenRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x123\n" +
-	"\x04kind\x18\x02 \x01(\x0e2\x13.nokku.v1.TokenKindB\n" +
+	"lastUsedAt\"\xa2\x02\n" +
+	"\x12CreateTokenRequest\x123\n" +
+	"\x04kind\x18\x01 \x01(\x0e2\x13.nokku.v1.TokenKindB\n" +
 	"\xbaH\a\x82\x01\x04\x10\x01 \x00R\x04kind\x12\x1d\n" +
-	"\x05label\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x18dR\x05label\x125\n" +
-	"\x03ttl\x18\x04 \x01(\v2\x19.google.protobuf.DurationB\b\xbaH\x05\xaa\x01\x02*\x00R\x03ttl\x12\"\n" +
-	"\bmax_uses\x18\x05 \x01(\x05B\a\xbaH\x04\x1a\x02 \x00R\amaxUses\x12!\n" +
-	"\fauto_approve\x18\x06 \x01(\bR\vautoApprove\x12\x1d\n" +
-	"\x05ca_id\x18\a \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12\x1b\n" +
-	"\trole_name\x18\b \x01(\tR\broleName\"T\n" +
+	"\x05label\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x18dR\x05label\x125\n" +
+	"\x03ttl\x18\x03 \x01(\v2\x19.google.protobuf.DurationB\b\xbaH\x05\xaa\x01\x02*\x00R\x03ttl\x12\"\n" +
+	"\bmax_uses\x18\x04 \x01(\x05B\a\xbaH\x04\x1a\x02 \x00R\amaxUses\x12!\n" +
+	"\fauto_approve\x18\x05 \x01(\bR\vautoApprove\x12\x1d\n" +
+	"\x05ca_id\x18\x06 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12\x1b\n" +
+	"\trole_name\x18\a \x01(\tR\broleName\"T\n" +
 	"\x13CreateTokenResponse\x12%\n" +
 	"\x05token\x18\x01 \x01(\v2\x0f.nokku.v1.TokenR\x05token\x12\x16\n" +
-	"\x06secret\x18\x02 \x01(\tR\x06secret\"s\n" +
-	"\x11ListTokensRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x121\n" +
-	"\x04kind\x18\x02 \x01(\x0e2\x13.nokku.v1.TokenKindB\b\xbaH\x05\x82\x01\x02\x10\x01R\x04kind\"=\n" +
+	"\x06secret\x18\x02 \x01(\tR\x06secret\"F\n" +
+	"\x11ListTokensRequest\x121\n" +
+	"\x04kind\x18\x01 \x01(\x0e2\x13.nokku.v1.TokenKindB\b\xbaH\x05\x82\x01\x02\x10\x01R\x04kind\"=\n" +
 	"\x12ListTokensResponse\x12'\n" +
-	"\x06tokens\x18\x01 \x03(\v2\x0f.nokku.v1.TokenR\x06tokens\"[\n" +
-	"\x12DeleteTokenRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x18\n" +
-	"\x02id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x15\n" +
+	"\x06tokens\x18\x01 \x03(\v2\x0f.nokku.v1.TokenR\x06tokens\".\n" +
+	"\x12DeleteTokenRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x15\n" +
 	"\x13DeleteTokenResponse*U\n" +
 	"\tTokenKind\x12\x1a\n" +
 	"\x16TOKEN_KIND_UNSPECIFIED\x10\x00\x12\x15\n" +

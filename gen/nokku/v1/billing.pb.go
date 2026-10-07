@@ -25,7 +25,6 @@ const (
 
 type GetBillingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -60,20 +59,13 @@ func (*GetBillingRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_billing_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GetBillingRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
-}
-
 type GetBillingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Plan          *string                `protobuf:"bytes,1,opt,name=plan" json:"plan,omitempty"`
 	Mode          *string                `protobuf:"bytes,2,opt,name=mode" json:"mode,omitempty"`
 	Features      map[string]bool        `protobuf:"bytes,3,rep,name=features" json:"features,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
 	Quotas        *Quotas                `protobuf:"bytes,4,opt,name=quotas" json:"quotas,omitempty"`
-	MemberCount   *int64                 `protobuf:"varint,5,opt,name=member_count,json=memberCount" json:"member_count,omitempty"`
+	UserCount     *int64                 `protobuf:"varint,5,opt,name=user_count,json=userCount" json:"user_count,omitempty"`
 	ResourceCount *int64                 `protobuf:"varint,6,opt,name=resource_count,json=resourceCount" json:"resource_count,omitempty"`
 	Subscription  *Subscription          `protobuf:"bytes,7,opt,name=subscription" json:"subscription,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -138,9 +130,9 @@ func (x *GetBillingResponse) GetQuotas() *Quotas {
 	return nil
 }
 
-func (x *GetBillingResponse) GetMemberCount() int64 {
-	if x != nil && x.MemberCount != nil {
-		return *x.MemberCount
+func (x *GetBillingResponse) GetUserCount() int64 {
+	if x != nil && x.UserCount != nil {
+		return *x.UserCount
 	}
 	return 0
 }
@@ -289,7 +281,6 @@ func (x *Subscription) GetCurrentPeriodEnd() *timestamppb.Timestamp {
 
 type CreatePortalRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -322,13 +313,6 @@ func (x *CreatePortalRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreatePortalRequest.ProtoReflect.Descriptor instead.
 func (*CreatePortalRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_billing_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *CreatePortalRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 type CreatePortalResponse struct {
@@ -377,7 +361,6 @@ func (x *CreatePortalResponse) GetUrl() string {
 
 type CreateCheckoutRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -410,13 +393,6 @@ func (x *CreateCheckoutRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreateCheckoutRequest.ProtoReflect.Descriptor instead.
 func (*CreateCheckoutRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_billing_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *CreateCheckoutRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 type CreateCheckoutResponse struct {
@@ -465,9 +441,8 @@ func (x *CreateCheckoutResponse) GetUrl() string {
 
 type CancelSubscriptionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Immediate     *bool                  `protobuf:"varint,2,opt,name=immediate" json:"immediate,omitempty"`
-	Reason        *string                `protobuf:"bytes,3,opt,name=reason" json:"reason,omitempty"`
+	Immediate     *bool                  `protobuf:"varint,1,opt,name=immediate" json:"immediate,omitempty"`
+	Reason        *string                `protobuf:"bytes,2,opt,name=reason" json:"reason,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -500,13 +475,6 @@ func (x *CancelSubscriptionRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CancelSubscriptionRequest.ProtoReflect.Descriptor instead.
 func (*CancelSubscriptionRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_billing_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *CancelSubscriptionRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *CancelSubscriptionRequest) GetImmediate() bool {
@@ -655,12 +623,10 @@ func (x *GetLicenseResponse) GetExpiresAt() *timestamppb.Timestamp {
 	return nil
 }
 
-// The license covers the whole instance. The workspace only says where the
-// caller is an owner.
+// The license covers the whole instance.
 type ActivateLicenseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	Key           *string                `protobuf:"bytes,2,opt,name=key" json:"key,omitempty"`
+	Key           *string                `protobuf:"bytes,1,opt,name=key" json:"key,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -693,13 +659,6 @@ func (x *ActivateLicenseRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ActivateLicenseRequest.ProtoReflect.Descriptor instead.
 func (*ActivateLicenseRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_billing_proto_rawDescGZIP(), []int{12}
-}
-
-func (x *ActivateLicenseRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *ActivateLicenseRequest) GetKey() string {
@@ -749,15 +708,15 @@ var File_nokku_v1_billing_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_billing_proto_rawDesc = "" +
 	"\n" +
-	"\x16nokku/v1/billing.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"@\n" +
-	"\x11GetBillingRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\"\xf1\x02\n" +
+	"\x16nokku/v1/billing.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x13\n" +
+	"\x11GetBillingRequest\"\xed\x02\n" +
 	"\x12GetBillingResponse\x12\x12\n" +
 	"\x04plan\x18\x01 \x01(\tR\x04plan\x12\x12\n" +
 	"\x04mode\x18\x02 \x01(\tR\x04mode\x12F\n" +
 	"\bfeatures\x18\x03 \x03(\v2*.nokku.v1.GetBillingResponse.FeaturesEntryR\bfeatures\x12(\n" +
-	"\x06quotas\x18\x04 \x01(\v2\x10.nokku.v1.QuotasR\x06quotas\x12!\n" +
-	"\fmember_count\x18\x05 \x01(\x03R\vmemberCount\x12%\n" +
+	"\x06quotas\x18\x04 \x01(\v2\x10.nokku.v1.QuotasR\x06quotas\x12\x1d\n" +
+	"\n" +
+	"user_count\x18\x05 \x01(\x03R\tuserCount\x12%\n" +
 	"\x0eresource_count\x18\x06 \x01(\x03R\rresourceCount\x12:\n" +
 	"\fsubscription\x18\a \x01(\v2\x16.nokku.v1.SubscriptionR\fsubscription\x1a;\n" +
 	"\rFeaturesEntry\x12\x10\n" +
@@ -771,29 +730,25 @@ const file_nokku_v1_billing_proto_rawDesc = "" +
 	"\fSubscription\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x12/\n" +
 	"\x14cancel_at_period_end\x18\x02 \x01(\bR\x11cancelAtPeriodEnd\x12H\n" +
-	"\x12current_period_end\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x10currentPeriodEnd\"B\n" +
-	"\x13CreatePortalRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\"(\n" +
+	"\x12current_period_end\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x10currentPeriodEnd\"\x15\n" +
+	"\x13CreatePortalRequest\"(\n" +
 	"\x14CreatePortalResponse\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url\"D\n" +
-	"\x15CreateCheckoutRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\"*\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\"\x17\n" +
+	"\x15CreateCheckoutRequest\"*\n" +
 	"\x16CreateCheckoutResponse\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url\"\x88\x01\n" +
-	"\x19CancelSubscriptionRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1c\n" +
-	"\timmediate\x18\x02 \x01(\bR\timmediate\x12 \n" +
-	"\x06reason\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\x06reason\"\x1c\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\"[\n" +
+	"\x19CancelSubscriptionRequest\x12\x1c\n" +
+	"\timmediate\x18\x01 \x01(\bR\timmediate\x12 \n" +
+	"\x06reason\x18\x02 \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\x06reason\"\x1c\n" +
 	"\x1aCancelSubscriptionResponse\"\x13\n" +
 	"\x11GetLicenseRequest\"{\n" +
 	"\x12GetLicenseResponse\x12\x12\n" +
 	"\x04plan\x18\x01 \x01(\tR\x04plan\x12\x16\n" +
 	"\x06active\x18\x02 \x01(\bR\x06active\x129\n" +
 	"\n" +
-	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"c\n" +
-	"\x16ActivateLicenseRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12\x1c\n" +
-	"\x03key\x18\x02 \x01(\tB\n" +
+	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"6\n" +
+	"\x16ActivateLicenseRequest\x12\x1c\n" +
+	"\x03key\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x80 R\x03key\"\x19\n" +
 	"\x17ActivateLicenseResponse2\xb5\x04\n" +
 	"\x0eBillingService\x12R\n" +

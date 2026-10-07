@@ -68,13 +68,12 @@ func (x *GetInvitationRequest) GetToken() string {
 }
 
 type GetInvitationResponse struct {
-	state                protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceName        *string                `protobuf:"bytes,1,opt,name=workspace_name,json=workspaceName" json:"workspace_name,omitempty"`
-	WorkspaceDescription *string                `protobuf:"bytes,2,opt,name=workspace_description,json=workspaceDescription" json:"workspace_description,omitempty"`
-	ExpiresAt            *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=expires_at,json=expiresAt" json:"expires_at,omitempty"`
-	RoleName             *string                `protobuf:"bytes,4,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceName *string                `protobuf:"bytes,1,opt,name=workspace_name,json=workspaceName" json:"workspace_name,omitempty"`
+	Role          *string                `protobuf:"bytes,2,opt,name=role" json:"role,omitempty"`
+	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=expires_at,json=expiresAt" json:"expires_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetInvitationResponse) Reset() {
@@ -114,9 +113,9 @@ func (x *GetInvitationResponse) GetWorkspaceName() string {
 	return ""
 }
 
-func (x *GetInvitationResponse) GetWorkspaceDescription() string {
-	if x != nil && x.WorkspaceDescription != nil {
-		return *x.WorkspaceDescription
+func (x *GetInvitationResponse) GetRole() string {
+	if x != nil && x.Role != nil {
+		return *x.Role
 	}
 	return ""
 }
@@ -128,16 +127,11 @@ func (x *GetInvitationResponse) GetExpiresAt() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *GetInvitationResponse) GetRoleName() string {
-	if x != nil && x.RoleName != nil {
-		return *x.RoleName
-	}
-	return ""
-}
-
 type AcceptInvitationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Token         *string                `protobuf:"bytes,1,opt,name=token" json:"token,omitempty"`
+	Name          *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Email         *string                `protobuf:"bytes,3,opt,name=email" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -179,9 +173,22 @@ func (x *AcceptInvitationRequest) GetToken() string {
 	return ""
 }
 
+func (x *AcceptInvitationRequest) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *AcceptInvitationRequest) GetEmail() string {
+	if x != nil && x.Email != nil {
+		return *x.Email
+	}
+	return ""
+}
+
 type AcceptInvitationResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -216,33 +223,26 @@ func (*AcceptInvitationResponse) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_invitation_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AcceptInvitationResponse) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
-}
-
 var File_nokku_v1_invitation_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_invitation_proto_rawDesc = "" +
 	"\n" +
 	"\x19nokku/v1/invitation.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"5\n" +
 	"\x14GetInvitationRequest\x12\x1d\n" +
-	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"\xcb\x01\n" +
+	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"\x8d\x01\n" +
 	"\x15GetInvitationResponse\x12%\n" +
-	"\x0eworkspace_name\x18\x01 \x01(\tR\rworkspaceName\x123\n" +
-	"\x15workspace_description\x18\x02 \x01(\tR\x14workspaceDescription\x129\n" +
+	"\x0eworkspace_name\x18\x01 \x01(\tR\rworkspaceName\x12\x12\n" +
+	"\x04role\x18\x02 \x01(\tR\x04role\x129\n" +
 	"\n" +
-	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\x12\x1b\n" +
-	"\trole_name\x18\x04 \x01(\tR\broleName\"8\n" +
+	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"u\n" +
 	"\x17AcceptInvitationRequest\x12\x1d\n" +
-	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"=\n" +
-	"\x18AcceptInvitationResponse\x12!\n" +
-	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId2\xd3\x01\n" +
+	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\x12\x1c\n" +
+	"\x04name\x18\x02 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x02R\x04name\x12\x1d\n" +
+	"\x05email\x18\x03 \x01(\tB\a\xbaH\x04r\x02`\x01R\x05email\"\x1a\n" +
+	"\x18AcceptInvitationResponse2\xd3\x01\n" +
 	"\x11InvitationService\x12[\n" +
-	"\rGetInvitation\x12\x1e.nokku.v1.GetInvitationRequest\x1a\x1f.nokku.v1.GetInvitationResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12a\n" +
-	"\x10AcceptInvitation\x12!.nokku.v1.AcceptInvitationRequest\x1a\".nokku.v1.AcceptInvitationResponse\"\x06\xc2\xf3\x18\x02\x10\x01B\x91\x01\n" +
+	"\rGetInvitation\x12\x1e.nokku.v1.GetInvitationRequest\x1a\x1f.nokku.v1.GetInvitationResponse\"\t\xc2\xf3\x18\x02\b\x01\x90\x02\x01\x12a\n" +
+	"\x10AcceptInvitation\x12!.nokku.v1.AcceptInvitationRequest\x1a\".nokku.v1.AcceptInvitationResponse\"\x06\xc2\xf3\x18\x02\b\x01B\x91\x01\n" +
 	"\fcom.nokku.v1B\x0fInvitationProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (

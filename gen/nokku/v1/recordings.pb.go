@@ -24,18 +24,17 @@ const (
 )
 
 type Recording struct {
-	state       protoimpl.MessageState `protogen:"open.v1"`
-	Id          *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	WorkspaceId *string                `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	// Empty once the daemon is deleted, the recording stays.
-	DaemonId  *string                `protobuf:"bytes,3,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
-	Username  *string                `protobuf:"bytes,4,opt,name=username" json:"username,omitempty"`
-	SizeBytes *int64                 `protobuf:"varint,5,opt,name=size_bytes,json=sizeBytes" json:"size_bytes,omitempty"`
-	Complete  *bool                  `protobuf:"varint,6,opt,name=complete" json:"complete,omitempty"`
-	StartedAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=started_at,json=startedAt" json:"started_at,omitempty"`
-	EndedAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=ended_at,json=endedAt" json:"ended_at,omitempty"`
+	DaemonId  *string                `protobuf:"bytes,2,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
+	Username  *string                `protobuf:"bytes,3,opt,name=username" json:"username,omitempty"`
+	SizeBytes *int64                 `protobuf:"varint,4,opt,name=size_bytes,json=sizeBytes" json:"size_bytes,omitempty"`
+	Complete  *bool                  `protobuf:"varint,5,opt,name=complete" json:"complete,omitempty"`
+	StartedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=started_at,json=startedAt" json:"started_at,omitempty"`
+	EndedAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=ended_at,json=endedAt" json:"ended_at,omitempty"`
 	// The daemon's name when the session ran.
-	DaemonName    *string `protobuf:"bytes,9,opt,name=daemon_name,json=daemonName" json:"daemon_name,omitempty"`
+	DaemonName    *string `protobuf:"bytes,8,opt,name=daemon_name,json=daemonName" json:"daemon_name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -73,13 +72,6 @@ func (*Recording) Descriptor() ([]byte, []int) {
 func (x *Recording) GetId() string {
 	if x != nil && x.Id != nil {
 		return *x.Id
-	}
-	return ""
-}
-
-func (x *Recording) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -373,11 +365,10 @@ func (x *UploadRecordingResponse) GetSizeBytes() int64 {
 
 type ListRecordingsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	DaemonId      *string                `protobuf:"bytes,2,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
-	Limit         *int32                 `protobuf:"varint,3,opt,name=limit" json:"limit,omitempty"`
-	Offset        *int32                 `protobuf:"varint,4,opt,name=offset" json:"offset,omitempty"`
-	Username      *string                `protobuf:"bytes,5,opt,name=username" json:"username,omitempty"`
+	DaemonId      *string                `protobuf:"bytes,1,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
+	Limit         *int32                 `protobuf:"varint,2,opt,name=limit" json:"limit,omitempty"`
+	Offset        *int32                 `protobuf:"varint,3,opt,name=offset" json:"offset,omitempty"`
+	Username      *string                `protobuf:"bytes,4,opt,name=username" json:"username,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -410,13 +401,6 @@ func (x *ListRecordingsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ListRecordingsRequest.ProtoReflect.Descriptor instead.
 func (*ListRecordingsRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_recordings_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *ListRecordingsRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *ListRecordingsRequest) GetDaemonId() string {
@@ -509,8 +493,7 @@ func (x *ListRecordingsResponse) GetTotalBytes() int64 {
 
 type GetRecordingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	RecordingId   *string                `protobuf:"bytes,2,opt,name=recording_id,json=recordingId" json:"recording_id,omitempty"`
+	RecordingId   *string                `protobuf:"bytes,1,opt,name=recording_id,json=recordingId" json:"recording_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -543,13 +526,6 @@ func (x *GetRecordingRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetRecordingRequest.ProtoReflect.Descriptor instead.
 func (*GetRecordingRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_recordings_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *GetRecordingRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *GetRecordingRequest) GetRecordingId() string {
@@ -643,8 +619,7 @@ func (*GetRecordingResponse_Chunk) isGetRecordingResponse_Msg() {}
 
 type DeleteRecordingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	WorkspaceId   *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId" json:"workspace_id,omitempty"`
-	RecordingId   *string                `protobuf:"bytes,2,opt,name=recording_id,json=recordingId" json:"recording_id,omitempty"`
+	RecordingId   *string                `protobuf:"bytes,1,opt,name=recording_id,json=recordingId" json:"recording_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -677,13 +652,6 @@ func (x *DeleteRecordingRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DeleteRecordingRequest.ProtoReflect.Descriptor instead.
 func (*DeleteRecordingRequest) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_recordings_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *DeleteRecordingRequest) GetWorkspaceId() string {
-	if x != nil && x.WorkspaceId != nil {
-		return *x.WorkspaceId
-	}
-	return ""
 }
 
 func (x *DeleteRecordingRequest) GetRecordingId() string {
@@ -733,19 +701,18 @@ var File_nokku_v1_recordings_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"\n" +
-	"\x19nokku/v1/recordings.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xc5\x02\n" +
+	"\x19nokku/v1/recordings.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xa2\x02\n" +
 	"\tRecording\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
-	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x1b\n" +
-	"\tdaemon_id\x18\x03 \x01(\tR\bdaemonId\x12\x1a\n" +
-	"\busername\x18\x04 \x01(\tR\busername\x12\x1d\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
+	"\tdaemon_id\x18\x02 \x01(\tR\bdaemonId\x12\x1a\n" +
+	"\busername\x18\x03 \x01(\tR\busername\x12\x1d\n" +
 	"\n" +
-	"size_bytes\x18\x05 \x01(\x03R\tsizeBytes\x12\x1a\n" +
-	"\bcomplete\x18\x06 \x01(\bR\bcomplete\x129\n" +
+	"size_bytes\x18\x04 \x01(\x03R\tsizeBytes\x12\x1a\n" +
+	"\bcomplete\x18\x05 \x01(\bR\bcomplete\x129\n" +
 	"\n" +
-	"started_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x125\n" +
-	"\bended_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\aendedAt\x12\x1f\n" +
-	"\vdaemon_name\x18\t \x01(\tR\n" +
+	"started_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x125\n" +
+	"\bended_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\aendedAt\x12\x1f\n" +
+	"\vdaemon_name\x18\b \x01(\tR\n" +
 	"daemonName\"\x98\x01\n" +
 	"\x16UploadRecordingRequest\x12-\n" +
 	"\x04meta\x18\x01 \x01(\v2\x17.nokku.v1.RecordingMetaH\x00R\x04meta\x12\x16\n" +
@@ -759,33 +726,30 @@ const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"\x17UploadRecordingResponse\x12!\n" +
 	"\frecording_id\x18\x01 \x01(\tR\vrecordingId\x12\x1d\n" +
 	"\n" +
-	"size_bytes\x18\x02 \x01(\x03R\tsizeBytes\"\xc9\x01\n" +
-	"\x15ListRecordingsRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12%\n" +
-	"\tdaemon_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\bdaemonId\x12\x1f\n" +
-	"\x05limit\x18\x03 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
-	"\x06offset\x18\x04 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x1a\n" +
-	"\busername\x18\x05 \x01(\tR\busername\"\x84\x01\n" +
+	"size_bytes\x18\x02 \x01(\x03R\tsizeBytes\"\x9c\x01\n" +
+	"\x15ListRecordingsRequest\x12%\n" +
+	"\tdaemon_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\bdaemonId\x12\x1f\n" +
+	"\x05limit\x18\x02 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
+	"\x06offset\x18\x03 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x1a\n" +
+	"\busername\x18\x04 \x01(\tR\busername\"\x84\x01\n" +
 	"\x16ListRecordingsResponse\x123\n" +
 	"\n" +
 	"recordings\x18\x01 \x03(\v2\x13.nokku.v1.RecordingR\n" +
 	"recordings\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x1f\n" +
 	"\vtotal_bytes\x18\x03 \x01(\x03R\n" +
-	"totalBytes\"o\n" +
+	"totalBytes\"B\n" +
 	"\x13GetRecordingRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12+\n" +
-	"\frecording_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vrecordingId\"d\n" +
+	"\frecording_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vrecordingId\"d\n" +
 	"\x14GetRecordingResponse\x12-\n" +
 	"\x04meta\x18\x01 \x01(\v2\x17.nokku.v1.RecordingMetaH\x00R\x04meta\x12\x16\n" +
 	"\x05chunk\x18\x02 \x01(\fH\x00R\x05chunkB\x05\n" +
-	"\x03msg\"r\n" +
+	"\x03msg\"E\n" +
 	"\x16DeleteRecordingRequest\x12+\n" +
-	"\fworkspace_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vworkspaceId\x12+\n" +
-	"\frecording_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vrecordingId\"\x19\n" +
+	"\frecording_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vrecordingId\"\x19\n" +
 	"\x17DeleteRecordingResponse2\xae\x02\n" +
 	"\x10RecordingService\x12Z\n" +
-	"\fGetRecording\x12\x1d.nokku.v1.GetRecordingRequest\x1a\x1e.nokku.v1.GetRecordingResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x010\x01\x12^\n" +
+	"\fGetRecording\x12\x1d.nokku.v1.GetRecordingRequest\x1a\x1e.nokku.v1.GetRecordingResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x010\x01\x12^\n" +
 	"\x0eListRecordings\x12\x1f.nokku.v1.ListRecordingsRequest\x1a .nokku.v1.ListRecordingsResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12^\n" +
 	"\x0fDeleteRecording\x12 .nokku.v1.DeleteRecordingRequest\x1a!.nokku.v1.DeleteRecordingResponse\"\x06\xc2\xf3\x18\x02\x18\x03B\x91\x01\n" +
 	"\fcom.nokku.v1B\x0fRecordingsProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"

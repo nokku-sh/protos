@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
 service CertificateService {
-  // Members read CAs because nk trusts the X.509 CAs of every workspace it belongs to.
+  // Members read CAs because nk trusts the workspace's X.509 CAs.
   rpc GetCertificateAuthority(GetCertificateAuthorityRequest) returns (GetCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_MEMBER};
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -19,7 +19,7 @@ service CertificateService {
   rpc UpdateCertificateAuthority(UpdateCertificateAuthorityRequest) returns (UpdateCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  // Members read CAs because nk trusts the X.509 CAs of every workspace it belongs to.
+  // Members read CAs because nk trusts the workspace's X.509 CAs.
   rpc ListCertificateAuthorities(ListCertificateAuthoritiesRequest) returns (ListCertificateAuthoritiesResponse) {
     option (access) = {role: WORKSPACE_ROLE_MEMBER};
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -59,145 +59,137 @@ enum AuthorityType {
 // Certificate Authority messages ---------------------------------------------
 message CertificateAuthority {
   string id = 1;
-  string workspace_id = 2;
-  string name = 3;
-  string description = 4;
-  string certificate = 5;
-  string public_key = 6;
-  string serial_number = 7;
-  string subject = 8;
-  google.protobuf.Timestamp not_before = 9;
-  google.protobuf.Timestamp not_after = 10;
-  bool is_active = 11;
-  bool is_default = 12;
-  int32 key_bits = 13;
-  CertificateKeyType key_type = 14;
-  repeated CertificateKeyType allowed_key_types = 15;
-  google.protobuf.Duration lifetime = 16;
-  google.protobuf.Duration user_default_ttl = 17;
-  google.protobuf.Duration user_max_ttl = 18;
-  map<string, string> user_extensions = 19;
-  map<string, string> user_critical_options = 20;
-  google.protobuf.Duration host_default_ttl = 21;
-  google.protobuf.Duration host_max_ttl = 22;
-  google.protobuf.Timestamp created_at = 23;
-  google.protobuf.Timestamp updated_at = 24;
-  AuthorityType authority_type = 25;
+  string name = 2;
+  string description = 3;
+  string certificate = 4;
+  string public_key = 5;
+  string serial_number = 6;
+  string subject = 7;
+  google.protobuf.Timestamp not_before = 8;
+  google.protobuf.Timestamp not_after = 9;
+  bool is_active = 10;
+  bool is_default = 11;
+  int32 key_bits = 12;
+  CertificateKeyType key_type = 13;
+  repeated CertificateKeyType allowed_key_types = 14;
+  google.protobuf.Duration lifetime = 15;
+  google.protobuf.Duration user_default_ttl = 16;
+  google.protobuf.Duration user_max_ttl = 17;
+  map<string, string> user_extensions = 18;
+  map<string, string> user_critical_options = 19;
+  google.protobuf.Duration host_default_ttl = 20;
+  google.protobuf.Duration host_max_ttl = 21;
+  google.protobuf.Timestamp created_at = 22;
+  google.protobuf.Timestamp updated_at = 23;
+  AuthorityType authority_type = 24;
   // The key this CA had before its last rollover. Certificates it signed stay
   // trusted until previous_trusted_until. Both are unset after an emergency
   // rollover.
-  string previous_public_key = 26;
-  google.protobuf.Timestamp previous_trusted_until = 27;
+  string previous_public_key = 25;
+  google.protobuf.Timestamp previous_trusted_until = 26;
 }
 
 message CreateCertificateAuthorityRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string = {
+  string name = 1 [(buf.validate.field).string = {
     min_len: 1
     max_len: 256
   }];
-  string description = 3 [(buf.validate.field).string.max_len = 1000];
-  CertificateKeyType key_type = 4 [(buf.validate.field).enum = {
+  string description = 2 [(buf.validate.field).string.max_len = 1000];
+  CertificateKeyType key_type = 3 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
-  int32 key_bits = 5;
-  bool is_default = 6;
-  repeated CertificateKeyType allowed_key_types = 7;
-  google.protobuf.Duration lifetime = 8 [(buf.validate.field).duration = {
+  int32 key_bits = 4;
+  bool is_default = 5;
+  repeated CertificateKeyType allowed_key_types = 6;
+  google.protobuf.Duration lifetime = 7 [(buf.validate.field).duration = {
     gte: {seconds: 2628000} /* Min 1 month */
     lte: {seconds: 315360000} /* Max 10 years */
   }];
-  google.protobuf.Duration user_default_ttl = 9 [(buf.validate.field).duration = {
+  google.protobuf.Duration user_default_ttl = 8 [(buf.validate.field).duration = {
     gte: {seconds: 60} /* Min 1 minute */
     lte: {seconds: 31536000} /* Max 1 year */
   }];
-  google.protobuf.Duration user_max_ttl = 10 [(buf.validate.field).duration = {
+  google.protobuf.Duration user_max_ttl = 9 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration host_default_ttl = 11 [(buf.validate.field).duration = {
+  google.protobuf.Duration host_default_ttl = 10 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration host_max_ttl = 12 [(buf.validate.field).duration = {
+  google.protobuf.Duration host_max_ttl = 11 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  map<string, string> user_extensions = 13;
-  map<string, string> user_critical_options = 14;
-  AuthorityType authority_type = 15 [(buf.validate.field).enum = {defined_only: true}];
+  map<string, string> user_extensions = 12;
+  map<string, string> user_critical_options = 13;
+  AuthorityType authority_type = 14 [(buf.validate.field).enum = {defined_only: true}];
 }
 message CreateCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
 }
 
 message GetCertificateAuthorityRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message GetCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
 }
 
-message ListCertificateAuthoritiesRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
+message ListCertificateAuthoritiesRequest {}
 message ListCertificateAuthoritiesResponse {
   repeated CertificateAuthority certificate_authorities = 1;
 }
 
 message UpdateCertificateAuthorityRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
-  string name = 3 [(buf.validate.field).string = {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [(buf.validate.field).string = {
     min_len: 1
     max_len: 256
   }];
-  string description = 4 [(buf.validate.field).string.max_len = 1000];
-  bool is_active = 5;
-  bool is_default = 6;
-  repeated CertificateKeyType allowed_key_types = 7;
-  google.protobuf.Duration lifetime = 8 [(buf.validate.field).duration = {
+  string description = 3 [(buf.validate.field).string.max_len = 1000];
+  bool is_active = 4;
+  bool is_default = 5;
+  repeated CertificateKeyType allowed_key_types = 6;
+  google.protobuf.Duration lifetime = 7 [(buf.validate.field).duration = {
     gte: {seconds: 2628000} /* Min 1 month */
     lte: {seconds: 315360000} /* Max 10 years */
   }];
-  google.protobuf.Duration user_default_ttl = 9 [(buf.validate.field).duration = {
+  google.protobuf.Duration user_default_ttl = 8 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration user_max_ttl = 10 [(buf.validate.field).duration = {
+  google.protobuf.Duration user_max_ttl = 9 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration host_default_ttl = 11 [(buf.validate.field).duration = {
+  google.protobuf.Duration host_default_ttl = 10 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration host_max_ttl = 12 [(buf.validate.field).duration = {
+  google.protobuf.Duration host_max_ttl = 11 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  map<string, string> user_extensions = 13;
-  map<string, string> user_critical_options = 14;
+  map<string, string> user_extensions = 12;
+  map<string, string> user_critical_options = 13;
 }
 message UpdateCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
 }
 
 message DeleteCertificateAuthorityRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message DeleteCertificateAuthorityResponse {}
 
 message RolloverCertificateAuthorityRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string id = 2 [(buf.validate.field).string.uuid = true];
-  int32 key_bits = 3;
-  CertificateKeyType key_type = 4;
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  int32 key_bits = 2;
+  CertificateKeyType key_type = 3;
   // Stop trusting the replaced key at once. For a key that may have leaked.
-  bool revoke_previous = 5;
+  bool revoke_previous = 4;
 }
 message RolloverCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
@@ -206,17 +198,16 @@ message RolloverCertificateAuthorityResponse {
 // Certificate messages -------------------------------------------------------
 
 message SignSSHCertificateRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string public_key = 5 [(buf.validate.field).string = {
+  string public_key = 1 [(buf.validate.field).string = {
     min_len: 1
     max_len: 10000
   }];
-  google.protobuf.Duration ttl = 6 [(buf.validate.field).duration = {
+  google.protobuf.Duration ttl = 2 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
   // The server the certificate is for. Its certificate authority signs.
-  string target_id = 7 [
+  string target_id = 3 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
@@ -236,14 +227,13 @@ message SignX509CertificateRequest {
     X509_USAGE_SERVER_AUTH = 2;
     X509_USAGE_CLIENT_AND_SERVER = 3;
   }
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string ca_id = 2 [(buf.validate.field).string.uuid = true];
-  string csr = 3 [(buf.validate.field).string = {
+  string ca_id = 1 [(buf.validate.field).string.uuid = true];
+  string csr = 2 [(buf.validate.field).string = {
     min_len: 1
     max_len: 10000
   }];
-  X509Usage usage = 4 [(buf.validate.field).enum = {defined_only: true}];
-  google.protobuf.Duration ttl = 5 [(buf.validate.field).duration = {
+  X509Usage usage = 3 [(buf.validate.field).enum = {defined_only: true}];
+  google.protobuf.Duration ttl = 4 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];

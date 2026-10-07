@@ -39,15 +39,9 @@ const (
 	// AccountServiceUpdateAccountProcedure is the fully-qualified name of the AccountService's
 	// UpdateAccount RPC.
 	AccountServiceUpdateAccountProcedure = "/nokku.v1.AccountService/UpdateAccount"
-	// AccountServiceChangePasswordProcedure is the fully-qualified name of the AccountService's
-	// ChangePassword RPC.
-	AccountServiceChangePasswordProcedure = "/nokku.v1.AccountService/ChangePassword"
 	// AccountServiceRequestEmailChangeProcedure is the fully-qualified name of the AccountService's
 	// RequestEmailChange RPC.
 	AccountServiceRequestEmailChangeProcedure = "/nokku.v1.AccountService/RequestEmailChange"
-	// AccountServiceRemovePasswordProcedure is the fully-qualified name of the AccountService's
-	// RemovePassword RPC.
-	AccountServiceRemovePasswordProcedure = "/nokku.v1.AccountService/RemovePassword"
 	// AccountServiceListCredentialsProcedure is the fully-qualified name of the AccountService's
 	// ListCredentials RPC.
 	AccountServiceListCredentialsProcedure = "/nokku.v1.AccountService/ListCredentials"
@@ -57,18 +51,6 @@ const (
 	// AccountServiceRemoveCredentialProcedure is the fully-qualified name of the AccountService's
 	// RemoveCredential RPC.
 	AccountServiceRemoveCredentialProcedure = "/nokku.v1.AccountService/RemoveCredential"
-	// AccountServiceRemoveIdentityProcedure is the fully-qualified name of the AccountService's
-	// RemoveIdentity RPC.
-	AccountServiceRemoveIdentityProcedure = "/nokku.v1.AccountService/RemoveIdentity"
-	// AccountServiceListBackupCodesProcedure is the fully-qualified name of the AccountService's
-	// ListBackupCodes RPC.
-	AccountServiceListBackupCodesProcedure = "/nokku.v1.AccountService/ListBackupCodes"
-	// AccountServiceRotateBackupCodesProcedure is the fully-qualified name of the AccountService's
-	// RotateBackupCodes RPC.
-	AccountServiceRotateBackupCodesProcedure = "/nokku.v1.AccountService/RotateBackupCodes"
-	// AccountServiceRemoveBackupCodesProcedure is the fully-qualified name of the AccountService's
-	// RemoveBackupCodes RPC.
-	AccountServiceRemoveBackupCodesProcedure = "/nokku.v1.AccountService/RemoveBackupCodes"
 	// AccountServiceListAccountSessionsProcedure is the fully-qualified name of the AccountService's
 	// ListAccountSessions RPC.
 	AccountServiceListAccountSessionsProcedure = "/nokku.v1.AccountService/ListAccountSessions"
@@ -84,20 +66,17 @@ const (
 type AccountServiceClient interface {
 	GetAccount(context.Context, *v1.GetAccountRequest) (*v1.GetAccountResponse, error)
 	UpdateAccount(context.Context, *v1.UpdateAccountRequest) (*v1.UpdateAccountResponse, error)
-	ChangePassword(context.Context, *v1.ChangePasswordRequest) (*v1.ChangePasswordResponse, error)
 	// Starts an email change. The address stays the old one until the link
 	// sent to the new address is used with AuthService.ConfirmEmailChange.
+	// Refused for accounts an identity provider manages.
 	RequestEmailChange(context.Context, *v1.RequestEmailChangeRequest) (*v1.RequestEmailChangeResponse, error)
-	RemovePassword(context.Context, *v1.RemovePasswordRequest) (*v1.RemovePasswordResponse, error)
 	ListCredentials(context.Context, *v1.ListCredentialsRequest) (*v1.ListCredentialsResponse, error)
 	RenameCredential(context.Context, *v1.RenameCredentialRequest) (*v1.RenameCredentialResponse, error)
+	// Removes a passkey or a linked identity. The last way in stays.
 	RemoveCredential(context.Context, *v1.RemoveCredentialRequest) (*v1.RemoveCredentialResponse, error)
-	RemoveIdentity(context.Context, *v1.RemoveIdentityRequest) (*v1.RemoveIdentityResponse, error)
-	ListBackupCodes(context.Context, *v1.ListBackupCodesRequest) (*v1.ListBackupCodesResponse, error)
-	RotateBackupCodes(context.Context, *v1.RotateBackupCodesRequest) (*v1.RotateBackupCodesResponse, error)
-	RemoveBackupCodes(context.Context, *v1.RemoveBackupCodesRequest) (*v1.RemoveBackupCodesResponse, error)
 	ListAccountSessions(context.Context, *v1.ListAccountSessionsRequest) (*v1.ListAccountSessionsResponse, error)
 	RemoveSession(context.Context, *v1.RemoveSessionRequest) (*v1.RemoveSessionResponse, error)
+	// Refused for the owner, ownership moves first.
 	DeleteAccount(context.Context, *v1.DeleteAccountRequest) (*v1.DeleteAccountResponse, error)
 }
 
@@ -125,22 +104,10 @@ func NewAccountServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 			connect.WithSchema(accountServiceMethods.ByName("UpdateAccount")),
 			connect.WithClientOptions(opts...),
 		),
-		changePassword: connect.NewClient[v1.ChangePasswordRequest, v1.ChangePasswordResponse](
-			httpClient,
-			baseURL+AccountServiceChangePasswordProcedure,
-			connect.WithSchema(accountServiceMethods.ByName("ChangePassword")),
-			connect.WithClientOptions(opts...),
-		),
 		requestEmailChange: connect.NewClient[v1.RequestEmailChangeRequest, v1.RequestEmailChangeResponse](
 			httpClient,
 			baseURL+AccountServiceRequestEmailChangeProcedure,
 			connect.WithSchema(accountServiceMethods.ByName("RequestEmailChange")),
-			connect.WithClientOptions(opts...),
-		),
-		removePassword: connect.NewClient[v1.RemovePasswordRequest, v1.RemovePasswordResponse](
-			httpClient,
-			baseURL+AccountServiceRemovePasswordProcedure,
-			connect.WithSchema(accountServiceMethods.ByName("RemovePassword")),
 			connect.WithClientOptions(opts...),
 		),
 		listCredentials: connect.NewClient[v1.ListCredentialsRequest, v1.ListCredentialsResponse](
@@ -160,31 +127,6 @@ func NewAccountServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 			httpClient,
 			baseURL+AccountServiceRemoveCredentialProcedure,
 			connect.WithSchema(accountServiceMethods.ByName("RemoveCredential")),
-			connect.WithClientOptions(opts...),
-		),
-		removeIdentity: connect.NewClient[v1.RemoveIdentityRequest, v1.RemoveIdentityResponse](
-			httpClient,
-			baseURL+AccountServiceRemoveIdentityProcedure,
-			connect.WithSchema(accountServiceMethods.ByName("RemoveIdentity")),
-			connect.WithClientOptions(opts...),
-		),
-		listBackupCodes: connect.NewClient[v1.ListBackupCodesRequest, v1.ListBackupCodesResponse](
-			httpClient,
-			baseURL+AccountServiceListBackupCodesProcedure,
-			connect.WithSchema(accountServiceMethods.ByName("ListBackupCodes")),
-			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-			connect.WithClientOptions(opts...),
-		),
-		rotateBackupCodes: connect.NewClient[v1.RotateBackupCodesRequest, v1.RotateBackupCodesResponse](
-			httpClient,
-			baseURL+AccountServiceRotateBackupCodesProcedure,
-			connect.WithSchema(accountServiceMethods.ByName("RotateBackupCodes")),
-			connect.WithClientOptions(opts...),
-		),
-		removeBackupCodes: connect.NewClient[v1.RemoveBackupCodesRequest, v1.RemoveBackupCodesResponse](
-			httpClient,
-			baseURL+AccountServiceRemoveBackupCodesProcedure,
-			connect.WithSchema(accountServiceMethods.ByName("RemoveBackupCodes")),
 			connect.WithClientOptions(opts...),
 		),
 		listAccountSessions: connect.NewClient[v1.ListAccountSessionsRequest, v1.ListAccountSessionsResponse](
@@ -213,16 +155,10 @@ func NewAccountServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 type accountServiceClient struct {
 	getAccount          *connect.Client[v1.GetAccountRequest, v1.GetAccountResponse]
 	updateAccount       *connect.Client[v1.UpdateAccountRequest, v1.UpdateAccountResponse]
-	changePassword      *connect.Client[v1.ChangePasswordRequest, v1.ChangePasswordResponse]
 	requestEmailChange  *connect.Client[v1.RequestEmailChangeRequest, v1.RequestEmailChangeResponse]
-	removePassword      *connect.Client[v1.RemovePasswordRequest, v1.RemovePasswordResponse]
 	listCredentials     *connect.Client[v1.ListCredentialsRequest, v1.ListCredentialsResponse]
 	renameCredential    *connect.Client[v1.RenameCredentialRequest, v1.RenameCredentialResponse]
 	removeCredential    *connect.Client[v1.RemoveCredentialRequest, v1.RemoveCredentialResponse]
-	removeIdentity      *connect.Client[v1.RemoveIdentityRequest, v1.RemoveIdentityResponse]
-	listBackupCodes     *connect.Client[v1.ListBackupCodesRequest, v1.ListBackupCodesResponse]
-	rotateBackupCodes   *connect.Client[v1.RotateBackupCodesRequest, v1.RotateBackupCodesResponse]
-	removeBackupCodes   *connect.Client[v1.RemoveBackupCodesRequest, v1.RemoveBackupCodesResponse]
 	listAccountSessions *connect.Client[v1.ListAccountSessionsRequest, v1.ListAccountSessionsResponse]
 	removeSession       *connect.Client[v1.RemoveSessionRequest, v1.RemoveSessionResponse]
 	deleteAccount       *connect.Client[v1.DeleteAccountRequest, v1.DeleteAccountResponse]
@@ -246,27 +182,9 @@ func (c *accountServiceClient) UpdateAccount(ctx context.Context, req *v1.Update
 	return nil, err
 }
 
-// ChangePassword calls nokku.v1.AccountService.ChangePassword.
-func (c *accountServiceClient) ChangePassword(ctx context.Context, req *v1.ChangePasswordRequest) (*v1.ChangePasswordResponse, error) {
-	response, err := c.changePassword.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
 // RequestEmailChange calls nokku.v1.AccountService.RequestEmailChange.
 func (c *accountServiceClient) RequestEmailChange(ctx context.Context, req *v1.RequestEmailChangeRequest) (*v1.RequestEmailChangeResponse, error) {
 	response, err := c.requestEmailChange.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// RemovePassword calls nokku.v1.AccountService.RemovePassword.
-func (c *accountServiceClient) RemovePassword(ctx context.Context, req *v1.RemovePasswordRequest) (*v1.RemovePasswordResponse, error) {
-	response, err := c.removePassword.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
@@ -294,42 +212,6 @@ func (c *accountServiceClient) RenameCredential(ctx context.Context, req *v1.Ren
 // RemoveCredential calls nokku.v1.AccountService.RemoveCredential.
 func (c *accountServiceClient) RemoveCredential(ctx context.Context, req *v1.RemoveCredentialRequest) (*v1.RemoveCredentialResponse, error) {
 	response, err := c.removeCredential.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// RemoveIdentity calls nokku.v1.AccountService.RemoveIdentity.
-func (c *accountServiceClient) RemoveIdentity(ctx context.Context, req *v1.RemoveIdentityRequest) (*v1.RemoveIdentityResponse, error) {
-	response, err := c.removeIdentity.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// ListBackupCodes calls nokku.v1.AccountService.ListBackupCodes.
-func (c *accountServiceClient) ListBackupCodes(ctx context.Context, req *v1.ListBackupCodesRequest) (*v1.ListBackupCodesResponse, error) {
-	response, err := c.listBackupCodes.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// RotateBackupCodes calls nokku.v1.AccountService.RotateBackupCodes.
-func (c *accountServiceClient) RotateBackupCodes(ctx context.Context, req *v1.RotateBackupCodesRequest) (*v1.RotateBackupCodesResponse, error) {
-	response, err := c.rotateBackupCodes.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
-// RemoveBackupCodes calls nokku.v1.AccountService.RemoveBackupCodes.
-func (c *accountServiceClient) RemoveBackupCodes(ctx context.Context, req *v1.RemoveBackupCodesRequest) (*v1.RemoveBackupCodesResponse, error) {
-	response, err := c.removeBackupCodes.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
@@ -367,20 +249,17 @@ func (c *accountServiceClient) DeleteAccount(ctx context.Context, req *v1.Delete
 type AccountServiceHandler interface {
 	GetAccount(context.Context, *v1.GetAccountRequest) (*v1.GetAccountResponse, error)
 	UpdateAccount(context.Context, *v1.UpdateAccountRequest) (*v1.UpdateAccountResponse, error)
-	ChangePassword(context.Context, *v1.ChangePasswordRequest) (*v1.ChangePasswordResponse, error)
 	// Starts an email change. The address stays the old one until the link
 	// sent to the new address is used with AuthService.ConfirmEmailChange.
+	// Refused for accounts an identity provider manages.
 	RequestEmailChange(context.Context, *v1.RequestEmailChangeRequest) (*v1.RequestEmailChangeResponse, error)
-	RemovePassword(context.Context, *v1.RemovePasswordRequest) (*v1.RemovePasswordResponse, error)
 	ListCredentials(context.Context, *v1.ListCredentialsRequest) (*v1.ListCredentialsResponse, error)
 	RenameCredential(context.Context, *v1.RenameCredentialRequest) (*v1.RenameCredentialResponse, error)
+	// Removes a passkey or a linked identity. The last way in stays.
 	RemoveCredential(context.Context, *v1.RemoveCredentialRequest) (*v1.RemoveCredentialResponse, error)
-	RemoveIdentity(context.Context, *v1.RemoveIdentityRequest) (*v1.RemoveIdentityResponse, error)
-	ListBackupCodes(context.Context, *v1.ListBackupCodesRequest) (*v1.ListBackupCodesResponse, error)
-	RotateBackupCodes(context.Context, *v1.RotateBackupCodesRequest) (*v1.RotateBackupCodesResponse, error)
-	RemoveBackupCodes(context.Context, *v1.RemoveBackupCodesRequest) (*v1.RemoveBackupCodesResponse, error)
 	ListAccountSessions(context.Context, *v1.ListAccountSessionsRequest) (*v1.ListAccountSessionsResponse, error)
 	RemoveSession(context.Context, *v1.RemoveSessionRequest) (*v1.RemoveSessionResponse, error)
+	// Refused for the owner, ownership moves first.
 	DeleteAccount(context.Context, *v1.DeleteAccountRequest) (*v1.DeleteAccountResponse, error)
 }
 
@@ -404,22 +283,10 @@ func NewAccountServiceHandler(svc AccountServiceHandler, opts ...connect.Handler
 		connect.WithSchema(accountServiceMethods.ByName("UpdateAccount")),
 		connect.WithHandlerOptions(opts...),
 	)
-	accountServiceChangePasswordHandler := connect.NewUnaryHandlerSimple(
-		AccountServiceChangePasswordProcedure,
-		svc.ChangePassword,
-		connect.WithSchema(accountServiceMethods.ByName("ChangePassword")),
-		connect.WithHandlerOptions(opts...),
-	)
 	accountServiceRequestEmailChangeHandler := connect.NewUnaryHandlerSimple(
 		AccountServiceRequestEmailChangeProcedure,
 		svc.RequestEmailChange,
 		connect.WithSchema(accountServiceMethods.ByName("RequestEmailChange")),
-		connect.WithHandlerOptions(opts...),
-	)
-	accountServiceRemovePasswordHandler := connect.NewUnaryHandlerSimple(
-		AccountServiceRemovePasswordProcedure,
-		svc.RemovePassword,
-		connect.WithSchema(accountServiceMethods.ByName("RemovePassword")),
 		connect.WithHandlerOptions(opts...),
 	)
 	accountServiceListCredentialsHandler := connect.NewUnaryHandlerSimple(
@@ -439,31 +306,6 @@ func NewAccountServiceHandler(svc AccountServiceHandler, opts ...connect.Handler
 		AccountServiceRemoveCredentialProcedure,
 		svc.RemoveCredential,
 		connect.WithSchema(accountServiceMethods.ByName("RemoveCredential")),
-		connect.WithHandlerOptions(opts...),
-	)
-	accountServiceRemoveIdentityHandler := connect.NewUnaryHandlerSimple(
-		AccountServiceRemoveIdentityProcedure,
-		svc.RemoveIdentity,
-		connect.WithSchema(accountServiceMethods.ByName("RemoveIdentity")),
-		connect.WithHandlerOptions(opts...),
-	)
-	accountServiceListBackupCodesHandler := connect.NewUnaryHandlerSimple(
-		AccountServiceListBackupCodesProcedure,
-		svc.ListBackupCodes,
-		connect.WithSchema(accountServiceMethods.ByName("ListBackupCodes")),
-		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-		connect.WithHandlerOptions(opts...),
-	)
-	accountServiceRotateBackupCodesHandler := connect.NewUnaryHandlerSimple(
-		AccountServiceRotateBackupCodesProcedure,
-		svc.RotateBackupCodes,
-		connect.WithSchema(accountServiceMethods.ByName("RotateBackupCodes")),
-		connect.WithHandlerOptions(opts...),
-	)
-	accountServiceRemoveBackupCodesHandler := connect.NewUnaryHandlerSimple(
-		AccountServiceRemoveBackupCodesProcedure,
-		svc.RemoveBackupCodes,
-		connect.WithSchema(accountServiceMethods.ByName("RemoveBackupCodes")),
 		connect.WithHandlerOptions(opts...),
 	)
 	accountServiceListAccountSessionsHandler := connect.NewUnaryHandlerSimple(
@@ -491,26 +333,14 @@ func NewAccountServiceHandler(svc AccountServiceHandler, opts ...connect.Handler
 			accountServiceGetAccountHandler.ServeHTTP(w, r)
 		case AccountServiceUpdateAccountProcedure:
 			accountServiceUpdateAccountHandler.ServeHTTP(w, r)
-		case AccountServiceChangePasswordProcedure:
-			accountServiceChangePasswordHandler.ServeHTTP(w, r)
 		case AccountServiceRequestEmailChangeProcedure:
 			accountServiceRequestEmailChangeHandler.ServeHTTP(w, r)
-		case AccountServiceRemovePasswordProcedure:
-			accountServiceRemovePasswordHandler.ServeHTTP(w, r)
 		case AccountServiceListCredentialsProcedure:
 			accountServiceListCredentialsHandler.ServeHTTP(w, r)
 		case AccountServiceRenameCredentialProcedure:
 			accountServiceRenameCredentialHandler.ServeHTTP(w, r)
 		case AccountServiceRemoveCredentialProcedure:
 			accountServiceRemoveCredentialHandler.ServeHTTP(w, r)
-		case AccountServiceRemoveIdentityProcedure:
-			accountServiceRemoveIdentityHandler.ServeHTTP(w, r)
-		case AccountServiceListBackupCodesProcedure:
-			accountServiceListBackupCodesHandler.ServeHTTP(w, r)
-		case AccountServiceRotateBackupCodesProcedure:
-			accountServiceRotateBackupCodesHandler.ServeHTTP(w, r)
-		case AccountServiceRemoveBackupCodesProcedure:
-			accountServiceRemoveBackupCodesHandler.ServeHTTP(w, r)
 		case AccountServiceListAccountSessionsProcedure:
 			accountServiceListAccountSessionsHandler.ServeHTTP(w, r)
 		case AccountServiceRemoveSessionProcedure:
@@ -534,16 +364,8 @@ func (UnimplementedAccountServiceHandler) UpdateAccount(context.Context, *v1.Upd
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.UpdateAccount is not implemented"))
 }
 
-func (UnimplementedAccountServiceHandler) ChangePassword(context.Context, *v1.ChangePasswordRequest) (*v1.ChangePasswordResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.ChangePassword is not implemented"))
-}
-
 func (UnimplementedAccountServiceHandler) RequestEmailChange(context.Context, *v1.RequestEmailChangeRequest) (*v1.RequestEmailChangeResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.RequestEmailChange is not implemented"))
-}
-
-func (UnimplementedAccountServiceHandler) RemovePassword(context.Context, *v1.RemovePasswordRequest) (*v1.RemovePasswordResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.RemovePassword is not implemented"))
 }
 
 func (UnimplementedAccountServiceHandler) ListCredentials(context.Context, *v1.ListCredentialsRequest) (*v1.ListCredentialsResponse, error) {
@@ -556,22 +378,6 @@ func (UnimplementedAccountServiceHandler) RenameCredential(context.Context, *v1.
 
 func (UnimplementedAccountServiceHandler) RemoveCredential(context.Context, *v1.RemoveCredentialRequest) (*v1.RemoveCredentialResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.RemoveCredential is not implemented"))
-}
-
-func (UnimplementedAccountServiceHandler) RemoveIdentity(context.Context, *v1.RemoveIdentityRequest) (*v1.RemoveIdentityResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.RemoveIdentity is not implemented"))
-}
-
-func (UnimplementedAccountServiceHandler) ListBackupCodes(context.Context, *v1.ListBackupCodesRequest) (*v1.ListBackupCodesResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.ListBackupCodes is not implemented"))
-}
-
-func (UnimplementedAccountServiceHandler) RotateBackupCodes(context.Context, *v1.RotateBackupCodesRequest) (*v1.RotateBackupCodesResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.RotateBackupCodes is not implemented"))
-}
-
-func (UnimplementedAccountServiceHandler) RemoveBackupCodes(context.Context, *v1.RemoveBackupCodesRequest) (*v1.RemoveBackupCodesResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.AccountService.RemoveBackupCodes is not implemented"))
 }
 
 func (UnimplementedAccountServiceHandler) ListAccountSessions(context.Context, *v1.ListAccountSessionsRequest) (*v1.ListAccountSessionsResponse, error) {
