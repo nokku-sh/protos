@@ -6,21 +6,24 @@ import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
-service PrincipalService {
-  rpc ListPrincipals(ListPrincipalsRequest) returns (ListPrincipalsResponse) {
+// A target account is a local account on a target, like root or deploy. A
+// grant lets a subject log in as it. The certificate principal a login
+// carries is built from the subject, the target and the account.
+service TargetAccountService {
+  rpc ListTargetAccounts(ListTargetAccountsRequest) returns (ListTargetAccountsResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
-  rpc AddPrincipal(AddPrincipalRequest) returns (AddPrincipalResponse) {
+  rpc AddTargetAccount(AddTargetAccountRequest) returns (AddTargetAccountResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  rpc RemovePrincipal(RemovePrincipalRequest) returns (RemovePrincipalResponse) {
+  rpc RemoveTargetAccount(RemoveTargetAccountRequest) returns (RemoveTargetAccountResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  rpc AddSubjectsToPrincipal(AddSubjectsToPrincipalRequest) returns (AddSubjectsToPrincipalResponse) {
+  rpc AddSubjects(AddSubjectsRequest) returns (AddSubjectsResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  rpc RemoveSubjectsFromPrincipal(RemoveSubjectsFromPrincipalRequest) returns (RemoveSubjectsFromPrincipalResponse) {
+  rpc RemoveSubjects(RemoveSubjectsRequest) returns (RemoveSubjectsResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
   rpc RevokeAllAccess(RevokeAllAccessRequest) returns (RevokeAllAccessResponse) {
@@ -28,7 +31,7 @@ service PrincipalService {
   }
 }
 
-// SubjectKind is who a grant is for. A Principal is the local account.
+// SubjectKind is who a grant is for.
 enum SubjectKind {
   SUBJECT_KIND_UNSPECIFIED = 0;
   SUBJECT_KIND_USER = 1;
@@ -36,7 +39,7 @@ enum SubjectKind {
   SUBJECT_KIND_SERVICE_ACCOUNT = 3;
 }
 
-message Principal {
+message TargetAccount {
   string id = 1;
   string target_id = 2;
   string username = 3;
@@ -46,7 +49,7 @@ message Principal {
   google.protobuf.Timestamp created_at = 7;
 }
 
-message ListPrincipalsRequest {
+message ListTargetAccountsRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
   int32 limit = 2 [(buf.validate.field).int32 = {
     gte: 1
@@ -55,12 +58,12 @@ message ListPrincipalsRequest {
   int32 offset = 3 [(buf.validate.field).int32.gte = 0];
   string query = 4;
 }
-message ListPrincipalsResponse {
-  repeated Principal principals = 1;
+message ListTargetAccountsResponse {
+  repeated TargetAccount accounts = 1;
   int32 total = 2;
 }
 
-message AddSubjectsToPrincipalRequest {
+message AddSubjectsRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   repeated string subject_ids = 2 [(buf.validate.field).repeated = {
     min_items: 1
@@ -74,9 +77,9 @@ message AddSubjectsToPrincipalRequest {
     not_in: [0]
   }];
 }
-message AddSubjectsToPrincipalResponse {}
+message AddSubjectsResponse {}
 
-message RemoveSubjectsFromPrincipalRequest {
+message RemoveSubjectsRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   repeated string subject_ids = 2 [(buf.validate.field).repeated = {
     min_items: 1
@@ -90,7 +93,7 @@ message RemoveSubjectsFromPrincipalRequest {
     not_in: [0]
   }];
 }
-message RemoveSubjectsFromPrincipalResponse {}
+message RemoveSubjectsResponse {}
 
 message RevokeAllAccessRequest {
   string subject_id = 1 [(buf.validate.field).string.uuid = true];
@@ -101,7 +104,7 @@ message RevokeAllAccessRequest {
 }
 message RevokeAllAccessResponse {}
 
-message AddPrincipalRequest {
+message AddTargetAccountRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
   string username = 2 [(buf.validate.field).string = {
     min_len: 1
@@ -109,11 +112,11 @@ message AddPrincipalRequest {
     pattern: "^[A-Za-z_][A-Za-z0-9._-]*\\$?$"
   }];
 }
-message AddPrincipalResponse {
-  Principal principal = 1;
+message AddTargetAccountResponse {
+  TargetAccount account = 1;
 }
 
-message RemovePrincipalRequest {
+message RemoveTargetAccountRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
 }
-message RemovePrincipalResponse {}
+message RemoveTargetAccountResponse {}

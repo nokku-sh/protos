@@ -8,8 +8,8 @@ import "nokku/v1/access.proto";
 import "nokku/v1/account.proto";
 import "nokku/v1/certificates.proto";
 import "nokku/v1/daemon.proto";
-import "nokku/v1/principal.proto";
 import "nokku/v1/service_account.proto";
+import "nokku/v1/target_account.proto";
 
 service TargetService {
   rpc GetTarget(GetTargetRequest) returns (GetTargetResponse) {
@@ -29,7 +29,7 @@ service TargetService {
   rpc DeleteTarget(DeleteTargetRequest) returns (DeleteTargetResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  // A member may only ask for itself. Viewers ask for anyone and also get the principals.
+  // A member may only ask for itself. Viewers ask for anyone and also get the accounts.
   rpc GetSubjectAccess(GetSubjectAccessRequest) returns (GetSubjectAccessResponse) {
     option (access) = {role: WORKSPACE_ROLE_MEMBER};
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -67,7 +67,7 @@ message GetTargetPrincipalsRequest {
 }
 
 message GetTargetPrincipalsResponse {
-  repeated PrincipalUsers principals = 1;
+  repeated AccountPrincipals principals = 1;
 }
 
 message SyncTargetUsersRequest {
@@ -99,7 +99,7 @@ message Target {
   repeated string tags = 7;
   repeated string endpoints = 8;
   repeated string usernames = 9;
-  repeated Principal principals = 10;
+  repeated TargetAccount accounts = 10;
   map<string, string> metadata = 11;
   google.protobuf.Timestamp created_at = 12;
   google.protobuf.Timestamp updated_at = 13;
@@ -159,7 +159,7 @@ message ListTargetsRequest {
   string query = 3;
   string daemon_id = 4;
   string ca_id = 5;
-  repeated string principals = 6;
+  repeated string accounts = 6;
   repeated string tags = 7;
 }
 message ListTargetsResponse {
@@ -190,7 +190,7 @@ message GetMyAccessResponse {
 message GetTargetFiltersRequest {}
 message GetTargetFiltersResponse {
   repeated string tags = 1;
-  repeated string principals = 2;
+  repeated string accounts = 2;
 }
 
 // AccessGraphFilter narrows the graph to the grants that match every set

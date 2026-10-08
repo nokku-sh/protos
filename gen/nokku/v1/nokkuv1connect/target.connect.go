@@ -77,7 +77,7 @@ type TargetServiceClient interface {
 	CreateTarget(context.Context, *v1.CreateTargetRequest) (*v1.CreateTargetResponse, error)
 	UpdateTarget(context.Context, *v1.UpdateTargetRequest) (*v1.UpdateTargetResponse, error)
 	DeleteTarget(context.Context, *v1.DeleteTargetRequest) (*v1.DeleteTargetResponse, error)
-	// A member may only ask for itself. Viewers ask for anyone and also get the principals.
+	// A member may only ask for itself. Viewers ask for anyone and also get the accounts.
 	GetSubjectAccess(context.Context, *v1.GetSubjectAccessRequest) (*v1.GetSubjectAccessResponse, error)
 	GetMyAccess(context.Context, *v1.GetMyAccessRequest) (*v1.GetMyAccessResponse, error)
 	GetTargetFilters(context.Context, *v1.GetTargetFiltersRequest) (*v1.GetTargetFiltersResponse, error)
@@ -315,7 +315,7 @@ type TargetServiceHandler interface {
 	CreateTarget(context.Context, *v1.CreateTargetRequest) (*v1.CreateTargetResponse, error)
 	UpdateTarget(context.Context, *v1.UpdateTargetRequest) (*v1.UpdateTargetResponse, error)
 	DeleteTarget(context.Context, *v1.DeleteTargetRequest) (*v1.DeleteTargetResponse, error)
-	// A member may only ask for itself. Viewers ask for anyone and also get the principals.
+	// A member may only ask for itself. Viewers ask for anyone and also get the accounts.
 	GetSubjectAccess(context.Context, *v1.GetSubjectAccessRequest) (*v1.GetSubjectAccessResponse, error)
 	GetMyAccess(context.Context, *v1.GetMyAccessRequest) (*v1.GetMyAccessResponse, error)
 	GetTargetFilters(context.Context, *v1.GetTargetFiltersRequest) (*v1.GetTargetFiltersResponse, error)

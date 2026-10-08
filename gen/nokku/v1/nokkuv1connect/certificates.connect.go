@@ -54,18 +54,15 @@ const (
 	// CertificateServiceSignSSHCertificateProcedure is the fully-qualified name of the
 	// CertificateService's SignSSHCertificate RPC.
 	CertificateServiceSignSSHCertificateProcedure = "/nokku.v1.CertificateService/SignSSHCertificate"
-	// CertificateServiceSignX509CertificateProcedure is the fully-qualified name of the
-	// CertificateService's SignX509Certificate RPC.
-	CertificateServiceSignX509CertificateProcedure = "/nokku.v1.CertificateService/SignX509Certificate"
 )
 
 // CertificateServiceClient is a client for the nokku.v1.CertificateService service.
 type CertificateServiceClient interface {
-	// Members read CAs because nk trusts the workspace's X.509 CAs.
+	// Members read CAs because nk needs the CA of a server it has not synced yet.
 	GetCertificateAuthority(context.Context, *v1.GetCertificateAuthorityRequest) (*v1.GetCertificateAuthorityResponse, error)
 	CreateCertificateAuthority(context.Context, *v1.CreateCertificateAuthorityRequest) (*v1.CreateCertificateAuthorityResponse, error)
 	UpdateCertificateAuthority(context.Context, *v1.UpdateCertificateAuthorityRequest) (*v1.UpdateCertificateAuthorityResponse, error)
-	// Members read CAs because nk trusts the workspace's X.509 CAs.
+	// Members read CAs because nk needs the CA of a server it has not synced yet.
 	ListCertificateAuthorities(context.Context, *v1.ListCertificateAuthoritiesRequest) (*v1.ListCertificateAuthoritiesResponse, error)
 	DeleteCertificateAuthority(context.Context, *v1.DeleteCertificateAuthorityRequest) (*v1.DeleteCertificateAuthorityResponse, error)
 	RolloverCertificateAuthority(context.Context, *v1.RolloverCertificateAuthorityRequest) (*v1.RolloverCertificateAuthorityResponse, error)
@@ -74,8 +71,6 @@ type CertificateServiceClient interface {
 	// else and a revoked grant ends with it. Daemons get host certificates from
 	// DaemonControlService.
 	SignSSHCertificate(context.Context, *v1.SignSSHCertificateRequest) (*v1.SignSSHCertificateResponse, error)
-	// Subject and SANs come from the CSR untouched, so signing equals holding the CA.
-	SignX509Certificate(context.Context, *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error)
 }
 
 // NewCertificateServiceClient constructs a client for the nokku.v1.CertificateService service. By
@@ -133,12 +128,6 @@ func NewCertificateServiceClient(httpClient connect.HTTPClient, baseURL string, 
 			connect.WithSchema(certificateServiceMethods.ByName("SignSSHCertificate")),
 			connect.WithClientOptions(opts...),
 		),
-		signX509Certificate: connect.NewClient[v1.SignX509CertificateRequest, v1.SignX509CertificateResponse](
-			httpClient,
-			baseURL+CertificateServiceSignX509CertificateProcedure,
-			connect.WithSchema(certificateServiceMethods.ByName("SignX509Certificate")),
-			connect.WithClientOptions(opts...),
-		),
 	}
 }
 
@@ -151,7 +140,6 @@ type certificateServiceClient struct {
 	deleteCertificateAuthority   *connect.Client[v1.DeleteCertificateAuthorityRequest, v1.DeleteCertificateAuthorityResponse]
 	rolloverCertificateAuthority *connect.Client[v1.RolloverCertificateAuthorityRequest, v1.RolloverCertificateAuthorityResponse]
 	signSSHCertificate           *connect.Client[v1.SignSSHCertificateRequest, v1.SignSSHCertificateResponse]
-	signX509Certificate          *connect.Client[v1.SignX509CertificateRequest, v1.SignX509CertificateResponse]
 }
 
 // GetCertificateAuthority calls nokku.v1.CertificateService.GetCertificateAuthority.
@@ -217,22 +205,13 @@ func (c *certificateServiceClient) SignSSHCertificate(ctx context.Context, req *
 	return nil, err
 }
 
-// SignX509Certificate calls nokku.v1.CertificateService.SignX509Certificate.
-func (c *certificateServiceClient) SignX509Certificate(ctx context.Context, req *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error) {
-	response, err := c.signX509Certificate.CallUnary(ctx, connect.NewRequest(req))
-	if response != nil {
-		return response.Msg, err
-	}
-	return nil, err
-}
-
 // CertificateServiceHandler is an implementation of the nokku.v1.CertificateService service.
 type CertificateServiceHandler interface {
-	// Members read CAs because nk trusts the workspace's X.509 CAs.
+	// Members read CAs because nk needs the CA of a server it has not synced yet.
 	GetCertificateAuthority(context.Context, *v1.GetCertificateAuthorityRequest) (*v1.GetCertificateAuthorityResponse, error)
 	CreateCertificateAuthority(context.Context, *v1.CreateCertificateAuthorityRequest) (*v1.CreateCertificateAuthorityResponse, error)
 	UpdateCertificateAuthority(context.Context, *v1.UpdateCertificateAuthorityRequest) (*v1.UpdateCertificateAuthorityResponse, error)
-	// Members read CAs because nk trusts the workspace's X.509 CAs.
+	// Members read CAs because nk needs the CA of a server it has not synced yet.
 	ListCertificateAuthorities(context.Context, *v1.ListCertificateAuthoritiesRequest) (*v1.ListCertificateAuthoritiesResponse, error)
 	DeleteCertificateAuthority(context.Context, *v1.DeleteCertificateAuthorityRequest) (*v1.DeleteCertificateAuthorityResponse, error)
 	RolloverCertificateAuthority(context.Context, *v1.RolloverCertificateAuthorityRequest) (*v1.RolloverCertificateAuthorityResponse, error)
@@ -241,8 +220,6 @@ type CertificateServiceHandler interface {
 	// else and a revoked grant ends with it. Daemons get host certificates from
 	// DaemonControlService.
 	SignSSHCertificate(context.Context, *v1.SignSSHCertificateRequest) (*v1.SignSSHCertificateResponse, error)
-	// Subject and SANs come from the CSR untouched, so signing equals holding the CA.
-	SignX509Certificate(context.Context, *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error)
 }
 
 // NewCertificateServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -296,12 +273,6 @@ func NewCertificateServiceHandler(svc CertificateServiceHandler, opts ...connect
 		connect.WithSchema(certificateServiceMethods.ByName("SignSSHCertificate")),
 		connect.WithHandlerOptions(opts...),
 	)
-	certificateServiceSignX509CertificateHandler := connect.NewUnaryHandlerSimple(
-		CertificateServiceSignX509CertificateProcedure,
-		svc.SignX509Certificate,
-		connect.WithSchema(certificateServiceMethods.ByName("SignX509Certificate")),
-		connect.WithHandlerOptions(opts...),
-	)
 	return "/nokku.v1.CertificateService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case CertificateServiceGetCertificateAuthorityProcedure:
@@ -318,8 +289,6 @@ func NewCertificateServiceHandler(svc CertificateServiceHandler, opts ...connect
 			certificateServiceRolloverCertificateAuthorityHandler.ServeHTTP(w, r)
 		case CertificateServiceSignSSHCertificateProcedure:
 			certificateServiceSignSSHCertificateHandler.ServeHTTP(w, r)
-		case CertificateServiceSignX509CertificateProcedure:
-			certificateServiceSignX509CertificateHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -355,8 +324,4 @@ func (UnimplementedCertificateServiceHandler) RolloverCertificateAuthority(conte
 
 func (UnimplementedCertificateServiceHandler) SignSSHCertificate(context.Context, *v1.SignSSHCertificateRequest) (*v1.SignSSHCertificateResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.CertificateService.SignSSHCertificate is not implemented"))
-}
-
-func (UnimplementedCertificateServiceHandler) SignX509Certificate(context.Context, *v1.SignX509CertificateRequest) (*v1.SignX509CertificateResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.CertificateService.SignX509Certificate is not implemented"))
 }

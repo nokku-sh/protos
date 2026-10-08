@@ -1054,7 +1054,7 @@ func (x *EnrollDaemonResponse) GetAccessToken() string {
 // Who may log in as one Linux account. A host lets a certificate in when it
 // carries one of these principals, compared as whole strings. Each one names
 // a subject, this server and this account.
-type PrincipalUsers struct {
+type AccountPrincipals struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Username       *string                `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
 	CertPrincipals []string               `protobuf:"bytes,2,rep,name=cert_principals,json=certPrincipals" json:"cert_principals,omitempty"`
@@ -1062,20 +1062,20 @@ type PrincipalUsers struct {
 	sizeCache      protoimpl.SizeCache
 }
 
-func (x *PrincipalUsers) Reset() {
-	*x = PrincipalUsers{}
+func (x *AccountPrincipals) Reset() {
+	*x = AccountPrincipals{}
 	mi := &file_nokku_v1_daemon_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PrincipalUsers) String() string {
+func (x *AccountPrincipals) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PrincipalUsers) ProtoMessage() {}
+func (*AccountPrincipals) ProtoMessage() {}
 
-func (x *PrincipalUsers) ProtoReflect() protoreflect.Message {
+func (x *AccountPrincipals) ProtoReflect() protoreflect.Message {
 	mi := &file_nokku_v1_daemon_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1087,19 +1087,19 @@ func (x *PrincipalUsers) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PrincipalUsers.ProtoReflect.Descriptor instead.
-func (*PrincipalUsers) Descriptor() ([]byte, []int) {
+// Deprecated: Use AccountPrincipals.ProtoReflect.Descriptor instead.
+func (*AccountPrincipals) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_daemon_proto_rawDescGZIP(), []int{18}
 }
 
-func (x *PrincipalUsers) GetUsername() string {
+func (x *AccountPrincipals) GetUsername() string {
 	if x != nil && x.Username != nil {
 		return *x.Username
 	}
 	return ""
 }
 
-func (x *PrincipalUsers) GetCertPrincipals() []string {
+func (x *AccountPrincipals) GetCertPrincipals() []string {
 	if x != nil {
 		return x.CertPrincipals
 	}
@@ -1173,7 +1173,7 @@ type SyncDaemonResponse struct {
 	state        protoimpl.MessageState `protogen:"open.v1"`
 	Status       *DaemonStatus          `protobuf:"varint,1,opt,name=status,enum=nokku.v1.DaemonStatus" json:"status,omitempty"`
 	Config       *DaemonConfig          `protobuf:"bytes,2,opt,name=config" json:"config,omitempty"`
-	Principals   []*PrincipalUsers      `protobuf:"bytes,3,rep,name=principals" json:"principals,omitempty"`
+	Principals   []*AccountPrincipals   `protobuf:"bytes,3,rep,name=principals" json:"principals,omitempty"`
 	StateVersion *int64                 `protobuf:"varint,4,opt,name=state_version,json=stateVersion" json:"state_version,omitempty"`
 	CaPublicKey  *string                `protobuf:"bytes,5,opt,name=ca_public_key,json=caPublicKey" json:"ca_public_key,omitempty"`
 	// Keys the daemon trusts next to ca_public_key, each until its deadline.
@@ -1226,7 +1226,7 @@ func (x *SyncDaemonResponse) GetConfig() *DaemonConfig {
 	return nil
 }
 
-func (x *SyncDaemonResponse) GetPrincipals() []*PrincipalUsers {
+func (x *SyncDaemonResponse) GetPrincipals() []*AccountPrincipals {
 	if x != nil {
 		return x.Principals
 	}
@@ -2446,8 +2446,8 @@ const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"\ttarget_id\x18\x02 \x01(\tR\btargetId\x12.\n" +
 	"\x06status\x18\x03 \x01(\x0e2\x16.nokku.v1.DaemonStatusR\x06status\x12.\n" +
 	"\x06config\x18\x04 \x01(\v2\x16.nokku.v1.DaemonConfigR\x06config\x12!\n" +
-	"\faccess_token\x18\x05 \x01(\tR\vaccessToken\"U\n" +
-	"\x0ePrincipalUsers\x12\x1a\n" +
+	"\faccess_token\x18\x05 \x01(\tR\vaccessToken\"X\n" +
+	"\x11AccountPrincipals\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12'\n" +
 	"\x0fcert_principals\x18\x02 \x03(\tR\x0ecertPrincipals\"\x87\x02\n" +
 	"\x11SyncDaemonRequest\x12&\n" +
@@ -2458,12 +2458,12 @@ const file_nokku_v1_daemon_proto_rawDesc = "" +
 	"\bmetadata\x18\x03 \x03(\v2).nokku.v1.SyncDaemonRequest.MetadataEntryB\x15\xbaH\x12\x9a\x01\x0f\x10\x10\"\x04r\x02\x18@*\x05r\x03\x18\x80\x02R\bmetadata\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xb7\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xba\x02\n" +
 	"\x12SyncDaemonResponse\x12.\n" +
 	"\x06status\x18\x01 \x01(\x0e2\x16.nokku.v1.DaemonStatusR\x06status\x12.\n" +
-	"\x06config\x18\x02 \x01(\v2\x16.nokku.v1.DaemonConfigR\x06config\x128\n" +
+	"\x06config\x18\x02 \x01(\v2\x16.nokku.v1.DaemonConfigR\x06config\x12;\n" +
 	"\n" +
-	"principals\x18\x03 \x03(\v2\x18.nokku.v1.PrincipalUsersR\n" +
+	"principals\x18\x03 \x03(\v2\x1b.nokku.v1.AccountPrincipalsR\n" +
 	"principals\x12#\n" +
 	"\rstate_version\x18\x04 \x01(\x03R\fstateVersion\x12\"\n" +
 	"\rca_public_key\x18\x05 \x01(\tR\vcaPublicKey\x12>\n" +
@@ -2587,7 +2587,7 @@ var file_nokku_v1_daemon_proto_goTypes = []any{
 	(*CloseSessionResponse)(nil),        // 16: nokku.v1.CloseSessionResponse
 	(*EnrollDaemonRequest)(nil),         // 17: nokku.v1.EnrollDaemonRequest
 	(*EnrollDaemonResponse)(nil),        // 18: nokku.v1.EnrollDaemonResponse
-	(*PrincipalUsers)(nil),              // 19: nokku.v1.PrincipalUsers
+	(*AccountPrincipals)(nil),           // 19: nokku.v1.AccountPrincipals
 	(*SyncDaemonRequest)(nil),           // 20: nokku.v1.SyncDaemonRequest
 	(*SyncDaemonResponse)(nil),          // 21: nokku.v1.SyncDaemonResponse
 	(*RetiredCAKey)(nil),                // 22: nokku.v1.RetiredCAKey
@@ -2635,7 +2635,7 @@ var file_nokku_v1_daemon_proto_depIdxs = []int32{
 	43, // 15: nokku.v1.SyncDaemonRequest.metadata:type_name -> nokku.v1.SyncDaemonRequest.MetadataEntry
 	0,  // 16: nokku.v1.SyncDaemonResponse.status:type_name -> nokku.v1.DaemonStatus
 	2,  // 17: nokku.v1.SyncDaemonResponse.config:type_name -> nokku.v1.DaemonConfig
-	19, // 18: nokku.v1.SyncDaemonResponse.principals:type_name -> nokku.v1.PrincipalUsers
+	19, // 18: nokku.v1.SyncDaemonResponse.principals:type_name -> nokku.v1.AccountPrincipals
 	22, // 19: nokku.v1.SyncDaemonResponse.retired_ca_keys:type_name -> nokku.v1.RetiredCAKey
 	44, // 20: nokku.v1.RetiredCAKey.trusted_until:type_name -> google.protobuf.Timestamp
 	29, // 21: nokku.v1.ConnectRequest.heartbeat:type_name -> nokku.v1.Heartbeat

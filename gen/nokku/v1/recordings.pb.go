@@ -34,7 +34,11 @@ type Recording struct {
 	StartedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=started_at,json=startedAt" json:"started_at,omitempty"`
 	EndedAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=ended_at,json=endedAt" json:"ended_at,omitempty"`
 	// The daemon's name when the session ran.
-	DaemonName    *string `protobuf:"bytes,8,opt,name=daemon_name,json=daemonName" json:"daemon_name,omitempty"`
+	DaemonName *string `protobuf:"bytes,8,opt,name=daemon_name,json=daemonName" json:"daemon_name,omitempty"`
+	// Who was logged in: the subject of the certificate principal the host
+	// matched. Empty for a recording from a daemon that did not say.
+	SubjectId     *string `protobuf:"bytes,9,opt,name=subject_id,json=subjectId" json:"subject_id,omitempty"`
+	Principal     *string `protobuf:"bytes,10,opt,name=principal" json:"principal,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -121,6 +125,20 @@ func (x *Recording) GetEndedAt() *timestamppb.Timestamp {
 func (x *Recording) GetDaemonName() string {
 	if x != nil && x.DaemonName != nil {
 		return *x.DaemonName
+	}
+	return ""
+}
+
+func (x *Recording) GetSubjectId() string {
+	if x != nil && x.SubjectId != nil {
+		return *x.SubjectId
+	}
+	return ""
+}
+
+func (x *Recording) GetPrincipal() string {
+	if x != nil && x.Principal != nil {
+		return *x.Principal
 	}
 	return ""
 }
@@ -229,7 +247,10 @@ type RecordingMeta struct {
 	Username    *string                `protobuf:"bytes,2,opt,name=username" json:"username,omitempty"`
 	// When the session began, for a recording that is uploaded after it. Unset
 	// or in the future means now.
-	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=started_at,json=startedAt" json:"started_at,omitempty"`
+	StartedAt *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=started_at,json=startedAt" json:"started_at,omitempty"`
+	// The certificate principal the host matched at login, as the backend built
+	// it. Empty from a daemon that predates the field.
+	Principal     *string `protobuf:"bytes,4,opt,name=principal" json:"principal,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -283,6 +304,13 @@ func (x *RecordingMeta) GetStartedAt() *timestamppb.Timestamp {
 		return x.StartedAt
 	}
 	return nil
+}
+
+func (x *RecordingMeta) GetPrincipal() string {
+	if x != nil && x.Principal != nil {
+		return *x.Principal
+	}
+	return ""
 }
 
 type RecordingFinal struct {
@@ -379,6 +407,7 @@ type ListRecordingsRequest struct {
 	Limit         *int32                 `protobuf:"varint,2,opt,name=limit" json:"limit,omitempty"`
 	Offset        *int32                 `protobuf:"varint,3,opt,name=offset" json:"offset,omitempty"`
 	Username      *string                `protobuf:"bytes,4,opt,name=username" json:"username,omitempty"`
+	SubjectId     *string                `protobuf:"bytes,5,opt,name=subject_id,json=subjectId" json:"subject_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -437,6 +466,13 @@ func (x *ListRecordingsRequest) GetOffset() int32 {
 func (x *ListRecordingsRequest) GetUsername() string {
 	if x != nil && x.Username != nil {
 		return *x.Username
+	}
+	return ""
+}
+
+func (x *ListRecordingsRequest) GetSubjectId() string {
+	if x != nil && x.SubjectId != nil {
+		return *x.SubjectId
 	}
 	return ""
 }
@@ -711,7 +747,7 @@ var File_nokku_v1_recordings_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"\n" +
-	"\x19nokku/v1/recordings.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xa2\x02\n" +
+	"\x19nokku/v1/recordings.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xdf\x02\n" +
 	"\tRecording\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
 	"\tdaemon_id\x18\x02 \x01(\tR\bdaemonId\x12\x1a\n" +
@@ -723,27 +759,34 @@ const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"started_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x125\n" +
 	"\bended_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\aendedAt\x12\x1f\n" +
 	"\vdaemon_name\x18\b \x01(\tR\n" +
-	"daemonName\"\x98\x01\n" +
+	"daemonName\x12\x1d\n" +
+	"\n" +
+	"subject_id\x18\t \x01(\tR\tsubjectId\x12\x1c\n" +
+	"\tprincipal\x18\n" +
+	" \x01(\tR\tprincipal\"\x98\x01\n" +
 	"\x16UploadRecordingRequest\x12-\n" +
 	"\x04meta\x18\x01 \x01(\v2\x17.nokku.v1.RecordingMetaH\x00R\x04meta\x12\x16\n" +
 	"\x05chunk\x18\x02 \x01(\fH\x00R\x05chunk\x120\n" +
 	"\x05final\x18\x03 \x01(\v2\x18.nokku.v1.RecordingFinalH\x00R\x05finalB\x05\n" +
-	"\x03msg\"\x9c\x01\n" +
+	"\x03msg\"\xc4\x01\n" +
 	"\rRecordingMeta\x12+\n" +
 	"\frecording_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vrecordingId\x12#\n" +
 	"\busername\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x18 R\busername\x129\n" +
 	"\n" +
-	"started_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\"\x10\n" +
+	"started_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x12&\n" +
+	"\tprincipal\x18\x04 \x01(\tB\b\xbaH\x05r\x03\x18\xa0\x01R\tprincipal\"\x10\n" +
 	"\x0eRecordingFinal\"[\n" +
 	"\x17UploadRecordingResponse\x12!\n" +
 	"\frecording_id\x18\x01 \x01(\tR\vrecordingId\x12\x1d\n" +
 	"\n" +
-	"size_bytes\x18\x02 \x01(\x03R\tsizeBytes\"\x9c\x01\n" +
+	"size_bytes\x18\x02 \x01(\x03R\tsizeBytes\"\xc5\x01\n" +
 	"\x15ListRecordingsRequest\x12%\n" +
 	"\tdaemon_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\bdaemonId\x12\x1f\n" +
 	"\x05limit\x18\x02 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
 	"\x06offset\x18\x03 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x1a\n" +
-	"\busername\x18\x04 \x01(\tR\busername\"\x84\x01\n" +
+	"\busername\x18\x04 \x01(\tR\busername\x12'\n" +
+	"\n" +
+	"subject_id\x18\x05 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\tsubjectId\"\x84\x01\n" +
 	"\x16ListRecordingsResponse\x123\n" +
 	"\n" +
 	"recordings\x18\x01 \x03(\v2\x13.nokku.v1.RecordingR\n" +

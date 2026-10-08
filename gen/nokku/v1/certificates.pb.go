@@ -76,117 +76,13 @@ func (CertificateKeyType) EnumDescriptor() ([]byte, []int) {
 	return file_nokku_v1_certificates_proto_rawDescGZIP(), []int{0}
 }
 
-type AuthorityType int32
-
-const (
-	AuthorityType_AUTHORITY_TYPE_UNSPECIFIED AuthorityType = 0
-	AuthorityType_AUTHORITY_TYPE_SSH         AuthorityType = 1
-	AuthorityType_AUTHORITY_TYPE_X509        AuthorityType = 2
-)
-
-// Enum value maps for AuthorityType.
-var (
-	AuthorityType_name = map[int32]string{
-		0: "AUTHORITY_TYPE_UNSPECIFIED",
-		1: "AUTHORITY_TYPE_SSH",
-		2: "AUTHORITY_TYPE_X509",
-	}
-	AuthorityType_value = map[string]int32{
-		"AUTHORITY_TYPE_UNSPECIFIED": 0,
-		"AUTHORITY_TYPE_SSH":         1,
-		"AUTHORITY_TYPE_X509":        2,
-	}
-)
-
-func (x AuthorityType) Enum() *AuthorityType {
-	p := new(AuthorityType)
-	*p = x
-	return p
-}
-
-func (x AuthorityType) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (AuthorityType) Descriptor() protoreflect.EnumDescriptor {
-	return file_nokku_v1_certificates_proto_enumTypes[1].Descriptor()
-}
-
-func (AuthorityType) Type() protoreflect.EnumType {
-	return &file_nokku_v1_certificates_proto_enumTypes[1]
-}
-
-func (x AuthorityType) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use AuthorityType.Descriptor instead.
-func (AuthorityType) EnumDescriptor() ([]byte, []int) {
-	return file_nokku_v1_certificates_proto_rawDescGZIP(), []int{1}
-}
-
-type SignX509CertificateRequest_X509Usage int32
-
-const (
-	SignX509CertificateRequest_X509_USAGE_UNSPECIFIED       SignX509CertificateRequest_X509Usage = 0
-	SignX509CertificateRequest_X509_USAGE_CLIENT_AUTH       SignX509CertificateRequest_X509Usage = 1
-	SignX509CertificateRequest_X509_USAGE_SERVER_AUTH       SignX509CertificateRequest_X509Usage = 2
-	SignX509CertificateRequest_X509_USAGE_CLIENT_AND_SERVER SignX509CertificateRequest_X509Usage = 3
-)
-
-// Enum value maps for SignX509CertificateRequest_X509Usage.
-var (
-	SignX509CertificateRequest_X509Usage_name = map[int32]string{
-		0: "X509_USAGE_UNSPECIFIED",
-		1: "X509_USAGE_CLIENT_AUTH",
-		2: "X509_USAGE_SERVER_AUTH",
-		3: "X509_USAGE_CLIENT_AND_SERVER",
-	}
-	SignX509CertificateRequest_X509Usage_value = map[string]int32{
-		"X509_USAGE_UNSPECIFIED":       0,
-		"X509_USAGE_CLIENT_AUTH":       1,
-		"X509_USAGE_SERVER_AUTH":       2,
-		"X509_USAGE_CLIENT_AND_SERVER": 3,
-	}
-)
-
-func (x SignX509CertificateRequest_X509Usage) Enum() *SignX509CertificateRequest_X509Usage {
-	p := new(SignX509CertificateRequest_X509Usage)
-	*p = x
-	return p
-}
-
-func (x SignX509CertificateRequest_X509Usage) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (SignX509CertificateRequest_X509Usage) Descriptor() protoreflect.EnumDescriptor {
-	return file_nokku_v1_certificates_proto_enumTypes[2].Descriptor()
-}
-
-func (SignX509CertificateRequest_X509Usage) Type() protoreflect.EnumType {
-	return &file_nokku_v1_certificates_proto_enumTypes[2]
-}
-
-func (x SignX509CertificateRequest_X509Usage) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use SignX509CertificateRequest_X509Usage.Descriptor instead.
-func (SignX509CertificateRequest_X509Usage) EnumDescriptor() ([]byte, []int) {
-	return file_nokku_v1_certificates_proto_rawDescGZIP(), []int{15, 0}
-}
-
 // Certificate Authority messages ---------------------------------------------
 type CertificateAuthority struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
 	Id                  *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	Name                *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
 	Description         *string                `protobuf:"bytes,3,opt,name=description" json:"description,omitempty"`
-	Certificate         *string                `protobuf:"bytes,4,opt,name=certificate" json:"certificate,omitempty"`
 	PublicKey           *string                `protobuf:"bytes,5,opt,name=public_key,json=publicKey" json:"public_key,omitempty"`
-	SerialNumber        *string                `protobuf:"bytes,6,opt,name=serial_number,json=serialNumber" json:"serial_number,omitempty"`
-	Subject             *string                `protobuf:"bytes,7,opt,name=subject" json:"subject,omitempty"`
 	NotBefore           *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=not_before,json=notBefore" json:"not_before,omitempty"`
 	NotAfter            *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=not_after,json=notAfter" json:"not_after,omitempty"`
 	IsActive            *bool                  `protobuf:"varint,10,opt,name=is_active,json=isActive" json:"is_active,omitempty"`
@@ -203,7 +99,6 @@ type CertificateAuthority struct {
 	HostMaxTtl          *durationpb.Duration   `protobuf:"bytes,21,opt,name=host_max_ttl,json=hostMaxTtl" json:"host_max_ttl,omitempty"`
 	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,22,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
 	UpdatedAt           *timestamppb.Timestamp `protobuf:"bytes,23,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty"`
-	AuthorityType       *AuthorityType         `protobuf:"varint,24,opt,name=authority_type,json=authorityType,enum=nokku.v1.AuthorityType" json:"authority_type,omitempty"`
 	// The key this CA had before its last rollover. Certificates it signed stay
 	// trusted until previous_trusted_until. Both are unset after an emergency
 	// rollover.
@@ -264,30 +159,9 @@ func (x *CertificateAuthority) GetDescription() string {
 	return ""
 }
 
-func (x *CertificateAuthority) GetCertificate() string {
-	if x != nil && x.Certificate != nil {
-		return *x.Certificate
-	}
-	return ""
-}
-
 func (x *CertificateAuthority) GetPublicKey() string {
 	if x != nil && x.PublicKey != nil {
 		return *x.PublicKey
-	}
-	return ""
-}
-
-func (x *CertificateAuthority) GetSerialNumber() string {
-	if x != nil && x.SerialNumber != nil {
-		return *x.SerialNumber
-	}
-	return ""
-}
-
-func (x *CertificateAuthority) GetSubject() string {
-	if x != nil && x.Subject != nil {
-		return *x.Subject
 	}
 	return ""
 }
@@ -404,13 +278,6 @@ func (x *CertificateAuthority) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *CertificateAuthority) GetAuthorityType() AuthorityType {
-	if x != nil && x.AuthorityType != nil {
-		return *x.AuthorityType
-	}
-	return AuthorityType_AUTHORITY_TYPE_UNSPECIFIED
-}
-
 func (x *CertificateAuthority) GetPreviousPublicKey() string {
 	if x != nil && x.PreviousPublicKey != nil {
 		return *x.PreviousPublicKey
@@ -440,7 +307,6 @@ type CreateCertificateAuthorityRequest struct {
 	HostMaxTtl          *durationpb.Duration   `protobuf:"bytes,11,opt,name=host_max_ttl,json=hostMaxTtl" json:"host_max_ttl,omitempty"`
 	UserExtensions      map[string]string      `protobuf:"bytes,12,rep,name=user_extensions,json=userExtensions" json:"user_extensions,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	UserCriticalOptions map[string]string      `protobuf:"bytes,13,rep,name=user_critical_options,json=userCriticalOptions" json:"user_critical_options,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	AuthorityType       *AuthorityType         `protobuf:"varint,14,opt,name=authority_type,json=authorityType,enum=nokku.v1.AuthorityType" json:"authority_type,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -564,13 +430,6 @@ func (x *CreateCertificateAuthorityRequest) GetUserCriticalOptions() map[string]
 		return x.UserCriticalOptions
 	}
 	return nil
-}
-
-func (x *CreateCertificateAuthorityRequest) GetAuthorityType() AuthorityType {
-	if x != nil && x.AuthorityType != nil {
-		return *x.AuthorityType
-	}
-	return AuthorityType_AUTHORITY_TYPE_UNSPECIFIED
 }
 
 type CreateCertificateAuthorityResponse struct {
@@ -1299,164 +1158,18 @@ func (x *SignSSHCertificateResponse) GetExpiresAt() *timestamppb.Timestamp {
 	return nil
 }
 
-type SignX509CertificateRequest struct {
-	state         protoimpl.MessageState                `protogen:"open.v1"`
-	CaId          *string                               `protobuf:"bytes,1,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	Csr           *string                               `protobuf:"bytes,2,opt,name=csr" json:"csr,omitempty"`
-	Usage         *SignX509CertificateRequest_X509Usage `protobuf:"varint,3,opt,name=usage,enum=nokku.v1.SignX509CertificateRequest_X509Usage" json:"usage,omitempty"`
-	Ttl           *durationpb.Duration                  `protobuf:"bytes,4,opt,name=ttl" json:"ttl,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SignX509CertificateRequest) Reset() {
-	*x = SignX509CertificateRequest{}
-	mi := &file_nokku_v1_certificates_proto_msgTypes[15]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SignX509CertificateRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SignX509CertificateRequest) ProtoMessage() {}
-
-func (x *SignX509CertificateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_certificates_proto_msgTypes[15]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SignX509CertificateRequest.ProtoReflect.Descriptor instead.
-func (*SignX509CertificateRequest) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_certificates_proto_rawDescGZIP(), []int{15}
-}
-
-func (x *SignX509CertificateRequest) GetCaId() string {
-	if x != nil && x.CaId != nil {
-		return *x.CaId
-	}
-	return ""
-}
-
-func (x *SignX509CertificateRequest) GetCsr() string {
-	if x != nil && x.Csr != nil {
-		return *x.Csr
-	}
-	return ""
-}
-
-func (x *SignX509CertificateRequest) GetUsage() SignX509CertificateRequest_X509Usage {
-	if x != nil && x.Usage != nil {
-		return *x.Usage
-	}
-	return SignX509CertificateRequest_X509_USAGE_UNSPECIFIED
-}
-
-func (x *SignX509CertificateRequest) GetTtl() *durationpb.Duration {
-	if x != nil {
-		return x.Ttl
-	}
-	return nil
-}
-
-type SignX509CertificateResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	CaId          *string                `protobuf:"bytes,1,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	CaName        *string                `protobuf:"bytes,2,opt,name=ca_name,json=caName" json:"ca_name,omitempty"`
-	Certificate   *string                `protobuf:"bytes,3,opt,name=certificate" json:"certificate,omitempty"`
-	CaChain       *string                `protobuf:"bytes,4,opt,name=ca_chain,json=caChain" json:"ca_chain,omitempty"`
-	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=expires_at,json=expiresAt" json:"expires_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SignX509CertificateResponse) Reset() {
-	*x = SignX509CertificateResponse{}
-	mi := &file_nokku_v1_certificates_proto_msgTypes[16]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SignX509CertificateResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SignX509CertificateResponse) ProtoMessage() {}
-
-func (x *SignX509CertificateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nokku_v1_certificates_proto_msgTypes[16]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SignX509CertificateResponse.ProtoReflect.Descriptor instead.
-func (*SignX509CertificateResponse) Descriptor() ([]byte, []int) {
-	return file_nokku_v1_certificates_proto_rawDescGZIP(), []int{16}
-}
-
-func (x *SignX509CertificateResponse) GetCaId() string {
-	if x != nil && x.CaId != nil {
-		return *x.CaId
-	}
-	return ""
-}
-
-func (x *SignX509CertificateResponse) GetCaName() string {
-	if x != nil && x.CaName != nil {
-		return *x.CaName
-	}
-	return ""
-}
-
-func (x *SignX509CertificateResponse) GetCertificate() string {
-	if x != nil && x.Certificate != nil {
-		return *x.Certificate
-	}
-	return ""
-}
-
-func (x *SignX509CertificateResponse) GetCaChain() string {
-	if x != nil && x.CaChain != nil {
-		return *x.CaChain
-	}
-	return ""
-}
-
-func (x *SignX509CertificateResponse) GetExpiresAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.ExpiresAt
-	}
-	return nil
-}
-
 var File_nokku_v1_certificates_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\n" +
-	"\x1bnokku/v1/certificates.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xf2\v\n" +
+	"\x1bnokku/v1/certificates.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xd1\n" +
+	"\n" +
 	"\x14CertificateAuthority\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\x12 \n" +
-	"\vcertificate\x18\x04 \x01(\tR\vcertificate\x12\x1d\n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x05 \x01(\tR\tpublicKey\x12#\n" +
-	"\rserial_number\x18\x06 \x01(\tR\fserialNumber\x12\x18\n" +
-	"\asubject\x18\a \x01(\tR\asubject\x129\n" +
+	"public_key\x18\x05 \x01(\tR\tpublicKey\x129\n" +
 	"\n" +
 	"not_before\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tnotBefore\x127\n" +
 	"\tnot_after\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\bnotAfter\x12\x1b\n" +
@@ -1479,8 +1192,7 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x16 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x17 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12>\n" +
-	"\x0eauthority_type\x18\x18 \x01(\x0e2\x17.nokku.v1.AuthorityTypeR\rauthorityType\x12.\n" +
+	"updated_at\x18\x17 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12.\n" +
 	"\x13previous_public_key\x18\x19 \x01(\tR\x11previousPublicKey\x12P\n" +
 	"\x16previous_trusted_until\x18\x1a \x01(\v2\x1a.google.protobuf.TimestampR\x14previousTrustedUntil\x1aA\n" +
 	"\x13UserExtensionsEntry\x12\x10\n" +
@@ -1488,7 +1200,7 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1aF\n" +
 	"\x18UserCriticalOptionsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x8f\t\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc5\b\n" +
 	"!CreateCertificateAuthorityRequest\x12\x1e\n" +
 	"\x04name\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x80\x02R\x04name\x12*\n" +
@@ -1508,8 +1220,7 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\fhost_max_ttl\x18\v \x01(\v2\x19.google.protobuf.DurationB\x11\xbaH\x0e\xaa\x01\v\"\x05\b\x80\xe7\x84\x0f2\x02\b<R\n" +
 	"hostMaxTtl\x12h\n" +
 	"\x0fuser_extensions\x18\f \x03(\v2?.nokku.v1.CreateCertificateAuthorityRequest.UserExtensionsEntryR\x0euserExtensions\x12x\n" +
-	"\x15user_critical_options\x18\r \x03(\v2D.nokku.v1.CreateCertificateAuthorityRequest.UserCriticalOptionsEntryR\x13userCriticalOptions\x12H\n" +
-	"\x0eauthority_type\x18\x0e \x01(\x0e2\x17.nokku.v1.AuthorityTypeB\b\xbaH\x05\x82\x01\x02\x10\x01R\rauthorityType\x1aA\n" +
+	"\x15user_critical_options\x18\r \x03(\v2D.nokku.v1.CreateCertificateAuthorityRequest.UserCriticalOptionsEntryR\x13userCriticalOptions\x1aA\n" +
 	"\x13UserExtensionsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1aF\n" +
@@ -1574,34 +1285,12 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\rca_public_key\x18\x03 \x01(\tR\vcaPublicKey\x12-\n" +
 	"\x12signed_certificate\x18\x04 \x01(\tR\x11signedCertificate\x129\n" +
 	"\n" +
-	"expires_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"\xed\x02\n" +
-	"\x1aSignX509CertificateRequest\x12\x1d\n" +
-	"\x05ca_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12\x1c\n" +
-	"\x03csr\x18\x02 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\x01\x18\x90NR\x03csr\x12N\n" +
-	"\x05usage\x18\x03 \x01(\x0e2..nokku.v1.SignX509CertificateRequest.X509UsageB\b\xbaH\x05\x82\x01\x02\x10\x01R\x05usage\x12>\n" +
-	"\x03ttl\x18\x04 \x01(\v2\x19.google.protobuf.DurationB\x11\xbaH\x0e\xaa\x01\v\"\x05\b\x80\xe7\x84\x0f2\x02\b<R\x03ttl\"\x81\x01\n" +
-	"\tX509Usage\x12\x1a\n" +
-	"\x16X509_USAGE_UNSPECIFIED\x10\x00\x12\x1a\n" +
-	"\x16X509_USAGE_CLIENT_AUTH\x10\x01\x12\x1a\n" +
-	"\x16X509_USAGE_SERVER_AUTH\x10\x02\x12 \n" +
-	"\x1cX509_USAGE_CLIENT_AND_SERVER\x10\x03\"\xc3\x01\n" +
-	"\x1bSignX509CertificateResponse\x12\x13\n" +
-	"\x05ca_id\x18\x01 \x01(\tR\x04caId\x12\x17\n" +
-	"\aca_name\x18\x02 \x01(\tR\x06caName\x12 \n" +
-	"\vcertificate\x18\x03 \x01(\tR\vcertificate\x12\x19\n" +
-	"\bca_chain\x18\x04 \x01(\tR\acaChain\x129\n" +
-	"\n" +
 	"expires_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt*\x9a\x01\n" +
 	"\x12CertificateKeyType\x12$\n" +
 	" CERTIFICATE_KEY_TYPE_UNSPECIFIED\x10\x00\x12\x1c\n" +
 	"\x18CERTIFICATE_KEY_TYPE_RSA\x10\x01\x12\x1e\n" +
 	"\x1aCERTIFICATE_KEY_TYPE_ECDSA\x10\x02\x12 \n" +
-	"\x1cCERTIFICATE_KEY_TYPE_ED25519\x10\x03*`\n" +
-	"\rAuthorityType\x12\x1e\n" +
-	"\x1aAUTHORITY_TYPE_UNSPECIFIED\x10\x00\x12\x16\n" +
-	"\x12AUTHORITY_TYPE_SSH\x10\x01\x12\x17\n" +
-	"\x13AUTHORITY_TYPE_X509\x10\x022\xf4\a\n" +
+	"\x1cCERTIFICATE_KEY_TYPE_ED25519\x10\x032\x88\a\n" +
 	"\x12CertificateService\x12y\n" +
 	"\x17GetCertificateAuthority\x12(.nokku.v1.GetCertificateAuthorityRequest\x1a).nokku.v1.GetCertificateAuthorityResponse\"\t\xc2\xf3\x18\x02\x18\x01\x90\x02\x01\x12\x7f\n" +
 	"\x1aCreateCertificateAuthority\x12+.nokku.v1.CreateCertificateAuthorityRequest\x1a,.nokku.v1.CreateCertificateAuthorityResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12\x7f\n" +
@@ -1609,8 +1298,7 @@ const file_nokku_v1_certificates_proto_rawDesc = "" +
 	"\x1aListCertificateAuthorities\x12+.nokku.v1.ListCertificateAuthoritiesRequest\x1a,.nokku.v1.ListCertificateAuthoritiesResponse\"\t\xc2\xf3\x18\x02\x18\x01\x90\x02\x01\x12\x7f\n" +
 	"\x1aDeleteCertificateAuthority\x12+.nokku.v1.DeleteCertificateAuthorityRequest\x1a,.nokku.v1.DeleteCertificateAuthorityResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12\x85\x01\n" +
 	"\x1cRolloverCertificateAuthority\x12-.nokku.v1.RolloverCertificateAuthorityRequest\x1a..nokku.v1.RolloverCertificateAuthorityResponse\"\x06\xc2\xf3\x18\x02\x18\x03\x12g\n" +
-	"\x12SignSSHCertificate\x12#.nokku.v1.SignSSHCertificateRequest\x1a$.nokku.v1.SignSSHCertificateResponse\"\x06\xc2\xf3\x18\x02\x10\x01\x12j\n" +
-	"\x13SignX509Certificate\x12$.nokku.v1.SignX509CertificateRequest\x1a%.nokku.v1.SignX509CertificateResponse\"\x06\xc2\xf3\x18\x02\x18\x03B\x93\x01\n" +
+	"\x12SignSSHCertificate\x12#.nokku.v1.SignSSHCertificateRequest\x1a$.nokku.v1.SignSSHCertificateResponse\"\x06\xc2\xf3\x18\x02\x10\x01B\x93\x01\n" +
 	"\fcom.nokku.v1B\x11CertificatesProtoP\x01Z/github.com/nokku-sh/protos/gen/nokku/v1;nokkuv1\xa2\x02\x03NXX\xaa\x02\bNokku.V1\xca\x02\bNokku\\V1\xe2\x02\x14Nokku\\V1\\GPBMetadata\xea\x02\tNokku::V1b\beditionsp\xe8\a"
 
 var (
@@ -1625,104 +1313,93 @@ func file_nokku_v1_certificates_proto_rawDescGZIP() []byte {
 	return file_nokku_v1_certificates_proto_rawDescData
 }
 
-var file_nokku_v1_certificates_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_nokku_v1_certificates_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_nokku_v1_certificates_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_nokku_v1_certificates_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_nokku_v1_certificates_proto_goTypes = []any{
 	(CertificateKeyType)(0),                      // 0: nokku.v1.CertificateKeyType
-	(AuthorityType)(0),                           // 1: nokku.v1.AuthorityType
-	(SignX509CertificateRequest_X509Usage)(0),    // 2: nokku.v1.SignX509CertificateRequest.X509Usage
-	(*CertificateAuthority)(nil),                 // 3: nokku.v1.CertificateAuthority
-	(*CreateCertificateAuthorityRequest)(nil),    // 4: nokku.v1.CreateCertificateAuthorityRequest
-	(*CreateCertificateAuthorityResponse)(nil),   // 5: nokku.v1.CreateCertificateAuthorityResponse
-	(*GetCertificateAuthorityRequest)(nil),       // 6: nokku.v1.GetCertificateAuthorityRequest
-	(*GetCertificateAuthorityResponse)(nil),      // 7: nokku.v1.GetCertificateAuthorityResponse
-	(*ListCertificateAuthoritiesRequest)(nil),    // 8: nokku.v1.ListCertificateAuthoritiesRequest
-	(*ListCertificateAuthoritiesResponse)(nil),   // 9: nokku.v1.ListCertificateAuthoritiesResponse
-	(*UpdateCertificateAuthorityRequest)(nil),    // 10: nokku.v1.UpdateCertificateAuthorityRequest
-	(*UpdateCertificateAuthorityResponse)(nil),   // 11: nokku.v1.UpdateCertificateAuthorityResponse
-	(*DeleteCertificateAuthorityRequest)(nil),    // 12: nokku.v1.DeleteCertificateAuthorityRequest
-	(*DeleteCertificateAuthorityResponse)(nil),   // 13: nokku.v1.DeleteCertificateAuthorityResponse
-	(*RolloverCertificateAuthorityRequest)(nil),  // 14: nokku.v1.RolloverCertificateAuthorityRequest
-	(*RolloverCertificateAuthorityResponse)(nil), // 15: nokku.v1.RolloverCertificateAuthorityResponse
-	(*SignSSHCertificateRequest)(nil),            // 16: nokku.v1.SignSSHCertificateRequest
-	(*SignSSHCertificateResponse)(nil),           // 17: nokku.v1.SignSSHCertificateResponse
-	(*SignX509CertificateRequest)(nil),           // 18: nokku.v1.SignX509CertificateRequest
-	(*SignX509CertificateResponse)(nil),          // 19: nokku.v1.SignX509CertificateResponse
-	nil,                                          // 20: nokku.v1.CertificateAuthority.UserExtensionsEntry
-	nil,                                          // 21: nokku.v1.CertificateAuthority.UserCriticalOptionsEntry
-	nil,                                          // 22: nokku.v1.CreateCertificateAuthorityRequest.UserExtensionsEntry
-	nil,                                          // 23: nokku.v1.CreateCertificateAuthorityRequest.UserCriticalOptionsEntry
-	nil,                                          // 24: nokku.v1.UpdateCertificateAuthorityRequest.UserExtensionsEntry
-	nil,                                          // 25: nokku.v1.UpdateCertificateAuthorityRequest.UserCriticalOptionsEntry
-	(*timestamppb.Timestamp)(nil),                // 26: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),                  // 27: google.protobuf.Duration
+	(*CertificateAuthority)(nil),                 // 1: nokku.v1.CertificateAuthority
+	(*CreateCertificateAuthorityRequest)(nil),    // 2: nokku.v1.CreateCertificateAuthorityRequest
+	(*CreateCertificateAuthorityResponse)(nil),   // 3: nokku.v1.CreateCertificateAuthorityResponse
+	(*GetCertificateAuthorityRequest)(nil),       // 4: nokku.v1.GetCertificateAuthorityRequest
+	(*GetCertificateAuthorityResponse)(nil),      // 5: nokku.v1.GetCertificateAuthorityResponse
+	(*ListCertificateAuthoritiesRequest)(nil),    // 6: nokku.v1.ListCertificateAuthoritiesRequest
+	(*ListCertificateAuthoritiesResponse)(nil),   // 7: nokku.v1.ListCertificateAuthoritiesResponse
+	(*UpdateCertificateAuthorityRequest)(nil),    // 8: nokku.v1.UpdateCertificateAuthorityRequest
+	(*UpdateCertificateAuthorityResponse)(nil),   // 9: nokku.v1.UpdateCertificateAuthorityResponse
+	(*DeleteCertificateAuthorityRequest)(nil),    // 10: nokku.v1.DeleteCertificateAuthorityRequest
+	(*DeleteCertificateAuthorityResponse)(nil),   // 11: nokku.v1.DeleteCertificateAuthorityResponse
+	(*RolloverCertificateAuthorityRequest)(nil),  // 12: nokku.v1.RolloverCertificateAuthorityRequest
+	(*RolloverCertificateAuthorityResponse)(nil), // 13: nokku.v1.RolloverCertificateAuthorityResponse
+	(*SignSSHCertificateRequest)(nil),            // 14: nokku.v1.SignSSHCertificateRequest
+	(*SignSSHCertificateResponse)(nil),           // 15: nokku.v1.SignSSHCertificateResponse
+	nil,                                          // 16: nokku.v1.CertificateAuthority.UserExtensionsEntry
+	nil,                                          // 17: nokku.v1.CertificateAuthority.UserCriticalOptionsEntry
+	nil,                                          // 18: nokku.v1.CreateCertificateAuthorityRequest.UserExtensionsEntry
+	nil,                                          // 19: nokku.v1.CreateCertificateAuthorityRequest.UserCriticalOptionsEntry
+	nil,                                          // 20: nokku.v1.UpdateCertificateAuthorityRequest.UserExtensionsEntry
+	nil,                                          // 21: nokku.v1.UpdateCertificateAuthorityRequest.UserCriticalOptionsEntry
+	(*timestamppb.Timestamp)(nil),                // 22: google.protobuf.Timestamp
+	(*durationpb.Duration)(nil),                  // 23: google.protobuf.Duration
 }
 var file_nokku_v1_certificates_proto_depIdxs = []int32{
-	26, // 0: nokku.v1.CertificateAuthority.not_before:type_name -> google.protobuf.Timestamp
-	26, // 1: nokku.v1.CertificateAuthority.not_after:type_name -> google.protobuf.Timestamp
+	22, // 0: nokku.v1.CertificateAuthority.not_before:type_name -> google.protobuf.Timestamp
+	22, // 1: nokku.v1.CertificateAuthority.not_after:type_name -> google.protobuf.Timestamp
 	0,  // 2: nokku.v1.CertificateAuthority.key_type:type_name -> nokku.v1.CertificateKeyType
 	0,  // 3: nokku.v1.CertificateAuthority.allowed_key_types:type_name -> nokku.v1.CertificateKeyType
-	27, // 4: nokku.v1.CertificateAuthority.lifetime:type_name -> google.protobuf.Duration
-	27, // 5: nokku.v1.CertificateAuthority.user_default_ttl:type_name -> google.protobuf.Duration
-	27, // 6: nokku.v1.CertificateAuthority.user_max_ttl:type_name -> google.protobuf.Duration
-	20, // 7: nokku.v1.CertificateAuthority.user_extensions:type_name -> nokku.v1.CertificateAuthority.UserExtensionsEntry
-	21, // 8: nokku.v1.CertificateAuthority.user_critical_options:type_name -> nokku.v1.CertificateAuthority.UserCriticalOptionsEntry
-	27, // 9: nokku.v1.CertificateAuthority.host_default_ttl:type_name -> google.protobuf.Duration
-	27, // 10: nokku.v1.CertificateAuthority.host_max_ttl:type_name -> google.protobuf.Duration
-	26, // 11: nokku.v1.CertificateAuthority.created_at:type_name -> google.protobuf.Timestamp
-	26, // 12: nokku.v1.CertificateAuthority.updated_at:type_name -> google.protobuf.Timestamp
-	1,  // 13: nokku.v1.CertificateAuthority.authority_type:type_name -> nokku.v1.AuthorityType
-	26, // 14: nokku.v1.CertificateAuthority.previous_trusted_until:type_name -> google.protobuf.Timestamp
-	0,  // 15: nokku.v1.CreateCertificateAuthorityRequest.key_type:type_name -> nokku.v1.CertificateKeyType
-	0,  // 16: nokku.v1.CreateCertificateAuthorityRequest.allowed_key_types:type_name -> nokku.v1.CertificateKeyType
-	27, // 17: nokku.v1.CreateCertificateAuthorityRequest.lifetime:type_name -> google.protobuf.Duration
-	27, // 18: nokku.v1.CreateCertificateAuthorityRequest.user_default_ttl:type_name -> google.protobuf.Duration
-	27, // 19: nokku.v1.CreateCertificateAuthorityRequest.user_max_ttl:type_name -> google.protobuf.Duration
-	27, // 20: nokku.v1.CreateCertificateAuthorityRequest.host_default_ttl:type_name -> google.protobuf.Duration
-	27, // 21: nokku.v1.CreateCertificateAuthorityRequest.host_max_ttl:type_name -> google.protobuf.Duration
-	22, // 22: nokku.v1.CreateCertificateAuthorityRequest.user_extensions:type_name -> nokku.v1.CreateCertificateAuthorityRequest.UserExtensionsEntry
-	23, // 23: nokku.v1.CreateCertificateAuthorityRequest.user_critical_options:type_name -> nokku.v1.CreateCertificateAuthorityRequest.UserCriticalOptionsEntry
-	1,  // 24: nokku.v1.CreateCertificateAuthorityRequest.authority_type:type_name -> nokku.v1.AuthorityType
-	3,  // 25: nokku.v1.CreateCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
-	3,  // 26: nokku.v1.GetCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
-	3,  // 27: nokku.v1.ListCertificateAuthoritiesResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
-	0,  // 28: nokku.v1.UpdateCertificateAuthorityRequest.allowed_key_types:type_name -> nokku.v1.CertificateKeyType
-	27, // 29: nokku.v1.UpdateCertificateAuthorityRequest.lifetime:type_name -> google.protobuf.Duration
-	27, // 30: nokku.v1.UpdateCertificateAuthorityRequest.user_default_ttl:type_name -> google.protobuf.Duration
-	27, // 31: nokku.v1.UpdateCertificateAuthorityRequest.user_max_ttl:type_name -> google.protobuf.Duration
-	27, // 32: nokku.v1.UpdateCertificateAuthorityRequest.host_default_ttl:type_name -> google.protobuf.Duration
-	27, // 33: nokku.v1.UpdateCertificateAuthorityRequest.host_max_ttl:type_name -> google.protobuf.Duration
-	24, // 34: nokku.v1.UpdateCertificateAuthorityRequest.user_extensions:type_name -> nokku.v1.UpdateCertificateAuthorityRequest.UserExtensionsEntry
-	25, // 35: nokku.v1.UpdateCertificateAuthorityRequest.user_critical_options:type_name -> nokku.v1.UpdateCertificateAuthorityRequest.UserCriticalOptionsEntry
-	3,  // 36: nokku.v1.UpdateCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
-	0,  // 37: nokku.v1.RolloverCertificateAuthorityRequest.key_type:type_name -> nokku.v1.CertificateKeyType
-	3,  // 38: nokku.v1.RolloverCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
-	27, // 39: nokku.v1.SignSSHCertificateRequest.ttl:type_name -> google.protobuf.Duration
-	26, // 40: nokku.v1.SignSSHCertificateResponse.expires_at:type_name -> google.protobuf.Timestamp
-	2,  // 41: nokku.v1.SignX509CertificateRequest.usage:type_name -> nokku.v1.SignX509CertificateRequest.X509Usage
-	27, // 42: nokku.v1.SignX509CertificateRequest.ttl:type_name -> google.protobuf.Duration
-	26, // 43: nokku.v1.SignX509CertificateResponse.expires_at:type_name -> google.protobuf.Timestamp
-	6,  // 44: nokku.v1.CertificateService.GetCertificateAuthority:input_type -> nokku.v1.GetCertificateAuthorityRequest
-	4,  // 45: nokku.v1.CertificateService.CreateCertificateAuthority:input_type -> nokku.v1.CreateCertificateAuthorityRequest
-	10, // 46: nokku.v1.CertificateService.UpdateCertificateAuthority:input_type -> nokku.v1.UpdateCertificateAuthorityRequest
-	8,  // 47: nokku.v1.CertificateService.ListCertificateAuthorities:input_type -> nokku.v1.ListCertificateAuthoritiesRequest
-	12, // 48: nokku.v1.CertificateService.DeleteCertificateAuthority:input_type -> nokku.v1.DeleteCertificateAuthorityRequest
-	14, // 49: nokku.v1.CertificateService.RolloverCertificateAuthority:input_type -> nokku.v1.RolloverCertificateAuthorityRequest
-	16, // 50: nokku.v1.CertificateService.SignSSHCertificate:input_type -> nokku.v1.SignSSHCertificateRequest
-	18, // 51: nokku.v1.CertificateService.SignX509Certificate:input_type -> nokku.v1.SignX509CertificateRequest
-	7,  // 52: nokku.v1.CertificateService.GetCertificateAuthority:output_type -> nokku.v1.GetCertificateAuthorityResponse
-	5,  // 53: nokku.v1.CertificateService.CreateCertificateAuthority:output_type -> nokku.v1.CreateCertificateAuthorityResponse
-	11, // 54: nokku.v1.CertificateService.UpdateCertificateAuthority:output_type -> nokku.v1.UpdateCertificateAuthorityResponse
-	9,  // 55: nokku.v1.CertificateService.ListCertificateAuthorities:output_type -> nokku.v1.ListCertificateAuthoritiesResponse
-	13, // 56: nokku.v1.CertificateService.DeleteCertificateAuthority:output_type -> nokku.v1.DeleteCertificateAuthorityResponse
-	15, // 57: nokku.v1.CertificateService.RolloverCertificateAuthority:output_type -> nokku.v1.RolloverCertificateAuthorityResponse
-	17, // 58: nokku.v1.CertificateService.SignSSHCertificate:output_type -> nokku.v1.SignSSHCertificateResponse
-	19, // 59: nokku.v1.CertificateService.SignX509Certificate:output_type -> nokku.v1.SignX509CertificateResponse
-	52, // [52:60] is the sub-list for method output_type
-	44, // [44:52] is the sub-list for method input_type
-	44, // [44:44] is the sub-list for extension type_name
-	44, // [44:44] is the sub-list for extension extendee
-	0,  // [0:44] is the sub-list for field type_name
+	23, // 4: nokku.v1.CertificateAuthority.lifetime:type_name -> google.protobuf.Duration
+	23, // 5: nokku.v1.CertificateAuthority.user_default_ttl:type_name -> google.protobuf.Duration
+	23, // 6: nokku.v1.CertificateAuthority.user_max_ttl:type_name -> google.protobuf.Duration
+	16, // 7: nokku.v1.CertificateAuthority.user_extensions:type_name -> nokku.v1.CertificateAuthority.UserExtensionsEntry
+	17, // 8: nokku.v1.CertificateAuthority.user_critical_options:type_name -> nokku.v1.CertificateAuthority.UserCriticalOptionsEntry
+	23, // 9: nokku.v1.CertificateAuthority.host_default_ttl:type_name -> google.protobuf.Duration
+	23, // 10: nokku.v1.CertificateAuthority.host_max_ttl:type_name -> google.protobuf.Duration
+	22, // 11: nokku.v1.CertificateAuthority.created_at:type_name -> google.protobuf.Timestamp
+	22, // 12: nokku.v1.CertificateAuthority.updated_at:type_name -> google.protobuf.Timestamp
+	22, // 13: nokku.v1.CertificateAuthority.previous_trusted_until:type_name -> google.protobuf.Timestamp
+	0,  // 14: nokku.v1.CreateCertificateAuthorityRequest.key_type:type_name -> nokku.v1.CertificateKeyType
+	0,  // 15: nokku.v1.CreateCertificateAuthorityRequest.allowed_key_types:type_name -> nokku.v1.CertificateKeyType
+	23, // 16: nokku.v1.CreateCertificateAuthorityRequest.lifetime:type_name -> google.protobuf.Duration
+	23, // 17: nokku.v1.CreateCertificateAuthorityRequest.user_default_ttl:type_name -> google.protobuf.Duration
+	23, // 18: nokku.v1.CreateCertificateAuthorityRequest.user_max_ttl:type_name -> google.protobuf.Duration
+	23, // 19: nokku.v1.CreateCertificateAuthorityRequest.host_default_ttl:type_name -> google.protobuf.Duration
+	23, // 20: nokku.v1.CreateCertificateAuthorityRequest.host_max_ttl:type_name -> google.protobuf.Duration
+	18, // 21: nokku.v1.CreateCertificateAuthorityRequest.user_extensions:type_name -> nokku.v1.CreateCertificateAuthorityRequest.UserExtensionsEntry
+	19, // 22: nokku.v1.CreateCertificateAuthorityRequest.user_critical_options:type_name -> nokku.v1.CreateCertificateAuthorityRequest.UserCriticalOptionsEntry
+	1,  // 23: nokku.v1.CreateCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
+	1,  // 24: nokku.v1.GetCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
+	1,  // 25: nokku.v1.ListCertificateAuthoritiesResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
+	0,  // 26: nokku.v1.UpdateCertificateAuthorityRequest.allowed_key_types:type_name -> nokku.v1.CertificateKeyType
+	23, // 27: nokku.v1.UpdateCertificateAuthorityRequest.lifetime:type_name -> google.protobuf.Duration
+	23, // 28: nokku.v1.UpdateCertificateAuthorityRequest.user_default_ttl:type_name -> google.protobuf.Duration
+	23, // 29: nokku.v1.UpdateCertificateAuthorityRequest.user_max_ttl:type_name -> google.protobuf.Duration
+	23, // 30: nokku.v1.UpdateCertificateAuthorityRequest.host_default_ttl:type_name -> google.protobuf.Duration
+	23, // 31: nokku.v1.UpdateCertificateAuthorityRequest.host_max_ttl:type_name -> google.protobuf.Duration
+	20, // 32: nokku.v1.UpdateCertificateAuthorityRequest.user_extensions:type_name -> nokku.v1.UpdateCertificateAuthorityRequest.UserExtensionsEntry
+	21, // 33: nokku.v1.UpdateCertificateAuthorityRequest.user_critical_options:type_name -> nokku.v1.UpdateCertificateAuthorityRequest.UserCriticalOptionsEntry
+	1,  // 34: nokku.v1.UpdateCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
+	0,  // 35: nokku.v1.RolloverCertificateAuthorityRequest.key_type:type_name -> nokku.v1.CertificateKeyType
+	1,  // 36: nokku.v1.RolloverCertificateAuthorityResponse.certificate_authority:type_name -> nokku.v1.CertificateAuthority
+	23, // 37: nokku.v1.SignSSHCertificateRequest.ttl:type_name -> google.protobuf.Duration
+	22, // 38: nokku.v1.SignSSHCertificateResponse.expires_at:type_name -> google.protobuf.Timestamp
+	4,  // 39: nokku.v1.CertificateService.GetCertificateAuthority:input_type -> nokku.v1.GetCertificateAuthorityRequest
+	2,  // 40: nokku.v1.CertificateService.CreateCertificateAuthority:input_type -> nokku.v1.CreateCertificateAuthorityRequest
+	8,  // 41: nokku.v1.CertificateService.UpdateCertificateAuthority:input_type -> nokku.v1.UpdateCertificateAuthorityRequest
+	6,  // 42: nokku.v1.CertificateService.ListCertificateAuthorities:input_type -> nokku.v1.ListCertificateAuthoritiesRequest
+	10, // 43: nokku.v1.CertificateService.DeleteCertificateAuthority:input_type -> nokku.v1.DeleteCertificateAuthorityRequest
+	12, // 44: nokku.v1.CertificateService.RolloverCertificateAuthority:input_type -> nokku.v1.RolloverCertificateAuthorityRequest
+	14, // 45: nokku.v1.CertificateService.SignSSHCertificate:input_type -> nokku.v1.SignSSHCertificateRequest
+	5,  // 46: nokku.v1.CertificateService.GetCertificateAuthority:output_type -> nokku.v1.GetCertificateAuthorityResponse
+	3,  // 47: nokku.v1.CertificateService.CreateCertificateAuthority:output_type -> nokku.v1.CreateCertificateAuthorityResponse
+	9,  // 48: nokku.v1.CertificateService.UpdateCertificateAuthority:output_type -> nokku.v1.UpdateCertificateAuthorityResponse
+	7,  // 49: nokku.v1.CertificateService.ListCertificateAuthorities:output_type -> nokku.v1.ListCertificateAuthoritiesResponse
+	11, // 50: nokku.v1.CertificateService.DeleteCertificateAuthority:output_type -> nokku.v1.DeleteCertificateAuthorityResponse
+	13, // 51: nokku.v1.CertificateService.RolloverCertificateAuthority:output_type -> nokku.v1.RolloverCertificateAuthorityResponse
+	15, // 52: nokku.v1.CertificateService.SignSSHCertificate:output_type -> nokku.v1.SignSSHCertificateResponse
+	46, // [46:53] is the sub-list for method output_type
+	39, // [39:46] is the sub-list for method input_type
+	39, // [39:39] is the sub-list for extension type_name
+	39, // [39:39] is the sub-list for extension extendee
+	0,  // [0:39] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_certificates_proto_init() }
@@ -1736,8 +1413,8 @@ func file_nokku_v1_certificates_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_nokku_v1_certificates_proto_rawDesc), len(file_nokku_v1_certificates_proto_rawDesc)),
-			NumEnums:      3,
-			NumMessages:   23,
+			NumEnums:      1,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

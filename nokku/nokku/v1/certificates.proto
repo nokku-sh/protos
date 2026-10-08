@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
 service CertificateService {
-  // Members read CAs because nk trusts the workspace's X.509 CAs.
+  // Members read CAs because nk needs the CA of a server it has not synced yet.
   rpc GetCertificateAuthority(GetCertificateAuthorityRequest) returns (GetCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_MEMBER};
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -19,7 +19,7 @@ service CertificateService {
   rpc UpdateCertificateAuthority(UpdateCertificateAuthorityRequest) returns (UpdateCertificateAuthorityResponse) {
     option (access) = {role: WORKSPACE_ROLE_EDITOR};
   }
-  // Members read CAs because nk trusts the workspace's X.509 CAs.
+  // Members read CAs because nk needs the CA of a server it has not synced yet.
   rpc ListCertificateAuthorities(ListCertificateAuthoritiesRequest) returns (ListCertificateAuthoritiesResponse) {
     option (access) = {role: WORKSPACE_ROLE_MEMBER};
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -37,10 +37,6 @@ service CertificateService {
   rpc SignSSHCertificate(SignSSHCertificateRequest) returns (SignSSHCertificateResponse) {
     option (access) = {self: true};
   }
-  // Subject and SANs come from the CSR untouched, so signing equals holding the CA.
-  rpc SignX509Certificate(SignX509CertificateRequest) returns (SignX509CertificateResponse) {
-    option (access) = {role: WORKSPACE_ROLE_EDITOR};
-  }
 }
 
 enum CertificateKeyType {
@@ -50,21 +46,12 @@ enum CertificateKeyType {
   CERTIFICATE_KEY_TYPE_ED25519 = 3;
 }
 
-enum AuthorityType {
-  AUTHORITY_TYPE_UNSPECIFIED = 0;
-  AUTHORITY_TYPE_SSH = 1;
-  AUTHORITY_TYPE_X509 = 2;
-}
-
 // Certificate Authority messages ---------------------------------------------
 message CertificateAuthority {
   string id = 1;
   string name = 2;
   string description = 3;
-  string certificate = 4;
   string public_key = 5;
-  string serial_number = 6;
-  string subject = 7;
   google.protobuf.Timestamp not_before = 8;
   google.protobuf.Timestamp not_after = 9;
   bool is_active = 10;
@@ -81,7 +68,6 @@ message CertificateAuthority {
   google.protobuf.Duration host_max_ttl = 21;
   google.protobuf.Timestamp created_at = 22;
   google.protobuf.Timestamp updated_at = 23;
-  AuthorityType authority_type = 24;
   // The key this CA had before its last rollover. Certificates it signed stay
   // trusted until previous_trusted_until. Both are unset after an emergency
   // rollover.
@@ -124,7 +110,6 @@ message CreateCertificateAuthorityRequest {
   }];
   map<string, string> user_extensions = 12;
   map<string, string> user_critical_options = 13;
-  AuthorityType authority_type = 14 [(buf.validate.field).enum = {defined_only: true}];
 }
 message CreateCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
@@ -217,31 +202,5 @@ message SignSSHCertificateResponse {
   string ca_name = 2;
   string ca_public_key = 3;
   string signed_certificate = 4;
-  google.protobuf.Timestamp expires_at = 5;
-}
-
-message SignX509CertificateRequest {
-  enum X509Usage {
-    X509_USAGE_UNSPECIFIED = 0;
-    X509_USAGE_CLIENT_AUTH = 1;
-    X509_USAGE_SERVER_AUTH = 2;
-    X509_USAGE_CLIENT_AND_SERVER = 3;
-  }
-  string ca_id = 1 [(buf.validate.field).string.uuid = true];
-  string csr = 2 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 10000
-  }];
-  X509Usage usage = 3 [(buf.validate.field).enum = {defined_only: true}];
-  google.protobuf.Duration ttl = 4 [(buf.validate.field).duration = {
-    gte: {seconds: 60}
-    lte: {seconds: 31536000}
-  }];
-}
-message SignX509CertificateResponse {
-  string ca_id = 1;
-  string ca_name = 2;
-  string certificate = 3;
-  string ca_chain = 4;
   google.protobuf.Timestamp expires_at = 5;
 }

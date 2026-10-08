@@ -69,7 +69,7 @@ func (x *GetTargetPrincipalsRequest) GetTargetId() string {
 
 type GetTargetPrincipalsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Principals    []*PrincipalUsers      `protobuf:"bytes,1,rep,name=principals" json:"principals,omitempty"`
+	Principals    []*AccountPrincipals   `protobuf:"bytes,1,rep,name=principals" json:"principals,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -104,7 +104,7 @@ func (*GetTargetPrincipalsResponse) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_target_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetTargetPrincipalsResponse) GetPrincipals() []*PrincipalUsers {
+func (x *GetTargetPrincipalsResponse) GetPrincipals() []*AccountPrincipals {
 	if x != nil {
 		return x.Principals
 	}
@@ -226,7 +226,7 @@ type Target struct {
 	Tags          []string               `protobuf:"bytes,7,rep,name=tags" json:"tags,omitempty"`
 	Endpoints     []string               `protobuf:"bytes,8,rep,name=endpoints" json:"endpoints,omitempty"`
 	Usernames     []string               `protobuf:"bytes,9,rep,name=usernames" json:"usernames,omitempty"`
-	Principals    []*Principal           `protobuf:"bytes,10,rep,name=principals" json:"principals,omitempty"`
+	Accounts      []*TargetAccount       `protobuf:"bytes,10,rep,name=accounts" json:"accounts,omitempty"`
 	Metadata      map[string]string      `protobuf:"bytes,11,rep,name=metadata" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt" json:"updated_at,omitempty"`
@@ -327,9 +327,9 @@ func (x *Target) GetUsernames() []string {
 	return nil
 }
 
-func (x *Target) GetPrincipals() []*Principal {
+func (x *Target) GetAccounts() []*TargetAccount {
 	if x != nil {
-		return x.Principals
+		return x.Accounts
 	}
 	return nil
 }
@@ -795,7 +795,7 @@ type ListTargetsRequest struct {
 	Query         *string                `protobuf:"bytes,3,opt,name=query" json:"query,omitempty"`
 	DaemonId      *string                `protobuf:"bytes,4,opt,name=daemon_id,json=daemonId" json:"daemon_id,omitempty"`
 	CaId          *string                `protobuf:"bytes,5,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	Principals    []string               `protobuf:"bytes,6,rep,name=principals" json:"principals,omitempty"`
+	Accounts      []string               `protobuf:"bytes,6,rep,name=accounts" json:"accounts,omitempty"`
 	Tags          []string               `protobuf:"bytes,7,rep,name=tags" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -866,9 +866,9 @@ func (x *ListTargetsRequest) GetCaId() string {
 	return ""
 }
 
-func (x *ListTargetsRequest) GetPrincipals() []string {
+func (x *ListTargetsRequest) GetAccounts() []string {
 	if x != nil {
-		return x.Principals
+		return x.Accounts
 	}
 	return nil
 }
@@ -1209,7 +1209,7 @@ func (*GetTargetFiltersRequest) Descriptor() ([]byte, []int) {
 type GetTargetFiltersResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Tags          []string               `protobuf:"bytes,1,rep,name=tags" json:"tags,omitempty"`
-	Principals    []string               `protobuf:"bytes,2,rep,name=principals" json:"principals,omitempty"`
+	Accounts      []string               `protobuf:"bytes,2,rep,name=accounts" json:"accounts,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1251,9 +1251,9 @@ func (x *GetTargetFiltersResponse) GetTags() []string {
 	return nil
 }
 
-func (x *GetTargetFiltersResponse) GetPrincipals() []string {
+func (x *GetTargetFiltersResponse) GetAccounts() []string {
 	if x != nil {
-		return x.Principals
+		return x.Accounts
 	}
 	return nil
 }
@@ -1969,12 +1969,12 @@ var File_nokku_v1_target_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_target_proto_rawDesc = "" +
 	"\n" +
-	"\x15nokku/v1/target.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x18nokku/v1/principal.proto\x1a\x1enokku/v1/service_account.proto\"C\n" +
+	"\x15nokku/v1/target.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x1enokku/v1/service_account.proto\x1a\x1dnokku/v1/target_account.proto\"C\n" +
 	"\x1aGetTargetPrincipalsRequest\x12%\n" +
-	"\ttarget_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\"W\n" +
-	"\x1bGetTargetPrincipalsResponse\x128\n" +
+	"\ttarget_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\"Z\n" +
+	"\x1bGetTargetPrincipalsResponse\x12;\n" +
 	"\n" +
-	"principals\x18\x01 \x03(\v2\x18.nokku.v1.PrincipalUsersR\n" +
+	"principals\x18\x01 \x03(\v2\x1b.nokku.v1.AccountPrincipalsR\n" +
 	"principals\"\xc6\x01\n" +
 	"\x16SyncTargetUsersRequest\x12%\n" +
 	"\ttarget_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\x12&\n" +
@@ -1993,10 +1993,8 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"\x04tags\x18\a \x03(\tR\x04tags\x12\x1c\n" +
 	"\tendpoints\x18\b \x03(\tR\tendpoints\x12\x1c\n" +
 	"\tusernames\x18\t \x03(\tR\tusernames\x123\n" +
-	"\n" +
-	"principals\x18\n" +
-	" \x03(\v2\x13.nokku.v1.PrincipalR\n" +
-	"principals\x12:\n" +
+	"\baccounts\x18\n" +
+	" \x03(\v2\x17.nokku.v1.TargetAccountR\baccounts\x12:\n" +
 	"\bmetadata\x18\v \x03(\v2\x1e.nokku.v1.Target.MetadataEntryR\bmetadata\x129\n" +
 	"\n" +
 	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
@@ -2030,16 +2028,14 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"/\n" +
 	"\x13DeleteTargetRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x16\n" +
-	"\x14DeleteTargetResponse\"\xd2\x01\n" +
+	"\x14DeleteTargetResponse\"\xce\x01\n" +
 	"\x12ListTargetsRequest\x12\x1f\n" +
 	"\x05limit\x18\x01 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
 	"\x06offset\x18\x02 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x14\n" +
 	"\x05query\x18\x03 \x01(\tR\x05query\x12\x1b\n" +
 	"\tdaemon_id\x18\x04 \x01(\tR\bdaemonId\x12\x13\n" +
-	"\x05ca_id\x18\x05 \x01(\tR\x04caId\x12\x1e\n" +
-	"\n" +
-	"principals\x18\x06 \x03(\tR\n" +
-	"principals\x12\x12\n" +
+	"\x05ca_id\x18\x05 \x01(\tR\x04caId\x12\x1a\n" +
+	"\baccounts\x18\x06 \x03(\tR\baccounts\x12\x12\n" +
 	"\x04tags\x18\a \x03(\tR\x04tags\"W\n" +
 	"\x13ListTargetsResponse\x12*\n" +
 	"\atargets\x18\x01 \x03(\v2\x10.nokku.v1.TargetR\atargets\x12\x14\n" +
@@ -2058,12 +2054,10 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"\atargets\x18\x03 \x03(\v2\x10.nokku.v1.TargetR\atargets\x12W\n" +
 	"\x17certificate_authorities\x18\x04 \x03(\v2\x1e.nokku.v1.CertificateAuthorityR\x16certificateAuthoritiesB\t\n" +
 	"\asubject\"\x19\n" +
-	"\x17GetTargetFiltersRequest\"N\n" +
+	"\x17GetTargetFiltersRequest\"J\n" +
 	"\x18GetTargetFiltersResponse\x12\x12\n" +
-	"\x04tags\x18\x01 \x03(\tR\x04tags\x12\x1e\n" +
-	"\n" +
-	"principals\x18\x02 \x03(\tR\n" +
-	"principals\"\xa4\x01\n" +
+	"\x04tags\x18\x01 \x03(\tR\x04tags\x12\x1a\n" +
+	"\baccounts\x18\x02 \x03(\tR\baccounts\"\xa4\x01\n" +
 	"\x11AccessGraphFilter\x12'\n" +
 	"\n" +
 	"subject_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\tsubjectId\x12%\n" +
@@ -2176,8 +2170,8 @@ var file_nokku_v1_target_proto_goTypes = []any{
 	(*ListAccessGraphTargetsResponse)(nil), // 30: nokku.v1.ListAccessGraphTargetsResponse
 	(*AccessGraphTarget)(nil),              // 31: nokku.v1.AccessGraphTarget
 	nil,                                    // 32: nokku.v1.Target.MetadataEntry
-	(*PrincipalUsers)(nil),                 // 33: nokku.v1.PrincipalUsers
-	(*Principal)(nil),                      // 34: nokku.v1.Principal
+	(*AccountPrincipals)(nil),              // 33: nokku.v1.AccountPrincipals
+	(*TargetAccount)(nil),                  // 34: nokku.v1.TargetAccount
 	(*timestamppb.Timestamp)(nil),          // 35: google.protobuf.Timestamp
 	(*Daemon)(nil),                         // 36: nokku.v1.Daemon
 	(*CertificateAuthority)(nil),           // 37: nokku.v1.CertificateAuthority
@@ -2186,8 +2180,8 @@ var file_nokku_v1_target_proto_goTypes = []any{
 	(SubjectKind)(0),                       // 40: nokku.v1.SubjectKind
 }
 var file_nokku_v1_target_proto_depIdxs = []int32{
-	33, // 0: nokku.v1.GetTargetPrincipalsResponse.principals:type_name -> nokku.v1.PrincipalUsers
-	34, // 1: nokku.v1.Target.principals:type_name -> nokku.v1.Principal
+	33, // 0: nokku.v1.GetTargetPrincipalsResponse.principals:type_name -> nokku.v1.AccountPrincipals
+	34, // 1: nokku.v1.Target.accounts:type_name -> nokku.v1.TargetAccount
 	32, // 2: nokku.v1.Target.metadata:type_name -> nokku.v1.Target.MetadataEntry
 	35, // 3: nokku.v1.Target.created_at:type_name -> google.protobuf.Timestamp
 	35, // 4: nokku.v1.Target.updated_at:type_name -> google.protobuf.Timestamp
@@ -2251,8 +2245,8 @@ func file_nokku_v1_target_proto_init() {
 	file_nokku_v1_account_proto_init()
 	file_nokku_v1_certificates_proto_init()
 	file_nokku_v1_daemon_proto_init()
-	file_nokku_v1_principal_proto_init()
 	file_nokku_v1_service_account_proto_init()
+	file_nokku_v1_target_account_proto_init()
 	file_nokku_v1_target_proto_msgTypes[18].OneofWrappers = []any{
 		(*GetMyAccessResponse_User)(nil),
 		(*GetMyAccessResponse_ServiceAccount)(nil),
