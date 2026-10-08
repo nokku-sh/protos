@@ -51,6 +51,12 @@ service WorkspaceService {
   rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse) {
     option (access) = {public: true};
   }
+  // Tells a client that keeps a view open when to read again. A message
+  // carries no data, only which services answer differently now. The server
+  // ends the stream after a while, the client opens it again.
+  rpc SubscribeChanges(SubscribeChangesRequest) returns (stream SubscribeChangesResponse) {
+    option (access) = {self: true};
+  }
 }
 
 message Workspace {
@@ -108,6 +114,16 @@ message CreateWorkspaceRequest {
 message CreateWorkspaceResponse {
   // Where the new workspace lives.
   string url = 1;
+}
+
+message SubscribeChangesRequest {}
+// With neither field set nothing changed. The server sends one of those to
+// open the stream and whenever it has been silent for a while.
+message SubscribeChangesResponse {
+  // Full names of the services to ask again, like nokku.v1.TargetService.
+  repeated string services = 1;
+  // Anything may have changed.
+  bool everything = 2;
 }
 
 // Users ----------------------------------------------------------------------
