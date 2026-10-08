@@ -70,7 +70,7 @@ func (x *GetInvitationRequest) GetToken() string {
 type GetInvitationResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	WorkspaceName *string                `protobuf:"bytes,1,opt,name=workspace_name,json=workspaceName" json:"workspace_name,omitempty"`
-	Role          *string                `protobuf:"bytes,2,opt,name=role" json:"role,omitempty"`
+	Role          *WorkspaceRole         `protobuf:"varint,2,opt,name=role,enum=nokku.v1.WorkspaceRole" json:"role,omitempty"`
 	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=expires_at,json=expiresAt" json:"expires_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -113,11 +113,11 @@ func (x *GetInvitationResponse) GetWorkspaceName() string {
 	return ""
 }
 
-func (x *GetInvitationResponse) GetRole() string {
+func (x *GetInvitationResponse) GetRole() WorkspaceRole {
 	if x != nil && x.Role != nil {
 		return *x.Role
 	}
-	return ""
+	return WorkspaceRole_WORKSPACE_ROLE_UNSPECIFIED
 }
 
 func (x *GetInvitationResponse) GetExpiresAt() *timestamppb.Timestamp {
@@ -229,10 +229,10 @@ const file_nokku_v1_invitation_proto_rawDesc = "" +
 	"\n" +
 	"\x19nokku/v1/invitation.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"5\n" +
 	"\x14GetInvitationRequest\x12\x1d\n" +
-	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"\x8d\x01\n" +
+	"\x05token\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05token\"\xa6\x01\n" +
 	"\x15GetInvitationResponse\x12%\n" +
-	"\x0eworkspace_name\x18\x01 \x01(\tR\rworkspaceName\x12\x12\n" +
-	"\x04role\x18\x02 \x01(\tR\x04role\x129\n" +
+	"\x0eworkspace_name\x18\x01 \x01(\tR\rworkspaceName\x12+\n" +
+	"\x04role\x18\x02 \x01(\x0e2\x17.nokku.v1.WorkspaceRoleR\x04role\x129\n" +
 	"\n" +
 	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"u\n" +
 	"\x17AcceptInvitationRequest\x12\x1d\n" +
@@ -263,19 +263,21 @@ var file_nokku_v1_invitation_proto_goTypes = []any{
 	(*GetInvitationResponse)(nil),    // 1: nokku.v1.GetInvitationResponse
 	(*AcceptInvitationRequest)(nil),  // 2: nokku.v1.AcceptInvitationRequest
 	(*AcceptInvitationResponse)(nil), // 3: nokku.v1.AcceptInvitationResponse
-	(*timestamppb.Timestamp)(nil),    // 4: google.protobuf.Timestamp
+	(WorkspaceRole)(0),               // 4: nokku.v1.WorkspaceRole
+	(*timestamppb.Timestamp)(nil),    // 5: google.protobuf.Timestamp
 }
 var file_nokku_v1_invitation_proto_depIdxs = []int32{
-	4, // 0: nokku.v1.GetInvitationResponse.expires_at:type_name -> google.protobuf.Timestamp
-	0, // 1: nokku.v1.InvitationService.GetInvitation:input_type -> nokku.v1.GetInvitationRequest
-	2, // 2: nokku.v1.InvitationService.AcceptInvitation:input_type -> nokku.v1.AcceptInvitationRequest
-	1, // 3: nokku.v1.InvitationService.GetInvitation:output_type -> nokku.v1.GetInvitationResponse
-	3, // 4: nokku.v1.InvitationService.AcceptInvitation:output_type -> nokku.v1.AcceptInvitationResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	4, // 0: nokku.v1.GetInvitationResponse.role:type_name -> nokku.v1.WorkspaceRole
+	5, // 1: nokku.v1.GetInvitationResponse.expires_at:type_name -> google.protobuf.Timestamp
+	0, // 2: nokku.v1.InvitationService.GetInvitation:input_type -> nokku.v1.GetInvitationRequest
+	2, // 3: nokku.v1.InvitationService.AcceptInvitation:input_type -> nokku.v1.AcceptInvitationRequest
+	1, // 4: nokku.v1.InvitationService.GetInvitation:output_type -> nokku.v1.GetInvitationResponse
+	3, // 5: nokku.v1.InvitationService.AcceptInvitation:output_type -> nokku.v1.AcceptInvitationResponse
+	4, // [4:6] is the sub-list for method output_type
+	2, // [2:4] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_invitation_proto_init() }

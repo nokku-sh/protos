@@ -35,7 +35,7 @@ message Token {
   int32 uses = 6;
   bool auto_approve = 7;
   string ca_id = 8;
-  string role_name = 9;
+  WorkspaceRole role = 9;
   google.protobuf.Timestamp created_at = 10;
   google.protobuf.Timestamp last_used_at = 11;
 }
@@ -50,7 +50,8 @@ message CreateTokenRequest {
   int32 max_uses = 4 [(buf.validate.field).int32.gt = 0];
   bool auto_approve = 5;
   string ca_id = 6 [(buf.validate.field).string.uuid = true];
-  string role_name = 7;
+  // Invite tokens only. Unset is the member.
+  WorkspaceRole role = 7 [(buf.validate.field).enum.defined_only = true];
 }
 message CreateTokenResponse {
   Token token = 1;

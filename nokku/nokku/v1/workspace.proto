@@ -134,7 +134,7 @@ message ListUsersRequest {
   }];
   int32 offset = 2 [(buf.validate.field).int32.gte = 0];
   string query = 3;
-  string role = 4;
+  WorkspaceRole role = 4 [(buf.validate.field).enum.defined_only = true];
 }
 message ListUsersResponse {
   repeated User users = 1;
@@ -150,12 +150,12 @@ message GetUserResponse {
 
 message UpdateUserRoleRequest {
   string user_id = 1 [(buf.validate.field).string.uuid = true];
-  string role = 2 [(buf.validate.field).string = {
+  WorkspaceRole role = 2 [(buf.validate.field).enum = {
     in: [
-      "member",
-      "viewer",
-      "editor",
-      "admin"
+      1,
+      2,
+      3,
+      4
     ]
   }];
 }

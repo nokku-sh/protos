@@ -83,7 +83,7 @@ type Token struct {
 	Uses          *int32                 `protobuf:"varint,6,opt,name=uses" json:"uses,omitempty"`
 	AutoApprove   *bool                  `protobuf:"varint,7,opt,name=auto_approve,json=autoApprove" json:"auto_approve,omitempty"`
 	CaId          *string                `protobuf:"bytes,8,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	RoleName      *string                `protobuf:"bytes,9,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
+	Role          *WorkspaceRole         `protobuf:"varint,9,opt,name=role,enum=nokku.v1.WorkspaceRole" json:"role,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
 	LastUsedAt    *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=last_used_at,json=lastUsedAt" json:"last_used_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -176,11 +176,11 @@ func (x *Token) GetCaId() string {
 	return ""
 }
 
-func (x *Token) GetRoleName() string {
-	if x != nil && x.RoleName != nil {
-		return *x.RoleName
+func (x *Token) GetRole() WorkspaceRole {
+	if x != nil && x.Role != nil {
+		return *x.Role
 	}
-	return ""
+	return WorkspaceRole_WORKSPACE_ROLE_UNSPECIFIED
 }
 
 func (x *Token) GetCreatedAt() *timestamppb.Timestamp {
@@ -198,14 +198,15 @@ func (x *Token) GetLastUsedAt() *timestamppb.Timestamp {
 }
 
 type CreateTokenRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Kind          *TokenKind             `protobuf:"varint,1,opt,name=kind,enum=nokku.v1.TokenKind" json:"kind,omitempty"`
-	Label         *string                `protobuf:"bytes,2,opt,name=label" json:"label,omitempty"`
-	Ttl           *durationpb.Duration   `protobuf:"bytes,3,opt,name=ttl" json:"ttl,omitempty"`
-	MaxUses       *int32                 `protobuf:"varint,4,opt,name=max_uses,json=maxUses" json:"max_uses,omitempty"`
-	AutoApprove   *bool                  `protobuf:"varint,5,opt,name=auto_approve,json=autoApprove" json:"auto_approve,omitempty"`
-	CaId          *string                `protobuf:"bytes,6,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
-	RoleName      *string                `protobuf:"bytes,7,opt,name=role_name,json=roleName" json:"role_name,omitempty"`
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Kind        *TokenKind             `protobuf:"varint,1,opt,name=kind,enum=nokku.v1.TokenKind" json:"kind,omitempty"`
+	Label       *string                `protobuf:"bytes,2,opt,name=label" json:"label,omitempty"`
+	Ttl         *durationpb.Duration   `protobuf:"bytes,3,opt,name=ttl" json:"ttl,omitempty"`
+	MaxUses     *int32                 `protobuf:"varint,4,opt,name=max_uses,json=maxUses" json:"max_uses,omitempty"`
+	AutoApprove *bool                  `protobuf:"varint,5,opt,name=auto_approve,json=autoApprove" json:"auto_approve,omitempty"`
+	CaId        *string                `protobuf:"bytes,6,opt,name=ca_id,json=caId" json:"ca_id,omitempty"`
+	// Invite tokens only. Unset is the member.
+	Role          *WorkspaceRole `protobuf:"varint,7,opt,name=role,enum=nokku.v1.WorkspaceRole" json:"role,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -282,11 +283,11 @@ func (x *CreateTokenRequest) GetCaId() string {
 	return ""
 }
 
-func (x *CreateTokenRequest) GetRoleName() string {
-	if x != nil && x.RoleName != nil {
-		return *x.RoleName
+func (x *CreateTokenRequest) GetRole() WorkspaceRole {
+	if x != nil && x.Role != nil {
+		return *x.Role
 	}
-	return ""
+	return WorkspaceRole_WORKSPACE_ROLE_UNSPECIFIED
 }
 
 type CreateTokenResponse struct {
@@ -513,7 +514,7 @@ var File_nokku_v1_token_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_token_proto_rawDesc = "" +
 	"\n" +
-	"\x14nokku/v1/token.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x8e\x03\n" +
+	"\x14nokku/v1/token.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\x9e\x03\n" +
 	"\x05Token\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
 	"\x04kind\x18\x02 \x01(\x0e2\x13.nokku.v1.TokenKindR\x04kind\x12\x14\n" +
@@ -523,13 +524,13 @@ const file_nokku_v1_token_proto_rawDesc = "" +
 	"\bmax_uses\x18\x05 \x01(\x05R\amaxUses\x12\x12\n" +
 	"\x04uses\x18\x06 \x01(\x05R\x04uses\x12!\n" +
 	"\fauto_approve\x18\a \x01(\bR\vautoApprove\x12\x13\n" +
-	"\x05ca_id\x18\b \x01(\tR\x04caId\x12\x1b\n" +
-	"\trole_name\x18\t \x01(\tR\broleName\x129\n" +
+	"\x05ca_id\x18\b \x01(\tR\x04caId\x12+\n" +
+	"\x04role\x18\t \x01(\x0e2\x17.nokku.v1.WorkspaceRoleR\x04role\x129\n" +
 	"\n" +
 	"created_at\x18\n" +
 	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12<\n" +
 	"\flast_used_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"lastUsedAt\"\xa2\x02\n" +
+	"lastUsedAt\"\xbc\x02\n" +
 	"\x12CreateTokenRequest\x123\n" +
 	"\x04kind\x18\x01 \x01(\x0e2\x13.nokku.v1.TokenKindB\n" +
 	"\xbaH\a\x82\x01\x04\x10\x01 \x00R\x04kind\x12\x1d\n" +
@@ -537,8 +538,8 @@ const file_nokku_v1_token_proto_rawDesc = "" +
 	"\x03ttl\x18\x03 \x01(\v2\x19.google.protobuf.DurationB\b\xbaH\x05\xaa\x01\x02*\x00R\x03ttl\x12\"\n" +
 	"\bmax_uses\x18\x04 \x01(\x05B\a\xbaH\x04\x1a\x02 \x00R\amaxUses\x12!\n" +
 	"\fauto_approve\x18\x05 \x01(\bR\vautoApprove\x12\x1d\n" +
-	"\x05ca_id\x18\x06 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12\x1b\n" +
-	"\trole_name\x18\a \x01(\tR\broleName\"T\n" +
+	"\x05ca_id\x18\x06 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x125\n" +
+	"\x04role\x18\a \x01(\x0e2\x17.nokku.v1.WorkspaceRoleB\b\xbaH\x05\x82\x01\x02\x10\x01R\x04role\"T\n" +
 	"\x13CreateTokenResponse\x12%\n" +
 	"\x05token\x18\x01 \x01(\v2\x0f.nokku.v1.TokenR\x05token\x12\x16\n" +
 	"\x06secret\x18\x02 \x01(\tR\x06secret\"F\n" +
@@ -585,29 +586,32 @@ var file_nokku_v1_token_proto_goTypes = []any{
 	(*DeleteTokenRequest)(nil),    // 6: nokku.v1.DeleteTokenRequest
 	(*DeleteTokenResponse)(nil),   // 7: nokku.v1.DeleteTokenResponse
 	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),   // 9: google.protobuf.Duration
+	(WorkspaceRole)(0),            // 9: nokku.v1.WorkspaceRole
+	(*durationpb.Duration)(nil),   // 10: google.protobuf.Duration
 }
 var file_nokku_v1_token_proto_depIdxs = []int32{
 	0,  // 0: nokku.v1.Token.kind:type_name -> nokku.v1.TokenKind
 	8,  // 1: nokku.v1.Token.expires_at:type_name -> google.protobuf.Timestamp
-	8,  // 2: nokku.v1.Token.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 3: nokku.v1.Token.last_used_at:type_name -> google.protobuf.Timestamp
-	0,  // 4: nokku.v1.CreateTokenRequest.kind:type_name -> nokku.v1.TokenKind
-	9,  // 5: nokku.v1.CreateTokenRequest.ttl:type_name -> google.protobuf.Duration
-	1,  // 6: nokku.v1.CreateTokenResponse.token:type_name -> nokku.v1.Token
-	0,  // 7: nokku.v1.ListTokensRequest.kind:type_name -> nokku.v1.TokenKind
-	1,  // 8: nokku.v1.ListTokensResponse.tokens:type_name -> nokku.v1.Token
-	2,  // 9: nokku.v1.TokenService.CreateToken:input_type -> nokku.v1.CreateTokenRequest
-	4,  // 10: nokku.v1.TokenService.ListTokens:input_type -> nokku.v1.ListTokensRequest
-	6,  // 11: nokku.v1.TokenService.DeleteToken:input_type -> nokku.v1.DeleteTokenRequest
-	3,  // 12: nokku.v1.TokenService.CreateToken:output_type -> nokku.v1.CreateTokenResponse
-	5,  // 13: nokku.v1.TokenService.ListTokens:output_type -> nokku.v1.ListTokensResponse
-	7,  // 14: nokku.v1.TokenService.DeleteToken:output_type -> nokku.v1.DeleteTokenResponse
-	12, // [12:15] is the sub-list for method output_type
-	9,  // [9:12] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	9,  // 2: nokku.v1.Token.role:type_name -> nokku.v1.WorkspaceRole
+	8,  // 3: nokku.v1.Token.created_at:type_name -> google.protobuf.Timestamp
+	8,  // 4: nokku.v1.Token.last_used_at:type_name -> google.protobuf.Timestamp
+	0,  // 5: nokku.v1.CreateTokenRequest.kind:type_name -> nokku.v1.TokenKind
+	10, // 6: nokku.v1.CreateTokenRequest.ttl:type_name -> google.protobuf.Duration
+	9,  // 7: nokku.v1.CreateTokenRequest.role:type_name -> nokku.v1.WorkspaceRole
+	1,  // 8: nokku.v1.CreateTokenResponse.token:type_name -> nokku.v1.Token
+	0,  // 9: nokku.v1.ListTokensRequest.kind:type_name -> nokku.v1.TokenKind
+	1,  // 10: nokku.v1.ListTokensResponse.tokens:type_name -> nokku.v1.Token
+	2,  // 11: nokku.v1.TokenService.CreateToken:input_type -> nokku.v1.CreateTokenRequest
+	4,  // 12: nokku.v1.TokenService.ListTokens:input_type -> nokku.v1.ListTokensRequest
+	6,  // 13: nokku.v1.TokenService.DeleteToken:input_type -> nokku.v1.DeleteTokenRequest
+	3,  // 14: nokku.v1.TokenService.CreateToken:output_type -> nokku.v1.CreateTokenResponse
+	5,  // 15: nokku.v1.TokenService.ListTokens:output_type -> nokku.v1.ListTokensResponse
+	7,  // 16: nokku.v1.TokenService.DeleteToken:output_type -> nokku.v1.DeleteTokenResponse
+	14, // [14:17] is the sub-list for method output_type
+	11, // [11:14] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_token_proto_init() }

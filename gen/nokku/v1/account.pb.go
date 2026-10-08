@@ -29,9 +29,8 @@ type User struct {
 	Name    *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
 	Email   *string                `protobuf:"bytes,3,opt,name=email" json:"email,omitempty"`
 	Picture *string                `protobuf:"bytes,4,opt,name=picture" json:"picture,omitempty"`
-	// member, viewer, editor, admin, owner
-	Role   *string `protobuf:"bytes,5,opt,name=role" json:"role,omitempty"`
-	Active *bool   `protobuf:"varint,6,opt,name=active" json:"active,omitempty"`
+	Role    *WorkspaceRole         `protobuf:"varint,5,opt,name=role,enum=nokku.v1.WorkspaceRole" json:"role,omitempty"`
+	Active  *bool                  `protobuf:"varint,6,opt,name=active" json:"active,omitempty"`
 	// The address an email change is waiting on, empty when none is pending.
 	PendingEmail  *string                `protobuf:"bytes,7,opt,name=pending_email,json=pendingEmail" json:"pending_email,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
@@ -98,11 +97,11 @@ func (x *User) GetPicture() string {
 	return ""
 }
 
-func (x *User) GetRole() string {
+func (x *User) GetRole() WorkspaceRole {
 	if x != nil && x.Role != nil {
 		return *x.Role
 	}
-	return ""
+	return WorkspaceRole_WORKSPACE_ROLE_UNSPECIFIED
 }
 
 func (x *User) GetActive() bool {
@@ -1075,13 +1074,13 @@ var File_nokku_v1_account_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_account_proto_rawDesc = "" +
 	"\n" +
-	"\x16nokku/v1/account.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xa1\x02\n" +
+	"\x16nokku/v1/account.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xba\x02\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12\x18\n" +
-	"\apicture\x18\x04 \x01(\tR\apicture\x12\x12\n" +
-	"\x04role\x18\x05 \x01(\tR\x04role\x12\x16\n" +
+	"\apicture\x18\x04 \x01(\tR\apicture\x12+\n" +
+	"\x04role\x18\x05 \x01(\x0e2\x17.nokku.v1.WorkspaceRoleR\x04role\x12\x16\n" +
 	"\x06active\x18\x06 \x01(\bR\x06active\x12#\n" +
 	"\rpending_email\x18\a \x01(\tR\fpendingEmail\x129\n" +
 	"\n" +
@@ -1189,42 +1188,44 @@ var file_nokku_v1_account_proto_goTypes = []any{
 	(*RemoveSessionResponse)(nil),       // 18: nokku.v1.RemoveSessionResponse
 	(*DeleteAccountRequest)(nil),        // 19: nokku.v1.DeleteAccountRequest
 	(*DeleteAccountResponse)(nil),       // 20: nokku.v1.DeleteAccountResponse
-	(*timestamppb.Timestamp)(nil),       // 21: google.protobuf.Timestamp
+	(WorkspaceRole)(0),                  // 21: nokku.v1.WorkspaceRole
+	(*timestamppb.Timestamp)(nil),       // 22: google.protobuf.Timestamp
 }
 var file_nokku_v1_account_proto_depIdxs = []int32{
-	21, // 0: nokku.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	21, // 1: nokku.v1.User.updated_at:type_name -> google.protobuf.Timestamp
-	21, // 2: nokku.v1.AccountCredential.created_at:type_name -> google.protobuf.Timestamp
-	21, // 3: nokku.v1.AccountCredential.last_used_at:type_name -> google.protobuf.Timestamp
-	21, // 4: nokku.v1.AccountSession.expires_at:type_name -> google.protobuf.Timestamp
-	21, // 5: nokku.v1.AccountSession.last_seen_at:type_name -> google.protobuf.Timestamp
-	0,  // 6: nokku.v1.GetAccountResponse.user:type_name -> nokku.v1.User
-	0,  // 7: nokku.v1.UpdateAccountResponse.user:type_name -> nokku.v1.User
-	1,  // 8: nokku.v1.ListCredentialsResponse.credentials:type_name -> nokku.v1.AccountCredential
-	2,  // 9: nokku.v1.ListAccountSessionsResponse.sessions:type_name -> nokku.v1.AccountSession
-	3,  // 10: nokku.v1.AccountService.GetAccount:input_type -> nokku.v1.GetAccountRequest
-	5,  // 11: nokku.v1.AccountService.UpdateAccount:input_type -> nokku.v1.UpdateAccountRequest
-	7,  // 12: nokku.v1.AccountService.RequestEmailChange:input_type -> nokku.v1.RequestEmailChangeRequest
-	9,  // 13: nokku.v1.AccountService.ListCredentials:input_type -> nokku.v1.ListCredentialsRequest
-	11, // 14: nokku.v1.AccountService.RenameCredential:input_type -> nokku.v1.RenameCredentialRequest
-	13, // 15: nokku.v1.AccountService.RemoveCredential:input_type -> nokku.v1.RemoveCredentialRequest
-	15, // 16: nokku.v1.AccountService.ListAccountSessions:input_type -> nokku.v1.ListAccountSessionsRequest
-	17, // 17: nokku.v1.AccountService.RemoveSession:input_type -> nokku.v1.RemoveSessionRequest
-	19, // 18: nokku.v1.AccountService.DeleteAccount:input_type -> nokku.v1.DeleteAccountRequest
-	4,  // 19: nokku.v1.AccountService.GetAccount:output_type -> nokku.v1.GetAccountResponse
-	6,  // 20: nokku.v1.AccountService.UpdateAccount:output_type -> nokku.v1.UpdateAccountResponse
-	8,  // 21: nokku.v1.AccountService.RequestEmailChange:output_type -> nokku.v1.RequestEmailChangeResponse
-	10, // 22: nokku.v1.AccountService.ListCredentials:output_type -> nokku.v1.ListCredentialsResponse
-	12, // 23: nokku.v1.AccountService.RenameCredential:output_type -> nokku.v1.RenameCredentialResponse
-	14, // 24: nokku.v1.AccountService.RemoveCredential:output_type -> nokku.v1.RemoveCredentialResponse
-	16, // 25: nokku.v1.AccountService.ListAccountSessions:output_type -> nokku.v1.ListAccountSessionsResponse
-	18, // 26: nokku.v1.AccountService.RemoveSession:output_type -> nokku.v1.RemoveSessionResponse
-	20, // 27: nokku.v1.AccountService.DeleteAccount:output_type -> nokku.v1.DeleteAccountResponse
-	19, // [19:28] is the sub-list for method output_type
-	10, // [10:19] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	21, // 0: nokku.v1.User.role:type_name -> nokku.v1.WorkspaceRole
+	22, // 1: nokku.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	22, // 2: nokku.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	22, // 3: nokku.v1.AccountCredential.created_at:type_name -> google.protobuf.Timestamp
+	22, // 4: nokku.v1.AccountCredential.last_used_at:type_name -> google.protobuf.Timestamp
+	22, // 5: nokku.v1.AccountSession.expires_at:type_name -> google.protobuf.Timestamp
+	22, // 6: nokku.v1.AccountSession.last_seen_at:type_name -> google.protobuf.Timestamp
+	0,  // 7: nokku.v1.GetAccountResponse.user:type_name -> nokku.v1.User
+	0,  // 8: nokku.v1.UpdateAccountResponse.user:type_name -> nokku.v1.User
+	1,  // 9: nokku.v1.ListCredentialsResponse.credentials:type_name -> nokku.v1.AccountCredential
+	2,  // 10: nokku.v1.ListAccountSessionsResponse.sessions:type_name -> nokku.v1.AccountSession
+	3,  // 11: nokku.v1.AccountService.GetAccount:input_type -> nokku.v1.GetAccountRequest
+	5,  // 12: nokku.v1.AccountService.UpdateAccount:input_type -> nokku.v1.UpdateAccountRequest
+	7,  // 13: nokku.v1.AccountService.RequestEmailChange:input_type -> nokku.v1.RequestEmailChangeRequest
+	9,  // 14: nokku.v1.AccountService.ListCredentials:input_type -> nokku.v1.ListCredentialsRequest
+	11, // 15: nokku.v1.AccountService.RenameCredential:input_type -> nokku.v1.RenameCredentialRequest
+	13, // 16: nokku.v1.AccountService.RemoveCredential:input_type -> nokku.v1.RemoveCredentialRequest
+	15, // 17: nokku.v1.AccountService.ListAccountSessions:input_type -> nokku.v1.ListAccountSessionsRequest
+	17, // 18: nokku.v1.AccountService.RemoveSession:input_type -> nokku.v1.RemoveSessionRequest
+	19, // 19: nokku.v1.AccountService.DeleteAccount:input_type -> nokku.v1.DeleteAccountRequest
+	4,  // 20: nokku.v1.AccountService.GetAccount:output_type -> nokku.v1.GetAccountResponse
+	6,  // 21: nokku.v1.AccountService.UpdateAccount:output_type -> nokku.v1.UpdateAccountResponse
+	8,  // 22: nokku.v1.AccountService.RequestEmailChange:output_type -> nokku.v1.RequestEmailChangeResponse
+	10, // 23: nokku.v1.AccountService.ListCredentials:output_type -> nokku.v1.ListCredentialsResponse
+	12, // 24: nokku.v1.AccountService.RenameCredential:output_type -> nokku.v1.RenameCredentialResponse
+	14, // 25: nokku.v1.AccountService.RemoveCredential:output_type -> nokku.v1.RemoveCredentialResponse
+	16, // 26: nokku.v1.AccountService.ListAccountSessions:output_type -> nokku.v1.ListAccountSessionsResponse
+	18, // 27: nokku.v1.AccountService.RemoveSession:output_type -> nokku.v1.RemoveSessionResponse
+	20, // 28: nokku.v1.AccountService.DeleteAccount:output_type -> nokku.v1.DeleteAccountResponse
+	20, // [20:29] is the sub-list for method output_type
+	11, // [11:20] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_account_proto_init() }

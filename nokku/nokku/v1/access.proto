@@ -19,7 +19,9 @@ message Access {
   bool daemon = 4;
 }
 
-// WorkspaceRole values are ordered, each includes everything before it.
+// WorkspaceRole values are ordered, each includes everything before it. The
+// backend compares and stores the numbers, so a role added in between means
+// renumbering the stored rows too.
 enum WorkspaceRole {
   WORKSPACE_ROLE_UNSPECIFIED = 0;
   WORKSPACE_ROLE_MEMBER = 1;

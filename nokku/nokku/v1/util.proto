@@ -75,7 +75,7 @@ message WhoamiResponse {
 }
 
 message Role {
-  string name = 1;
+  WorkspaceRole role = 1;
   string description = 2;
 }
 message ListRolesRequest {}

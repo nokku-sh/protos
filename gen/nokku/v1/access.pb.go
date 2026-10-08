@@ -22,7 +22,9 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// WorkspaceRole values are ordered, each includes everything before it.
+// WorkspaceRole values are ordered, each includes everything before it. The
+// backend compares and stores the numbers, so a role added in between means
+// renumbering the stored rows too.
 type WorkspaceRole int32
 
 const (

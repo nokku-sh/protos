@@ -462,7 +462,7 @@ func (x *WhoamiResponse) GetDaemon() *Daemon {
 
 type Role struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          *string                `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	Role          *WorkspaceRole         `protobuf:"varint,1,opt,name=role,enum=nokku.v1.WorkspaceRole" json:"role,omitempty"`
 	Description   *string                `protobuf:"bytes,2,opt,name=description" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -498,11 +498,11 @@ func (*Role) Descriptor() ([]byte, []int) {
 	return file_nokku_v1_util_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *Role) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
+func (x *Role) GetRole() WorkspaceRole {
+	if x != nil && x.Role != nil {
+		return *x.Role
 	}
-	return ""
+	return WorkspaceRole_WORKSPACE_ROLE_UNSPECIFIED
 }
 
 func (x *Role) GetDescription() string {
@@ -1184,9 +1184,9 @@ const file_nokku_v1_util_proto_rawDesc = "" +
 	"subject_id\x18\x02 \x01(\tR\tsubjectId\x12\"\n" +
 	"\x04user\x18\x03 \x01(\v2\x0e.nokku.v1.UserR\x04user\x12A\n" +
 	"\x0fservice_account\x18\x04 \x01(\v2\x18.nokku.v1.ServiceAccountR\x0eserviceAccount\x12(\n" +
-	"\x06daemon\x18\x05 \x01(\v2\x10.nokku.v1.DaemonR\x06daemon\"<\n" +
-	"\x04Role\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
+	"\x06daemon\x18\x05 \x01(\v2\x10.nokku.v1.DaemonR\x06daemon\"U\n" +
+	"\x04Role\x12+\n" +
+	"\x04role\x18\x01 \x01(\x0e2\x17.nokku.v1.WorkspaceRoleR\x04role\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\"\x12\n" +
 	"\x10ListRolesRequest\"9\n" +
 	"\x11ListRolesResponse\x12$\n" +
@@ -1298,43 +1298,45 @@ var file_nokku_v1_util_proto_goTypes = []any{
 	(*User)(nil),                       // 19: nokku.v1.User
 	(*ServiceAccount)(nil),             // 20: nokku.v1.ServiceAccount
 	(*Daemon)(nil),                     // 21: nokku.v1.Daemon
-	(*structpb.Struct)(nil),            // 22: google.protobuf.Struct
-	(*timestamppb.Timestamp)(nil),      // 23: google.protobuf.Timestamp
+	(WorkspaceRole)(0),                 // 22: nokku.v1.WorkspaceRole
+	(*structpb.Struct)(nil),            // 23: google.protobuf.Struct
+	(*timestamppb.Timestamp)(nil),      // 24: google.protobuf.Timestamp
 }
 var file_nokku_v1_util_proto_depIdxs = []int32{
 	19, // 0: nokku.v1.WhoamiResponse.user:type_name -> nokku.v1.User
 	20, // 1: nokku.v1.WhoamiResponse.service_account:type_name -> nokku.v1.ServiceAccount
 	21, // 2: nokku.v1.WhoamiResponse.daemon:type_name -> nokku.v1.Daemon
-	8,  // 3: nokku.v1.ListRolesResponse.roles:type_name -> nokku.v1.Role
-	22, // 4: nokku.v1.EventLog.details:type_name -> google.protobuf.Struct
-	23, // 5: nokku.v1.EventLog.timestamp:type_name -> google.protobuf.Timestamp
-	0,  // 6: nokku.v1.AuditLogFilter.outcome:type_name -> nokku.v1.AuditOutcome
-	23, // 7: nokku.v1.AuditLogFilter.start_date:type_name -> google.protobuf.Timestamp
-	23, // 8: nokku.v1.AuditLogFilter.end_date:type_name -> google.protobuf.Timestamp
-	12, // 9: nokku.v1.ListAuditLogsRequest.filter:type_name -> nokku.v1.AuditLogFilter
-	11, // 10: nokku.v1.ListAuditLogsResponse.logs:type_name -> nokku.v1.EventLog
-	1,  // 11: nokku.v1.ExportAuditLogsRequest.format:type_name -> nokku.v1.ExportAuditLogsRequest.Format
-	12, // 12: nokku.v1.ExportAuditLogsRequest.filter:type_name -> nokku.v1.AuditLogFilter
-	11, // 13: nokku.v1.ListMyActivityResponse.logs:type_name -> nokku.v1.EventLog
-	2,  // 14: nokku.v1.UtilService.GetVersion:input_type -> nokku.v1.GetVersionRequest
-	4,  // 15: nokku.v1.UtilService.GetInstanceInfo:input_type -> nokku.v1.GetInstanceInfoRequest
-	6,  // 16: nokku.v1.UtilService.Whoami:input_type -> nokku.v1.WhoamiRequest
-	9,  // 17: nokku.v1.UtilService.ListRoles:input_type -> nokku.v1.ListRolesRequest
-	13, // 18: nokku.v1.UtilService.ListAuditLogs:input_type -> nokku.v1.ListAuditLogsRequest
-	15, // 19: nokku.v1.UtilService.ExportAuditLogs:input_type -> nokku.v1.ExportAuditLogsRequest
-	17, // 20: nokku.v1.UtilService.ListMyActivity:input_type -> nokku.v1.ListMyActivityRequest
-	3,  // 21: nokku.v1.UtilService.GetVersion:output_type -> nokku.v1.GetVersionResponse
-	5,  // 22: nokku.v1.UtilService.GetInstanceInfo:output_type -> nokku.v1.GetInstanceInfoResponse
-	7,  // 23: nokku.v1.UtilService.Whoami:output_type -> nokku.v1.WhoamiResponse
-	10, // 24: nokku.v1.UtilService.ListRoles:output_type -> nokku.v1.ListRolesResponse
-	14, // 25: nokku.v1.UtilService.ListAuditLogs:output_type -> nokku.v1.ListAuditLogsResponse
-	16, // 26: nokku.v1.UtilService.ExportAuditLogs:output_type -> nokku.v1.ExportAuditLogsResponse
-	18, // 27: nokku.v1.UtilService.ListMyActivity:output_type -> nokku.v1.ListMyActivityResponse
-	21, // [21:28] is the sub-list for method output_type
-	14, // [14:21] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	22, // 3: nokku.v1.Role.role:type_name -> nokku.v1.WorkspaceRole
+	8,  // 4: nokku.v1.ListRolesResponse.roles:type_name -> nokku.v1.Role
+	23, // 5: nokku.v1.EventLog.details:type_name -> google.protobuf.Struct
+	24, // 6: nokku.v1.EventLog.timestamp:type_name -> google.protobuf.Timestamp
+	0,  // 7: nokku.v1.AuditLogFilter.outcome:type_name -> nokku.v1.AuditOutcome
+	24, // 8: nokku.v1.AuditLogFilter.start_date:type_name -> google.protobuf.Timestamp
+	24, // 9: nokku.v1.AuditLogFilter.end_date:type_name -> google.protobuf.Timestamp
+	12, // 10: nokku.v1.ListAuditLogsRequest.filter:type_name -> nokku.v1.AuditLogFilter
+	11, // 11: nokku.v1.ListAuditLogsResponse.logs:type_name -> nokku.v1.EventLog
+	1,  // 12: nokku.v1.ExportAuditLogsRequest.format:type_name -> nokku.v1.ExportAuditLogsRequest.Format
+	12, // 13: nokku.v1.ExportAuditLogsRequest.filter:type_name -> nokku.v1.AuditLogFilter
+	11, // 14: nokku.v1.ListMyActivityResponse.logs:type_name -> nokku.v1.EventLog
+	2,  // 15: nokku.v1.UtilService.GetVersion:input_type -> nokku.v1.GetVersionRequest
+	4,  // 16: nokku.v1.UtilService.GetInstanceInfo:input_type -> nokku.v1.GetInstanceInfoRequest
+	6,  // 17: nokku.v1.UtilService.Whoami:input_type -> nokku.v1.WhoamiRequest
+	9,  // 18: nokku.v1.UtilService.ListRoles:input_type -> nokku.v1.ListRolesRequest
+	13, // 19: nokku.v1.UtilService.ListAuditLogs:input_type -> nokku.v1.ListAuditLogsRequest
+	15, // 20: nokku.v1.UtilService.ExportAuditLogs:input_type -> nokku.v1.ExportAuditLogsRequest
+	17, // 21: nokku.v1.UtilService.ListMyActivity:input_type -> nokku.v1.ListMyActivityRequest
+	3,  // 22: nokku.v1.UtilService.GetVersion:output_type -> nokku.v1.GetVersionResponse
+	5,  // 23: nokku.v1.UtilService.GetInstanceInfo:output_type -> nokku.v1.GetInstanceInfoResponse
+	7,  // 24: nokku.v1.UtilService.Whoami:output_type -> nokku.v1.WhoamiResponse
+	10, // 25: nokku.v1.UtilService.ListRoles:output_type -> nokku.v1.ListRolesResponse
+	14, // 26: nokku.v1.UtilService.ListAuditLogs:output_type -> nokku.v1.ListAuditLogsResponse
+	16, // 27: nokku.v1.UtilService.ExportAuditLogs:output_type -> nokku.v1.ExportAuditLogsResponse
+	18, // 28: nokku.v1.UtilService.ListMyActivity:output_type -> nokku.v1.ListMyActivityResponse
+	22, // [22:29] is the sub-list for method output_type
+	15, // [15:22] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_util_proto_init() }

@@ -49,8 +49,7 @@ message User {
   string name = 2;
   string email = 3;
   string picture = 4;
-  // member, viewer, editor, admin, owner
-  string role = 5;
+  WorkspaceRole role = 5;
   bool active = 6;
   // The address an email change is waiting on, empty when none is pending.
   string pending_email = 7;

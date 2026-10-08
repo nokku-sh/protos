@@ -652,7 +652,7 @@ type ListUsersRequest struct {
 	Limit         *int32                 `protobuf:"varint,1,opt,name=limit" json:"limit,omitempty"`
 	Offset        *int32                 `protobuf:"varint,2,opt,name=offset" json:"offset,omitempty"`
 	Query         *string                `protobuf:"bytes,3,opt,name=query" json:"query,omitempty"`
-	Role          *string                `protobuf:"bytes,4,opt,name=role" json:"role,omitempty"`
+	Role          *WorkspaceRole         `protobuf:"varint,4,opt,name=role,enum=nokku.v1.WorkspaceRole" json:"role,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -708,11 +708,11 @@ func (x *ListUsersRequest) GetQuery() string {
 	return ""
 }
 
-func (x *ListUsersRequest) GetRole() string {
+func (x *ListUsersRequest) GetRole() WorkspaceRole {
 	if x != nil && x.Role != nil {
 		return *x.Role
 	}
-	return ""
+	return WorkspaceRole_WORKSPACE_ROLE_UNSPECIFIED
 }
 
 type ListUsersResponse struct {
@@ -858,7 +858,7 @@ func (x *GetUserResponse) GetUser() *User {
 type UpdateUserRoleRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        *string                `protobuf:"bytes,1,opt,name=user_id,json=userId" json:"user_id,omitempty"`
-	Role          *string                `protobuf:"bytes,2,opt,name=role" json:"role,omitempty"`
+	Role          *WorkspaceRole         `protobuf:"varint,2,opt,name=role,enum=nokku.v1.WorkspaceRole" json:"role,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -900,11 +900,11 @@ func (x *UpdateUserRoleRequest) GetUserId() string {
 	return ""
 }
 
-func (x *UpdateUserRoleRequest) GetRole() string {
+func (x *UpdateUserRoleRequest) GetRole() WorkspaceRole {
 	if x != nil && x.Role != nil {
 		return *x.Role
 	}
-	return ""
+	return WorkspaceRole_WORKSPACE_ROLE_UNSPECIFIED
 }
 
 type UpdateUserRoleResponse struct {
@@ -1239,22 +1239,22 @@ const file_nokku_v1_workspace_proto_rawDesc = "" +
 	"\bservices\x18\x01 \x03(\tR\bservices\x12\x1e\n" +
 	"\n" +
 	"everything\x18\x02 \x01(\bR\n" +
-	"everything\"~\n" +
+	"everything\"\xa1\x01\n" +
 	"\x10ListUsersRequest\x12\x1f\n" +
 	"\x05limit\x18\x01 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
 	"\x06offset\x18\x02 \x01(\x05B\a\xbaH\x04\x1a\x02(\x00R\x06offset\x12\x14\n" +
-	"\x05query\x18\x03 \x01(\tR\x05query\x12\x12\n" +
-	"\x04role\x18\x04 \x01(\tR\x04role\"O\n" +
+	"\x05query\x18\x03 \x01(\tR\x05query\x125\n" +
+	"\x04role\x18\x04 \x01(\x0e2\x17.nokku.v1.WorkspaceRoleB\b\xbaH\x05\x82\x01\x02\x10\x01R\x04role\"O\n" +
 	"\x11ListUsersResponse\x12$\n" +
 	"\x05users\x18\x01 \x03(\v2\x0e.nokku.v1.UserR\x05users\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\"3\n" +
 	"\x0eGetUserRequest\x12!\n" +
 	"\auser_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\"5\n" +
 	"\x0fGetUserResponse\x12\"\n" +
-	"\x04user\x18\x01 \x01(\v2\x0e.nokku.v1.UserR\x04user\"t\n" +
+	"\x04user\x18\x01 \x01(\v2\x0e.nokku.v1.UserR\x04user\"w\n" +
 	"\x15UpdateUserRoleRequest\x12!\n" +
-	"\auser_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\x128\n" +
-	"\x04role\x18\x02 \x01(\tB$\xbaH!r\x1fR\x06memberR\x06viewerR\x06editorR\x05adminR\x04role\"\x18\n" +
+	"\auser_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\x12;\n" +
+	"\x04role\x18\x02 \x01(\x0e2\x17.nokku.v1.WorkspaceRoleB\x0e\xbaH\v\x82\x01\b\x18\x01\x18\x02\x18\x03\x18\x04R\x04role\"\x18\n" +
 	"\x16UpdateUserRoleResponse\"Q\n" +
 	"\x14SetUserActiveRequest\x12!\n" +
 	"\auser_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06userId\x12\x16\n" +
@@ -1322,7 +1322,8 @@ var file_nokku_v1_workspace_proto_goTypes = []any{
 	(*TransferOwnershipResponse)(nil), // 23: nokku.v1.TransferOwnershipResponse
 	(*timestamppb.Timestamp)(nil),     // 24: google.protobuf.Timestamp
 	(*DaemonConfig)(nil),              // 25: nokku.v1.DaemonConfig
-	(*User)(nil),                      // 26: nokku.v1.User
+	(WorkspaceRole)(0),                // 26: nokku.v1.WorkspaceRole
+	(*User)(nil),                      // 27: nokku.v1.User
 }
 var file_nokku_v1_workspace_proto_depIdxs = []int32{
 	1,  // 0: nokku.v1.Workspace.settings:type_name -> nokku.v1.WorkspaceSettings
@@ -1332,35 +1333,37 @@ var file_nokku_v1_workspace_proto_depIdxs = []int32{
 	0,  // 4: nokku.v1.GetWorkspaceResponse.workspace:type_name -> nokku.v1.Workspace
 	1,  // 5: nokku.v1.UpdateWorkspaceRequest.settings:type_name -> nokku.v1.WorkspaceSettings
 	0,  // 6: nokku.v1.UpdateWorkspaceResponse.workspace:type_name -> nokku.v1.Workspace
-	26, // 7: nokku.v1.ListUsersResponse.users:type_name -> nokku.v1.User
-	26, // 8: nokku.v1.GetUserResponse.user:type_name -> nokku.v1.User
-	2,  // 9: nokku.v1.WorkspaceService.GetWorkspace:input_type -> nokku.v1.GetWorkspaceRequest
-	4,  // 10: nokku.v1.WorkspaceService.UpdateWorkspace:input_type -> nokku.v1.UpdateWorkspaceRequest
-	6,  // 11: nokku.v1.WorkspaceService.DeleteWorkspace:input_type -> nokku.v1.DeleteWorkspaceRequest
-	12, // 12: nokku.v1.WorkspaceService.ListUsers:input_type -> nokku.v1.ListUsersRequest
-	14, // 13: nokku.v1.WorkspaceService.GetUser:input_type -> nokku.v1.GetUserRequest
-	16, // 14: nokku.v1.WorkspaceService.UpdateUserRole:input_type -> nokku.v1.UpdateUserRoleRequest
-	18, // 15: nokku.v1.WorkspaceService.SetUserActive:input_type -> nokku.v1.SetUserActiveRequest
-	20, // 16: nokku.v1.WorkspaceService.DeleteUser:input_type -> nokku.v1.DeleteUserRequest
-	22, // 17: nokku.v1.WorkspaceService.TransferOwnership:input_type -> nokku.v1.TransferOwnershipRequest
-	8,  // 18: nokku.v1.WorkspaceService.CreateWorkspace:input_type -> nokku.v1.CreateWorkspaceRequest
-	10, // 19: nokku.v1.WorkspaceService.SubscribeChanges:input_type -> nokku.v1.SubscribeChangesRequest
-	3,  // 20: nokku.v1.WorkspaceService.GetWorkspace:output_type -> nokku.v1.GetWorkspaceResponse
-	5,  // 21: nokku.v1.WorkspaceService.UpdateWorkspace:output_type -> nokku.v1.UpdateWorkspaceResponse
-	7,  // 22: nokku.v1.WorkspaceService.DeleteWorkspace:output_type -> nokku.v1.DeleteWorkspaceResponse
-	13, // 23: nokku.v1.WorkspaceService.ListUsers:output_type -> nokku.v1.ListUsersResponse
-	15, // 24: nokku.v1.WorkspaceService.GetUser:output_type -> nokku.v1.GetUserResponse
-	17, // 25: nokku.v1.WorkspaceService.UpdateUserRole:output_type -> nokku.v1.UpdateUserRoleResponse
-	19, // 26: nokku.v1.WorkspaceService.SetUserActive:output_type -> nokku.v1.SetUserActiveResponse
-	21, // 27: nokku.v1.WorkspaceService.DeleteUser:output_type -> nokku.v1.DeleteUserResponse
-	23, // 28: nokku.v1.WorkspaceService.TransferOwnership:output_type -> nokku.v1.TransferOwnershipResponse
-	9,  // 29: nokku.v1.WorkspaceService.CreateWorkspace:output_type -> nokku.v1.CreateWorkspaceResponse
-	11, // 30: nokku.v1.WorkspaceService.SubscribeChanges:output_type -> nokku.v1.SubscribeChangesResponse
-	20, // [20:31] is the sub-list for method output_type
-	9,  // [9:20] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	26, // 7: nokku.v1.ListUsersRequest.role:type_name -> nokku.v1.WorkspaceRole
+	27, // 8: nokku.v1.ListUsersResponse.users:type_name -> nokku.v1.User
+	27, // 9: nokku.v1.GetUserResponse.user:type_name -> nokku.v1.User
+	26, // 10: nokku.v1.UpdateUserRoleRequest.role:type_name -> nokku.v1.WorkspaceRole
+	2,  // 11: nokku.v1.WorkspaceService.GetWorkspace:input_type -> nokku.v1.GetWorkspaceRequest
+	4,  // 12: nokku.v1.WorkspaceService.UpdateWorkspace:input_type -> nokku.v1.UpdateWorkspaceRequest
+	6,  // 13: nokku.v1.WorkspaceService.DeleteWorkspace:input_type -> nokku.v1.DeleteWorkspaceRequest
+	12, // 14: nokku.v1.WorkspaceService.ListUsers:input_type -> nokku.v1.ListUsersRequest
+	14, // 15: nokku.v1.WorkspaceService.GetUser:input_type -> nokku.v1.GetUserRequest
+	16, // 16: nokku.v1.WorkspaceService.UpdateUserRole:input_type -> nokku.v1.UpdateUserRoleRequest
+	18, // 17: nokku.v1.WorkspaceService.SetUserActive:input_type -> nokku.v1.SetUserActiveRequest
+	20, // 18: nokku.v1.WorkspaceService.DeleteUser:input_type -> nokku.v1.DeleteUserRequest
+	22, // 19: nokku.v1.WorkspaceService.TransferOwnership:input_type -> nokku.v1.TransferOwnershipRequest
+	8,  // 20: nokku.v1.WorkspaceService.CreateWorkspace:input_type -> nokku.v1.CreateWorkspaceRequest
+	10, // 21: nokku.v1.WorkspaceService.SubscribeChanges:input_type -> nokku.v1.SubscribeChangesRequest
+	3,  // 22: nokku.v1.WorkspaceService.GetWorkspace:output_type -> nokku.v1.GetWorkspaceResponse
+	5,  // 23: nokku.v1.WorkspaceService.UpdateWorkspace:output_type -> nokku.v1.UpdateWorkspaceResponse
+	7,  // 24: nokku.v1.WorkspaceService.DeleteWorkspace:output_type -> nokku.v1.DeleteWorkspaceResponse
+	13, // 25: nokku.v1.WorkspaceService.ListUsers:output_type -> nokku.v1.ListUsersResponse
+	15, // 26: nokku.v1.WorkspaceService.GetUser:output_type -> nokku.v1.GetUserResponse
+	17, // 27: nokku.v1.WorkspaceService.UpdateUserRole:output_type -> nokku.v1.UpdateUserRoleResponse
+	19, // 28: nokku.v1.WorkspaceService.SetUserActive:output_type -> nokku.v1.SetUserActiveResponse
+	21, // 29: nokku.v1.WorkspaceService.DeleteUser:output_type -> nokku.v1.DeleteUserResponse
+	23, // 30: nokku.v1.WorkspaceService.TransferOwnership:output_type -> nokku.v1.TransferOwnershipResponse
+	9,  // 31: nokku.v1.WorkspaceService.CreateWorkspace:output_type -> nokku.v1.CreateWorkspaceResponse
+	11, // 32: nokku.v1.WorkspaceService.SubscribeChanges:output_type -> nokku.v1.SubscribeChangesResponse
+	22, // [22:33] is the sub-list for method output_type
+	11, // [11:22] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_workspace_proto_init() }
