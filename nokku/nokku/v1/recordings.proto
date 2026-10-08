@@ -44,6 +44,9 @@ message UploadRecordingRequest {
 message RecordingMeta {
   string recording_id = 1 [(buf.validate.field).string.uuid = true];
   string username = 2 [(buf.validate.field).string.max_len = 32];
+  // When the session began, for a recording that is uploaded after it. Unset
+  // or in the future means now.
+  google.protobuf.Timestamp started_at = 3;
 }
 
 message RecordingFinal {}

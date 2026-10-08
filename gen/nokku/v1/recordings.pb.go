@@ -224,9 +224,12 @@ func (*UploadRecordingRequest_Chunk) isUploadRecordingRequest_Msg() {}
 func (*UploadRecordingRequest_Final) isUploadRecordingRequest_Msg() {}
 
 type RecordingMeta struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RecordingId   *string                `protobuf:"bytes,1,opt,name=recording_id,json=recordingId" json:"recording_id,omitempty"`
-	Username      *string                `protobuf:"bytes,2,opt,name=username" json:"username,omitempty"`
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	RecordingId *string                `protobuf:"bytes,1,opt,name=recording_id,json=recordingId" json:"recording_id,omitempty"`
+	Username    *string                `protobuf:"bytes,2,opt,name=username" json:"username,omitempty"`
+	// When the session began, for a recording that is uploaded after it. Unset
+	// or in the future means now.
+	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=started_at,json=startedAt" json:"started_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -273,6 +276,13 @@ func (x *RecordingMeta) GetUsername() string {
 		return *x.Username
 	}
 	return ""
+}
+
+func (x *RecordingMeta) GetStartedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.StartedAt
+	}
+	return nil
 }
 
 type RecordingFinal struct {
@@ -718,10 +728,12 @@ const file_nokku_v1_recordings_proto_rawDesc = "" +
 	"\x04meta\x18\x01 \x01(\v2\x17.nokku.v1.RecordingMetaH\x00R\x04meta\x12\x16\n" +
 	"\x05chunk\x18\x02 \x01(\fH\x00R\x05chunk\x120\n" +
 	"\x05final\x18\x03 \x01(\v2\x18.nokku.v1.RecordingFinalH\x00R\x05finalB\x05\n" +
-	"\x03msg\"a\n" +
+	"\x03msg\"\x9c\x01\n" +
 	"\rRecordingMeta\x12+\n" +
 	"\frecording_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\vrecordingId\x12#\n" +
-	"\busername\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x18 R\busername\"\x10\n" +
+	"\busername\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x18 R\busername\x129\n" +
+	"\n" +
+	"started_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\"\x10\n" +
 	"\x0eRecordingFinal\"[\n" +
 	"\x17UploadRecordingResponse\x12!\n" +
 	"\frecording_id\x18\x01 \x01(\tR\vrecordingId\x12\x1d\n" +
@@ -786,19 +798,20 @@ var file_nokku_v1_recordings_proto_depIdxs = []int32{
 	11, // 1: nokku.v1.Recording.ended_at:type_name -> google.protobuf.Timestamp
 	2,  // 2: nokku.v1.UploadRecordingRequest.meta:type_name -> nokku.v1.RecordingMeta
 	3,  // 3: nokku.v1.UploadRecordingRequest.final:type_name -> nokku.v1.RecordingFinal
-	0,  // 4: nokku.v1.ListRecordingsResponse.recordings:type_name -> nokku.v1.Recording
-	2,  // 5: nokku.v1.GetRecordingResponse.meta:type_name -> nokku.v1.RecordingMeta
-	7,  // 6: nokku.v1.RecordingService.GetRecording:input_type -> nokku.v1.GetRecordingRequest
-	5,  // 7: nokku.v1.RecordingService.ListRecordings:input_type -> nokku.v1.ListRecordingsRequest
-	9,  // 8: nokku.v1.RecordingService.DeleteRecording:input_type -> nokku.v1.DeleteRecordingRequest
-	8,  // 9: nokku.v1.RecordingService.GetRecording:output_type -> nokku.v1.GetRecordingResponse
-	6,  // 10: nokku.v1.RecordingService.ListRecordings:output_type -> nokku.v1.ListRecordingsResponse
-	10, // 11: nokku.v1.RecordingService.DeleteRecording:output_type -> nokku.v1.DeleteRecordingResponse
-	9,  // [9:12] is the sub-list for method output_type
-	6,  // [6:9] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	11, // 4: nokku.v1.RecordingMeta.started_at:type_name -> google.protobuf.Timestamp
+	0,  // 5: nokku.v1.ListRecordingsResponse.recordings:type_name -> nokku.v1.Recording
+	2,  // 6: nokku.v1.GetRecordingResponse.meta:type_name -> nokku.v1.RecordingMeta
+	7,  // 7: nokku.v1.RecordingService.GetRecording:input_type -> nokku.v1.GetRecordingRequest
+	5,  // 8: nokku.v1.RecordingService.ListRecordings:input_type -> nokku.v1.ListRecordingsRequest
+	9,  // 9: nokku.v1.RecordingService.DeleteRecording:input_type -> nokku.v1.DeleteRecordingRequest
+	8,  // 10: nokku.v1.RecordingService.GetRecording:output_type -> nokku.v1.GetRecordingResponse
+	6,  // 11: nokku.v1.RecordingService.ListRecordings:output_type -> nokku.v1.ListRecordingsResponse
+	10, // 12: nokku.v1.RecordingService.DeleteRecording:output_type -> nokku.v1.DeleteRecordingResponse
+	10, // [10:13] is the sub-list for method output_type
+	7,  // [7:10] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_recordings_proto_init() }
