@@ -1171,7 +1171,7 @@ const file_nokku_v1_workspace_proto_rawDesc = "" +
 	"\x19TransferOwnershipResponse2\x96\a\n" +
 	"\x10WorkspaceService\x12X\n" +
 	"\fGetWorkspace\x12\x1d.nokku.v1.GetWorkspaceRequest\x1a\x1e.nokku.v1.GetWorkspaceResponse\"\t\xc2\xf3\x18\x02\x10\x01\x90\x02\x01\x12^\n" +
-	"\x0fUpdateWorkspace\x12 .nokku.v1.UpdateWorkspaceRequest\x1a!.nokku.v1.UpdateWorkspaceResponse\"\x06\xc2\xf3\x18\x02\x18\x04\x12^\n" +
+	"\x0fUpdateWorkspace\x12 .nokku.v1.UpdateWorkspaceRequest\x1a!.nokku.v1.UpdateWorkspaceResponse\"\x06\xc2\xf3\x18\x02\x18\x05\x12^\n" +
 	"\x0fDeleteWorkspace\x12 .nokku.v1.DeleteWorkspaceRequest\x1a!.nokku.v1.DeleteWorkspaceResponse\"\x06\xc2\xf3\x18\x02\x18\x05\x12O\n" +
 	"\tListUsers\x12\x1a.nokku.v1.ListUsersRequest\x1a\x1b.nokku.v1.ListUsersResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12I\n" +
 	"\aGetUser\x12\x18.nokku.v1.GetUserRequest\x1a\x19.nokku.v1.GetUserResponse\"\t\xc2\xf3\x18\x02\x18\x02\x90\x02\x01\x12[\n" +

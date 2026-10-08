@@ -16,7 +16,7 @@ service WorkspaceService {
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc UpdateWorkspace(UpdateWorkspaceRequest) returns (UpdateWorkspaceResponse) {
-    option (access) = {role: WORKSPACE_ROLE_ADMIN};
+    option (access) = {role: WORKSPACE_ROLE_OWNER};
   }
   // Refused on a self-hosted server.
   rpc DeleteWorkspace(DeleteWorkspaceRequest) returns (DeleteWorkspaceResponse) {
