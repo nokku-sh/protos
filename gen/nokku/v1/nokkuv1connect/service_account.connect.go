@@ -48,6 +48,9 @@ const (
 	// ServiceAccountServiceDeleteServiceAccountProcedure is the fully-qualified name of the
 	// ServiceAccountService's DeleteServiceAccount RPC.
 	ServiceAccountServiceDeleteServiceAccountProcedure = "/nokku.v1.ServiceAccountService/DeleteServiceAccount"
+	// ServiceAccountServiceRotateServiceAccountTokenProcedure is the fully-qualified name of the
+	// ServiceAccountService's RotateServiceAccountToken RPC.
+	ServiceAccountServiceRotateServiceAccountTokenProcedure = "/nokku.v1.ServiceAccountService/RotateServiceAccountToken"
 )
 
 // ServiceAccountServiceClient is a client for the nokku.v1.ServiceAccountService service.
@@ -57,6 +60,8 @@ type ServiceAccountServiceClient interface {
 	CreateServiceAccount(context.Context, *v1.CreateServiceAccountRequest) (*v1.CreateServiceAccountResponse, error)
 	UpdateServiceAccount(context.Context, *v1.UpdateServiceAccountRequest) (*v1.UpdateServiceAccountResponse, error)
 	DeleteServiceAccount(context.Context, *v1.DeleteServiceAccountRequest) (*v1.DeleteServiceAccountResponse, error)
+	// The old token stops working with the call. Grants and the id stay.
+	RotateServiceAccountToken(context.Context, *v1.RotateServiceAccountTokenRequest) (*v1.RotateServiceAccountTokenResponse, error)
 }
 
 // NewServiceAccountServiceClient constructs a client for the nokku.v1.ServiceAccountService
@@ -102,16 +107,23 @@ func NewServiceAccountServiceClient(httpClient connect.HTTPClient, baseURL strin
 			connect.WithSchema(serviceAccountServiceMethods.ByName("DeleteServiceAccount")),
 			connect.WithClientOptions(opts...),
 		),
+		rotateServiceAccountToken: connect.NewClient[v1.RotateServiceAccountTokenRequest, v1.RotateServiceAccountTokenResponse](
+			httpClient,
+			baseURL+ServiceAccountServiceRotateServiceAccountTokenProcedure,
+			connect.WithSchema(serviceAccountServiceMethods.ByName("RotateServiceAccountToken")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // serviceAccountServiceClient implements ServiceAccountServiceClient.
 type serviceAccountServiceClient struct {
-	getServiceAccount    *connect.Client[v1.GetServiceAccountRequest, v1.GetServiceAccountResponse]
-	listServiceAccounts  *connect.Client[v1.ListServiceAccountsRequest, v1.ListServiceAccountsResponse]
-	createServiceAccount *connect.Client[v1.CreateServiceAccountRequest, v1.CreateServiceAccountResponse]
-	updateServiceAccount *connect.Client[v1.UpdateServiceAccountRequest, v1.UpdateServiceAccountResponse]
-	deleteServiceAccount *connect.Client[v1.DeleteServiceAccountRequest, v1.DeleteServiceAccountResponse]
+	getServiceAccount         *connect.Client[v1.GetServiceAccountRequest, v1.GetServiceAccountResponse]
+	listServiceAccounts       *connect.Client[v1.ListServiceAccountsRequest, v1.ListServiceAccountsResponse]
+	createServiceAccount      *connect.Client[v1.CreateServiceAccountRequest, v1.CreateServiceAccountResponse]
+	updateServiceAccount      *connect.Client[v1.UpdateServiceAccountRequest, v1.UpdateServiceAccountResponse]
+	deleteServiceAccount      *connect.Client[v1.DeleteServiceAccountRequest, v1.DeleteServiceAccountResponse]
+	rotateServiceAccountToken *connect.Client[v1.RotateServiceAccountTokenRequest, v1.RotateServiceAccountTokenResponse]
 }
 
 // GetServiceAccount calls nokku.v1.ServiceAccountService.GetServiceAccount.
@@ -159,6 +171,15 @@ func (c *serviceAccountServiceClient) DeleteServiceAccount(ctx context.Context, 
 	return nil, err
 }
 
+// RotateServiceAccountToken calls nokku.v1.ServiceAccountService.RotateServiceAccountToken.
+func (c *serviceAccountServiceClient) RotateServiceAccountToken(ctx context.Context, req *v1.RotateServiceAccountTokenRequest) (*v1.RotateServiceAccountTokenResponse, error) {
+	response, err := c.rotateServiceAccountToken.CallUnary(ctx, connect.NewRequest(req))
+	if response != nil {
+		return response.Msg, err
+	}
+	return nil, err
+}
+
 // ServiceAccountServiceHandler is an implementation of the nokku.v1.ServiceAccountService service.
 type ServiceAccountServiceHandler interface {
 	GetServiceAccount(context.Context, *v1.GetServiceAccountRequest) (*v1.GetServiceAccountResponse, error)
@@ -166,6 +187,8 @@ type ServiceAccountServiceHandler interface {
 	CreateServiceAccount(context.Context, *v1.CreateServiceAccountRequest) (*v1.CreateServiceAccountResponse, error)
 	UpdateServiceAccount(context.Context, *v1.UpdateServiceAccountRequest) (*v1.UpdateServiceAccountResponse, error)
 	DeleteServiceAccount(context.Context, *v1.DeleteServiceAccountRequest) (*v1.DeleteServiceAccountResponse, error)
+	// The old token stops working with the call. Grants and the id stay.
+	RotateServiceAccountToken(context.Context, *v1.RotateServiceAccountTokenRequest) (*v1.RotateServiceAccountTokenResponse, error)
 }
 
 // NewServiceAccountServiceHandler builds an HTTP handler from the service implementation. It
@@ -207,6 +230,12 @@ func NewServiceAccountServiceHandler(svc ServiceAccountServiceHandler, opts ...c
 		connect.WithSchema(serviceAccountServiceMethods.ByName("DeleteServiceAccount")),
 		connect.WithHandlerOptions(opts...),
 	)
+	serviceAccountServiceRotateServiceAccountTokenHandler := connect.NewUnaryHandlerSimple(
+		ServiceAccountServiceRotateServiceAccountTokenProcedure,
+		svc.RotateServiceAccountToken,
+		connect.WithSchema(serviceAccountServiceMethods.ByName("RotateServiceAccountToken")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/nokku.v1.ServiceAccountService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case ServiceAccountServiceGetServiceAccountProcedure:
@@ -219,6 +248,8 @@ func NewServiceAccountServiceHandler(svc ServiceAccountServiceHandler, opts ...c
 			serviceAccountServiceUpdateServiceAccountHandler.ServeHTTP(w, r)
 		case ServiceAccountServiceDeleteServiceAccountProcedure:
 			serviceAccountServiceDeleteServiceAccountHandler.ServeHTTP(w, r)
+		case ServiceAccountServiceRotateServiceAccountTokenProcedure:
+			serviceAccountServiceRotateServiceAccountTokenHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -246,4 +277,8 @@ func (UnimplementedServiceAccountServiceHandler) UpdateServiceAccount(context.Co
 
 func (UnimplementedServiceAccountServiceHandler) DeleteServiceAccount(context.Context, *v1.DeleteServiceAccountRequest) (*v1.DeleteServiceAccountResponse, error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.ServiceAccountService.DeleteServiceAccount is not implemented"))
+}
+
+func (UnimplementedServiceAccountServiceHandler) RotateServiceAccountToken(context.Context, *v1.RotateServiceAccountTokenRequest) (*v1.RotateServiceAccountTokenResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("nokku.v1.ServiceAccountService.RotateServiceAccountToken is not implemented"))
 }
