@@ -69,6 +69,7 @@ message AccountCredential {
 }
 
 message AccountSession {
+  // The token id, what RemoveSession takes.
   string id = 1;
   string kind = 2;
   string method = 3;
@@ -123,8 +124,7 @@ message ListAccountSessionsResponse {
 }
 
 message RemoveSessionRequest {
-  // The hex token hash of the session, as returned by ListAccountSessions.
-  string id = 1 [(buf.validate.field).string.min_len = 1];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message RemoveSessionResponse {}
 

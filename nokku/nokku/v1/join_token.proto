@@ -7,28 +7,30 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "nokku/v1/access.proto";
 
-service TokenService {
-  rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {
+// Join tokens bring things in: an enroll token a daemon, an invite token a
+// person. They are redeemed and counted, they never authenticate a call.
+service JoinTokenService {
+  rpc CreateJoinToken(CreateJoinTokenRequest) returns (CreateJoinTokenResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
   }
-  rpc ListTokens(ListTokensRequest) returns (ListTokensResponse) {
+  rpc ListJoinTokens(ListJoinTokensRequest) returns (ListJoinTokensResponse) {
     option (access) = {role: WORKSPACE_ROLE_VIEWER};
     option idempotency_level = NO_SIDE_EFFECTS;
   }
-  rpc DeleteToken(DeleteTokenRequest) returns (DeleteTokenResponse) {
+  rpc DeleteJoinToken(DeleteJoinTokenRequest) returns (DeleteJoinTokenResponse) {
     option (access) = {role: WORKSPACE_ROLE_ADMIN};
   }
 }
 
-enum TokenKind {
-  TOKEN_KIND_UNSPECIFIED = 0;
-  TOKEN_KIND_ENROLL = 1;
-  TOKEN_KIND_INVITE = 2;
+enum JoinTokenKind {
+  JOIN_TOKEN_KIND_UNSPECIFIED = 0;
+  JOIN_TOKEN_KIND_ENROLL = 1;
+  JOIN_TOKEN_KIND_INVITE = 2;
 }
 
-message Token {
+message JoinToken {
   string id = 1;
-  TokenKind kind = 2;
+  JoinTokenKind kind = 2;
   string label = 3;
   google.protobuf.Timestamp expires_at = 4;
   int32 max_uses = 5;
@@ -40,8 +42,8 @@ message Token {
   google.protobuf.Timestamp last_used_at = 11;
 }
 
-message CreateTokenRequest {
-  TokenKind kind = 1 [(buf.validate.field).enum = {
+message CreateJoinTokenRequest {
+  JoinTokenKind kind = 1 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -53,19 +55,19 @@ message CreateTokenRequest {
   // Invite tokens only. Unset is the member.
   WorkspaceRole role = 7 [(buf.validate.field).enum.defined_only = true];
 }
-message CreateTokenResponse {
-  Token token = 1;
+message CreateJoinTokenResponse {
+  JoinToken token = 1;
   string secret = 2;
 }
 
-message ListTokensRequest {
-  TokenKind kind = 1 [(buf.validate.field).enum.defined_only = true];
+message ListJoinTokensRequest {
+  JoinTokenKind kind = 1 [(buf.validate.field).enum.defined_only = true];
 }
-message ListTokensResponse {
-  repeated Token tokens = 1;
+message ListJoinTokensResponse {
+  repeated JoinToken tokens = 1;
 }
 
-message DeleteTokenRequest {
+message DeleteJoinTokenRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
 }
-message DeleteTokenResponse {}
+message DeleteJoinTokenResponse {}

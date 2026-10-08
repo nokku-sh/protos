@@ -226,7 +226,8 @@ func (x *AccountCredential) GetLastUsedAt() *timestamppb.Timestamp {
 }
 
 type AccountSession struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The token id, what RemoveSession takes.
 	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	Kind          *string                `protobuf:"bytes,2,opt,name=kind" json:"kind,omitempty"`
 	Method        *string                `protobuf:"bytes,3,opt,name=method" json:"method,omitempty"`
@@ -918,9 +919,8 @@ func (x *ListAccountSessionsResponse) GetSessions() []*AccountSession {
 }
 
 type RemoveSessionRequest struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// The hex token hash of the session, as returned by ListAccountSessions.
-	Id            *string `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1134,9 +1134,9 @@ const file_nokku_v1_account_proto_rawDesc = "" +
 	"\x18RemoveCredentialResponse\"\x1c\n" +
 	"\x1aListAccountSessionsRequest\"S\n" +
 	"\x1bListAccountSessionsResponse\x124\n" +
-	"\bsessions\x18\x01 \x03(\v2\x18.nokku.v1.AccountSessionR\bsessions\"/\n" +
-	"\x14RemoveSessionRequest\x12\x17\n" +
-	"\x02id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x02id\"\x17\n" +
+	"\bsessions\x18\x01 \x03(\v2\x18.nokku.v1.AccountSessionR\bsessions\"0\n" +
+	"\x14RemoveSessionRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x17\n" +
 	"\x15RemoveSessionResponse\"\x16\n" +
 	"\x14DeleteAccountRequest\"\x17\n" +
 	"\x15DeleteAccountResponse2\xf3\x06\n" +

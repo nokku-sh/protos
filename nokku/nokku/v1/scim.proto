@@ -46,6 +46,6 @@ message ListSCIMTokensResponse {
 }
 
 message DeleteSCIMTokenRequest {
-  string token_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message DeleteSCIMTokenResponse {}
