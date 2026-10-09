@@ -63,6 +63,10 @@ message GetInstanceInfoResponse {
   // Whether this host offers workspace signup, true only on the hosted
   // service's root host.
   bool signup = 8;
+  // Pin of the private CA the server's certificate comes from, in the form
+  // nk --pin and NOKKUD_API_PIN take. Empty when every machine trusts the
+  // certificate already.
+  string ca_pin = 9;
 }
 
 message WhoamiRequest {}

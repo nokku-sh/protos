@@ -257,7 +257,11 @@ type GetInstanceInfoResponse struct {
 	Mode *string `protobuf:"bytes,7,opt,name=mode" json:"mode,omitempty"`
 	// Whether this host offers workspace signup, true only on the hosted
 	// service's root host.
-	Signup        *bool `protobuf:"varint,8,opt,name=signup" json:"signup,omitempty"`
+	Signup *bool `protobuf:"varint,8,opt,name=signup" json:"signup,omitempty"`
+	// Pin of the private CA the server's certificate comes from, in the form
+	// nk --pin and NOKKUD_API_PIN take. Empty when every machine trusts the
+	// certificate already.
+	CaPin         *string `protobuf:"bytes,9,opt,name=ca_pin,json=caPin" json:"ca_pin,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -346,6 +350,13 @@ func (x *GetInstanceInfoResponse) GetSignup() bool {
 		return *x.Signup
 	}
 	return false
+}
+
+func (x *GetInstanceInfoResponse) GetCaPin() string {
+	if x != nil && x.CaPin != nil {
+		return *x.CaPin
+	}
+	return ""
 }
 
 type WhoamiRequest struct {
@@ -1164,7 +1175,7 @@ const file_nokku_v1_util_proto_rawDesc = "" +
 	"\x11GetVersionRequest\".\n" +
 	"\x12GetVersionResponse\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\"\x18\n" +
-	"\x16GetInstanceInfoRequest\"\x8f\x02\n" +
+	"\x16GetInstanceInfoRequest\"\xa6\x02\n" +
 	"\x17GetInstanceInfoResponse\x12#\n" +
 	"\roperator_name\x18\x01 \x01(\tR\foperatorName\x12#\n" +
 	"\rsupport_email\x18\x02 \x01(\tR\fsupportEmail\x12\x1f\n" +
@@ -1176,7 +1187,8 @@ const file_nokku_v1_util_proto_rawDesc = "" +
 	"\vimprint_url\x18\x06 \x01(\tR\n" +
 	"imprintUrl\x12\x12\n" +
 	"\x04mode\x18\a \x01(\tR\x04mode\x12\x16\n" +
-	"\x06signup\x18\b \x01(\bR\x06signup\"\x0f\n" +
+	"\x06signup\x18\b \x01(\bR\x06signup\x12\x15\n" +
+	"\x06ca_pin\x18\t \x01(\tR\x05caPin\"\x0f\n" +
 	"\rWhoamiRequest\"\xd4\x01\n" +
 	"\x0eWhoamiResponse\x12\x12\n" +
 	"\x04kind\x18\x01 \x01(\tR\x04kind\x12\x1d\n" +
