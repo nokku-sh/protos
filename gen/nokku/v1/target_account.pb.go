@@ -85,8 +85,11 @@ type TargetAccount struct {
 	TeamIds           []string               `protobuf:"bytes,5,rep,name=team_ids,json=teamIds" json:"team_ids,omitempty"`
 	ServiceAccountIds []string               `protobuf:"bytes,6,rep,name=service_account_ids,json=serviceAccountIds" json:"service_account_ids,omitempty"`
 	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt" json:"created_at,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// When the host first reported the account. Unset means the host has not
+	// reported it, so grants on it open nothing until it exists there.
+	SeenAt        *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=seen_at,json=seenAt" json:"seen_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TargetAccount) Reset() {
@@ -164,6 +167,13 @@ func (x *TargetAccount) GetServiceAccountIds() []string {
 func (x *TargetAccount) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *TargetAccount) GetSeenAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.SeenAt
 	}
 	return nil
 }
@@ -748,7 +758,7 @@ var File_nokku_v1_target_account_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_target_account_proto_rawDesc = "" +
 	"\n" +
-	"\x1dnokku/v1/target_account.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xf9\x01\n" +
+	"\x1dnokku/v1/target_account.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\"\xae\x02\n" +
 	"\rTargetAccount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
 	"\ttarget_id\x18\x02 \x01(\tR\btargetId\x12\x1a\n" +
@@ -757,7 +767,8 @@ const file_nokku_v1_target_account_proto_rawDesc = "" +
 	"\bteam_ids\x18\x05 \x03(\tR\ateamIds\x12.\n" +
 	"\x13service_account_ids\x18\x06 \x03(\tR\x11serviceAccountIds\x129\n" +
 	"\n" +
-	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\x9a\x01\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x123\n" +
+	"\aseen_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\x06seenAt\"\x9a\x01\n" +
 	"\x19ListTargetAccountsRequest\x12%\n" +
 	"\ttarget_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\x12\x1f\n" +
 	"\x05limit\x18\x02 \x01(\x05B\t\xbaH\x06\x1a\x04\x18d(\x01R\x05limit\x12\x1f\n" +
@@ -841,28 +852,29 @@ var file_nokku_v1_target_account_proto_goTypes = []any{
 }
 var file_nokku_v1_target_account_proto_depIdxs = []int32{
 	14, // 0: nokku.v1.TargetAccount.created_at:type_name -> google.protobuf.Timestamp
-	1,  // 1: nokku.v1.ListTargetAccountsResponse.accounts:type_name -> nokku.v1.TargetAccount
-	0,  // 2: nokku.v1.AddSubjectsRequest.kind:type_name -> nokku.v1.SubjectKind
-	0,  // 3: nokku.v1.RemoveSubjectsRequest.kind:type_name -> nokku.v1.SubjectKind
-	0,  // 4: nokku.v1.RevokeAllAccessRequest.kind:type_name -> nokku.v1.SubjectKind
-	1,  // 5: nokku.v1.AddTargetAccountResponse.account:type_name -> nokku.v1.TargetAccount
-	2,  // 6: nokku.v1.TargetAccountService.ListTargetAccounts:input_type -> nokku.v1.ListTargetAccountsRequest
-	10, // 7: nokku.v1.TargetAccountService.AddTargetAccount:input_type -> nokku.v1.AddTargetAccountRequest
-	12, // 8: nokku.v1.TargetAccountService.RemoveTargetAccount:input_type -> nokku.v1.RemoveTargetAccountRequest
-	4,  // 9: nokku.v1.TargetAccountService.AddSubjects:input_type -> nokku.v1.AddSubjectsRequest
-	6,  // 10: nokku.v1.TargetAccountService.RemoveSubjects:input_type -> nokku.v1.RemoveSubjectsRequest
-	8,  // 11: nokku.v1.TargetAccountService.RevokeAllAccess:input_type -> nokku.v1.RevokeAllAccessRequest
-	3,  // 12: nokku.v1.TargetAccountService.ListTargetAccounts:output_type -> nokku.v1.ListTargetAccountsResponse
-	11, // 13: nokku.v1.TargetAccountService.AddTargetAccount:output_type -> nokku.v1.AddTargetAccountResponse
-	13, // 14: nokku.v1.TargetAccountService.RemoveTargetAccount:output_type -> nokku.v1.RemoveTargetAccountResponse
-	5,  // 15: nokku.v1.TargetAccountService.AddSubjects:output_type -> nokku.v1.AddSubjectsResponse
-	7,  // 16: nokku.v1.TargetAccountService.RemoveSubjects:output_type -> nokku.v1.RemoveSubjectsResponse
-	9,  // 17: nokku.v1.TargetAccountService.RevokeAllAccess:output_type -> nokku.v1.RevokeAllAccessResponse
-	12, // [12:18] is the sub-list for method output_type
-	6,  // [6:12] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	14, // 1: nokku.v1.TargetAccount.seen_at:type_name -> google.protobuf.Timestamp
+	1,  // 2: nokku.v1.ListTargetAccountsResponse.accounts:type_name -> nokku.v1.TargetAccount
+	0,  // 3: nokku.v1.AddSubjectsRequest.kind:type_name -> nokku.v1.SubjectKind
+	0,  // 4: nokku.v1.RemoveSubjectsRequest.kind:type_name -> nokku.v1.SubjectKind
+	0,  // 5: nokku.v1.RevokeAllAccessRequest.kind:type_name -> nokku.v1.SubjectKind
+	1,  // 6: nokku.v1.AddTargetAccountResponse.account:type_name -> nokku.v1.TargetAccount
+	2,  // 7: nokku.v1.TargetAccountService.ListTargetAccounts:input_type -> nokku.v1.ListTargetAccountsRequest
+	10, // 8: nokku.v1.TargetAccountService.AddTargetAccount:input_type -> nokku.v1.AddTargetAccountRequest
+	12, // 9: nokku.v1.TargetAccountService.RemoveTargetAccount:input_type -> nokku.v1.RemoveTargetAccountRequest
+	4,  // 10: nokku.v1.TargetAccountService.AddSubjects:input_type -> nokku.v1.AddSubjectsRequest
+	6,  // 11: nokku.v1.TargetAccountService.RemoveSubjects:input_type -> nokku.v1.RemoveSubjectsRequest
+	8,  // 12: nokku.v1.TargetAccountService.RevokeAllAccess:input_type -> nokku.v1.RevokeAllAccessRequest
+	3,  // 13: nokku.v1.TargetAccountService.ListTargetAccounts:output_type -> nokku.v1.ListTargetAccountsResponse
+	11, // 14: nokku.v1.TargetAccountService.AddTargetAccount:output_type -> nokku.v1.AddTargetAccountResponse
+	13, // 15: nokku.v1.TargetAccountService.RemoveTargetAccount:output_type -> nokku.v1.RemoveTargetAccountResponse
+	5,  // 16: nokku.v1.TargetAccountService.AddSubjects:output_type -> nokku.v1.AddSubjectsResponse
+	7,  // 17: nokku.v1.TargetAccountService.RemoveSubjects:output_type -> nokku.v1.RemoveSubjectsResponse
+	9,  // 18: nokku.v1.TargetAccountService.RevokeAllAccess:output_type -> nokku.v1.RevokeAllAccessResponse
+	13, // [13:19] is the sub-list for method output_type
+	7,  // [7:13] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_target_account_proto_init() }

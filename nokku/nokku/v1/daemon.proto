@@ -92,6 +92,9 @@ message DaemonConfig {
   bool allow_forwarding = 2;
   bool allow_agent_forwarding = 3;
   bool gateway_ports = 4;
+  // Set by the core from the enroll token, never by an admin. An ephemeral
+  // daemon deletes itself from the core when it is stopped.
+  bool ephemeral = 5;
 }
 
 message GetDaemonRequest {
@@ -173,6 +176,17 @@ message CloseSessionResponse {}
 
 message EnrollDaemonRequest {
   string token = 1 [(buf.validate.field).string.min_len = 1];
+  // The host's own report, same keys as SyncDaemonRequest.metadata. The
+  // hostname in it may become the daemon's name.
+  map<string, string> metadata = 2 [(buf.validate.field).map = {
+    max_pairs: 16
+    keys: {
+      string: {max_len: 64}
+    }
+    values: {
+      string: {max_len: 256}
+    }
+  }];
 }
 message EnrollDaemonResponse {
   string id = 1;
