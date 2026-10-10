@@ -451,6 +451,9 @@ type CreateTargetRequest struct {
 	HostPublicKey *string                `protobuf:"bytes,4,opt,name=host_public_key,json=hostPublicKey" json:"host_public_key,omitempty"`
 	Endpoints     []string               `protobuf:"bytes,5,rep,name=endpoints" json:"endpoints,omitempty"`
 	Tags          []string               `protobuf:"bytes,6,rep,name=tags" json:"tags,omitempty"`
+	// Seeded once with the target, like the grants of an enroll token. Edits
+	// in the web app win from then on.
+	Grants        []*JoinTokenGrant `protobuf:"bytes,7,rep,name=grants" json:"grants,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -523,6 +526,13 @@ func (x *CreateTargetRequest) GetEndpoints() []string {
 func (x *CreateTargetRequest) GetTags() []string {
 	if x != nil {
 		return x.Tags
+	}
+	return nil
+}
+
+func (x *CreateTargetRequest) GetGrants() []*JoinTokenGrant {
+	if x != nil {
+		return x.Grants
 	}
 	return nil
 }
@@ -1969,7 +1979,7 @@ var File_nokku_v1_target_proto protoreflect.FileDescriptor
 
 const file_nokku_v1_target_proto_rawDesc = "" +
 	"\n" +
-	"\x15nokku/v1/target.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x1enokku/v1/service_account.proto\x1a\x1dnokku/v1/target_account.proto\"C\n" +
+	"\x15nokku/v1/target.proto\x12\bnokku.v1\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15nokku/v1/access.proto\x1a\x16nokku/v1/account.proto\x1a\x1bnokku/v1/certificates.proto\x1a\x15nokku/v1/daemon.proto\x1a\x19nokku/v1/join_token.proto\x1a\x1enokku/v1/service_account.proto\x1a\x1dnokku/v1/target_account.proto\"C\n" +
 	"\x1aGetTargetPrincipalsRequest\x12%\n" +
 	"\ttarget_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\btargetId\"Z\n" +
 	"\x1bGetTargetPrincipalsResponse\x12;\n" +
@@ -2006,14 +2016,15 @@ const file_nokku_v1_target_proto_rawDesc = "" +
 	"\x10GetTargetRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"=\n" +
 	"\x11GetTargetResponse\x12(\n" +
-	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"\xf8\x01\n" +
+	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"\xb4\x02\n" +
 	"\x13CreateTargetRequest\x12\x1d\n" +
 	"\x05ca_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x04caId\x12<\n" +
 	"\x04name\x18\x02 \x01(\tB(\xbaH%r#\x18\x80\x022\x1e^$|^[a-zA-Z0-9][a-zA-Z0-9-_]*$R\x04name\x12*\n" +
 	"\vdescription\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\xe8\aR\vdescription\x12&\n" +
 	"\x0fhost_public_key\x18\x04 \x01(\tR\rhostPublicKey\x12\x1c\n" +
 	"\tendpoints\x18\x05 \x03(\tR\tendpoints\x12\x12\n" +
-	"\x04tags\x18\x06 \x03(\tR\x04tags\"@\n" +
+	"\x04tags\x18\x06 \x03(\tR\x04tags\x12:\n" +
+	"\x06grants\x18\a \x03(\v2\x18.nokku.v1.JoinTokenGrantB\b\xbaH\x05\x92\x01\x02\x10 R\x06grants\"@\n" +
 	"\x14CreateTargetResponse\x12(\n" +
 	"\x06target\x18\x01 \x01(\v2\x10.nokku.v1.TargetR\x06target\"\x91\x02\n" +
 	"\x13UpdateTargetRequest\x12\x18\n" +
@@ -2173,11 +2184,12 @@ var file_nokku_v1_target_proto_goTypes = []any{
 	(*AccountPrincipals)(nil),              // 33: nokku.v1.AccountPrincipals
 	(*TargetAccount)(nil),                  // 34: nokku.v1.TargetAccount
 	(*timestamppb.Timestamp)(nil),          // 35: google.protobuf.Timestamp
-	(*Daemon)(nil),                         // 36: nokku.v1.Daemon
-	(*CertificateAuthority)(nil),           // 37: nokku.v1.CertificateAuthority
-	(*User)(nil),                           // 38: nokku.v1.User
-	(*ServiceAccount)(nil),                 // 39: nokku.v1.ServiceAccount
-	(SubjectKind)(0),                       // 40: nokku.v1.SubjectKind
+	(*JoinTokenGrant)(nil),                 // 36: nokku.v1.JoinTokenGrant
+	(*Daemon)(nil),                         // 37: nokku.v1.Daemon
+	(*CertificateAuthority)(nil),           // 38: nokku.v1.CertificateAuthority
+	(*User)(nil),                           // 39: nokku.v1.User
+	(*ServiceAccount)(nil),                 // 40: nokku.v1.ServiceAccount
+	(SubjectKind)(0),                       // 41: nokku.v1.SubjectKind
 }
 var file_nokku_v1_target_proto_depIdxs = []int32{
 	33, // 0: nokku.v1.GetTargetPrincipalsResponse.principals:type_name -> nokku.v1.AccountPrincipals
@@ -2186,54 +2198,55 @@ var file_nokku_v1_target_proto_depIdxs = []int32{
 	35, // 3: nokku.v1.Target.created_at:type_name -> google.protobuf.Timestamp
 	35, // 4: nokku.v1.Target.updated_at:type_name -> google.protobuf.Timestamp
 	4,  // 5: nokku.v1.GetTargetResponse.target:type_name -> nokku.v1.Target
-	4,  // 6: nokku.v1.CreateTargetResponse.target:type_name -> nokku.v1.Target
-	4,  // 7: nokku.v1.UpdateTargetResponse.target:type_name -> nokku.v1.Target
-	4,  // 8: nokku.v1.ListTargetsResponse.targets:type_name -> nokku.v1.Target
-	4,  // 9: nokku.v1.GetSubjectAccessResponse.targets:type_name -> nokku.v1.Target
-	36, // 10: nokku.v1.GetSubjectAccessResponse.daemons:type_name -> nokku.v1.Daemon
-	37, // 11: nokku.v1.GetSubjectAccessResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
-	38, // 12: nokku.v1.GetMyAccessResponse.user:type_name -> nokku.v1.User
-	39, // 13: nokku.v1.GetMyAccessResponse.service_account:type_name -> nokku.v1.ServiceAccount
-	4,  // 14: nokku.v1.GetMyAccessResponse.targets:type_name -> nokku.v1.Target
-	37, // 15: nokku.v1.GetMyAccessResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
-	21, // 16: nokku.v1.GetAccessGraphRequest.filter:type_name -> nokku.v1.AccessGraphFilter
-	24, // 17: nokku.v1.GetAccessGraphResponse.subjects:type_name -> nokku.v1.AccessGraphSubject
-	25, // 18: nokku.v1.GetAccessGraphResponse.accounts:type_name -> nokku.v1.AccessGraphAccount
-	26, // 19: nokku.v1.GetAccessGraphResponse.tags:type_name -> nokku.v1.AccessGraphTag
-	27, // 20: nokku.v1.GetAccessGraphResponse.grants:type_name -> nokku.v1.AccessGraphGrant
-	28, // 21: nokku.v1.GetAccessGraphResponse.reach:type_name -> nokku.v1.AccessGraphReach
-	40, // 22: nokku.v1.AccessGraphSubject.kind:type_name -> nokku.v1.SubjectKind
-	21, // 23: nokku.v1.ListAccessGraphTargetsRequest.filter:type_name -> nokku.v1.AccessGraphFilter
-	31, // 24: nokku.v1.ListAccessGraphTargetsResponse.targets:type_name -> nokku.v1.AccessGraphTarget
-	5,  // 25: nokku.v1.TargetService.GetTarget:input_type -> nokku.v1.GetTargetRequest
-	13, // 26: nokku.v1.TargetService.ListTargets:input_type -> nokku.v1.ListTargetsRequest
-	7,  // 27: nokku.v1.TargetService.CreateTarget:input_type -> nokku.v1.CreateTargetRequest
-	9,  // 28: nokku.v1.TargetService.UpdateTarget:input_type -> nokku.v1.UpdateTargetRequest
-	11, // 29: nokku.v1.TargetService.DeleteTarget:input_type -> nokku.v1.DeleteTargetRequest
-	15, // 30: nokku.v1.TargetService.GetSubjectAccess:input_type -> nokku.v1.GetSubjectAccessRequest
-	17, // 31: nokku.v1.TargetService.GetMyAccess:input_type -> nokku.v1.GetMyAccessRequest
-	19, // 32: nokku.v1.TargetService.GetTargetFilters:input_type -> nokku.v1.GetTargetFiltersRequest
-	0,  // 33: nokku.v1.TargetService.GetTargetPrincipals:input_type -> nokku.v1.GetTargetPrincipalsRequest
-	2,  // 34: nokku.v1.TargetService.SyncTargetUsers:input_type -> nokku.v1.SyncTargetUsersRequest
-	22, // 35: nokku.v1.TargetService.GetAccessGraph:input_type -> nokku.v1.GetAccessGraphRequest
-	29, // 36: nokku.v1.TargetService.ListAccessGraphTargets:input_type -> nokku.v1.ListAccessGraphTargetsRequest
-	6,  // 37: nokku.v1.TargetService.GetTarget:output_type -> nokku.v1.GetTargetResponse
-	14, // 38: nokku.v1.TargetService.ListTargets:output_type -> nokku.v1.ListTargetsResponse
-	8,  // 39: nokku.v1.TargetService.CreateTarget:output_type -> nokku.v1.CreateTargetResponse
-	10, // 40: nokku.v1.TargetService.UpdateTarget:output_type -> nokku.v1.UpdateTargetResponse
-	12, // 41: nokku.v1.TargetService.DeleteTarget:output_type -> nokku.v1.DeleteTargetResponse
-	16, // 42: nokku.v1.TargetService.GetSubjectAccess:output_type -> nokku.v1.GetSubjectAccessResponse
-	18, // 43: nokku.v1.TargetService.GetMyAccess:output_type -> nokku.v1.GetMyAccessResponse
-	20, // 44: nokku.v1.TargetService.GetTargetFilters:output_type -> nokku.v1.GetTargetFiltersResponse
-	1,  // 45: nokku.v1.TargetService.GetTargetPrincipals:output_type -> nokku.v1.GetTargetPrincipalsResponse
-	3,  // 46: nokku.v1.TargetService.SyncTargetUsers:output_type -> nokku.v1.SyncTargetUsersResponse
-	23, // 47: nokku.v1.TargetService.GetAccessGraph:output_type -> nokku.v1.GetAccessGraphResponse
-	30, // 48: nokku.v1.TargetService.ListAccessGraphTargets:output_type -> nokku.v1.ListAccessGraphTargetsResponse
-	37, // [37:49] is the sub-list for method output_type
-	25, // [25:37] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	36, // 6: nokku.v1.CreateTargetRequest.grants:type_name -> nokku.v1.JoinTokenGrant
+	4,  // 7: nokku.v1.CreateTargetResponse.target:type_name -> nokku.v1.Target
+	4,  // 8: nokku.v1.UpdateTargetResponse.target:type_name -> nokku.v1.Target
+	4,  // 9: nokku.v1.ListTargetsResponse.targets:type_name -> nokku.v1.Target
+	4,  // 10: nokku.v1.GetSubjectAccessResponse.targets:type_name -> nokku.v1.Target
+	37, // 11: nokku.v1.GetSubjectAccessResponse.daemons:type_name -> nokku.v1.Daemon
+	38, // 12: nokku.v1.GetSubjectAccessResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
+	39, // 13: nokku.v1.GetMyAccessResponse.user:type_name -> nokku.v1.User
+	40, // 14: nokku.v1.GetMyAccessResponse.service_account:type_name -> nokku.v1.ServiceAccount
+	4,  // 15: nokku.v1.GetMyAccessResponse.targets:type_name -> nokku.v1.Target
+	38, // 16: nokku.v1.GetMyAccessResponse.certificate_authorities:type_name -> nokku.v1.CertificateAuthority
+	21, // 17: nokku.v1.GetAccessGraphRequest.filter:type_name -> nokku.v1.AccessGraphFilter
+	24, // 18: nokku.v1.GetAccessGraphResponse.subjects:type_name -> nokku.v1.AccessGraphSubject
+	25, // 19: nokku.v1.GetAccessGraphResponse.accounts:type_name -> nokku.v1.AccessGraphAccount
+	26, // 20: nokku.v1.GetAccessGraphResponse.tags:type_name -> nokku.v1.AccessGraphTag
+	27, // 21: nokku.v1.GetAccessGraphResponse.grants:type_name -> nokku.v1.AccessGraphGrant
+	28, // 22: nokku.v1.GetAccessGraphResponse.reach:type_name -> nokku.v1.AccessGraphReach
+	41, // 23: nokku.v1.AccessGraphSubject.kind:type_name -> nokku.v1.SubjectKind
+	21, // 24: nokku.v1.ListAccessGraphTargetsRequest.filter:type_name -> nokku.v1.AccessGraphFilter
+	31, // 25: nokku.v1.ListAccessGraphTargetsResponse.targets:type_name -> nokku.v1.AccessGraphTarget
+	5,  // 26: nokku.v1.TargetService.GetTarget:input_type -> nokku.v1.GetTargetRequest
+	13, // 27: nokku.v1.TargetService.ListTargets:input_type -> nokku.v1.ListTargetsRequest
+	7,  // 28: nokku.v1.TargetService.CreateTarget:input_type -> nokku.v1.CreateTargetRequest
+	9,  // 29: nokku.v1.TargetService.UpdateTarget:input_type -> nokku.v1.UpdateTargetRequest
+	11, // 30: nokku.v1.TargetService.DeleteTarget:input_type -> nokku.v1.DeleteTargetRequest
+	15, // 31: nokku.v1.TargetService.GetSubjectAccess:input_type -> nokku.v1.GetSubjectAccessRequest
+	17, // 32: nokku.v1.TargetService.GetMyAccess:input_type -> nokku.v1.GetMyAccessRequest
+	19, // 33: nokku.v1.TargetService.GetTargetFilters:input_type -> nokku.v1.GetTargetFiltersRequest
+	0,  // 34: nokku.v1.TargetService.GetTargetPrincipals:input_type -> nokku.v1.GetTargetPrincipalsRequest
+	2,  // 35: nokku.v1.TargetService.SyncTargetUsers:input_type -> nokku.v1.SyncTargetUsersRequest
+	22, // 36: nokku.v1.TargetService.GetAccessGraph:input_type -> nokku.v1.GetAccessGraphRequest
+	29, // 37: nokku.v1.TargetService.ListAccessGraphTargets:input_type -> nokku.v1.ListAccessGraphTargetsRequest
+	6,  // 38: nokku.v1.TargetService.GetTarget:output_type -> nokku.v1.GetTargetResponse
+	14, // 39: nokku.v1.TargetService.ListTargets:output_type -> nokku.v1.ListTargetsResponse
+	8,  // 40: nokku.v1.TargetService.CreateTarget:output_type -> nokku.v1.CreateTargetResponse
+	10, // 41: nokku.v1.TargetService.UpdateTarget:output_type -> nokku.v1.UpdateTargetResponse
+	12, // 42: nokku.v1.TargetService.DeleteTarget:output_type -> nokku.v1.DeleteTargetResponse
+	16, // 43: nokku.v1.TargetService.GetSubjectAccess:output_type -> nokku.v1.GetSubjectAccessResponse
+	18, // 44: nokku.v1.TargetService.GetMyAccess:output_type -> nokku.v1.GetMyAccessResponse
+	20, // 45: nokku.v1.TargetService.GetTargetFilters:output_type -> nokku.v1.GetTargetFiltersResponse
+	1,  // 46: nokku.v1.TargetService.GetTargetPrincipals:output_type -> nokku.v1.GetTargetPrincipalsResponse
+	3,  // 47: nokku.v1.TargetService.SyncTargetUsers:output_type -> nokku.v1.SyncTargetUsersResponse
+	23, // 48: nokku.v1.TargetService.GetAccessGraph:output_type -> nokku.v1.GetAccessGraphResponse
+	30, // 49: nokku.v1.TargetService.ListAccessGraphTargets:output_type -> nokku.v1.ListAccessGraphTargetsResponse
+	38, // [38:50] is the sub-list for method output_type
+	26, // [26:38] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_nokku_v1_target_proto_init() }
@@ -2245,6 +2258,7 @@ func file_nokku_v1_target_proto_init() {
 	file_nokku_v1_account_proto_init()
 	file_nokku_v1_certificates_proto_init()
 	file_nokku_v1_daemon_proto_init()
+	file_nokku_v1_join_token_proto_init()
 	file_nokku_v1_service_account_proto_init()
 	file_nokku_v1_target_account_proto_init()
 	file_nokku_v1_target_proto_msgTypes[18].OneofWrappers = []any{

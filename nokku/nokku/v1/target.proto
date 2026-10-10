@@ -8,6 +8,7 @@ import "nokku/v1/access.proto";
 import "nokku/v1/account.proto";
 import "nokku/v1/certificates.proto";
 import "nokku/v1/daemon.proto";
+import "nokku/v1/join_token.proto";
 import "nokku/v1/service_account.proto";
 import "nokku/v1/target_account.proto";
 
@@ -122,6 +123,9 @@ message CreateTargetRequest {
   string host_public_key = 4;
   repeated string endpoints = 5;
   repeated string tags = 6;
+  // Seeded once with the target, like the grants of an enroll token. Edits
+  // in the web app win from then on.
+  repeated JoinTokenGrant grants = 7 [(buf.validate.field).repeated.max_items = 32];
 }
 message CreateTargetResponse {
   Target target = 1;
